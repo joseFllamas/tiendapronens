@@ -918,7 +918,8 @@ if (getenv('IS_DDEV_PROJECT') == 'true') {
  *
  * Keep this code block at the end of this file to take full effect.
  */
-#
-# if (file_exists($app_root . '/' . $site_path . '/settings.local.php')) {
-#   include $app_root . '/' . $site_path . '/settings.local.php';
-# }
+// Activado para inyectar las credenciales de las pasarelas de pago, que no
+// deben viajar en config/sync ni en git. El fichero está en .gitignore.
+if (file_exists($app_root . '/' . $site_path . '/settings.local.php')) {
+  include $app_root . '/' . $site_path . '/settings.local.php';
+}

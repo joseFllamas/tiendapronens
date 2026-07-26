@@ -1,0 +1,30 @@
+uuid: 4bf18ecd-709b-4c37-9c59-750fc816213b
+langcode: es
+status: true
+dependencies:
+  module:
+    - commerce_sermepa
+id: redsys
+label: 'Tarjeta de crédito (Redsys)'
+weight: 0
+plugin: commerce_sermepa
+configuration:
+  display_label: 'Tarjeta de crédito'
+  mode: test
+  payment_method_types:
+    - credit_card
+  collect_billing_information: true
+  merchant_name: ''
+  merchant_code: ''
+  merchant_group: ''
+  merchant_password: ''
+  merchant_terminal: ''
+  merchant_paymethods: {  }
+  merchant_consumer_language: ''
+  currency: 978
+  transaction_type: '0'
+  instructions:
+    value: ''
+    format: plain_text
+conditions: {  }
+conditionOperator: AND

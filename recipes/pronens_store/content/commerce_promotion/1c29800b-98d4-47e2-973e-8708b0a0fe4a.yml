@@ -1,0 +1,69 @@
+_meta:
+  version: '1.0'
+  entity_type: commerce_promotion
+  uuid: 1c29800b-98d4-47e2-973e-8708b0a0fe4a
+  default_langcode: es
+  depends:
+    f812b134-42ef-4fc9-9270-66ba5183e278: commerce_store
+    6b24dc45-3d6c-4691-a639-1f540f46965b: commerce_promotion_coupon
+default:
+  uid:
+    -
+      target_id: 0
+  name:
+    -
+      value: Bienvenida
+  display_name:
+    -
+      value: 'Descuento de bienvenida'
+  order_types:
+    -
+      target_id: default
+  stores:
+    -
+      entity: f812b134-42ef-4fc9-9270-66ba5183e278
+  offer:
+    -
+      target_plugin_id: order_percentage_off
+      target_plugin_configuration:
+        display_inclusive: false
+        percentage: '0.10'
+  condition_operator:
+    -
+      value: AND
+  coupons:
+    -
+      entity: 6b24dc45-3d6c-4691-a639-1f540f46965b
+  usage_limit:
+    -
+      value: 0
+  usage_limit_customer:
+    -
+      value: 0
+  start_date:
+    -
+      value: '2026-07-26T21:55:10'
+  compatibility:
+    -
+      value: any
+  allow_multiple_coupons:
+    -
+      value: false
+  require_coupon:
+    -
+      value: true
+  status:
+    -
+      value: true
+  weight:
+    -
+      value: 0
+  content_translation_source:
+    -
+      value: und
+  content_translation_outdated:
+    -
+      value: false
+  content_translation_status:
+    -
+      value: true

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "732c85823d395bc75715ae2178a37339",
+    "content-hash": "af10710aab795be92060a4e467d598d4",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -237,6 +237,58 @@
                 "source": "https://github.com/commerceguys/intl/tree/v2.0.7"
             },
             "time": "2025-04-11T08:13:51+00:00"
+        },
+        {
+            "name": "commerceredsys/sermepa",
+            "version": "1.0.11",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/CommerceRedsys/sermepa.git",
+                "reference": "85300d2b0a03cf375fcf39f04e755b58561a1c6d"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/CommerceRedsys/sermepa/zipball/85300d2b0a03cf375fcf39f04e755b58561a1c6d",
+                "reference": "85300d2b0a03cf375fcf39f04e755b58561a1c6d",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "CommerceRedsys\\Payment\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Pedro Cambra",
+                    "homepage": "https://www.drupal.org/u/pcambra"
+                },
+                {
+                    "name": "Manuel Egío",
+                    "homepage": "https://www.drupal.org/u/facine"
+                }
+            ],
+            "description": "Payment gateway library for spanish banks that use Sermepa/Redsýs systems.",
+            "homepage": "https://github.com/CommerceRedsys/sermepa",
+            "keywords": [
+                "e-commerce",
+                "gateway",
+                "payment",
+                "redsys",
+                "sermepa"
+            ],
+            "support": {
+                "issues": "https://github.com/CommerceRedsys/sermepa/issues",
+                "source": "https://github.com/CommerceRedsys/sermepa/tree/1.0.11"
+            },
+            "time": "2025-06-10T08:23:54+00:00"
         },
         {
             "name": "composer/installers",
@@ -1507,6 +1559,114 @@
             }
         },
         {
+            "name": "drupal/commerce_payment",
+            "version": "3.3.8",
+            "require": {
+                "drupal/commerce": "*",
+                "drupal/commerce_order": "*",
+                "drupal/core": "^10.3 || ^11",
+                "drupal/entity_reference_revisions": "*"
+            },
+            "type": "metapackage",
+            "extra": {
+                "drupal": {
+                    "version": "3.3.8",
+                    "datestamp": "1784272833",
+                    "security-coverage": {
+                        "status": "covered",
+                        "message": "Covered by Drupal's security advisory policy"
+                    }
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "centarro",
+                    "homepage": "https://www.drupal.org/user/3661446"
+                },
+                {
+                    "name": "jsacksick",
+                    "homepage": "https://www.drupal.org/user/972218"
+                },
+                {
+                    "name": "rszrama",
+                    "homepage": "https://www.drupal.org/user/49344"
+                }
+            ],
+            "description": "Provides payment functionality.",
+            "homepage": "https://www.drupal.org/project/commerce",
+            "support": {
+                "source": "https://git.drupalcode.org/project/commerce"
+            }
+        },
+        {
+            "name": "drupal/commerce_paypal",
+            "version": "2.1.2",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/commerce_paypal.git",
+                "reference": "2.1.2"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/commerce_paypal-2.1.2.zip",
+                "reference": "2.1.2",
+                "shasum": "e35dca0ca7c8ac0c10f390f9eaf3502e7553e022"
+            },
+            "require": {
+                "drupal/commerce": "^2.40 || ^3",
+                "drupal/commerce_payment": "*",
+                "drupal/core": "^9.3 || ^10 || ^11",
+                "php": "^8.0"
+            },
+            "require-dev": {
+                "drupal/commerce_shipping": "*",
+                "drupal/config_inspector": "*",
+                "drush/drush": "*"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "drupal": {
+                    "version": "2.1.2",
+                    "datestamp": "1776953529",
+                    "security-coverage": {
+                        "status": "covered",
+                        "message": "Covered by Drupal's security advisory policy"
+                    }
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "centarro",
+                    "homepage": "https://www.drupal.org/user/3661446"
+                },
+                {
+                    "name": "jsacksick",
+                    "homepage": "https://www.drupal.org/user/972218"
+                },
+                {
+                    "name": "rszrama",
+                    "homepage": "https://www.drupal.org/user/49344"
+                },
+                {
+                    "name": "tomtech",
+                    "homepage": "https://www.drupal.org/user/254986"
+                }
+            ],
+            "description": "Provides Commerce integration for PayPal.",
+            "homepage": "https://drupal.org/project/commerce_paypal",
+            "support": {
+                "source": "https://git.drupalcode.org/project/commerce_paypal"
+            }
+        },
+        {
             "name": "drupal/commerce_price",
             "version": "3.3.8",
             "require": {
@@ -1590,6 +1750,58 @@
             "homepage": "https://www.drupal.org/project/commerce",
             "support": {
                 "source": "https://git.drupalcode.org/project/commerce"
+            }
+        },
+        {
+            "name": "drupal/commerce_sermepa",
+            "version": "2.4.0",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/commerce_sermepa.git",
+                "reference": "8.x-2.4"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/commerce_sermepa-8.x-2.4.zip",
+                "reference": "8.x-2.4",
+                "shasum": "8ecfaf09ac044b3600a420cfc9d81db20df6f745"
+            },
+            "require": {
+                "commerceredsys/sermepa": "^1.0.9",
+                "drupal/commerce": "^2.0 || ^3.0",
+                "drupal/commerce_payment": "*",
+                "drupal/core": "^10 || ^11"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "drupal": {
+                    "version": "8.x-2.4",
+                    "datestamp": "1771948133",
+                    "security-coverage": {
+                        "status": "covered",
+                        "message": "Covered by Drupal's security advisory policy"
+                    }
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0+"
+            ],
+            "authors": [
+                {
+                    "name": "Pedro Cambra",
+                    "homepage": "https://www.drupal.org/u/pcambra"
+                },
+                {
+                    "name": "Manuel Egío",
+                    "homepage": "https://www.drupal.org/u/facine"
+                }
+            ],
+            "description": "Commerce Sermepa is an off-site payment gateway.",
+            "homepage": "http://drupal.org/project/commerce_sermepa",
+            "support": {
+                "source": "https://cgit.drupalcode.org/commerce_sermepa",
+                "issues": "https://www.drupal.org/project/issues/commerce_sermepa"
             }
         },
         {

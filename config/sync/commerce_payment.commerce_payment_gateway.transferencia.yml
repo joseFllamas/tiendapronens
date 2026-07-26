@@ -1,0 +1,19 @@
+uuid: 10c209e4-796f-418a-abb5-78087e28dd69
+langcode: es
+status: false
+dependencies: {  }
+id: transferencia
+label: 'Transferencia bancaria'
+weight: 2
+plugin: manual
+configuration:
+  display_label: 'Transferencia bancaria'
+  mode: n/a
+  payment_method_types:
+    - credit_card
+  collect_billing_information: true
+  instructions:
+    value: 'PENDIENTE: falta el IBAN. El Drupal 7 no guardaba estas instrucciones en ningún sitio.'
+    format: plain_text
+conditions: {  }
+conditionOperator: AND

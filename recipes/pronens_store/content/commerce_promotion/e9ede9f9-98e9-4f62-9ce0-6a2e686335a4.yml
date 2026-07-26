@@ -1,0 +1,69 @@
+_meta:
+  version: '1.0'
+  entity_type: commerce_promotion
+  uuid: e9ede9f9-98e9-4f62-9ce0-6a2e686335a4
+  default_langcode: es
+  depends:
+    f812b134-42ef-4fc9-9270-66ba5183e278: commerce_store
+    9f166480-59e5-4d4c-be55-38f4441ef08b: commerce_promotion_coupon
+default:
+  uid:
+    -
+      target_id: 0
+  name:
+    -
+      value: Dicasty
+  display_name:
+    -
+      value: 'Descuento Dicasty'
+  order_types:
+    -
+      target_id: default
+  stores:
+    -
+      entity: f812b134-42ef-4fc9-9270-66ba5183e278
+  offer:
+    -
+      target_plugin_id: order_percentage_off
+      target_plugin_configuration:
+        display_inclusive: false
+        percentage: '0.10'
+  condition_operator:
+    -
+      value: AND
+  coupons:
+    -
+      entity: 9f166480-59e5-4d4c-be55-38f4441ef08b
+  usage_limit:
+    -
+      value: 0
+  usage_limit_customer:
+    -
+      value: 0
+  start_date:
+    -
+      value: '2026-07-26T21:55:10'
+  compatibility:
+    -
+      value: any
+  allow_multiple_coupons:
+    -
+      value: false
+  require_coupon:
+    -
+      value: true
+  status:
+    -
+      value: true
+  weight:
+    -
+      value: 3
+  content_translation_source:
+    -
+      value: und
+  content_translation_outdated:
+    -
+      value: false
+  content_translation_status:
+    -
+      value: true

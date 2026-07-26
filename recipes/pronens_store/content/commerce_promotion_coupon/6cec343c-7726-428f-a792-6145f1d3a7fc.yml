@@ -1,0 +1,25 @@
+_meta:
+  version: '1.0'
+  entity_type: commerce_promotion_coupon
+  uuid: 6cec343c-7726-428f-a792-6145f1d3a7fc
+  depends:
+    f7828b7d-90da-4cd3-86cc-225a93d776a6: commerce_promotion
+default:
+  promotion_id:
+    -
+      entity: f7828b7d-90da-4cd3-86cc-225a93d776a6
+  code:
+    -
+      value: EDUCOSUM07
+  start_date:
+    -
+      value: '2026-07-26T21:55:10'
+  usage_limit:
+    -
+      value: 0
+  usage_limit_customer:
+    -
+      value: 0
+  status:
+    -
+      value: true

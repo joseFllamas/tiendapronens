@@ -1,0 +1,15 @@
+uuid: d78a118b-2875-473f-a037-e92009839d2c
+langcode: es
+status: true
+dependencies:
+  module:
+    - commerce_promotion
+    - content_translation
+third_party_settings:
+  content_translation:
+    enabled: true
+id: commerce_promotion.commerce_promotion
+target_entity_type_id: commerce_promotion
+target_bundle: commerce_promotion
+default_langcode: site_default
+language_alterable: false

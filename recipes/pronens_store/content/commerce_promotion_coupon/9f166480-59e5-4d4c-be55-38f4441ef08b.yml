@@ -1,0 +1,25 @@
+_meta:
+  version: '1.0'
+  entity_type: commerce_promotion_coupon
+  uuid: 9f166480-59e5-4d4c-be55-38f4441ef08b
+  depends:
+    e9ede9f9-98e9-4f62-9ce0-6a2e686335a4: commerce_promotion
+default:
+  promotion_id:
+    -
+      entity: e9ede9f9-98e9-4f62-9ce0-6a2e686335a4
+  code:
+    -
+      value: dicasty
+  start_date:
+    -
+      value: '2026-07-26T21:55:10'
+  usage_limit:
+    -
+      value: 0
+  usage_limit_customer:
+    -
+      value: 0
+  status:
+    -
+      value: true

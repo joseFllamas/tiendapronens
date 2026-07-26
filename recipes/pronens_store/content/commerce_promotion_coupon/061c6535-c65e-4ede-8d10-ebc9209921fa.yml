@@ -1,0 +1,25 @@
+_meta:
+  version: '1.0'
+  entity_type: commerce_promotion_coupon
+  uuid: 061c6535-c65e-4ede-8d10-ebc9209921fa
+  depends:
+    1340d0f6-0c48-4ec7-b96f-d5b02db33a79: commerce_promotion
+default:
+  promotion_id:
+    -
+      entity: 1340d0f6-0c48-4ec7-b96f-d5b02db33a79
+  code:
+    -
+      value: EDUCOPROF07
+  start_date:
+    -
+      value: '2026-07-26T21:55:10'
+  usage_limit:
+    -
+      value: 0
+  usage_limit_customer:
+    -
+      value: 0
+  status:
+    -
+      value: true
