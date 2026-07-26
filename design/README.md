@@ -70,6 +70,15 @@ Objetivos: **LCP < 2.5s · CLS < 0.1 · INP < 200ms · JS del tema < 100KB** tot
 5. **Caché**: Internal Page Cache + Dynamic Page Cache + **BigPipe** activos; contador del carrito y precios por sesión con `#lazy_builder`; cache tags de Commerce intactos (no `cache: false` globales en Twig).
 6. **Prohibido**: sliders/carousels JS pesados (el hero es estático), CSS/JS de terceros bloqueante, imágenes sin dimensiones, base64 grandes, `@import` en CSS.
 
+## Detalles de comportamiento adicionales
+- **Mega menú**: abre en hover (desktop) tras ~100ms; permanece abierto mientras el puntero esté en header o panel; cierra al salir o con `Escape`. Navegable por teclado (Tab entra en columnas, flechas opcionales). En mobile: menú off-canvas con acordeones de 2 niveles (mismo contenido).
+- **Flyout carrito**: estado vacío con mensaje "Tu cesta está vacía. ¡Descubre nuestros personalizados!"; se abre automáticamente al añadir producto; cierra con overlay, ✕ o `Escape`; botón secundario "Seguir comprando". La barra de envío gratis se recalcula en cada cambio (mensaje de éxito al superar el umbral).
+- **Selección color/talla en tarjeta**: al hacer clic en la imagen se navega a la ficha con la variación preseleccionada según los swatches/talla elegidos en la tarjeta.
+- **Buscador**: icono del header abre overlay/desplegable de búsqueda (Search API); fuera del alcance visual del prototipo, seguir el mismo lenguaje (pill, tipografías del sistema).
+- **Responsive**: breakpoints orientativos 1280 / 1024 / 768 / 480. Home: mosaico pasa a 2 col y luego 1; best sellers 2 col en mobile. Categoría: Vista 2/4 se convierte en 1/2 en mobile. Ficha: galería mobile = 1 foto grande + tira de miniaturas horizontales (scroll-snap), columna de compra debajo con CTA sticky inferior.
+- **Breadcrumbs** en categoría y ficha (12.5px, gris `#8AA0A6`, actual en ink).
+- **Páginas fuera de alcance** (checkout, cuenta, búsqueda, CMS): usar los mismos tokens y componentes; el checkout de Commerce se tematiza mínimamente (tipografías, botones pill naranja, inputs).
+
 ## Assets
 Las fotos ya existen en `web/sites/default/files/` del proyecto. Mapa referencia → original:
 - `assets/portada-batas.jpg` → `portada batas escolares.jpg` (hero)
