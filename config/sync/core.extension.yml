@@ -53,6 +53,10 @@ module:
   media_library: 0
   menu_link_content: 0
   menu_ui: 0
+  migrate: 0
+  migrate_drupal: 0
+  migrate_plus: 0
+  migrate_tools: 0
   mysql: 0
   navigation: 0
   node: 0
@@ -60,8 +64,10 @@ module:
   page_cache: 0
   path: 0
   path_alias: 0
+  phpass: 0
   physical: 0
   profile: 0
+  pronens_migrate: 0
   recipe_tracker: 0
   state_machine: 0
   system: 0

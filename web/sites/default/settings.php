@@ -884,6 +884,27 @@ if (getenv('IS_DDEV_PROJECT') == 'true' && file_exists(__DIR__ . '/settings.ddev
   include __DIR__ . '/settings.ddev.php';
 }
 
+// Conexión de origen para la migración desde el Drupal 7.
+// Solo en DDEV: el contenedor de base de datos del proyecto "tiendapronens" es
+// alcanzable desde aquí porque ambos proyectos comparten la red ddev_default.
+// Las credenciales son las estándar de DDEV, no hay secretos que proteger.
+// Los ficheros del D7 se montan en /mnt/d7-files, ver
+// .ddev/docker-compose.migrate.yaml.
+if (getenv('IS_DDEV_PROJECT') == 'true') {
+  $databases['migrate']['default'] = [
+    'database' => getenv('MIGRATE_DB_NAME') ?: 'db',
+    'username' => getenv('MIGRATE_DB_USER') ?: 'db',
+    'password' => getenv('MIGRATE_DB_PASSWORD') ?: 'db',
+    'host' => getenv('MIGRATE_DB_HOST') ?: 'ddev-tiendapronens-db',
+    'port' => getenv('MIGRATE_DB_PORT') ?: '3306',
+    'driver' => 'mysql',
+    'prefix' => '',
+  ];
+  $settings['migrate_source_connection'] = 'migrate';
+  $settings['migrate_source_version'] = '7';
+  $settings['migrate_file_public_path'] = '/mnt/d7';
+}
+
 /**
  * Load local development override configuration, if available.
  *

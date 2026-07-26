@@ -1,0 +1,43 @@
+id: pronens_media_imagen
+label: 'Pronens: imágenes del D7 como entidades Media'
+migration_tags:
+  - 'Drupal 7'
+  - Pronens
+migration_group: pronens
+audit: true
+source:
+  # Los 2325 ficheros del D7 son todos imágenes (1514 jpeg, 811 png), así que
+  # se convierten todos al tipo de medio "image" de core.
+  plugin: d7_file
+  scheme: public
+  key: migrate
+  constants:
+    # El plugin d7_file lee esta constante aunque aquí no se copie ningún
+    # fichero: sin ella emite warnings por clave indefinida.
+    source_base_path: /mnt/d7
+process:
+  bundle:
+    plugin: default_value
+    default_value: image
+  name: filename
+  langcode:
+    plugin: default_value
+    default_value: es
+  uid:
+    plugin: default_value
+    default_value: 1
+  status: status
+  created: timestamp
+  changed: timestamp
+  field_media_image/target_id:
+    plugin: migration_lookup
+    migration: pronens_file
+    source: fid
+    no_stub: true
+  field_media_image/alt: filename
+destination:
+  plugin: 'entity:media'
+  default_bundle: image
+migration_dependencies:
+  required:
+    - pronens_file

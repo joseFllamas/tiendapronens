@@ -1,0 +1,13 @@
+name: 'Pronens: migración desde Drupal 7'
+type: module
+description: 'Migraciones del catálogo, taxonomías y ficheros de la tienda Drupal 7 de Pronens hacia Drupal 11 y Commerce 3.'
+package: Pronens
+core_version_requirement: ^11
+dependencies:
+  - drupal:migrate
+  - drupal:migrate_drupal
+  - drupal:media
+  - drupal:taxonomy
+  - migrate_plus:migrate_plus
+  - migrate_tools:migrate_tools
+  - commerce:commerce_product

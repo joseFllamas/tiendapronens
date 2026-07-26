@@ -1,0 +1,55 @@
+id: pronens_taxonomia_tipo_producto
+label: 'Pronens: categorías (tipo_de_producto) con imagen'
+migration_tags:
+  - 'Drupal 7'
+  - Pronens
+migration_group: pronens
+audit: true
+source:
+  plugin: d7_taxonomy_term
+  key: migrate
+  bundle: tipo_de_producto
+process:
+  # No se mapea tid: dejar que el mapa resuelva el ID nuevo evita apropiarse
+  # del espacio de IDs del destino.
+  vid:
+    plugin: default_value
+    default_value: tipo_de_producto
+  # Solo castellano, es la decisión de alcance de la migración.
+  langcode:
+    plugin: default_value
+    default_value: es
+  name: name
+  description/value: description
+  description/format:
+    plugin: default_value
+    default_value: basic_html
+  weight: weight
+  # Patrón de core para jerarquías autorreferenciadas.
+  parent_id:
+    -
+      plugin: skip_on_empty
+      method: process
+      source: parent
+    -
+      plugin: migration_lookup
+      migration: pronens_taxonomia_tipo_producto
+  parent:
+    plugin: default_value
+    default_value: 0
+    source: '@parent_id'
+  # Los campos del D7 llegan como array completo del campo, hay que bajar al
+  # subvalor concreto o migration_lookup recibe alt, title, width y height.
+  field_imagen/target_id:
+    plugin: migration_lookup
+    migration: pronens_media_imagen
+    source: field_imagen_representativa/0/fid
+    no_stub: true
+  field_destacado: field_home/0/value
+  field_posicion: field_posicion/0/value
+destination:
+  plugin: 'entity:taxonomy_term'
+  default_bundle: tipo_de_producto
+migration_dependencies:
+  required:
+    - pronens_media_imagen

@@ -1,0 +1,44 @@
+id: pronens_file
+label: 'Pronens: ficheros públicos del D7'
+migration_tags:
+  - 'Drupal 7'
+  - Pronens
+migration_group: pronens
+audit: true
+source:
+  plugin: d7_file
+  scheme: public
+  key: migrate
+  constants:
+    # El directorio de ficheros del D7 se monta en /mnt/d7/sites/default/files,
+    # ver .ddev/docker-compose.migrate.yaml. El plugin añade file_public_path.
+    source_base_path: /mnt/d7
+process:
+  # A propósito NO se mapea fid. Mapearlo haría que la migración se apropiase
+  # del espacio de IDs del destino y sobrescribiese entidades fichero
+  # existentes. Las migraciones dependientes resuelven el fid nuevo con
+  # migration_lookup sobre esta migración, que es para lo que existe el mapa.
+  filename: filename
+  source_full_path:
+    -
+      plugin: concat
+      delimiter: /
+      source:
+        - constants/source_base_path
+        - filepath
+    -
+      plugin: urlencode
+  uri:
+    plugin: file_copy
+    source:
+      - '@source_full_path'
+      - uri
+  filemime: filemime
+  status: status
+  created: timestamp
+  changed: timestamp
+  uid:
+    plugin: default_value
+    default_value: 1
+destination:
+  plugin: 'entity:file'

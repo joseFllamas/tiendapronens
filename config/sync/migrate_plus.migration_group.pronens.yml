@@ -1,0 +1,10 @@
+uuid: 96dfe9d4-fe00-40fc-99ab-42b3e9631f3b
+langcode: es
+status: true
+dependencies: {  }
+id: pronens
+label: pronens
+description: ''
+source_type: null
+module: null
+shared_configuration: null
