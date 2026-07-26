@@ -9,6 +9,7 @@ dependencies:
     - field.field.commerce_product.default.field_destacado
     - field.field.commerce_product.default.field_edades
     - field.field.commerce_product.default.field_escuela
+    - field.field.commerce_product.default.field_fuentes_permitidas
     - field.field.commerce_product.default.field_galeria
     - field.field.commerce_product.default.field_guia_tallas
     - field.field.commerce_product.default.field_imagen_principal
@@ -59,6 +60,7 @@ hidden:
   field_destacado: true
   field_edades: true
   field_escuela: true
+  field_fuentes_permitidas: true
   field_galeria: true
   field_guia_tallas: true
   field_imagen_principal: true

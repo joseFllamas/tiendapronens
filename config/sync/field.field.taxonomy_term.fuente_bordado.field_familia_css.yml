@@ -1,0 +1,19 @@
+uuid: 7f204207-7cfd-4062-962c-a3f815ce5435
+langcode: es
+status: true
+dependencies:
+  config:
+    - field.storage.taxonomy_term.field_familia_css
+    - taxonomy.vocabulary.fuente_bordado
+id: taxonomy_term.fuente_bordado.field_familia_css
+field_name: field_familia_css
+entity_type: taxonomy_term
+bundle: fuente_bordado
+label: 'Familia CSS'
+description: 'Valor de font-family para la vista previa. Provisional hasta que lleguen las tipografías reales del taller.'
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

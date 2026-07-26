@@ -1,0 +1,39 @@
+_meta:
+  version: '1.0'
+  entity_type: taxonomy_term
+  uuid: 37bc871b-c108-4cea-9fc5-5539ecb953d4
+  bundle: fuente_bordado
+  default_langcode: es
+default:
+  status:
+    -
+      value: true
+  name:
+    -
+      value: Clásica
+  description:
+    -
+      value: 'Tipografía provisional. Sustituir por la del taller cuando entregue los ficheros.'
+      format: basic_html
+  weight:
+    -
+      value: 3
+  revision_translation_affected:
+    -
+      value: true
+  path:
+    -
+      langcode: es
+      alias: null
+  content_translation_source:
+    -
+      value: und
+  content_translation_outdated:
+    -
+      value: false
+  content_translation_uid:
+    -
+      target_id: 0
+  field_familia_css:
+    -
+      value: '"Times New Roman", Times, serif'

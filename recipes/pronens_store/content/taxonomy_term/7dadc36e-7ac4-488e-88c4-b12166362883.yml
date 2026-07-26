@@ -1,0 +1,39 @@
+_meta:
+  version: '1.0'
+  entity_type: taxonomy_term
+  uuid: 7dadc36e-7ac4-488e-88c4-b12166362883
+  bundle: fuente_bordado
+  default_langcode: es
+default:
+  status:
+    -
+      value: true
+  name:
+    -
+      value: Manuscrita
+  description:
+    -
+      value: 'Tipografía provisional. Sustituir por la del taller cuando entregue los ficheros.'
+      format: basic_html
+  weight:
+    -
+      value: 2
+  revision_translation_affected:
+    -
+      value: true
+  path:
+    -
+      langcode: es
+      alias: null
+  content_translation_source:
+    -
+      value: und
+  content_translation_outdated:
+    -
+      value: false
+  content_translation_uid:
+    -
+      target_id: 0
+  field_familia_css:
+    -
+      value: '"Brush Script MT", cursive'

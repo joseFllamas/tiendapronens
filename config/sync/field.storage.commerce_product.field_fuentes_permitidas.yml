@@ -1,0 +1,20 @@
+uuid: 5928a654-6859-425a-a0f7-538a3a099076
+langcode: es
+status: true
+dependencies:
+  module:
+    - commerce_product
+    - taxonomy
+id: commerce_product.field_fuentes_permitidas
+field_name: field_fuentes_permitidas
+entity_type: commerce_product
+type: entity_reference
+settings:
+  target_type: taxonomy_term
+module: core
+locked: false
+cardinality: -1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false
