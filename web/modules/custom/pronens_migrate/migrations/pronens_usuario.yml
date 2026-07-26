@@ -1,0 +1,52 @@
+id: pronens_usuario
+label: 'Pronens: cuentas de cliente del D7'
+migration_tags:
+  - 'Drupal 7'
+  - Pronens
+migration_group: pronens
+audit: true
+source:
+  plugin: d7_user
+  key: migrate
+process:
+  # A propósito NO se mapea uid. Mapearlo haría que el uid 1 del D7 sobrescriba
+  # la cuenta de administración de este sitio.
+  # El D7 tiene un usuario llamado "admin", igual que la cuenta de
+  # administración de este sitio. Drupal exige nombres únicos y la migración se
+  # salta la validación del formulario, así que sin esto quedarían dos cuentas
+  # "admin" y el inicio de sesión dejaría de funcionar. El plugin añade un
+  # sufijo numérico solo cuando hay colisión real.
+  name:
+    plugin: make_unique_entity_field
+    source: name
+    entity_type: user
+    field: name
+    postfix: _d7
+  # Los hash $S$ del D7 los verifica el módulo phpass de core, así que los 977
+  # usuarios que tienen contraseña pueden entrar sin cambiarla. Los 601 con
+  # contraseña vacía, cuentas creadas en el checkout, tendrán que usar el enlace
+  # de recuperación.
+  pass: pass
+  mail: mail
+  init: init
+  status: status
+  created: created
+  access: access
+  login: login
+  timezone: timezone
+  langcode:
+    plugin: default_value
+    default_value: es
+  preferred_langcode:
+    plugin: default_value
+    default_value: es
+  # En el D7 solo existe un rol propio, administrator con rid 3. Los rid 1 y 2
+  # son anonymous y authenticated, que Drupal gestiona solo y no se asignan.
+  roles:
+    plugin: static_map
+    source: roles
+    map:
+      3: administrator
+    default_value: null
+destination:
+  plugin: 'entity:user'
