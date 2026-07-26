@@ -1,0 +1,32 @@
+{#
+/**
+ * @file
+ * Hero full-bleed 600px con scrim, eyebrow, H1 y dos CTAs pill.
+ *
+ * hero_image (render array eager+preload) y ctas los aporta
+ * PronensHooks::preprocessParagraph().
+ */
+#}
+{{ attach_library('pronens/hero') }}
+<section{{ attributes.addClass('pro-hero') }}>
+  {% if hero_image %}
+    <div class="pro-hero__media">{{ hero_image }}</div>
+  {% endif %}
+  <div class="pro-hero__scrim" aria-hidden="true"></div>
+  <div class="pro-hero__content">
+    {% if content.field_eyebrow|render %}
+      <p class="pro-hero__eyebrow">{{ content.field_eyebrow }}</p>
+    {% endif %}
+    <h1 class="pro-hero__title">{{ content.field_titulo }}</h1>
+    {% if content.field_subtitulo|render %}
+      <p class="pro-hero__subtitle">{{ content.field_subtitulo }}</p>
+    {% endif %}
+    {% if ctas %}
+      <div class="pro-hero__actions">
+        {% for cta in ctas %}
+          <a class="pro-btn {{ loop.first ? 'pro-btn--light' : 'pro-btn--ghost' }}" href="{{ cta.url }}">{{ cta.title }}</a>
+        {% endfor %}
+      </div>
+    {% endif %}
+  </div>
+</section>

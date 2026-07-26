@@ -1,0 +1,11 @@
+uuid: a8928be7-766a-47c5-bf2c-647abdd54cef
+langcode: es
+status: true
+dependencies:
+  module:
+    - commerce_product
+id: commerce_product.tarjeta
+label: Tarjeta
+description: null
+targetEntityType: commerce_product
+cache: true

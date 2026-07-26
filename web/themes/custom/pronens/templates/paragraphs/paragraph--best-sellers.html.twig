@@ -1,0 +1,37 @@
+{#
+/**
+ * @file
+ * Best sellers: cabecera con chips de filtro y grupos de 4 tarjetas.
+ *
+ * groups (label + view render array) viene del preprocess; el primer grupo
+ * ("Todo") es el visible por defecto y el JS alterna el resto.
+ */
+#}
+{{ attach_library('pronens/best-sellers') }}
+<section{{ attributes.addClass('pro-best') }} data-pro-best>
+  <div class="pro-container">
+    <div class="pro-best__head">
+      <div>
+        {% if content.field_eyebrow|render %}
+          <p class="pro-eyebrow pro-best__eyebrow">{{ content.field_eyebrow }}</p>
+        {% endif %}
+        <h2 class="pro-best__title">{{ content.field_titulo }}</h2>
+      </div>
+      {% if groups|length > 1 %}
+        <div class="pro-best__chips" role="tablist" aria-label="{{ 'Filter by category'|t }}">
+          {% for group in groups %}
+            <button type="button" role="tab" class="pro-best__chip{{ loop.first ? ' is-active' }}"
+                    aria-selected="{{ loop.first ? 'true' : 'false' }}" data-pro-best-chip="{{ loop.index0 }}">
+              {{ group.label }}
+            </button>
+          {% endfor %}
+        </div>
+      {% endif %}
+    </div>
+    {% for group in groups %}
+      <div class="pro-best__group{{ not loop.first ? ' is-hidden' }}" data-pro-best-group="{{ loop.index0 }}">
+        {{ group.view }}
+      </div>
+    {% endfor %}
+  </div>
+</section>

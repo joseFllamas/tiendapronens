@@ -1,0 +1,19 @@
+uuid: 8b8ce7a2-0420-42d8-a782-81765b4280e6
+langcode: es
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_boton
+    - paragraphs.paragraphs_type.newsletter
+id: paragraph.newsletter.field_boton
+field_name: field_boton
+entity_type: paragraph
+bundle: newsletter
+label: 'Texto del botón'
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

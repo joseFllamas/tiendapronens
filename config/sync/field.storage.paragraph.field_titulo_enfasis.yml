@@ -1,0 +1,21 @@
+uuid: 2dea2745-b297-48a7-9217-62024411e7c2
+langcode: es
+status: true
+dependencies:
+  module:
+    - paragraphs
+id: paragraph.field_titulo_enfasis
+field_name: field_titulo_enfasis
+entity_type: paragraph
+type: string
+settings:
+  max_length: 255
+  case_sensitive: false
+  is_ascii: false
+module: core
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

@@ -1,0 +1,21 @@
+uuid: 545d73e8-0371-43c5-bffb-d3b61a41ff5a
+langcode: es
+status: true
+dependencies: {  }
+name: pronens_hero
+label: 'Pronens: pronens_hero (1920x600 WebP)'
+effects:
+  42aa5c37-80f4-4d6f-92d8-50b6dfecab27:
+    uuid: 42aa5c37-80f4-4d6f-92d8-50b6dfecab27
+    id: image_scale_and_crop
+    weight: 0
+    data:
+      width: 1920
+      height: 600
+      anchor: center-center
+  7d0ecd95-ff2a-432e-bed4-2fe50f9fc721:
+    uuid: 7d0ecd95-ff2a-432e-bed4-2fe50f9fc721
+    id: image_convert
+    weight: 1
+    data:
+      extension: webp

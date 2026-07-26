@@ -1,0 +1,19 @@
+uuid: 58f2fea9-af78-47e6-9913-81ba22a377fa
+langcode: es
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_titulo
+    - paragraphs.paragraphs_type.mosaico_categorias
+id: paragraph.mosaico_categorias.field_titulo
+field_name: field_titulo
+entity_type: paragraph
+bundle: mosaico_categorias
+label: Título
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

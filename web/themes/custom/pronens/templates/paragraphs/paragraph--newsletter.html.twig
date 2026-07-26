@@ -1,0 +1,26 @@
+{#
+/**
+ * @file
+ * Newsletter centrada: input pill + botón oscuro.
+ *
+ * El alta real en la plataforma de email queda pendiente de integración;
+ * el formulario envía por GET a la propia página (sin efecto).
+ */
+#}
+{{ attach_library('pronens/newsletter') }}
+<section{{ attributes.addClass('pro-newsletter') }}>
+  <div class="pro-container pro-newsletter__inner">
+    {% if content.field_eyebrow|render %}
+      <p class="pro-eyebrow pro-newsletter__eyebrow">{{ content.field_eyebrow }}</p>
+    {% endif %}
+    <h2 class="pro-newsletter__title">{{ content.field_titulo }}</h2>
+    {% if content.field_subtitulo|render %}
+      <p class="pro-newsletter__subtitle">{{ content.field_subtitulo }}</p>
+    {% endif %}
+    <form class="pro-newsletter__form" method="get" action="">
+      <label class="visually-hidden" for="pro-newsletter-email">{{ 'Email'|t }}</label>
+      <input class="pro-newsletter__input" id="pro-newsletter-email" type="email" name="email" placeholder="tu@email.com" required>
+      <button class="pro-newsletter__submit" type="submit">{{ paragraph.field_boton.value ?: 'Suscribirme' }}</button>
+    </form>
+  </div>
+</section>

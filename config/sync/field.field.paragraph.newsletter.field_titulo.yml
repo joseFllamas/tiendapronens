@@ -1,0 +1,19 @@
+uuid: 0f703131-9d21-4652-828b-3c9fb5539e4e
+langcode: es
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_titulo
+    - paragraphs.paragraphs_type.newsletter
+id: paragraph.newsletter.field_titulo
+field_name: field_titulo
+entity_type: paragraph
+bundle: newsletter
+label: Título
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

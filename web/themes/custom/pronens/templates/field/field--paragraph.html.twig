@@ -1,0 +1,8 @@
+{#
+/**
+ * @file
+ * Campos de paragraphs sin wrappers: los templates de sección aportan
+ * todo el markup (los campos se imprimen dentro de h1/h2/divs propios).
+ */
+#}
+{% for item in items %}{{ item.content }}{% endfor %}

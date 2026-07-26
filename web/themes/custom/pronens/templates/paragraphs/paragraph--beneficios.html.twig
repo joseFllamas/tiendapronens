@@ -1,0 +1,12 @@
+{#
+/**
+ * @file
+ * Franja blanca de beneficios: 4 columnas con punto turquesa.
+ */
+#}
+{{ attach_library('pronens/beneficios') }}
+<section{{ attributes.addClass('pro-beneficios') }}>
+  <div class="pro-beneficios__grid pro-container">
+    {{ content.field_items }}
+  </div>
+</section>

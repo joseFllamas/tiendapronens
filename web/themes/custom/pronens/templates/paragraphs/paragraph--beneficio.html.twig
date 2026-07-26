@@ -1,0 +1,13 @@
+{#
+/**
+ * @file
+ * Ítem de beneficio: punto turquesa + título + texto.
+ */
+#}
+<div{{ attributes.addClass('pro-beneficio') }}>
+  <span class="pro-beneficio__dot" aria-hidden="true"></span>
+  <div>
+    <div class="pro-beneficio__title">{{ content.field_titulo }}</div>
+    <div class="pro-beneficio__text">{{ content.field_texto }}</div>
+  </div>
+</div>

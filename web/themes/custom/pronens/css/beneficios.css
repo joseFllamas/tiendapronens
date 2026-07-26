@@ -1,0 +1,50 @@
+/**
+ * @file
+ * Franja de beneficios: 4 columnas con punto turquesa.
+ */
+
+.pro-beneficios {
+  background: #fff;
+  border-bottom: 1px solid var(--pro-border);
+}
+
+.pro-beneficios__grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 24px;
+  padding-top: 20px;
+  padding-bottom: 20px;
+}
+
+.pro-beneficio {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+}
+
+.pro-beneficio__dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--pro-teal);
+  margin-top: 5px;
+  flex-shrink: 0;
+}
+
+.pro-beneficio__title {
+  font-weight: 800;
+  font-size: 13.5px;
+  color: var(--pro-ink);
+}
+
+.pro-beneficio__text {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--pro-text-2);
+}
+
+@media (max-width: 900px) {
+  .pro-beneficios__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}

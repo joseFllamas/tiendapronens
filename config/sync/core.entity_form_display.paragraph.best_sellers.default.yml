@@ -1,0 +1,36 @@
+uuid: d1dcd035-678a-41a5-a8c6-f19ba954ca0a
+langcode: es
+status: true
+dependencies:
+  config:
+    - field.field.paragraph.best_sellers.field_eyebrow
+    - field.field.paragraph.best_sellers.field_items
+    - field.field.paragraph.best_sellers.field_titulo
+    - paragraphs.paragraphs_type.best_sellers
+id: paragraph.best_sellers.default
+targetEntityType: paragraph
+bundle: best_sellers
+mode: default
+content:
+  field_eyebrow:
+    type: string_textfield
+    weight: 0
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  field_items:
+    type: paragraphs
+    weight: 2
+    region: content
+    settings:
+      edit_mode: open
+    third_party_settings: {  }
+  field_titulo:
+    type: string_textfield
+    weight: 1
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+hidden:
+  created: true
+  status: true

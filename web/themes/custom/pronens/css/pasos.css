@@ -1,0 +1,97 @@
+/**
+ * @file
+ * Sección de personalización: foto + pasos numerados con contador CSS.
+ */
+
+.pro-pasos {
+  background: var(--pro-cream);
+  margin-top: 72px;
+}
+
+.pro-pasos__inner {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 64px;
+  align-items: center;
+  padding-top: 72px;
+  padding-bottom: 72px;
+}
+
+.pro-pasos__media img {
+  width: 100%;
+  height: 460px;
+  object-fit: cover;
+  display: block;
+}
+
+.pro-pasos__eyebrow {
+  margin: 0 0 10px;
+}
+
+.pro-pasos__title {
+  font-size: 36px;
+  margin: 0 0 10px;
+  text-wrap: pretty;
+}
+
+.pro-pasos__title-accent {
+  color: var(--pro-teal-ink);
+  font-style: italic;
+}
+
+.pro-pasos__items {
+  counter-reset: pasos;
+}
+
+.pro-paso {
+  display: flex;
+  gap: 18px;
+  align-items: flex-start;
+  border-bottom: 1px solid var(--pro-border-cream);
+  padding: 18px 0;
+  counter-increment: pasos;
+}
+
+.pro-paso__num::before {
+  content: counter(pasos, decimal-leading-zero);
+  font-family: var(--pro-font-display);
+  font-weight: 700;
+  font-size: 13px;
+  color: var(--pro-teal);
+}
+
+.pro-paso__num {
+  padding-top: 2px;
+}
+
+.pro-paso__title {
+  font-weight: 800;
+  font-size: 15px;
+  color: var(--pro-ink);
+  margin-bottom: 4px;
+}
+
+.pro-paso__text {
+  font-size: 13.5px;
+  line-height: 1.6;
+  color: var(--pro-text-2);
+}
+
+.pro-pasos__cta {
+  margin-top: 26px;
+}
+
+.pro-pasos__cta:hover {
+  background: var(--pro-teal);
+}
+
+@media (max-width: 900px) {
+  .pro-pasos__inner {
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
+
+  .pro-pasos__media img {
+    height: 320px;
+  }
+}

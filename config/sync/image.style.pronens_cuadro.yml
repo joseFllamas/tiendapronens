@@ -1,0 +1,21 @@
+uuid: 93063b4f-be4d-4561-af37-1c17f6c0eb46
+langcode: es
+status: true
+dependencies: {  }
+name: pronens_cuadro
+label: 'Pronens: pronens_cuadro (1160x920 WebP)'
+effects:
+  2f2218f3-a58f-4d3b-94f8-535a889940de:
+    uuid: 2f2218f3-a58f-4d3b-94f8-535a889940de
+    id: image_scale_and_crop
+    weight: 0
+    data:
+      width: 1160
+      height: 920
+      anchor: center-center
+  fca937a6-6374-47f9-adb3-07f5574196a3:
+    uuid: fca937a6-6374-47f9-adb3-07f5574196a3
+    id: image_convert
+    weight: 1
+    data:
+      extension: webp

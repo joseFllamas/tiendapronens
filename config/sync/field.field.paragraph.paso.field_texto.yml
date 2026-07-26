@@ -1,0 +1,19 @@
+uuid: 69aa6550-be2a-4045-9bc7-f8b2b3a2c9cf
+langcode: es
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_texto
+    - paragraphs.paragraphs_type.paso
+id: paragraph.paso.field_texto
+field_name: field_texto
+entity_type: paragraph
+bundle: paso
+label: Texto
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string_long

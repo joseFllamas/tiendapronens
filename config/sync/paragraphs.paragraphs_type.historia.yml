@@ -1,0 +1,10 @@
+uuid: 39e0d379-3357-415e-b0e0-16d2f7030627
+langcode: es
+status: true
+dependencies: {  }
+id: historia
+label: Historia
+icon_uuid: null
+icon_default: null
+description: null
+behavior_plugins: {  }

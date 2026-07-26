@@ -1,0 +1,24 @@
+uuid: e67463a2-352e-4aa0-8d0c-0d820a06ae4c
+langcode: es
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_termino
+    - paragraphs.paragraphs_type.chip_categoria
+    - taxonomy.vocabulary.tipo_de_producto
+id: paragraph.chip_categoria.field_termino
+field_name: field_termino
+entity_type: paragraph
+bundle: chip_categoria
+label: Categoría
+description: ''
+required: true
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:taxonomy_term'
+  handler_settings:
+    target_bundles:
+      tipo_de_producto: tipo_de_producto
+field_type: entity_reference

@@ -1,0 +1,27 @@
+uuid: 29a0de13-1cba-49ab-a93a-5647648963a2
+langcode: es
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_items
+    - paragraphs.paragraphs_type.paso
+    - paragraphs.paragraphs_type.pasos_personalizacion
+  module:
+    - entity_reference_revisions
+id: paragraph.pasos_personalizacion.field_items
+field_name: field_items
+entity_type: paragraph
+bundle: pasos_personalizacion
+label: Pasos
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:paragraph'
+  handler_settings:
+    target_bundles:
+      paso: paso
+    negate: 0
+field_type: entity_reference_revisions

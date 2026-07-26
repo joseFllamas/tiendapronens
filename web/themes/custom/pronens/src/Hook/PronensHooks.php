@@ -2,6 +2,8 @@
 
 namespace Drupal\pronens\Hook;
 
+use CommerceGuys\Intl\Formatter\CurrencyFormatterInterface;
+use Drupal\commerce_product\Entity\ProductInterface;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Field\EntityReferenceFieldItemListInterface;
@@ -10,6 +12,7 @@ use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Url;
 use Drupal\file\FileInterface;
 use Drupal\media\MediaInterface;
+use Drupal\paragraphs\ParagraphInterface;
 use Drupal\taxonomy\TermInterface;
 
 /**
@@ -24,6 +27,7 @@ class PronensHooks {
   public function __construct(
     protected EntityTypeManagerInterface $entityTypeManager,
     protected LanguageManagerInterface $languageManager,
+    protected CurrencyFormatterInterface $currencyFormatter,
   ) {
   }
 
@@ -130,6 +134,157 @@ class PronensHooks {
   }
 
   /**
+   * Implements hook_theme_suggestions_field_alter().
+   *
+   * Core no ofrece la sugerencia field__{entity_type} a secas; se añade
+   * para poder render bare de todos los campos de paragraphs
+   * (field--paragraph.html.twig).
+   *
+   * @param array<int, string> $suggestions
+   *   Sugerencias de template.
+   * @param array<string, mixed> $variables
+   *   Variables del template.
+   */
+  #[Hook('theme_suggestions_field_alter')]
+  public function themeSuggestionsFieldAlter(array &$suggestions, array $variables): void {
+    $entity_type = $variables['element']['#entity_type'] ?? NULL;
+    if ($entity_type === 'paragraph') {
+      array_unshift($suggestions, 'field__paragraph');
+    }
+  }
+
+  /**
+   * Implements hook_preprocess_paragraph().
+   *
+   * Prepara imágenes con estilo, enlaces y embeds de views para las
+   * secciones de la Home. La lógica vive aquí, no en los templates.
+   *
+   * @param array<string, mixed> $variables
+   *   Variables del template de paragraph.
+   */
+  #[Hook('preprocess_paragraph')]
+  public function preprocessParagraph(array &$variables): void {
+    $paragraph = $variables['paragraph'];
+    if (!$paragraph instanceof ParagraphInterface) {
+      return;
+    }
+    switch ($paragraph->bundle()) {
+      case 'hero':
+        $media = $this->mediaFromField($paragraph, 'field_imagen_media');
+        $variables['hero_image'] = $media !== NULL ? $this->buildStyledImage($media, 'pronens_hero', TRUE) : NULL;
+        $this->attachImagePreload($variables, $media, 'pronens_hero');
+        $variables['ctas'] = array_values(array_filter([
+          $this->linkArray($paragraph, 'field_enlace'),
+          $this->linkArray($paragraph, 'field_enlace_secundario'),
+        ]));
+        break;
+
+      case 'tile_categoria':
+        $term = $this->termFromField($paragraph, 'field_termino');
+        if ($term === NULL) {
+          break;
+        }
+        $etiqueta = $paragraph->hasField('field_etiqueta') ? $paragraph->get('field_etiqueta')->value : NULL;
+        $variables['tile_label'] = $etiqueta ?: $term->label();
+        $variables['tile_url'] = $term->toUrl()->toString();
+        $media = $this->mediaFromField($paragraph, 'field_imagen_media')
+          ?? $this->mediaFromField($term, 'field_imagen');
+        $variables['tile_image'] = $media !== NULL ? $this->buildStyledImage($media, 'pronens_mosaico') : NULL;
+        $variables['#cache']['tags'] = Cache::mergeTags($variables['#cache']['tags'] ?? [], $term->getCacheTags());
+        break;
+
+      case 'mosaico_categorias':
+      case 'historia':
+        $variables['enlace'] = $this->linkArray($paragraph, 'field_enlace');
+        break;
+
+      case 'pasos_personalizacion':
+        $variables['enlace'] = $this->linkArray($paragraph, 'field_enlace');
+        $media = $this->mediaFromField($paragraph, 'field_imagen_media');
+        $variables['pasos_image'] = $media !== NULL ? $this->buildStyledImage($media, 'pronens_cuadro') : NULL;
+        break;
+
+      case 'best_sellers':
+        $embed = static fn(?string $tid = NULL): array => [
+          '#type' => 'view',
+          '#name' => 'productos_destacados',
+          '#display_id' => 'embed_1',
+          '#arguments' => $tid !== NULL ? [$tid] : [],
+        ];
+        $groups = [
+          ['label' => t('All'), 'view' => $embed()],
+        ];
+        if ($paragraph->hasField('field_items')) {
+          $items = $paragraph->get('field_items');
+          $chips = $items instanceof EntityReferenceFieldItemListInterface ? $items->referencedEntities() : [];
+          foreach ($chips as $chip) {
+            if (!$chip instanceof ParagraphInterface) {
+              continue;
+            }
+            $term = $this->termFromField($chip, 'field_termino');
+            if ($term === NULL) {
+              continue;
+            }
+            // Los productos referencian términos hoja: el argumento incluye
+            // el término del chip y todos sus descendientes (OR con "+").
+            $tids = [(int) $term->id()];
+            $storage = $this->entityTypeManager->getStorage('taxonomy_term');
+            /** @var \Drupal\taxonomy\TermStorageInterface $storage */
+            /** @var array<int, object{tid: int|string}> $tree */
+            $tree = $storage->loadTree($term->bundle(), (int) $term->id());
+            foreach ($tree as $descendant) {
+              $tids[] = (int) $descendant->tid;
+            }
+            $groups[] = [
+              'label' => $chip->get('field_etiqueta')->value ?: $term->label(),
+              'view' => $embed(implode('+', $tids)),
+            ];
+            $variables['#cache']['tags'] = Cache::mergeTags($variables['#cache']['tags'] ?? [], $chip->getCacheTags());
+          }
+        }
+        $variables['groups'] = $groups;
+        break;
+    }
+  }
+
+  /**
+   * Implements hook_preprocess_commerce_product().
+   *
+   * Construye los datos de la tarjeta (view mode "tarjeta"): imagen 3:4,
+   * precio de la variación por defecto y nota de bordado.
+   *
+   * @param array<string, mixed> $variables
+   *   Variables del template de producto.
+   */
+  #[Hook('preprocess_commerce_product')]
+  public function preprocessCommerceProduct(array &$variables): void {
+    if (($variables['elements']['#view_mode'] ?? '') !== 'tarjeta') {
+      return;
+    }
+    $product = $variables['elements']['#commerce_product'] ?? NULL;
+    if (!$product instanceof ProductInterface) {
+      return;
+    }
+    $card = [
+      'url' => $product->toUrl()->toString(),
+      'title' => $product->label(),
+      'image' => NULL,
+      'price' => NULL,
+      'personalizable' => $product->hasField('field_personalizable') && (bool) $product->get('field_personalizable')->value,
+    ];
+    $media = $this->mediaFromField($product, 'field_imagen_principal');
+    if ($media !== NULL) {
+      $card['image'] = $this->buildStyledImage($media, 'pronens_card');
+    }
+    $variation = $product->getDefaultVariation();
+    if ($variation !== NULL && ($price = $variation->getPrice()) !== NULL) {
+      $card['price'] = $this->currencyFormatter->format($price->getNumber(), $price->getCurrencyCode());
+      $variables['#cache']['tags'] = Cache::mergeTags($variables['#cache']['tags'] ?? [], $variation->getCacheTags());
+    }
+    $variables['card'] = $card;
+  }
+
+  /**
    * Implements hook_preprocess_image_widget().
    *
    * @param array<string, mixed> $variables
@@ -145,6 +300,118 @@ class PronensHooks {
     if (isset($data['preview']['#access']) && $data['preview']['#access'] === FALSE) {
       unset($data['preview']);
     }
+  }
+
+  /**
+   * Primer media referenciado por un campo de una entidad.
+   */
+  protected function mediaFromField(object $entity, string $field_name): ?MediaInterface {
+    if (!$entity instanceof \Drupal\Core\Entity\FieldableEntityInterface || !$entity->hasField($field_name)) {
+      return NULL;
+    }
+    $field = $entity->get($field_name);
+    $referenced = $field instanceof EntityReferenceFieldItemListInterface ? $field->referencedEntities() : [];
+    $media = reset($referenced);
+    return $media instanceof MediaInterface ? $media : NULL;
+  }
+
+  /**
+   * Primer término referenciado por un campo de una entidad.
+   */
+  protected function termFromField(object $entity, string $field_name): ?TermInterface {
+    if (!$entity instanceof \Drupal\Core\Entity\FieldableEntityInterface || !$entity->hasField($field_name)) {
+      return NULL;
+    }
+    $field = $entity->get($field_name);
+    $referenced = $field instanceof EntityReferenceFieldItemListInterface ? $field->referencedEntities() : [];
+    $term = reset($referenced);
+    return $term instanceof TermInterface ? $term : NULL;
+  }
+
+  /**
+   * Render array de la imagen de un media con un estilo (WebP).
+   *
+   * @return array<string, mixed>|null
+   *   Render array con cache tags del media y el fichero, o NULL.
+   */
+  protected function buildStyledImage(MediaInterface $media, string $style_name, bool $eager = FALSE): ?array {
+    if (!$media->hasField('field_media_image')) {
+      return NULL;
+    }
+    $field = $media->get('field_media_image');
+    $files = $field instanceof EntityReferenceFieldItemListInterface ? $field->referencedEntities() : [];
+    $file = reset($files);
+    if (!$file instanceof FileInterface) {
+      return NULL;
+    }
+    $item = $field->first();
+    $values = $item !== NULL ? $item->getValue() : [];
+    $attributes = $eager
+      ? ['loading' => 'eager', 'fetchpriority' => 'high']
+      : ['loading' => 'lazy'];
+
+    return [
+      '#theme' => 'image_style',
+      '#style_name' => $style_name,
+      '#uri' => $file->getFileUri(),
+      '#alt' => $values['alt'] ?? '',
+      '#width' => $values['width'] ?? NULL,
+      '#height' => $values['height'] ?? NULL,
+      '#attributes' => $attributes,
+      '#cache' => [
+        'tags' => Cache::mergeTags($media->getCacheTags(), $file->getCacheTags()),
+      ],
+    ];
+  }
+
+  /**
+   * Añade el preload de la imagen hero (LCP) al head.
+   *
+   * @param array<string, mixed> $variables
+   *   Variables del template (se anota #attached).
+   */
+  protected function attachImagePreload(array &$variables, ?MediaInterface $media, string $style_name): void {
+    if ($media === NULL || !$media->hasField('field_media_image')) {
+      return;
+    }
+    $field = $media->get('field_media_image');
+    $files = $field instanceof EntityReferenceFieldItemListInterface ? $field->referencedEntities() : [];
+    $file = reset($files);
+    if (!$file instanceof FileInterface) {
+      return;
+    }
+    $style = $this->entityTypeManager->getStorage('image_style')->load($style_name);
+    $uri = $file->getFileUri();
+    if (!$style instanceof \Drupal\image\ImageStyleInterface || $uri === NULL) {
+      return;
+    }
+    $variables['#attached']['html_head_link'][] = [
+      [
+        'rel' => 'preload',
+        'as' => 'image',
+        'href' => $style->buildUrl($uri),
+        'fetchpriority' => 'high',
+      ],
+    ];
+  }
+
+  /**
+   * Convierte un campo link en ['url' => string, 'title' => string].
+   *
+   * @return array{url: string, title: string}|null
+   *   Datos del enlace o NULL si el campo está vacío.
+   */
+  protected function linkArray(object $entity, string $field_name): ?array {
+    if (!$entity instanceof \Drupal\Core\Entity\FieldableEntityInterface || !$entity->hasField($field_name) || $entity->get($field_name)->isEmpty()) {
+      return NULL;
+    }
+    /** @var \Drupal\link\Plugin\Field\FieldType\LinkItem $item */
+    $item = $entity->get($field_name)->first();
+    $values = $item->getValue();
+    return [
+      'url' => $item->getUrl()->toString(),
+      'title' => $values['title'] ?? $item->getUrl()->toString(),
+    ];
   }
 
   /**

@@ -1,0 +1,19 @@
+uuid: 4f732a14-da7f-4b93-a70a-069c56ca82cd
+langcode: es
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_eyebrow
+    - paragraphs.paragraphs_type.best_sellers
+id: paragraph.best_sellers.field_eyebrow
+field_name: field_eyebrow
+entity_type: paragraph
+bundle: best_sellers
+label: Eyebrow
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

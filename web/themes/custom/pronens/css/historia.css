@@ -1,0 +1,64 @@
+/**
+ * @file
+ * Sección historia sobre fondo ink.
+ */
+
+.pro-historia {
+  background: var(--pro-ink);
+}
+
+.pro-historia__inner {
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+  gap: 72px;
+  align-items: center;
+  padding-top: 88px;
+  padding-bottom: 88px;
+}
+
+.pro-historia__eyebrow {
+  color: var(--pro-teal-light);
+  margin: 0 0 14px;
+}
+
+.pro-historia__title {
+  font-size: 42px;
+  line-height: 1.12;
+  color: #fff;
+  margin: 0;
+  text-wrap: pretty;
+}
+
+.pro-historia__body {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.pro-historia__body p {
+  font-size: 15px;
+  line-height: 1.7;
+  color: #9fb3ba;
+  margin: 0;
+}
+
+.pro-historia__link {
+  color: var(--pro-teal-light);
+  font-weight: 800;
+  font-size: 13px;
+}
+
+.pro-historia__link:hover {
+  color: #fff;
+}
+
+@media (max-width: 900px) {
+  .pro-historia__inner {
+    grid-template-columns: 1fr;
+    gap: 28px;
+  }
+
+  .pro-historia__title {
+    font-size: 32px;
+  }
+}

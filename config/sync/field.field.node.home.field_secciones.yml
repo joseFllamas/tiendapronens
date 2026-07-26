@@ -1,0 +1,39 @@
+uuid: 30b1bdcf-bc3f-4f42-830e-e63fd52b79ba
+langcode: es
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_secciones
+    - node.type.home
+    - paragraphs.paragraphs_type.beneficios
+    - paragraphs.paragraphs_type.best_sellers
+    - paragraphs.paragraphs_type.hero
+    - paragraphs.paragraphs_type.historia
+    - paragraphs.paragraphs_type.mosaico_categorias
+    - paragraphs.paragraphs_type.newsletter
+    - paragraphs.paragraphs_type.pasos_personalizacion
+  module:
+    - entity_reference_revisions
+id: node.home.field_secciones
+field_name: field_secciones
+entity_type: node
+bundle: home
+label: Secciones
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:paragraph'
+  handler_settings:
+    target_bundles:
+      hero: hero
+      beneficios: beneficios
+      mosaico_categorias: mosaico_categorias
+      pasos_personalizacion: pasos_personalizacion
+      best_sellers: best_sellers
+      historia: historia
+      newsletter: newsletter
+    negate: 0
+field_type: entity_reference_revisions

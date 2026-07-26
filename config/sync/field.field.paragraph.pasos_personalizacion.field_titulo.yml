@@ -1,0 +1,19 @@
+uuid: 55e318b2-26b7-4d88-8239-d36654d45041
+langcode: es
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_titulo
+    - paragraphs.paragraphs_type.pasos_personalizacion
+id: paragraph.pasos_personalizacion.field_titulo
+field_name: field_titulo
+entity_type: paragraph
+bundle: pasos_personalizacion
+label: Título
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

@@ -1,0 +1,16 @@
+uuid: 4e37b259-c455-46e4-8a9a-4960bc32f799
+langcode: es
+status: true
+dependencies:
+  config:
+    - paragraphs.paragraphs_type.beneficios
+  module:
+    - content_translation
+third_party_settings:
+  content_translation:
+    enabled: true
+id: paragraph.beneficios
+target_entity_type_id: paragraph
+target_bundle: beneficios
+default_langcode: site_default
+language_alterable: false

@@ -1,0 +1,30 @@
+uuid: 666ecfb3-fb32-4e42-b5a0-e6ff70ef025b
+langcode: es
+status: true
+dependencies:
+  config:
+    - field.field.paragraph.paso.field_texto
+    - field.field.paragraph.paso.field_titulo
+    - paragraphs.paragraphs_type.paso
+id: paragraph.paso.default
+targetEntityType: paragraph
+bundle: paso
+mode: default
+content:
+  field_texto:
+    type: basic_string
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    weight: 1
+    region: content
+  field_titulo:
+    type: string
+    label: hidden
+    settings:
+      link_to_entity: false
+      link_rel: canonical
+    third_party_settings: {  }
+    weight: 0
+    region: content
+hidden: {  }

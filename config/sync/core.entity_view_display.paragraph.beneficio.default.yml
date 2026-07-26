@@ -1,0 +1,30 @@
+uuid: 1c237161-0ca9-4d47-9260-3602e15bc2aa
+langcode: es
+status: true
+dependencies:
+  config:
+    - field.field.paragraph.beneficio.field_texto
+    - field.field.paragraph.beneficio.field_titulo
+    - paragraphs.paragraphs_type.beneficio
+id: paragraph.beneficio.default
+targetEntityType: paragraph
+bundle: beneficio
+mode: default
+content:
+  field_texto:
+    type: basic_string
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    weight: 1
+    region: content
+  field_titulo:
+    type: string
+    label: hidden
+    settings:
+      link_to_entity: false
+      link_rel: canonical
+    third_party_settings: {  }
+    weight: 0
+    region: content
+hidden: {  }

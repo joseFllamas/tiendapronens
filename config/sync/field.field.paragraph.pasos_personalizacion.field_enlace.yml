@@ -1,0 +1,23 @@
+uuid: c07eba1b-0dbe-4570-ae4d-392218bcafa2
+langcode: es
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_enlace
+    - paragraphs.paragraphs_type.pasos_personalizacion
+  module:
+    - link
+id: paragraph.pasos_personalizacion.field_enlace
+field_name: field_enlace
+entity_type: paragraph
+bundle: pasos_personalizacion
+label: Botón
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  title: 1
+  link_type: 17
+field_type: link

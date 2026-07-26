@@ -1,0 +1,19 @@
+uuid: 8a86eae1-5939-4e1d-be6a-4980e66a9f7e
+langcode: es
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_etiqueta
+    - paragraphs.paragraphs_type.tile_categoria
+id: paragraph.tile_categoria.field_etiqueta
+field_name: field_etiqueta
+entity_type: paragraph
+bundle: tile_categoria
+label: Etiqueta
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

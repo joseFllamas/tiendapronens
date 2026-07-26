@@ -37,6 +37,59 @@ footer:
     component:
       css/footer.css: {}
 
+hero:
+  version: VERSION
+  css:
+    component:
+      css/hero.css: {}
+
+beneficios:
+  version: VERSION
+  css:
+    component:
+      css/beneficios.css: {}
+
+mosaico:
+  version: VERSION
+  css:
+    component:
+      css/mosaico.css: {}
+
+pasos:
+  version: VERSION
+  css:
+    component:
+      css/pasos.css: {}
+
+best-sellers:
+  version: VERSION
+  css:
+    component:
+      css/best-sellers.css: {}
+  js:
+    js/best-sellers.js: {}
+  dependencies:
+    - core/drupal
+    - core/once
+
+card:
+  version: VERSION
+  css:
+    component:
+      css/card.css: {}
+
+historia:
+  version: VERSION
+  css:
+    component:
+      css/historia.css: {}
+
+newsletter:
+  version: VERSION
+  css:
+    component:
+      css/newsletter.css: {}
+
 base:
   version: VERSION
   css:

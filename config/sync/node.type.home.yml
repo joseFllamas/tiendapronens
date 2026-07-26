@@ -1,0 +1,11 @@
+uuid: d2d58e2a-7a99-4fc4-94ef-061b2454af35
+langcode: es
+status: true
+dependencies: {  }
+name: 'Página Home'
+type: home
+description: 'Portada construida con secciones (paragraphs).'
+help: null
+new_revision: true
+preview_mode: 1
+display_submitted: false

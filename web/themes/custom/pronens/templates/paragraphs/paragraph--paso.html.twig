@@ -1,0 +1,13 @@
+{#
+/**
+ * @file
+ * Paso numerado (el número 01/02/03 lo pone un contador CSS).
+ */
+#}
+<div{{ attributes.addClass('pro-paso') }}>
+  <span class="pro-paso__num" aria-hidden="true"></span>
+  <div>
+    <div class="pro-paso__title">{{ content.field_titulo }}</div>
+    <div class="pro-paso__text">{{ content.field_texto }}</div>
+  </div>
+</div>

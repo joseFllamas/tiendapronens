@@ -1,0 +1,28 @@
+uuid: 172e1a95-f8cc-4c91-975a-ab74c0570f36
+langcode: es
+status: true
+dependencies:
+  config:
+    - field.field.paragraph.chip_categoria.field_etiqueta
+    - field.field.paragraph.chip_categoria.field_termino
+    - paragraphs.paragraphs_type.chip_categoria
+id: paragraph.chip_categoria.default
+targetEntityType: paragraph
+bundle: chip_categoria
+mode: default
+content:
+  field_etiqueta:
+    type: string_textfield
+    weight: 0
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  field_termino:
+    type: options_select
+    weight: 1
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+hidden:
+  created: true
+  status: true

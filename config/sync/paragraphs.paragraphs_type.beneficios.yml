@@ -1,0 +1,10 @@
+uuid: 2f834c49-c76a-4fd2-946d-6fd46d3fbf38
+langcode: es
+status: true
+dependencies: {  }
+id: beneficios
+label: 'Franja de beneficios'
+icon_uuid: null
+icon_default: null
+description: null
+behavior_plugins: {  }

@@ -1,0 +1,19 @@
+uuid: a2831a08-2760-4ee7-9ad9-ea8815ae31c0
+langcode: es
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_eyebrow
+    - paragraphs.paragraphs_type.newsletter
+id: paragraph.newsletter.field_eyebrow
+field_name: field_eyebrow
+entity_type: paragraph
+bundle: newsletter
+label: Eyebrow
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

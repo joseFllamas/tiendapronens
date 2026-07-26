@@ -1,0 +1,112 @@
+/**
+ * @file
+ * Mosaico de categorías: tile alto + tile ancho + dos medios.
+ */
+
+.pro-mosaico {
+  padding-top: 72px;
+}
+
+.pro-mosaico__head {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  margin-bottom: 26px;
+}
+
+.pro-mosaico__eyebrow {
+  margin: 0 0 8px;
+}
+
+.pro-mosaico__title {
+  font-size: 36px;
+  margin: 0;
+}
+
+.pro-mosaico__all {
+  font-weight: 800;
+  font-size: 13px;
+  color: var(--pro-ink);
+}
+
+.pro-mosaico__grid {
+  display: grid;
+  grid-template-columns: 1.2fr 0.5fr 0.5fr;
+  grid-template-rows: 280px 280px;
+  gap: 16px;
+}
+
+/* El campo se renderiza con wrappers de field: los tiles son los <a>. */
+.pro-mosaico__grid .pro-tile:nth-of-type(1) {
+  grid-column: 1;
+  grid-row: 1 / span 2;
+}
+
+.pro-mosaico__grid .pro-tile:nth-of-type(2) {
+  grid-column: 2 / span 2;
+  grid-row: 1;
+}
+
+.pro-tile {
+  position: relative;
+  display: block;
+  overflow: hidden;
+  background: var(--pro-img-bg);
+}
+
+.pro-tile__media,
+.pro-tile__media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.pro-tile__media {
+  position: absolute;
+  inset: 0;
+}
+
+.pro-tile__label {
+  position: absolute;
+  left: 16px;
+  bottom: 16px;
+  background: #fff;
+  color: var(--pro-ink);
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  padding: 8px 12px;
+}
+
+@media (max-width: 900px) {
+  .pro-mosaico__grid {
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 260px 260px 260px;
+  }
+
+  .pro-mosaico__grid .pro-tile:nth-of-type(1) {
+    grid-column: 1;
+    grid-row: 1 / span 2;
+  }
+
+  .pro-mosaico__grid .pro-tile:nth-of-type(2) {
+    grid-column: 2;
+    grid-row: 1;
+  }
+}
+
+@media (max-width: 480px) {
+  .pro-mosaico__grid {
+    grid-template-columns: 1fr;
+    grid-template-rows: none;
+    grid-auto-rows: 240px;
+  }
+
+  .pro-mosaico__grid .pro-tile:nth-of-type(1),
+  .pro-mosaico__grid .pro-tile:nth-of-type(2) {
+    grid-column: auto;
+    grid-row: auto;
+  }
+}

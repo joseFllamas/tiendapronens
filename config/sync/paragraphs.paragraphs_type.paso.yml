@@ -1,0 +1,10 @@
+uuid: 80408ac6-bc87-4d00-9e90-be9258dc5637
+langcode: es
+status: true
+dependencies: {  }
+id: paso
+label: 'Paso (ítem)'
+icon_uuid: null
+icon_default: null
+description: null
+behavior_plugins: {  }

@@ -1,0 +1,19 @@
+uuid: 6f60aa62-66f3-4a98-9f9c-41b16067e5bf
+langcode: es
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_titulo
+    - paragraphs.paragraphs_type.beneficio
+id: paragraph.beneficio.field_titulo
+field_name: field_titulo
+entity_type: paragraph
+bundle: beneficio
+label: Título
+description: ''
+required: true
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

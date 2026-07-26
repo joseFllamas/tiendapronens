@@ -1,0 +1,85 @@
+/**
+ * @file
+ * Hero full-bleed 600px con scrim y CTAs.
+ */
+
+.pro-hero {
+  position: relative;
+  height: 600px;
+  background: var(--pro-ink);
+  overflow: hidden;
+}
+
+.pro-hero__media img {
+  width: 100%;
+  height: 600px;
+  object-fit: cover;
+  display: block;
+}
+
+.pro-hero__scrim {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(rgba(14, 27, 32, 0.2), rgba(14, 27, 32, 0.45));
+  pointer-events: none;
+}
+
+.pro-hero__content {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 0 32px;
+}
+
+.pro-hero__eyebrow {
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.42em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.88);
+  margin: 0 0 18px;
+}
+
+.pro-hero__title {
+  font-family: var(--pro-font-display);
+  font-weight: 900;
+  font-size: 76px;
+  line-height: 1;
+  letter-spacing: 0.01em;
+  text-transform: uppercase;
+  color: #fff;
+  margin: 0 0 14px;
+  text-shadow: 0 2px 28px rgba(14, 27, 32, 0.4);
+}
+
+.pro-hero__subtitle {
+  font-size: 21px;
+  font-style: italic;
+  color: rgba(255, 255, 255, 0.94);
+  margin: 0 0 30px;
+  text-shadow: 0 1px 12px rgba(14, 27, 32, 0.4);
+}
+
+.pro-hero__actions {
+  display: flex;
+  gap: 12px;
+}
+
+@media (max-width: 768px) {
+  .pro-hero,
+  .pro-hero__media img {
+    height: 480px;
+  }
+
+  .pro-hero__title {
+    font-size: 44px;
+  }
+
+  .pro-hero__subtitle {
+    font-size: 17px;
+  }
+}

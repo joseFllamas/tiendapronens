@@ -1,0 +1,21 @@
+uuid: 15aae1ba-cca0-42b8-9048-b843d2fb190a
+langcode: es
+status: true
+dependencies: {  }
+name: pronens_mosaico
+label: 'Pronens: pronens_mosaico (900x700 WebP)'
+effects:
+  45880ab0-bed5-4a6b-b45f-6dc852ba3972:
+    uuid: 45880ab0-bed5-4a6b-b45f-6dc852ba3972
+    id: image_scale_and_crop
+    weight: 0
+    data:
+      width: 900
+      height: 700
+      anchor: center-center
+  9bc4a3b6-95a6-43be-89a7-54b9ff0f64bb:
+    uuid: 9bc4a3b6-95a6-43be-89a7-54b9ff0f64bb
+    id: image_convert
+    weight: 1
+    data:
+      extension: webp

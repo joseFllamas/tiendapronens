@@ -1,0 +1,34 @@
+uuid: 715de77b-37e2-40c7-a632-f0fc498feac3
+langcode: es
+status: true
+dependencies:
+  config:
+    - field.field.paragraph.best_sellers.field_eyebrow
+    - field.field.paragraph.best_sellers.field_items
+    - field.field.paragraph.best_sellers.field_titulo
+    - paragraphs.paragraphs_type.best_sellers
+id: paragraph.best_sellers.default
+targetEntityType: paragraph
+bundle: best_sellers
+mode: default
+content:
+  field_eyebrow:
+    type: string
+    label: hidden
+    settings:
+      link_to_entity: false
+      link_rel: canonical
+    third_party_settings: {  }
+    weight: 0
+    region: content
+  field_titulo:
+    type: string
+    label: hidden
+    settings:
+      link_to_entity: false
+      link_rel: canonical
+    third_party_settings: {  }
+    weight: 1
+    region: content
+hidden:
+  field_items: true

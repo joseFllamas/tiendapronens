@@ -1,0 +1,16 @@
+uuid: fad45852-fca3-4a12-81b2-a07ed6a99a64
+langcode: es
+status: true
+dependencies:
+  config:
+    - paragraphs.paragraphs_type.mosaico_categorias
+  module:
+    - content_translation
+third_party_settings:
+  content_translation:
+    enabled: true
+id: paragraph.mosaico_categorias
+target_entity_type_id: paragraph
+target_bundle: mosaico_categorias
+default_langcode: site_default
+language_alterable: false

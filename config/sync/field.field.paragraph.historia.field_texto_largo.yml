@@ -1,0 +1,22 @@
+uuid: b1572bc6-11b1-42ec-b32f-8675a5123cef
+langcode: es
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_texto_largo
+    - paragraphs.paragraphs_type.historia
+  module:
+    - text
+id: paragraph.historia.field_texto_largo
+field_name: field_texto_largo
+entity_type: paragraph
+bundle: historia
+label: Texto
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  allowed_formats: {  }
+field_type: text_long

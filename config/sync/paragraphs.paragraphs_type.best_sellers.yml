@@ -1,0 +1,10 @@
+uuid: e3d91f25-eeb1-457c-9ebf-1d4c4409e787
+langcode: es
+status: true
+dependencies: {  }
+id: best_sellers
+label: 'Best sellers'
+icon_uuid: null
+icon_default: null
+description: null
+behavior_plugins: {  }

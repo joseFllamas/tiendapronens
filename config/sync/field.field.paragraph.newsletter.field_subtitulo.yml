@@ -1,0 +1,19 @@
+uuid: 742d22e2-2f81-4b8f-8226-e48ef5d7c838
+langcode: es
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_subtitulo
+    - paragraphs.paragraphs_type.newsletter
+id: paragraph.newsletter.field_subtitulo
+field_name: field_subtitulo
+entity_type: paragraph
+bundle: newsletter
+label: Subtítulo
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

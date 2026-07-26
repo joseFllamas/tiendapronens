@@ -1,0 +1,43 @@
+uuid: ad11e84b-5026-4a97-9dfa-2ce745bfb4a6
+langcode: es
+status: true
+dependencies:
+  config:
+    - field.field.paragraph.mosaico_categorias.field_enlace
+    - field.field.paragraph.mosaico_categorias.field_eyebrow
+    - field.field.paragraph.mosaico_categorias.field_items
+    - field.field.paragraph.mosaico_categorias.field_titulo
+    - paragraphs.paragraphs_type.mosaico_categorias
+id: paragraph.mosaico_categorias.default
+targetEntityType: paragraph
+bundle: mosaico_categorias
+mode: default
+content:
+  field_enlace:
+    type: link_default
+    weight: 2
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  field_eyebrow:
+    type: string_textfield
+    weight: 0
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  field_items:
+    type: paragraphs
+    weight: 3
+    region: content
+    settings:
+      edit_mode: open
+    third_party_settings: {  }
+  field_titulo:
+    type: string_textfield
+    weight: 1
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+hidden:
+  created: true
+  status: true

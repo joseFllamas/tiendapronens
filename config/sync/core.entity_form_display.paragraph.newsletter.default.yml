@@ -1,0 +1,42 @@
+uuid: 902af249-bef3-4089-8849-928084aa6bbe
+langcode: es
+status: true
+dependencies:
+  config:
+    - field.field.paragraph.newsletter.field_boton
+    - field.field.paragraph.newsletter.field_eyebrow
+    - field.field.paragraph.newsletter.field_subtitulo
+    - field.field.paragraph.newsletter.field_titulo
+    - paragraphs.paragraphs_type.newsletter
+id: paragraph.newsletter.default
+targetEntityType: paragraph
+bundle: newsletter
+mode: default
+content:
+  field_boton:
+    type: string_textfield
+    weight: 3
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  field_eyebrow:
+    type: string_textfield
+    weight: 0
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  field_subtitulo:
+    type: string_textfield
+    weight: 2
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  field_titulo:
+    type: string_textfield
+    weight: 1
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+hidden:
+  created: true
+  status: true

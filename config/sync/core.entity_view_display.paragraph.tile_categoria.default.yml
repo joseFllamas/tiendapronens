@@ -1,0 +1,26 @@
+uuid: 23b747b7-bdbc-4528-bb3b-b1b2bbbeed40
+langcode: es
+status: true
+dependencies:
+  config:
+    - field.field.paragraph.tile_categoria.field_etiqueta
+    - field.field.paragraph.tile_categoria.field_imagen_media
+    - field.field.paragraph.tile_categoria.field_termino
+    - paragraphs.paragraphs_type.tile_categoria
+id: paragraph.tile_categoria.default
+targetEntityType: paragraph
+bundle: tile_categoria
+mode: default
+content:
+  field_etiqueta:
+    type: string
+    label: hidden
+    settings:
+      link_to_entity: false
+      link_rel: canonical
+    third_party_settings: {  }
+    weight: 1
+    region: content
+hidden:
+  field_imagen_media: true
+  field_termino: true

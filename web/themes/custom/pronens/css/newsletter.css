@@ -1,0 +1,68 @@
+/**
+ * @file
+ * Newsletter centrada con input pill y botón oscuro.
+ */
+
+.pro-newsletter__inner {
+  padding-top: 88px;
+  padding-bottom: 88px;
+  text-align: center;
+}
+
+.pro-newsletter__eyebrow {
+  margin: 0 0 10px;
+}
+
+.pro-newsletter__title {
+  font-size: 34px;
+  margin: 0;
+}
+
+.pro-newsletter__subtitle {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--pro-text-2);
+  margin: 12px 0 28px;
+}
+
+.pro-newsletter__form {
+  display: flex;
+  gap: 10px;
+  max-width: 480px;
+  margin: 0 auto;
+}
+
+.pro-newsletter__input {
+  flex: 1;
+  min-width: 0;
+  border: 1px solid var(--pro-border-2);
+  border-radius: var(--pro-radius-pill);
+  padding: 13px 20px;
+  font-size: 14px;
+  font-family: var(--pro-font-ui);
+  background: #fff;
+}
+
+.pro-newsletter__input::placeholder {
+  color: var(--pro-text-2);
+}
+
+.pro-newsletter__submit {
+  background: var(--pro-ink);
+  color: #fff;
+  border: 0;
+  border-radius: var(--pro-radius-pill);
+  padding: 13px 26px;
+  font-weight: 800;
+  font-size: 14px;
+}
+
+.pro-newsletter__submit:hover {
+  background: var(--pro-teal);
+}
+
+@media (max-width: 480px) {
+  .pro-newsletter__form {
+    flex-direction: column;
+  }
+}

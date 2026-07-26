@@ -1,0 +1,67 @@
+/**
+ * @file
+ * Best sellers: chips de filtro + grid de 4 tarjetas.
+ */
+
+.pro-best {
+  padding-top: 80px;
+  padding-bottom: 80px;
+}
+
+.pro-best__head {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 26px;
+}
+
+.pro-best__eyebrow {
+  margin: 0 0 8px;
+}
+
+.pro-best__title {
+  font-size: 36px;
+  margin: 0;
+}
+
+.pro-best__chips {
+  display: flex;
+  gap: 8px;
+}
+
+.pro-best__chip {
+  background: none;
+  border: 1px solid var(--pro-border-2);
+  border-radius: var(--pro-radius-pill);
+  padding: 8px 14px;
+  font-size: 12px;
+  font-weight: 800;
+  color: var(--pro-ink);
+}
+
+.pro-best__chip:hover {
+  border-color: var(--pro-ink);
+}
+
+.pro-best__chip.is-active {
+  background: var(--pro-ink);
+  border-color: var(--pro-ink);
+  color: #fff;
+}
+
+.pro-best__group.is-hidden {
+  display: none;
+}
+
+.pro-best__group .view-content {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 16px;
+}
+
+@media (max-width: 900px) {
+  .pro-best__group .view-content {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}

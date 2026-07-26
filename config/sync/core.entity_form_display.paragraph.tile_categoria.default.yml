@@ -1,0 +1,35 @@
+uuid: 0a07ae51-5878-47db-87b7-d15e57467930
+langcode: es
+status: true
+dependencies:
+  config:
+    - field.field.paragraph.tile_categoria.field_etiqueta
+    - field.field.paragraph.tile_categoria.field_imagen_media
+    - field.field.paragraph.tile_categoria.field_termino
+    - paragraphs.paragraphs_type.tile_categoria
+id: paragraph.tile_categoria.default
+targetEntityType: paragraph
+bundle: tile_categoria
+mode: default
+content:
+  field_etiqueta:
+    type: string_textfield
+    weight: 1
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  field_imagen_media:
+    type: media_library_widget
+    weight: 2
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  field_termino:
+    type: options_select
+    weight: 0
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+hidden:
+  created: true
+  status: true

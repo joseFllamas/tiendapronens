@@ -1,0 +1,48 @@
+uuid: eb145150-5a7e-48ca-a112-3ddc111b8a12
+langcode: es
+status: true
+dependencies:
+  config:
+    - field.field.paragraph.hero.field_enlace
+    - field.field.paragraph.hero.field_enlace_secundario
+    - field.field.paragraph.hero.field_eyebrow
+    - field.field.paragraph.hero.field_imagen_media
+    - field.field.paragraph.hero.field_subtitulo
+    - field.field.paragraph.hero.field_titulo
+    - paragraphs.paragraphs_type.hero
+id: paragraph.hero.default
+targetEntityType: paragraph
+bundle: hero
+mode: default
+content:
+  field_eyebrow:
+    type: string
+    label: hidden
+    settings:
+      link_to_entity: false
+      link_rel: canonical
+    third_party_settings: {  }
+    weight: 1
+    region: content
+  field_subtitulo:
+    type: string
+    label: hidden
+    settings:
+      link_to_entity: false
+      link_rel: canonical
+    third_party_settings: {  }
+    weight: 3
+    region: content
+  field_titulo:
+    type: string
+    label: hidden
+    settings:
+      link_to_entity: false
+      link_rel: canonical
+    third_party_settings: {  }
+    weight: 2
+    region: content
+hidden:
+  field_enlace: true
+  field_enlace_secundario: true
+  field_imagen_media: true

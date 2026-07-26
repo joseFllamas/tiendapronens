@@ -1,0 +1,24 @@
+uuid: 4dc62d0c-b545-4f6d-8a91-13359f870821
+langcode: es
+status: true
+dependencies:
+  config:
+    - field.field.paragraph.beneficios.field_items
+    - paragraphs.paragraphs_type.beneficios
+  module:
+    - entity_reference_revisions
+id: paragraph.beneficios.default
+targetEntityType: paragraph
+bundle: beneficios
+mode: default
+content:
+  field_items:
+    type: entity_reference_revisions_entity_view
+    label: hidden
+    settings:
+      view_mode: default
+      link: ''
+    third_party_settings: {  }
+    weight: 50
+    region: content
+hidden: {  }

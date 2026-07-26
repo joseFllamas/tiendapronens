@@ -1,0 +1,19 @@
+uuid: 1c80a520-15ef-4237-8284-b219a14e1cb4
+langcode: es
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_etiqueta
+    - paragraphs.paragraphs_type.chip_categoria
+id: paragraph.chip_categoria.field_etiqueta
+field_name: field_etiqueta
+entity_type: paragraph
+bundle: chip_categoria
+label: Etiqueta
+description: ''
+required: true
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

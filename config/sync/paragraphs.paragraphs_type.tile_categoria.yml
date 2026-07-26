@@ -1,0 +1,10 @@
+uuid: aedae74c-aa21-4e81-bc5c-ec725bd431d8
+langcode: es
+status: true
+dependencies: {  }
+id: tile_categoria
+label: 'Tile de categoría (ítem)'
+icon_uuid: null
+icon_default: null
+description: null
+behavior_plugins: {  }

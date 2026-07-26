@@ -1,0 +1,87 @@
+uuid: 5e818edb-7263-4bfb-b9a8-5040f18f595a
+langcode: es
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.commerce_product.tarjeta
+  module:
+    - commerce_product
+id: productos_destacados
+label: 'Productos destacados'
+module: views
+description: ''
+tag: ''
+base_table: commerce_product_field_data
+base_field: product_id
+display:
+  default:
+    id: default
+    display_title: Default
+    display_plugin: default
+    position: 0
+    display_options:
+      pager:
+        type: some
+        options:
+          offset: 0
+          items_per_page: 4
+      cache:
+        type: tag
+        options: {  }
+      sorts:
+        changed:
+          id: changed
+          table: commerce_product_field_data
+          field: changed
+          entity_type: commerce_product
+          entity_field: changed
+          plugin_id: date
+          order: DESC
+      arguments:
+        field_tipo_de_producto_target_id:
+          id: field_tipo_de_producto_target_id
+          table: commerce_product__field_tipo_de_producto
+          field: field_tipo_de_producto_target_id
+          plugin_id: numeric
+          default_action: ignore
+          break_phrase: true
+      filters:
+        status:
+          id: status
+          table: commerce_product_field_data
+          field: status
+          entity_type: commerce_product
+          entity_field: status
+          plugin_id: boolean
+          value: '1'
+        field_destacado_value:
+          id: field_destacado_value
+          table: commerce_product__field_destacado
+          field: field_destacado_value
+          plugin_id: boolean
+          operator: '='
+          value: '1'
+      row:
+        type: 'entity:commerce_product'
+        options:
+          view_mode: tarjeta
+      display_extenders: {  }
+    cache_metadata:
+      max-age: -1
+      contexts:
+        - 'languages:language_interface'
+        - url
+      tags: {  }
+  embed_1:
+    id: embed_1
+    display_title: Embed
+    display_plugin: embed
+    position: 1
+    display_options:
+      display_extenders: {  }
+    cache_metadata:
+      max-age: -1
+      contexts:
+        - 'languages:language_interface'
+        - url
+      tags: {  }

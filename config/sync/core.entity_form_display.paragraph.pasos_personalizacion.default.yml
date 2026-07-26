@@ -1,0 +1,57 @@
+uuid: dc82e3a9-c033-4f3f-b9ab-82bfdd9e647a
+langcode: es
+status: true
+dependencies:
+  config:
+    - field.field.paragraph.pasos_personalizacion.field_enlace
+    - field.field.paragraph.pasos_personalizacion.field_eyebrow
+    - field.field.paragraph.pasos_personalizacion.field_imagen_media
+    - field.field.paragraph.pasos_personalizacion.field_items
+    - field.field.paragraph.pasos_personalizacion.field_titulo
+    - field.field.paragraph.pasos_personalizacion.field_titulo_enfasis
+    - paragraphs.paragraphs_type.pasos_personalizacion
+id: paragraph.pasos_personalizacion.default
+targetEntityType: paragraph
+bundle: pasos_personalizacion
+mode: default
+content:
+  field_enlace:
+    type: link_default
+    weight: 5
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  field_eyebrow:
+    type: string_textfield
+    weight: 0
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  field_imagen_media:
+    type: media_library_widget
+    weight: 3
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  field_items:
+    type: paragraphs
+    weight: 4
+    region: content
+    settings:
+      edit_mode: open
+    third_party_settings: {  }
+  field_titulo:
+    type: string_textfield
+    weight: 1
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  field_titulo_enfasis:
+    type: string_textfield
+    weight: 2
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+hidden:
+  created: true
+  status: true

@@ -1,0 +1,26 @@
+{#
+/**
+ * @file
+ * Mosaico de categorías: cabecera + grid 1.2fr/1fr con tile alto,
+ * tile ancho y dos tiles medios.
+ */
+#}
+{{ attach_library('pronens/mosaico') }}
+<section{{ attributes.addClass('pro-mosaico') }}>
+  <div class="pro-container">
+    <div class="pro-mosaico__head">
+      <div>
+        {% if content.field_eyebrow|render %}
+          <p class="pro-eyebrow pro-mosaico__eyebrow">{{ content.field_eyebrow }}</p>
+        {% endif %}
+        <h2 class="pro-mosaico__title">{{ content.field_titulo }}</h2>
+      </div>
+      {% if enlace %}
+        <a class="pro-mosaico__all" href="{{ enlace.url }}">{{ enlace.title }}</a>
+      {% endif %}
+    </div>
+    <div class="pro-mosaico__grid">
+      {{ content.field_items }}
+    </div>
+  </div>
+</section>

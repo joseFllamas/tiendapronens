@@ -1,0 +1,10 @@
+uuid: 08734da9-8862-4f4a-b9cf-e5cf0f7b77d5
+langcode: es
+status: true
+dependencies: {  }
+id: beneficio
+label: 'Beneficio (ítem)'
+icon_uuid: null
+icon_default: null
+description: null
+behavior_plugins: {  }

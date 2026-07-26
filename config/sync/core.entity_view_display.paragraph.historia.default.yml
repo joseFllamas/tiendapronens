@@ -1,0 +1,44 @@
+uuid: 44871fc4-9f08-40ea-bc49-be07bfc72a03
+langcode: es
+status: true
+dependencies:
+  config:
+    - field.field.paragraph.historia.field_enlace
+    - field.field.paragraph.historia.field_eyebrow
+    - field.field.paragraph.historia.field_texto_largo
+    - field.field.paragraph.historia.field_titulo
+    - paragraphs.paragraphs_type.historia
+  module:
+    - text
+id: paragraph.historia.default
+targetEntityType: paragraph
+bundle: historia
+mode: default
+content:
+  field_eyebrow:
+    type: string
+    label: hidden
+    settings:
+      link_to_entity: false
+      link_rel: canonical
+    third_party_settings: {  }
+    weight: 0
+    region: content
+  field_texto_largo:
+    type: text_default
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    weight: 2
+    region: content
+  field_titulo:
+    type: string
+    label: hidden
+    settings:
+      link_to_entity: false
+      link_rel: canonical
+    third_party_settings: {  }
+    weight: 1
+    region: content
+hidden:
+  field_enlace: true

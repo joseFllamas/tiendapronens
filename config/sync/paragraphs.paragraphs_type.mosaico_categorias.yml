@@ -1,0 +1,10 @@
+uuid: 23c86bc2-b255-40af-a796-de70be2a5820
+langcode: es
+status: true
+dependencies: {  }
+id: mosaico_categorias
+label: 'Mosaico de categorías'
+icon_uuid: null
+icon_default: null
+description: null
+behavior_plugins: {  }

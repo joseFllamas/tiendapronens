@@ -1,0 +1,31 @@
+{#
+/**
+ * @file
+ * Sección de personalización: foto + tres pasos numerados (contador CSS).
+ */
+#}
+{{ attach_library('pronens/pasos') }}
+<section{{ attributes.addClass('pro-pasos') }}>
+  <div class="pro-pasos__inner pro-container">
+    {% if pasos_image %}
+      <div class="pro-pasos__media">{{ pasos_image }}</div>
+    {% endif %}
+    <div class="pro-pasos__body">
+      {% if content.field_eyebrow|render %}
+        <p class="pro-eyebrow pro-pasos__eyebrow">{{ content.field_eyebrow }}</p>
+      {% endif %}
+      <h2 class="pro-pasos__title">
+        {{ content.field_titulo }}
+        {% if paragraph.field_titulo_enfasis.value %}
+          <em class="pro-pasos__title-accent">{{ paragraph.field_titulo_enfasis.value }}</em>
+        {% endif %}
+      </h2>
+      <div class="pro-pasos__items">
+        {{ content.field_items }}
+      </div>
+      {% if enlace %}
+        <a class="pro-btn pro-btn--dark pro-pasos__cta" href="{{ enlace.url }}">{{ enlace.title }}</a>
+      {% endif %}
+    </div>
+  </div>
+</section>

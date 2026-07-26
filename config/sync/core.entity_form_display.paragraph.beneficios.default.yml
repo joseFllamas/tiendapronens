@@ -1,0 +1,22 @@
+uuid: 7c026f7b-9fa6-4ccd-af3a-5ee10464866e
+langcode: es
+status: true
+dependencies:
+  config:
+    - field.field.paragraph.beneficios.field_items
+    - paragraphs.paragraphs_type.beneficios
+id: paragraph.beneficios.default
+targetEntityType: paragraph
+bundle: beneficios
+mode: default
+content:
+  field_items:
+    type: paragraphs
+    weight: 0
+    region: content
+    settings:
+      edit_mode: open
+    third_party_settings: {  }
+hidden:
+  created: true
+  status: true

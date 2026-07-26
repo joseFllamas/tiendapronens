@@ -1,0 +1,56 @@
+uuid: 800437a2-46e8-4386-a294-b7c7612a76b3
+langcode: es
+status: true
+dependencies:
+  config:
+    - field.field.paragraph.hero.field_enlace
+    - field.field.paragraph.hero.field_enlace_secundario
+    - field.field.paragraph.hero.field_eyebrow
+    - field.field.paragraph.hero.field_imagen_media
+    - field.field.paragraph.hero.field_subtitulo
+    - field.field.paragraph.hero.field_titulo
+    - paragraphs.paragraphs_type.hero
+id: paragraph.hero.default
+targetEntityType: paragraph
+bundle: hero
+mode: default
+content:
+  field_enlace:
+    type: link_default
+    weight: 4
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  field_enlace_secundario:
+    type: link_default
+    weight: 5
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  field_eyebrow:
+    type: string_textfield
+    weight: 1
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  field_imagen_media:
+    type: media_library_widget
+    weight: 0
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  field_subtitulo:
+    type: string_textfield
+    weight: 3
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  field_titulo:
+    type: string_textfield
+    weight: 2
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+hidden:
+  created: true
+  status: true

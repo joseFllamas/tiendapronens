@@ -1,0 +1,27 @@
+uuid: 9906ba01-339f-4646-b0e4-558ea2556b21
+langcode: es
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_items
+    - paragraphs.paragraphs_type.beneficio
+    - paragraphs.paragraphs_type.beneficios
+  module:
+    - entity_reference_revisions
+id: paragraph.beneficios.field_items
+field_name: field_items
+entity_type: paragraph
+bundle: beneficios
+label: Beneficios
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:paragraph'
+  handler_settings:
+    target_bundles:
+      beneficio: beneficio
+    negate: 0
+field_type: entity_reference_revisions

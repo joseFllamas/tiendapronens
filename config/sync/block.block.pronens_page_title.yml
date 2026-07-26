@@ -2,6 +2,8 @@ uuid: da9e1319-9983-45be-b6e3-61dcd248c6b8
 langcode: es
 status: true
 dependencies:
+  module:
+    - system
   theme:
     - pronens
 _core:
@@ -17,4 +19,8 @@ settings:
   label: 'Título de la página'
   label_display: '0'
   provider: core
-visibility: {  }
+visibility:
+  request_path:
+    id: request_path
+    negate: true
+    pages: '<front>'

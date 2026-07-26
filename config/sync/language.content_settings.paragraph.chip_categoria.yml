@@ -1,0 +1,16 @@
+uuid: ad05308b-14a6-4e7b-a45d-56dbe6362c42
+langcode: es
+status: true
+dependencies:
+  config:
+    - paragraphs.paragraphs_type.chip_categoria
+  module:
+    - content_translation
+third_party_settings:
+  content_translation:
+    enabled: true
+id: paragraph.chip_categoria
+target_entity_type_id: paragraph
+target_bundle: chip_categoria
+default_langcode: site_default
+language_alterable: false

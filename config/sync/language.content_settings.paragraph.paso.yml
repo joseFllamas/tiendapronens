@@ -1,0 +1,16 @@
+uuid: cd4ef62a-a2e9-4a35-ab7b-af079295cd54
+langcode: es
+status: true
+dependencies:
+  config:
+    - paragraphs.paragraphs_type.paso
+  module:
+    - content_translation
+third_party_settings:
+  content_translation:
+    enabled: true
+id: paragraph.paso
+target_entity_type_id: paragraph
+target_bundle: paso
+default_langcode: site_default
+language_alterable: false

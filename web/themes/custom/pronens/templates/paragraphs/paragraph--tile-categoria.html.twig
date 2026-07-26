@@ -1,0 +1,14 @@
+{#
+/**
+ * @file
+ * Tile del mosaico: foto de la categoría con etiqueta chip blanca.
+ *
+ * tile_url, tile_label y tile_image vienen del preprocess.
+ */
+#}
+<a{{ attributes.addClass('pro-tile') }} href="{{ tile_url }}">
+  {% if tile_image %}
+    <div class="pro-tile__media">{{ tile_image }}</div>
+  {% endif %}
+  <span class="pro-tile__label">{{ tile_label }}</span>
+</a>

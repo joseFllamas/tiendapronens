@@ -65,14 +65,15 @@ button {
   padding-inline: var(--pro-container-pad);
 }
 
-/* Eyebrow: 11px/800, tracking .3em, turquesa. */
+/* Eyebrow: 11px/800, tracking .3em, turquesa oscurecido (AA sobre claro;
+   sobre fondos oscuros cada componente lo aclara). */
 .pro-eyebrow {
   font-family: var(--pro-font-ui);
   font-size: 11px;
   font-weight: 800;
   letter-spacing: 0.3em;
   text-transform: uppercase;
-  color: var(--pro-teal);
+  color: var(--pro-teal-ink);
 }
 
 /* Botones pill compartidos. */
@@ -83,12 +84,10 @@ button {
   gap: 8px;
   border: 1px solid transparent;
   border-radius: var(--pro-radius-pill);
-  padding: 13px 30px;
+  padding: 13px 28px;
   font-family: var(--pro-font-ui);
-  font-size: 13px;
+  font-size: 13.5px;
   font-weight: 800;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
   transition: background-color 160ms ease, color 160ms ease, border-color 160ms ease;
 }
 

@@ -1,0 +1,19 @@
+uuid: 8605a970-5b58-4bc1-b780-cfa0fbbfe0c1
+langcode: es
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_eyebrow
+    - paragraphs.paragraphs_type.pasos_personalizacion
+id: paragraph.pasos_personalizacion.field_eyebrow
+field_name: field_eyebrow
+entity_type: paragraph
+bundle: pasos_personalizacion
+label: Eyebrow
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

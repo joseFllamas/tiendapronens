@@ -1,0 +1,10 @@
+uuid: ff4fb5ee-f3b2-4176-ae4c-5aad1f33f0ec
+langcode: es
+status: true
+dependencies: {  }
+id: chip_categoria
+label: 'Chip de categoría (ítem)'
+icon_uuid: null
+icon_default: null
+description: null
+behavior_plugins: {  }
