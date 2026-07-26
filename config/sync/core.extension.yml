@@ -55,6 +55,7 @@ module:
   media_library: 0
   menu_link_content: 0
   menu_ui: 0
+  metatag: 0
   migrate: 0
   migrate_drupal: 0
   migrate_plus: 0
@@ -72,6 +73,7 @@ module:
   pronens_migrate: 0
   pronens_personalizacion: 0
   recipe_tracker: 0
+  responsive_image: 0
   state_machine: 0
   system: 0
   taxonomy: 0
@@ -80,10 +82,12 @@ module:
   update: 0
   user: 0
   views_ui: 0
+  pathauto: 1
   content_translation: 10
   views: 10
   standard: 1000
 theme:
   olivero: 0
   claro: 0
+  pronens: 0
 profile: standard

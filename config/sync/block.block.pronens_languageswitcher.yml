@@ -1,0 +1,20 @@
+uuid: ae81242b-5010-4e91-aafc-630e0e0d0a7a
+langcode: es
+status: true
+dependencies:
+  module:
+    - language
+  theme:
+    - pronens
+id: pronens_languageswitcher
+theme: pronens
+region: header
+weight: 0
+provider: null
+plugin: 'language_block:language_interface'
+settings:
+  id: 'language_block:language_interface'
+  label: Idioma
+  label_display: '0'
+  provider: language
+visibility: {  }

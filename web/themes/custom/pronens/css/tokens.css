@@ -1,0 +1,53 @@
+/**
+ * @file
+ * Design tokens del rediseño Pronens (design/README.md).
+ */
+
+:root {
+  /* Color. */
+  --pro-ink: #10222b;
+  --pro-ink-2: #173039;
+  --pro-ink-dark: #0e1b20;
+  --pro-bg: #fcfbf9;
+  --pro-cream: #f3eee6;
+  --pro-cream-2: #f7f3ec;
+  --pro-img-bg: #f4f2ee;
+  --pro-border: #ece7de;
+  --pro-border-2: #dcd5c9;
+  --pro-border-cream: #e4dcce;
+  --pro-teal: #2e9daa;
+  --pro-teal-light: #7fd4dd;
+  --pro-teal-bg: #effafb;
+  --pro-orange: #f4854e;
+  --pro-orange-hover: #e06f37;
+  --pro-yellow: #f9e547;
+  --pro-text-2: #5b7078;
+  --pro-mute: #8aa0a6;
+
+  /* Tipografía. */
+  --pro-font-display: "Archivo", system-ui, sans-serif;
+  --pro-font-ui: "Nunito Sans", system-ui, sans-serif;
+  --pro-font-script: "Caveat", cursive;
+
+  /* Radios. */
+  --pro-radius-pill: 999px;
+  --pro-radius-size: 12px;
+
+  /* Sombra de paneles (mega menú, flyout). */
+  --pro-shadow-panel: 0 32px 56px rgba(16, 34, 43, 0.1);
+
+  /* Layout. */
+  --pro-container-max: 1280px;
+  --pro-container-pad: 32px;
+  --pro-header-height: 62px;
+  --pro-marquee-height: 34px;
+
+  /* Movimiento. */
+  --pro-ease-panel: cubic-bezier(0.2, 0.8, 0.3, 1);
+}
+
+@media (max-width: 768px) {
+  :root {
+    --pro-container-pad: 20px;
+  }
+}

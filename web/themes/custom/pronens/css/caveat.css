@@ -1,0 +1,13 @@
+/**
+ * @file
+ * Caveat: solo para la vista previa del bordado (library pronens/caveat,
+ * attach condicional en la ficha de producto).
+ */
+
+@font-face {
+  font-family: "Caveat";
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("../fonts/caveat-v23-latin-600.woff2") format("woff2");
+}

@@ -1,0 +1,39 @@
+{#
+/**
+ * @file
+ * Layout de página del tema Pronens.
+ *
+ * Full-width sin sidebars: cada componente acota su contenido con
+ * .pro-container. Las páginas genéricas (CMS, checkout…) usan el
+ * modificador --boxed que aplica el contenedor central.
+ *
+ * @see html.html.twig
+ */
+#}
+<div class="pro-page">
+
+  {{ page.marquee }}
+
+  <header class="pro-page__header">
+    {{ page.header }}
+    {{ page.primary_menu }}
+  </header>
+
+  {{ page.breadcrumb }}
+
+  {{ page.highlighted }}
+
+  {{ page.help }}
+
+  <main class="pro-page__main{{ main_boxed ? ' pro-page__main--boxed' }}">
+    <a id="main-content" tabindex="-1"></a>{# link is in html.html.twig #}
+    {{ page.content }}
+  </main>
+
+  {% if page.footer %}
+    <footer class="pro-page__footer">
+      {{ page.footer }}
+    </footer>
+  {% endif %}
+
+</div>

@@ -1,0 +1,22 @@
+uuid: f4d8e3d8-8d09-4461-b98d-abffe7ea38bf
+langcode: es
+status: true
+dependencies:
+  theme:
+    - pronens
+_core:
+  default_config_hash: nGE3EoPQQaQCuqTUtZgw0-KIzmrqdKDzdNQf2JyPUt4
+id: pronens_primary_local_tasks
+theme: pronens
+region: highlighted
+weight: -4
+provider: null
+plugin: local_tasks_block
+settings:
+  id: local_tasks_block
+  label: 'Solapas principales'
+  label_display: '0'
+  provider: core
+  primary: true
+  secondary: false
+visibility: {  }

@@ -1,0 +1,22 @@
+uuid: c53caf8e-1a79-4e31-80d2-de95891579d1
+langcode: es
+status: true
+dependencies:
+  module:
+    - system
+  theme:
+    - pronens
+_core:
+  default_config_hash: erQSEZF2XUjNmgTl0uNRBzmg18ZGXwUcw2FhApoeuHk
+id: pronens_content
+theme: pronens
+region: content
+weight: 0
+provider: null
+plugin: system_main_block
+settings:
+  id: system_main_block
+  label: 'Contenido principal de la página'
+  label_display: '0'
+  provider: system
+visibility: {  }

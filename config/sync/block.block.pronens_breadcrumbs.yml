@@ -1,0 +1,22 @@
+uuid: 4f49619e-4f53-42cf-8801-c5dcb8b7f399
+langcode: es
+status: true
+dependencies:
+  module:
+    - system
+  theme:
+    - pronens
+_core:
+  default_config_hash: VhBzWb7lMRtIOg9G7VSw_0uopi-7zXeHq4vXqqV1HFE
+id: pronens_breadcrumbs
+theme: pronens
+region: breadcrumb
+weight: 0
+provider: null
+plugin: system_breadcrumb_block
+settings:
+  id: system_breadcrumb_block
+  label: 'Enlaces de ayuda a la navegación'
+  label_display: '0'
+  provider: system
+visibility: {  }

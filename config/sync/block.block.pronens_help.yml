@@ -1,0 +1,22 @@
+uuid: 4e87d4c6-f501-4689-98b7-72b8d13be4c6
+langcode: es
+status: true
+dependencies:
+  module:
+    - help
+  theme:
+    - pronens
+_core:
+  default_config_hash: VfPFqqxfkomud5CO8DUijw85QIl9GIxh_nIxLOYESxg
+id: pronens_help
+theme: pronens
+region: help
+weight: 0
+provider: null
+plugin: help_block
+settings:
+  id: help_block
+  label: Ayuda
+  label_display: '0'
+  provider: help
+visibility: {  }

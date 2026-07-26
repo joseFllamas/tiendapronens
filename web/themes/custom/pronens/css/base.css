@@ -1,0 +1,146 @@
+/**
+ * @file
+ * Base del tema: elementos, contenedor y utilidades compartidas (BEM).
+ */
+
+html {
+  box-sizing: border-box;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: inherit;
+}
+
+body {
+  margin: 0;
+  background: var(--pro-bg);
+  color: var(--pro-ink);
+  font-family: var(--pro-font-ui);
+  font-size: 15px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  font-family: var(--pro-font-display);
+  font-weight: 800;
+  line-height: 1.15;
+  margin: 0 0 0.5em;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+a:hover {
+  color: var(--pro-teal);
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+button {
+  font-family: inherit;
+  cursor: pointer;
+}
+
+:focus-visible {
+  outline: 2px solid var(--pro-teal);
+  outline-offset: 2px;
+}
+
+/* Contenedor central del diseño. */
+.pro-container {
+  max-width: var(--pro-container-max);
+  margin-inline: auto;
+  padding-inline: var(--pro-container-pad);
+}
+
+/* Eyebrow: 11px/800, tracking .3em, turquesa. */
+.pro-eyebrow {
+  font-family: var(--pro-font-ui);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--pro-teal);
+}
+
+/* Botones pill compartidos. */
+.pro-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border: 1px solid transparent;
+  border-radius: var(--pro-radius-pill);
+  padding: 13px 30px;
+  font-family: var(--pro-font-ui);
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  transition: background-color 160ms ease, color 160ms ease, border-color 160ms ease;
+}
+
+.pro-btn--dark {
+  background: var(--pro-ink);
+  color: #fff;
+}
+
+.pro-btn--dark:hover {
+  background: var(--pro-ink-2);
+  color: #fff;
+}
+
+.pro-btn--light {
+  background: #fff;
+  color: var(--pro-ink);
+}
+
+.pro-btn--light:hover {
+  background: var(--pro-cream);
+  color: var(--pro-ink);
+}
+
+.pro-btn--ghost {
+  background: transparent;
+  border-color: #fff;
+  color: #fff;
+}
+
+.pro-btn--ghost:hover {
+  background: rgba(255, 255, 255, 0.12);
+  color: #fff;
+}
+
+.pro-btn--cta {
+  background: var(--pro-orange);
+  color: #fff;
+}
+
+.pro-btn--cta:hover {
+  background: var(--pro-orange-hover);
+  color: #fff;
+}
+
+/* Reduced motion: sin animaciones ni transiciones largas. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

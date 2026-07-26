@@ -5,6 +5,7 @@ parameters:
 
   paths:
     - web/modules/custom
+    - web/themes/custom
 
   drupal:
     # Stricter than the extension defaults: we write config schema for the

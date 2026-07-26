@@ -1,0 +1,23 @@
+/**
+ * @file
+ * Layout de página: full-width, sin sidebars; el contenido acota con
+ * .pro-container dentro de cada componente.
+ */
+
+.pro-page {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.pro-page__main {
+  flex: 1 0 auto;
+}
+
+/* Páginas "genéricas" (CMS, checkout…) mantienen el contenedor central. */
+.pro-page__main--boxed {
+  width: 100%;
+  max-width: var(--pro-container-max);
+  margin-inline: auto;
+  padding: 32px var(--pro-container-pad) 64px;
+}

@@ -26,8 +26,10 @@
         "drupal/core-project-message": "^11.4",
         "drupal/core-recipe-unpack": "^11.4",
         "drupal/core-recommended": "^11.4",
+        "drupal/metatag": "^2.2",
         "drupal/migrate_plus": "^6.0",
         "drupal/migrate_tools": "^6.0",
+        "drupal/pathauto": "^1.15",
         "drupal/recipe_tracker": "^1",
         "drush/drush": "^13.7"
     },

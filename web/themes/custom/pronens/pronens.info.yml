@@ -1,0 +1,39 @@
+name: Pronens
+type: theme
+'base theme': false
+version: 1.0.0
+description: 'Tema custom de la tienda Pronens (rediseño minimal premium).'
+core_version_requirement: ^11
+generator: 'starterkit_theme:11.4.4'
+
+libraries:
+  - pronens/global
+  - pronens/base
+  - pronens/messages
+  - core/normalize
+
+libraries-extend:
+  user/drupal.user:
+    - pronens/user
+  core/drupal.dropbutton:
+    - pronens/dropbutton
+  core/drupal.dialog:
+    - pronens/dialog
+  file/drupal.file:
+    - pronens/file
+  core/drupal.item-list:
+    - pronens/item-list
+  core/drupal.progress:
+    - pronens/progress
+  core/drupal.tablesort:
+    - pronens/drupal.tablesort
+
+regions:
+  marquee: 'Marquee de avisos'
+  header: 'Cabecera'
+  primary_menu: 'Menú principal'
+  breadcrumb: 'Migas de pan'
+  highlighted: 'Destacado (mensajes)'
+  help: 'Ayuda'
+  content: 'Contenido'
+  footer: 'Pie de página'
