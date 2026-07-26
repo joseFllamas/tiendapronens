@@ -1,0 +1,12 @@
+uuid: 2a72eda0-38bd-46ea-a6a6-24a31f62ac21
+langcode: es
+status: true
+dependencies: {  }
+id: european_union_vat
+label: 'IVA europeo'
+plugin: european_union_vat
+configuration:
+  display_inclusive: true
+  display_tax_rate_in_label: true
+conditions: {  }
+conditionOperator: AND

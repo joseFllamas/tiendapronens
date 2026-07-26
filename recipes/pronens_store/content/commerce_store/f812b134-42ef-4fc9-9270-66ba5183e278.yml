@@ -96,3 +96,9 @@ default:
   is_default:
     -
       value: true
+  prices_include_tax:
+    -
+      value: true
+  tax_registrations:
+    -
+      value: ES
