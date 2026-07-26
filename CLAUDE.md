@@ -18,12 +18,17 @@ Donde este documento y la realidad del repo discrepan, manda esta lista (decidid
 - **Bundle de producto**: se queda `default`, NO se crea `prenda`. Renombrar el bundle de 370
   productos migrados no aporta nada; el template del tema es `commerce-product--default.html.twig`.
 - **Campos de personalización** (ya construidos en el order item por `pronens_personalizacion`):
-  `field_texto_bordado` (máx. **30**, no 12: el 21% de los 3374 bordados reales del D7 superan 12),
-  `field_fuente` (vocabulario `fuente_bordado`, 5 fuentes provisionales con `field_familia_css`) y
-  `field_color_bordado` (vocabulario `color_letra`: 9 hilos bicolores del D7 con imagen + 4 planos
-  del prototipo con hex; el taller desactivará los que no ofrezca).
-- **Sí hay selector de tipografía en la card** (la home lo promete aunque el prototipo de ficha no
-  lo pinte). La vista previa usa la `field_familia_css` del término, no Caveat fija.
+  `field_texto_bordado` y `field_color_bordado`, etiquetado **"Formato del bordado"**.
+- **NO hay selector de tipografía: la fuente es única** (decisión del cliente, 2026-07-26, revierte
+  una decisión anterior del mismo día). El cliente elige el **formato** en un solo selector: cada
+  término de `color_letra` es una combinación cerrada de la fuente única + colores del hilo,
+  representada por la **foto de una letra bordada** (como el "Step 3: choose your initial colour"
+  de la referencia; los 9 términos del D7 traen foto, Negro/Coral/Turquesa esperan la del taller).
+  El vocabulario `fuente_bordado`, `field_fuente` y `field_fuentes_permitidas` quedan dormidos.
+- **Modo por producto** (`field_modo_personalizacion`, ya activo en el add-to-cart): `inicial`
+  admite una sola letra (maxlength 1 + validación en servidor) y `texto` un nombre de hasta **30**
+  caracteres (no 12: el 21% de los 3374 bordados reales del D7 superan 12). Los 289 migrados están
+  en `texto`; marcar `inicial` producto a producto donde toque.
 - **El +5 € ya existe**: ajuste `fee` por unidad (configurable en
   `/admin/commerce/config/personalizacion` y por producto en `field_recargo`). No se toca el precio
   unitario: el desglose "X € + 5,00 € bordado" del prototipo depende de ello. El cupón no descuenta
@@ -45,8 +50,9 @@ Donde este documento y la realidad del repo discrepan, manda esta lista (decidid
 4. **Categoría**: View + facets + toggle Vista 2/4 (JS del tema, localStorage) + tarjeta de producto
    (componente compartido con hover-cycle de galería y selección color/talla en tarjeta).
 5. **Ficha**: galería grid 3:4, add-to-cart con variaciones (el personalizador funcional ya existe:
-   card con checkbox, nombre, fuente e hilo). Trabajo del tema: maquetar la card y la vista previa
-   en vivo (familia del término de fuente + color del hilo sobre la 1ª foto, ancla `bottom:44px`).
+   card con checkbox, inicial o nombre según el producto, y selector de formato). Trabajo del tema:
+   maquetar la card con los formatos como fotos de letra bordada (estilo "choose your initial
+   colour") y la vista previa en vivo con la fuente única sobre la 1ª foto, ancla `bottom:44px`.
 6. **Carrito flyout** con barra de progreso de envío gratis (umbral 60 €).
 
 ## Reglas de calidad (cada entrega debe cumplirlas)

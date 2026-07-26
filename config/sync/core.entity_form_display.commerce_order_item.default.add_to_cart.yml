@@ -29,12 +29,6 @@ content:
     region: content
     settings: {  }
     third_party_settings: {  }
-  field_fuente:
-    type: options_select
-    weight: 3
-    region: content
-    settings: {  }
-    third_party_settings: {  }
   field_texto_bordado:
     type: string_textfield
     weight: 2
@@ -61,6 +55,7 @@ content:
 hidden:
   adjustments: true
   created: true
+  field_fuente: true
   field_posicion_bordado: true
   status: true
   total_price: true

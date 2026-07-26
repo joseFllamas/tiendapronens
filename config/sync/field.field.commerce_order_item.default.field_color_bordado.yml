@@ -10,8 +10,8 @@ id: commerce_order_item.default.field_color_bordado
 field_name: field_color_bordado
 entity_type: commerce_order_item
 bundle: default
-label: 'Color del bordado'
-description: ''
+label: 'Formato del bordado'
+description: 'Cada opción combina la tipografía única con los colores del hilo, mostrada con la foto de una letra bordada de muestra.'
 required: false
 translatable: false
 default_value: {  }

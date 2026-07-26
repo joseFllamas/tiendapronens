@@ -9,16 +9,17 @@ use Drupal\commerce_product\Entity\ProductInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Hook\Attribute\Hook;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\pronens_personalizacion\OrderProcessor\PersonalizacionOrderProcessor;
 
 /**
  * Adapta el formulario de añadir al carrito a la card de personalización.
  *
- * El diseño (design/README.md, ficha de producto) resuelve la personalización
- * en una sola pantalla: una card con checkbox "Bordar su nombre +5 €", el
- * nombre, la tipografía y el color del hilo. Los campos los aporta el form
- * display add_to_cart de la línea de pedido; aquí se decide cuándo se ven y
- * con qué opciones.
+ * El cliente decide qué se borda con dos controles: el texto (una inicial o un
+ * nombre, según el modo del producto) y el color del hilo. La tipografía dejó
+ * de elegirse por decisión del cliente (2026-07-26): será siempre la misma, así
+ * que el vocabulario fuente_bordado y field_fuente quedan en el modelo sin
+ * exponerse, por si la decisión se revierte.
  */
 final class PersonalizacionHooks {
 
@@ -29,7 +30,6 @@ final class PersonalizacionHooks {
    */
   private const CAMPOS = [
     PersonalizacionOrderProcessor::CAMPO_TEXTO,
-    'field_fuente',
     'field_color_bordado',
   ];
 
@@ -59,11 +59,15 @@ final class PersonalizacionHooks {
       return;
     }
 
+    $modo = $this->modo($producto);
+
     // La card del diseño: checkbox que pliega y despliega la personalización.
     // No es un campo, es UX; que haya bordado o no lo decide el texto.
     $form['personalizacion_activa'] = [
       '#type' => 'checkbox',
-      '#title' => $this->t('Bordar su nombre'),
+      '#title' => $modo === 'inicial'
+        ? $this->t('Bordar su inicial')
+        : $this->t('Bordar su nombre'),
       '#default_value' => FALSE,
       '#weight' => 1,
     ];
@@ -81,26 +85,26 @@ final class PersonalizacionHooks {
       }
     }
 
-    // Si el producto restringe las fuentes, se recortan las opciones. Vacío
-    // significa todas.
-    $permitidas = $this->fuentesPermitidas($producto);
-    if ($permitidas !== [] && isset($form['field_fuente']['widget']['#options'])) {
-      $opciones = &$form['field_fuente']['widget']['#options'];
-      foreach (array_keys($opciones) as $clave) {
-        if ($clave !== '_none' && !in_array((int) $clave, $permitidas, TRUE)) {
-          unset($opciones[$clave]);
-        }
-      }
+    // El modo del producto decide qué se puede escribir: una sola letra o un
+    // nombre. El widget es un string_textfield; se ajusta su elemento de valor.
+    $texto = &$form[PersonalizacionOrderProcessor::CAMPO_TEXTO];
+    if (isset($texto['widget'][0]['value']) && $modo === 'inicial') {
+      $texto['widget'][0]['value']['#title'] = $this->t('Inicial');
+      $texto['widget'][0]['value']['#maxlength'] = 1;
+      $texto['widget'][0]['value']['#attributes']['maxlength'] = 1;
+      $texto['widget'][0]['value']['#placeholder'] = $this->t('Una letra');
     }
 
     $form['#validate'][] = [self::class, 'validarPersonalizacion'];
   }
 
   /**
-   * Impide que llegue texto a bordar sin la casilla marcada o en blanco.
+   * Normaliza y valida el texto a bordar según el modo del producto.
    *
    * Los datos del D7 contienen bordados de solo espacios: se normaliza aquí
-   * para que la línea de pedido guarde texto real o nada.
+   * para que la línea de pedido guarde texto real o nada. El maxlength del
+   * navegador no es una garantía, así que el modo inicial se reafirma en
+   * servidor.
    *
    * @param array<string, mixed> $form
    *   El formulario.
@@ -115,8 +119,16 @@ final class PersonalizacionHooks {
       // Sin casilla o sin texto no hay bordado: se vacía todo para que ni el
       // recargo ni el taller reciban restos.
       $form_state->setValue($campo, []);
-      $form_state->setValue('field_fuente', []);
       $form_state->setValue('field_color_bordado', []);
+      return;
+    }
+
+    $producto = $form_state->get('product');
+    if ($producto instanceof ProductInterface
+      && !$producto->get('field_modo_personalizacion')->isEmpty()
+      && $producto->get('field_modo_personalizacion')->value === 'inicial'
+      && mb_strlen($texto) > 1) {
+      $form_state->setErrorByName($campo, new TranslatableMarkup('Este producto se personaliza con una sola inicial.'));
       return;
     }
 
@@ -133,21 +145,16 @@ final class PersonalizacionHooks {
   }
 
   /**
-   * IDs de término de las fuentes permitidas por el producto.
+   * Modo de personalización del producto: inicial o texto.
    *
-   * @return list<int>
+   * Sin valor se asume texto libre, que es lo que hacía el D7.
    */
-  private function fuentesPermitidas(ProductInterface $producto): array {
-    if (!$producto->hasField('field_fuentes_permitidas')) {
-      return [];
+  private function modo(ProductInterface $producto): string {
+    if (!$producto->hasField('field_modo_personalizacion')
+      || $producto->get('field_modo_personalizacion')->isEmpty()) {
+      return 'texto';
     }
-    $ids = [];
-    foreach ($producto->get('field_fuentes_permitidas')->getValue() as $item) {
-      if (isset($item['target_id'])) {
-        $ids[] = (int) $item['target_id'];
-      }
-    }
-    return $ids;
+    return (string) $producto->get('field_modo_personalizacion')->value;
   }
 
 }

@@ -4,6 +4,6 @@ status: true
 dependencies: {  }
 name: 'Color de letra'
 vid: color_letra
-description: 'Combinaciones de color del bordado. Requieren imagen porque son bicolores: perfil e interior.'
+description: 'Formatos del bordado: cada término es una combinación cerrada de la tipografía única y los colores del hilo, con la foto de una letra de muestra. Equivale al paso "elige el color de tu inicial" de la referencia. Los 9 históricos del D7 traen su foto; los 4 planos del prototipo esperan la foto del taller y llevan hex de respaldo.'
 weight: 0
 new_revision: false
