@@ -1,0 +1,16 @@
+uuid: 42f613fb-0c5d-4ec2-9af6-f59e6eaa3a51
+langcode: es
+status: true
+dependencies:
+  config:
+    - taxonomy.vocabulary.color_letra
+  module:
+    - content_translation
+third_party_settings:
+  content_translation:
+    enabled: true
+id: taxonomy_term.color_letra
+target_entity_type_id: taxonomy_term
+target_bundle: color_letra
+default_langcode: site_default
+language_alterable: false

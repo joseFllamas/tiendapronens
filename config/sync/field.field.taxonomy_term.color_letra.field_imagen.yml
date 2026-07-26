@@ -1,0 +1,24 @@
+uuid: e9ce8078-0291-4e51-a1a5-3e51dfef76e8
+langcode: es
+status: true
+dependencies:
+  config:
+    - field.storage.taxonomy_term.field_imagen
+    - media.type.image
+    - taxonomy.vocabulary.color_letra
+id: taxonomy_term.color_letra.field_imagen
+field_name: field_imagen
+entity_type: taxonomy_term
+bundle: color_letra
+label: 'Muestra del bordado'
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:media'
+  handler_settings:
+    target_bundles:
+      image: image
+field_type: entity_reference

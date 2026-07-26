@@ -1,0 +1,37 @@
+id: pronens_taxonomia_color_letra
+label: 'Pronens: colores de letra del bordado, con su muestra'
+migration_tags:
+  - 'Drupal 7'
+  - Pronens
+migration_group: pronens
+audit: true
+source:
+  plugin: d7_taxonomy_term
+  key: migrate
+  bundle: color_letra
+process:
+  vid:
+    plugin: default_value
+    default_value: color_letra
+  langcode:
+    plugin: default_value
+    default_value: es
+  name: name
+  description/value: description
+  description/format:
+    plugin: default_value
+    default_value: basic_html
+  weight: weight
+  # Estos términos son bicolores ("perfil blanco interior rojo"), así que un
+  # código hex no los representa: la muestra tiene que ser una imagen.
+  field_imagen/target_id:
+    plugin: migration_lookup
+    migration: pronens_media_imagen
+    source: field_imagen/0/fid
+    no_stub: true
+destination:
+  plugin: 'entity:taxonomy_term'
+  default_bundle: color_letra
+migration_dependencies:
+  required:
+    - pronens_media_imagen

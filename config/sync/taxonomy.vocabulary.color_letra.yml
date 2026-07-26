@@ -1,0 +1,9 @@
+uuid: 0db2f904-f206-4b08-81d0-bb49ff675a8a
+langcode: es
+status: true
+dependencies: {  }
+name: 'Color de letra'
+vid: color_letra
+description: 'Combinaciones de color del bordado. Requieren imagen porque son bicolores: perfil e interior.'
+weight: 0
+new_revision: false
