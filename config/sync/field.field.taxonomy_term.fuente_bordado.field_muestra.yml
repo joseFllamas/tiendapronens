@@ -1,0 +1,24 @@
+uuid: 728efd1d-8dd6-4373-b965-ad75bbdc7cc0
+langcode: es
+status: true
+dependencies:
+  config:
+    - field.storage.taxonomy_term.field_muestra
+    - media.type.image
+    - taxonomy.vocabulary.fuente_bordado
+id: taxonomy_term.fuente_bordado.field_muestra
+field_name: field_muestra
+entity_type: taxonomy_term
+bundle: fuente_bordado
+label: 'Muestra de la tipografía'
+description: 'Imagen de ejemplo para que el cliente vea cómo queda.'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:media'
+  handler_settings:
+    target_bundles:
+      image: image
+field_type: entity_reference

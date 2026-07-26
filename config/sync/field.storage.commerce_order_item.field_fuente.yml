@@ -1,0 +1,20 @@
+uuid: 862c01ea-f016-4c77-8a2d-c238a926d15f
+langcode: es
+status: true
+dependencies:
+  module:
+    - commerce_order
+    - taxonomy
+id: commerce_order_item.field_fuente
+field_name: field_fuente
+entity_type: commerce_order_item
+type: entity_reference
+settings:
+  target_type: taxonomy_term
+module: core
+locked: false
+cardinality: 1
+translatable: false
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

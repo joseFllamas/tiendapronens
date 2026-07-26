@@ -13,6 +13,9 @@ dependencies:
     - field.field.commerce_product.default.field_guia_tallas
     - field.field.commerce_product.default.field_imagen_principal
     - field.field.commerce_product.default.field_lavado
+    - field.field.commerce_product.default.field_modo_personalizacion
+    - field.field.commerce_product.default.field_personalizable
+    - field.field.commerce_product.default.field_recargo
     - field.field.commerce_product.default.field_relacionados
     - field.field.commerce_product.default.field_tipo_de_producto
   module:
@@ -60,6 +63,9 @@ hidden:
   field_guia_tallas: true
   field_imagen_principal: true
   field_lavado: true
+  field_modo_personalizacion: true
+  field_personalizable: true
+  field_recargo: true
   field_relacionados: true
   field_tipo_de_producto: true
   langcode: true

@@ -1,0 +1,11 @@
+name: 'Pronens: personalización del bordado'
+type: module
+description: 'Captura en la línea de pedido el texto, la fuente, el color y la posición del bordado, y aplica el recargo configurable.'
+package: Pronens
+core_version_requirement: ^11
+dependencies:
+  - commerce:commerce_order
+  - commerce:commerce_price
+  - commerce:commerce_product
+  - drupal:taxonomy
+configure: pronens_personalizacion.settings

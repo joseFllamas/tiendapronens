@@ -1,0 +1,7 @@
+pronens_personalizacion.settings:
+  path: '/admin/commerce/config/personalizacion'
+  defaults:
+    _form: '\Drupal\pronens_personalizacion\Form\SettingsForm'
+    _title: 'Personalización del bordado'
+  requirements:
+    _permission: 'administrar personalizacion pronens'

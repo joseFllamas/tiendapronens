@@ -1,0 +1,21 @@
+uuid: a6124090-9330-4499-89c5-1fe1adca7ecf
+langcode: es
+status: true
+dependencies:
+  module:
+    - commerce_order
+id: commerce_order_item.field_texto_bordado
+field_name: field_texto_bordado
+entity_type: commerce_order_item
+type: string
+settings:
+  max_length: 47
+  case_sensitive: false
+  is_ascii: false
+module: core
+locked: false
+cardinality: 1
+translatable: false
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

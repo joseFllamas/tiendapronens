@@ -1,0 +1,24 @@
+uuid: 4a7da5ef-9759-4f20-abc1-e49aa378c36f
+langcode: es
+status: true
+dependencies:
+  config:
+    - commerce_order.commerce_order_item_type.default
+    - field.storage.commerce_order_item.field_color_bordado
+    - taxonomy.vocabulary.color_letra
+id: commerce_order_item.default.field_color_bordado
+field_name: field_color_bordado
+entity_type: commerce_order_item
+bundle: default
+label: 'Color del bordado'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:taxonomy_term'
+  handler_settings:
+    target_bundles:
+      color_letra: color_letra
+field_type: entity_reference

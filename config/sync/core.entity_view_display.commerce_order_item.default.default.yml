@@ -4,6 +4,10 @@ status: true
 dependencies:
   config:
     - commerce_order.commerce_order_item_type.default
+    - field.field.commerce_order_item.default.field_color_bordado
+    - field.field.commerce_order_item.default.field_fuente
+    - field.field.commerce_order_item.default.field_posicion_bordado
+    - field.field.commerce_order_item.default.field_texto_bordado
   module:
     - commerce_order
     - commerce_price
@@ -68,3 +72,7 @@ content:
     region: content
 hidden:
   adjustments: true
+  field_color_bordado: true
+  field_fuente: true
+  field_posicion_bordado: true
+  field_texto_bordado: true

@@ -1,0 +1,23 @@
+services:
+  Drupal\pronens_personalizacion\SurchargeCalculator:
+    class: Drupal\pronens_personalizacion\SurchargeCalculator
+
+  Drupal\pronens_personalizacion\OrderProcessor\PersonalizacionOrderProcessor:
+    class: Drupal\pronens_personalizacion\OrderProcessor\PersonalizacionOrderProcessor
+    arguments:
+      - '@config.factory'
+      - '@Drupal\pronens_personalizacion\SurchargeCalculator'
+      - '@string_translation'
+    tags:
+      # Prioridades reales de Commerce: pago 400, envío temprano 200,
+      # promoción 100, IVA 50, envío tardío -100. El recargo va en 150, antes de
+      # la promoción y del IVA.
+      #
+      # Verificado en un pedido real: el IVA SÍ incluye el recargo, sube de 2,63
+      # a 3,23 al añadir un bordado de 3,50. El cupón NO lo descuenta, porque
+      # order_percentage_off calcula sobre el subtotal y un ajuste de tarifa no
+      # forma parte del subtotal. Ir antes en la cola no lo cambia. Si se
+      # quisiera que el descuento alcance al bordado habría que subir el precio
+      # unitario en lugar de añadir un ajuste, y entonces el cliente perdería el
+      # desglose de qué paga por la prenda y qué por el bordado.
+      - { name: commerce_order.order_processor, priority: 150 }

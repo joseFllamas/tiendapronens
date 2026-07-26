@@ -1,0 +1,16 @@
+uuid: 620aa904-c1c0-4371-8add-158cc0c5fc24
+langcode: es
+status: true
+dependencies:
+  config:
+    - taxonomy.vocabulary.fuente_bordado
+  module:
+    - content_translation
+third_party_settings:
+  content_translation:
+    enabled: true
+id: taxonomy_term.fuente_bordado
+target_entity_type_id: taxonomy_term
+target_bundle: fuente_bordado
+default_langcode: site_default
+language_alterable: false

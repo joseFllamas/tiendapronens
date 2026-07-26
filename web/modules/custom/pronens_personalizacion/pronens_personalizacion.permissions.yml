@@ -1,0 +1,4 @@
+'administrar personalizacion pronens':
+  title: 'Administrar la personalización del bordado'
+  description: 'Permite cambiar el recargo por bordado y la longitud máxima del texto.'
+  restrict access: true

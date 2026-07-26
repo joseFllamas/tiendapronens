@@ -70,6 +70,7 @@ module:
   physical: 0
   profile: 0
   pronens_migrate: 0
+  pronens_personalizacion: 0
   recipe_tracker: 0
   state_machine: 0
   system: 0

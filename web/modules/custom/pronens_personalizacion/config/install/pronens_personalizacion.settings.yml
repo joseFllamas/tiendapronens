@@ -1,0 +1,7 @@
+# Recargo por defecto. Se puede sobreescribir por producto con field_recargo.
+recargo:
+  number: '0'
+  currency_code: EUR
+# 47 caracteres es el máximo real observado en los 3374 textos bordados del
+# Drupal 7, cuya media es de 9,2 caracteres.
+longitud_maxima: 47

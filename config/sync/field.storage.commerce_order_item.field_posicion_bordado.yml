@@ -1,0 +1,27 @@
+uuid: 9d16b12b-6b6a-4b62-9edf-1e343bc8636c
+langcode: es
+status: true
+dependencies:
+  module:
+    - commerce_order
+    - options
+id: commerce_order_item.field_posicion_bordado
+field_name: field_posicion_bordado
+entity_type: commerce_order_item
+type: list_string
+settings:
+  allowed_values:
+    -
+      value: lateral
+      label: Lateral
+    -
+      value: centro
+      label: Centro
+  allowed_values_function: ''
+module: options
+locked: false
+cardinality: 1
+translatable: false
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

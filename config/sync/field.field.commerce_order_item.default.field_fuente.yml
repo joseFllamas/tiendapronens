@@ -1,0 +1,24 @@
+uuid: 44f5e16f-230b-4cf2-85ea-95ac6589a0b7
+langcode: es
+status: true
+dependencies:
+  config:
+    - commerce_order.commerce_order_item_type.default
+    - field.storage.commerce_order_item.field_fuente
+    - taxonomy.vocabulary.fuente_bordado
+id: commerce_order_item.default.field_fuente
+field_name: field_fuente
+entity_type: commerce_order_item
+bundle: default
+label: 'Tipo de letra'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:taxonomy_term'
+  handler_settings:
+    target_bundles:
+      fuente_bordado: fuente_bordado
+field_type: entity_reference

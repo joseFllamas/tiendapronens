@@ -1,0 +1,9 @@
+uuid: be2077b9-fc97-4d31-8a0c-aefe53ffdebd
+langcode: es
+status: true
+dependencies: {  }
+name: 'Fuente de bordado'
+vid: fuente_bordado
+description: 'Tipografías disponibles para el bordado. Pendiente de que el taller entregue los ficheros.'
+weight: 0
+new_revision: false

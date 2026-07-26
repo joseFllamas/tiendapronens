@@ -5,6 +5,10 @@ dependencies:
   config:
     - commerce_order.commerce_order_item_type.default
     - core.entity_form_mode.commerce_order_item.add_to_cart
+    - field.field.commerce_order_item.default.field_color_bordado
+    - field.field.commerce_order_item.default.field_fuente
+    - field.field.commerce_order_item.default.field_posicion_bordado
+    - field.field.commerce_order_item.default.field_texto_bordado
   module:
     - commerce_product
   enforced:
@@ -27,6 +31,10 @@ content:
 hidden:
   adjustments: true
   created: true
+  field_color_bordado: true
+  field_fuente: true
+  field_posicion_bordado: true
+  field_texto_bordado: true
   quantity: true
   status: true
   total_price: true

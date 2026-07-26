@@ -1,0 +1,5 @@
+pronens_personalizacion.settings:
+  title: 'Personalización del bordado'
+  description: 'Recargo por bordado y longitud máxima del texto.'
+  route_name: pronens_personalizacion.settings
+  parent: commerce.configuration

@@ -1,0 +1,23 @@
+uuid: 49bd0b70-3d5c-4974-b28a-add35e5e1baf
+langcode: es
+status: true
+dependencies:
+  config:
+    - commerce_product.commerce_product_type.default
+    - field.storage.commerce_product.field_recargo
+  module:
+    - commerce_price
+id: commerce_product.default.field_recargo
+field_name: field_recargo
+entity_type: commerce_product
+bundle: default
+label: 'Recargo por bordado'
+description: 'Si se rellena, manda sobre el recargo general de la tienda.'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  available_currencies: {  }
+  allow_negative: false
+field_type: commerce_price

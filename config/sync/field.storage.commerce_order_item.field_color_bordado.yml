@@ -1,0 +1,20 @@
+uuid: 066c1789-07c0-44dd-8ede-1030ae48f69b
+langcode: es
+status: true
+dependencies:
+  module:
+    - commerce_order
+    - taxonomy
+id: commerce_order_item.field_color_bordado
+field_name: field_color_bordado
+entity_type: commerce_order_item
+type: entity_reference
+settings:
+  target_type: taxonomy_term
+module: core
+locked: false
+cardinality: 1
+translatable: false
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

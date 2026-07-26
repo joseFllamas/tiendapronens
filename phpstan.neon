@@ -29,3 +29,11 @@ parameters:
     -
       message: '#Parameter \#5 \$unit_cost of method .+::receiveStock\(\) expects float, null given\.#'
       path: web/modules/custom/pronens_migrate/src/EventSubscriber/StockTransactionSubscriber.php
+
+    # Fricción conocida entre los arrays de formulario sin tipar de Drupal y el
+    # nivel 8: si se anota el $form por referencia, PHPStan exige que el tipo
+    # coincida exactamente con el del padre, que no lo declara. Anotarlo y no
+    # anotarlo dan error, así que se silencia solo para métodos de formulario.
+    -
+      identifier: parameterByRef.type
+      path: web/modules/custom/*/src/Form/*.php
