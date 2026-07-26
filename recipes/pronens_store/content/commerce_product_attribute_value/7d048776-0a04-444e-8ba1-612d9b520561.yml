@@ -1,0 +1,25 @@
+_meta:
+  version: '1.0'
+  entity_type: commerce_product_attribute_value
+  uuid: 7d048776-0a04-444e-8ba1-612d9b520561
+  bundle: formato
+  default_langcode: es
+default:
+  name:
+    -
+      value: 'Pack de 5'
+  weight:
+    -
+      value: 5
+  content_translation_source:
+    -
+      value: und
+  content_translation_outdated:
+    -
+      value: false
+  content_translation_uid:
+    -
+      target_id: 0
+  content_translation_status:
+    -
+      value: true

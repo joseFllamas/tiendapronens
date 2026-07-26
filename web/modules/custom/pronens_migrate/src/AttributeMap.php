@@ -34,6 +34,8 @@ final class AttributeMap {
     '000 (6 months)' => '000 (6 meses)',
     '8 months' => '00 (8 meses)',
     '00 (8 months)' => '00 (8 meses)',
+    '000' => '000 (6 meses)',
+    '00' => '00 (8 meses)',
     '3m' => '3 meses',
     '0-3 meses' => '3 meses',
     '6m' => '6 meses',
@@ -101,6 +103,22 @@ final class AttributeMap {
     '6 - 12 años' => 'Infantil (6-12 años)',
     '+12 años' => 'Adulto (+12 años), 12 x 18 cm',
     'adulto (+12 años) 12 x 18 cm' => 'Adulto (+12 años), 12 x 18 cm',
+    // Medidas de bolsas y cojines que solo aparecen dentro de paréntesis
+    // anidados en el título, invisibles hasta corregir la extracción.
+    'mini 14x14cm' => 'Mini 14 x 14 cm',
+    'pequeño 15x15 cm' => 'Pequeño 15 x 15 cm',
+    'pequeño 20x20 cm' => 'Pequeño 20 x 20 cm',
+    'pequeño 25x25cm' => 'Pequeño 25 x 25 cm',
+    'pequeño 25x28cm' => 'Pequeño 25 x 28 cm',
+    'pequeño 25x30cm' => 'Pequeño 25 x 30 cm',
+    'medio 28x30 cm' => 'Medio 28 x 30 cm',
+    'grande 37x42cm' => 'Grande 37 x 42 cm',
+    'grande 38x40 cm' => 'Grande 38 x 40 cm',
+    'grande 38x40cm' => 'Grande 38 x 40 cm',
+    // Alias por la medida suelta, para no depender del rango de edad hermano.
+    '6 x 15 cm' => 'Infantil M (6-9 años), 6 x 15 cm',
+    '8,5 x 17 cm' => 'Infantil L (9-12 años), 8,5 x 17 cm',
+    '12 x 18 cm' => 'Adulto (+12 años), 12 x 18 cm',
     '20 x 30cm' => '20 x 30 cm',
     '30 x 40cm' => '30 x 40 cm',
     '32x45 cm' => '32 x 45 cm',
@@ -126,6 +144,9 @@ final class AttributeMap {
     'cojín (cushion)' => 'Cojín con relleno',
     'sin relleno' => 'Solo funda',
     'funda cojin (cushion cover only)' => 'Solo funda',
+    'funda cojin' => 'Solo funda',
+    'pack 5 unidades' => 'Pack de 5',
+    'pack 10 unidades' => 'Pack de 10',
     'pack 10 pcs' => 'Pack de 10',
     'pack 10 uds' => 'Pack de 10',
     'pack 20 pcs' => 'Pack de 20',
@@ -242,19 +263,27 @@ final class AttributeMap {
    *   Mapa de eje a valor canónico. Vacío si el título no aporta nada.
    */
   public function fromTitle(string $title): array {
-    $abre = mb_strrpos($title, '(');
-    $cierra = mb_strrpos($title, ')');
-    if ($abre === FALSE || $cierra === FALSE || $cierra < $abre) {
+    $primero = mb_strpos($title, '(');
+    if ($primero === FALSE) {
       return [];
     }
-    $dentro = mb_substr($title, $abre + 1, $cierra - $abre - 1);
+    // Se analiza desde el primer paréntesis, nunca el nombre del producto: hay
+    // productos llamados "CHÁNDAL ROJO SAKURA" y "Rojo" no es su variación.
+    $resto = mb_substr($title, $primero);
 
     $resultado = [];
-    foreach (explode(',', $dentro) as $parte) {
-      $clasificado = $this->classify($parte);
-      // El primer valor de cada eje gana: los títulos no repiten eje.
-      if ($clasificado !== NULL && !isset($resultado[$clasificado['axis']])) {
-        $resultado[$clasificado['axis']] = $clasificado['value'];
+    // Los títulos del D7 anidan paréntesis, como "(Pequeño 25x30cm
+    // (almuerzo))", así que se trocea por paréntesis a cualquier profundidad.
+    foreach (preg_split('/[()]/u', $resto) ?: [] as $segmento) {
+      // Y luego por coma seguida de espacio, el patrón de "(2, Azul Celeste)".
+      // Nunca por coma suelta: rompería decimales como "8,5 x 17 cm" en un "8"
+      // que se clasificaría como talla.
+      foreach (preg_split('/,\s+/u', $segmento) ?: [] as $parte) {
+        $clasificado = $this->classify($parte);
+        // El primer valor de cada eje gana.
+        if ($clasificado !== NULL) {
+          $resultado[$clasificado['axis']] ??= $clasificado['value'];
+        }
       }
     }
     return $resultado;

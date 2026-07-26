@@ -1,0 +1,25 @@
+_meta:
+  version: '1.0'
+  entity_type: commerce_product_attribute_value
+  uuid: 59669473-5bc8-4094-b001-94bdd464d0de
+  bundle: medida
+  default_langcode: es
+default:
+  name:
+    -
+      value: 'Pequeño 15 x 15 cm'
+  weight:
+    -
+      value: 11
+  content_translation_source:
+    -
+      value: und
+  content_translation_outdated:
+    -
+      value: false
+  content_translation_uid:
+    -
+      target_id: 0
+  content_translation_status:
+    -
+      value: true

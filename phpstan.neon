@@ -20,3 +20,12 @@ parameters:
 
   # Treat PHP notices/warnings raised during analysis as errors.
   reportUnmatchedIgnoredErrors: true
+
+  ignoreErrors:
+    # commerce_stock tipa $unit_cost como float en el docblock de
+    # StockTransactionsInterface::receiveStock(), pero la columna de base de
+    # datos admite NULL y el D7 no guardaba coste de compra. Pasar 0.0 sería
+    # afirmar que el coste es cero, que es peor que declararlo desconocido.
+    -
+      message: '#Parameter \#5 \$unit_cost of method .+::receiveStock\(\) expects float, null given\.#'
+      path: web/modules/custom/pronens_migrate/src/EventSubscriber/StockTransactionSubscriber.php

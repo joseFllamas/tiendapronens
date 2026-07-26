@@ -146,3 +146,35 @@ migrarlos como productos de una sola variación sin atributos, que es lo que son
 3. `Manta` y `Manta ajustable`: dos productos separados, o un atributo.
 4. Los 74 productos huérfanos, sin ningún display que los referencie: migrar o
    descartar.
+
+---
+
+## Ampliación tras corregir la extracción de paréntesis anidados
+
+La primera versión del extractor buscaba el último `(` y el último `)`, y con
+títulos como `Bolsa mochila impermeable guardería Oso Tribal (Pequeño 25x30cm
+(almuerzo))` devolvía `almuerzo)` con el cierre pegado. Consecuencias: las 224
+piezas no se clasificaban y las medidas del nivel exterior se perdían.
+
+Al corregirlo aparecieron nueve medidas que no estaban en la tabla original, y
+que afectan a 254 productos:
+
+| Origen | n | Destino |
+|---|---|---|
+| `Grande 38x40 cm`, `Grande 38x40cm` | 70 | Grande 38 x 40 cm |
+| `Medio 28x30 cm` | 55 | Medio 28 x 30 cm |
+| `Pequeño 20x20 cm` | 38 | Pequeño 20 x 20 cm |
+| `Mini 14x14cm` | 19 | Mini 14 x 14 cm |
+| `Pequeño 15x15 cm` | 17 | Pequeño 15 x 15 cm |
+| `Pequeño 25x25cm` | 15 | Pequeño 25 x 25 cm |
+| `Pequeño 25x28cm` | 4 | Pequeño 25 x 28 cm |
+| `Grande 37x42cm` | 4 | Grande 37 x 42 cm |
+| `Pequeño 25x30cm` | 2 | Pequeño 25 x 30 cm |
+
+Más `Pack 5 unidades` y `Pack 10 unidades` al formato, `Funda cojin` suelto, y
+las tallas `000` y `00` sueltas.
+
+Segundo riesgo detectado y cerrado: trocear por coma suelta partía
+`8,5 x 17 cm` en un `8` que se clasificaba como talla, un falso positivo en 33
+productos. Ahora solo se trocea por coma seguida de espacio, que es el patrón
+real de `(2, Azul Celeste)`.

@@ -1,0 +1,116 @@
+id: pronens_variacion
+label: 'Pronens: variaciones desde los productos-SKU del D7'
+migration_tags:
+  - 'Drupal 7'
+  - Pronens
+migration_group: pronens
+audit: true
+source:
+  plugin: pronens_d7_commerce_product
+  key: migrate
+process:
+  type:
+    plugin: default_value
+    default_value: default
+  langcode:
+    plugin: default_value
+    default_value: es
+  sku: sku
+  title: title
+  status: status
+  created: created
+  changed: changed
+  uid:
+    plugin: default_value
+    default_value: 1
+  # El producto padre se resuelve por el nodo de display que referenciaba este
+  # SKU en el D7. Sin display no hay producto, y esos ya los descarta el origen.
+  product_id:
+    plugin: migration_lookup
+    migration: pronens_producto
+    source: display_nid
+    no_stub: true
+  # El origen ya devuelve el precio con el 21% de IVA incorporado.
+  price/number: precio
+  price/currency_code:
+    plugin: default_value
+    default_value: EUR
+  # Los cinco ejes de variación. El origen entrega el nombre canónico del valor
+  # y entity_lookup lo convierte en el ID de la entidad, que es numérico.
+  attribute_talla:
+    -
+      plugin: skip_on_empty
+      method: process
+      source: attr_talla
+    -
+      plugin: entity_lookup
+      entity_type: commerce_product_attribute_value
+      bundle_key: attribute
+      bundle: talla
+      value_key: name
+      access_check: false
+  attribute_medida:
+    -
+      plugin: skip_on_empty
+      method: process
+      source: attr_medida
+    -
+      plugin: entity_lookup
+      entity_type: commerce_product_attribute_value
+      bundle_key: attribute
+      bundle: medida
+      value_key: name
+      access_check: false
+  attribute_pieza:
+    -
+      plugin: skip_on_empty
+      method: process
+      source: attr_pieza
+    -
+      plugin: entity_lookup
+      entity_type: commerce_product_attribute_value
+      bundle_key: attribute
+      bundle: pieza
+      value_key: name
+      access_check: false
+  attribute_formato:
+    -
+      plugin: skip_on_empty
+      method: process
+      source: attr_formato
+    -
+      plugin: entity_lookup
+      entity_type: commerce_product_attribute_value
+      bundle_key: attribute
+      bundle: formato
+      value_key: name
+      access_check: false
+  attribute_color:
+    -
+      plugin: skip_on_empty
+      method: process
+      source: attr_color
+    -
+      plugin: entity_lookup
+      entity_type: commerce_product_attribute_value
+      bundle_key: attribute
+      bundle: color
+      value_key: name
+      access_check: false
+  # Imágenes propias del SKU, que en el D7 solían ser la foto de ese color.
+  field_imagenes:
+    plugin: sub_process
+    source: imagen_fids
+    process:
+      target_id:
+        plugin: migration_lookup
+        migration: pronens_media_imagen
+        source: fid
+        no_stub: true
+destination:
+  plugin: 'entity:commerce_product_variation'
+  default_bundle: default
+migration_dependencies:
+  required:
+    - pronens_producto
+    - pronens_media_imagen

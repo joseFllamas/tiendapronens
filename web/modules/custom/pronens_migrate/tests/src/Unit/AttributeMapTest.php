@@ -128,10 +128,25 @@ final class AttributeMapTest extends UnitTestCase {
         'Cojín personalizado (40 x 40cm)',
         ['medida' => '40 x 40 cm'],
       ],
+      // Regresión: los títulos del D7 anidan paréntesis y la primera versión
+      // extraía "almuerzo)" con el cierre pegado, perdiendo las 224 piezas y
+      // las medidas del nivel exterior.
+      'parentesis anidados' => [
+        'Bolsa mochila impermeable guardería Oso Tribal (Pequeño 25x30cm (almuerzo))',
+        ['medida' => 'Pequeño 25 x 30 cm', 'pieza' => 'Bolsa de almuerzo'],
+      ],
+      // Regresión: partir por coma suelta rompía "8,5 x 17 cm" en un "8" que se
+      // clasificaba como talla, metiendo un falso positivo en 33 productos.
+      'coma decimal no parte el valor' => [
+        'Etiquetas identificativas (Infantil Large (9-12 años) 8,5 x 17 cm)',
+        ['medida' => 'Infantil L (9-12 años), 8,5 x 17 cm'],
+      ],
       'sin parentesis' => ['Bata escolar personalizada', []],
       'parentesis sin valor util' => ['Manta polar (Manta)', []],
       'parentesis vacio' => ['Producto ()', []],
-      'parentesis mal cerrado' => ['Producto (2', []],
+      // Un paréntesis sin cerrar no debe hacer perder el valor: el D7 tiene
+      // títulos escritos a mano y descartar el dato sería peor que leerlo.
+      'parentesis mal cerrado' => ['Producto (2', ['talla' => '2 (2-3 años)']],
       'varios parentesis, gana el ultimo' => [
         'Camiseta (algodón) (4)',
         ['talla' => '4 (3-4 años)'],

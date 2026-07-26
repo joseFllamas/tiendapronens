@@ -1,0 +1,101 @@
+id: pronens_producto
+label: 'Pronens: productos desde los nodos de display del D7'
+migration_tags:
+  - 'Drupal 7'
+  - Pronens
+migration_group: pronens
+audit: true
+source:
+  # En Commerce 1 el producto de cara al cliente es el nodo de display, que
+  # referencia varios productos-SKU. En Commerce 3 ese nodo pasa a ser el
+  # commerce_product y los SKU sus variaciones.
+  plugin: d7_node
+  key: migrate
+  node_type:
+    - producto_costumizado
+    - producto_costumizado_color
+    - producto_escuela
+    - product_display
+process:
+  type:
+    plugin: default_value
+    default_value: default
+  # Solo castellano: alcance acordado de la migración.
+  langcode:
+    plugin: default_value
+    default_value: es
+  title: title
+  status: status
+  created: created
+  changed: changed
+  uid:
+    plugin: default_value
+    default_value: 1
+  stores:
+    plugin: default_value
+    default_value:
+      - 1
+  body/value: field_descripcion_del_producto/0/value
+  body/format:
+    plugin: default_value
+    default_value: basic_html
+  field_composicion: field_composici_n/0/value
+  field_destacado: field_home/0/value
+  # Imagen principal y galería, resueltas contra las 2325 entidades Media.
+  field_imagen_principal/target_id:
+    plugin: migration_lookup
+    migration: pronens_media_imagen
+    source: field_imagen_representativa/0/fid
+    no_stub: true
+  field_galeria:
+    plugin: sub_process
+    source: field_imagen_galeria_ficha
+    process:
+      target_id:
+        plugin: migration_lookup
+        migration: pronens_media_imagen
+        source: fid
+        no_stub: true
+  # Taxonomías, resueltas contra los términos ya migrados.
+  field_tipo_de_producto:
+    plugin: sub_process
+    source: field_categor_a
+    process:
+      target_id:
+        plugin: migration_lookup
+        migration: pronens_taxonomia_tipo_producto
+        source: tid
+        no_stub: true
+  # field_edades no se mapea: en el D7 field__tama_o está en el producto-SKU, no
+  # en el nodo de display, y sus valores (rangos de edad con medida física) los
+  # consume el atributo Medida de la variación. El campo y el vocabulario se
+  # conservan para la navegación facetada del theme nuevo.
+  field_lavado:
+    plugin: sub_process
+    source: field_recomendaciones_de_lavado
+    process:
+      target_id:
+        plugin: migration_lookup
+        migration: pronens_taxonomia_recomendaciones_de_lavado
+        source: tid
+        no_stub: true
+  field_guia_tallas/target_id:
+    plugin: migration_lookup
+    migration: pronens_taxonomia_guia_tallas
+    source: field_guia_tallas/0/tid
+    no_stub: true
+  field_escuela/target_id:
+    plugin: migration_lookup
+    migration: pronens_taxonomia_escuelas
+    source: field_escuela/0/tid
+    no_stub: true
+destination:
+  plugin: 'entity:commerce_product'
+  default_bundle: default
+migration_dependencies:
+  required:
+    - pronens_media_imagen
+    - pronens_taxonomia_tipo_producto
+    - pronens_taxonomia_recomendaciones_de_lavado
+    - pronens_taxonomia_guia_tallas
+    - pronens_taxonomia_escuelas

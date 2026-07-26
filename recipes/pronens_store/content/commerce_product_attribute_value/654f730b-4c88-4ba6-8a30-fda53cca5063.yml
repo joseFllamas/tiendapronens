@@ -1,0 +1,25 @@
+_meta:
+  version: '1.0'
+  entity_type: commerce_product_attribute_value
+  uuid: 654f730b-4c88-4ba6-8a30-fda53cca5063
+  bundle: medida
+  default_langcode: es
+default:
+  name:
+    -
+      value: 'Mini 14 x 14 cm'
+  weight:
+    -
+      value: 10
+  content_translation_source:
+    -
+      value: und
+  content_translation_outdated:
+    -
+      value: false
+  content_translation_uid:
+    -
+      target_id: 0
+  content_translation_status:
+    -
+      value: true

@@ -1,0 +1,16 @@
+services:
+  Drupal\pronens_migrate\AttributeMap:
+    class: Drupal\pronens_migrate\AttributeMap
+
+  Drupal\pronens_migrate\EventSubscriber\StockTransactionSubscriber:
+    class: Drupal\pronens_migrate\EventSubscriber\StockTransactionSubscriber
+    arguments:
+      - '@commerce_stock.service_manager'
+      - '@entity_type.manager'
+      - '@logger.channel.pronens_migrate'
+    tags:
+      - { name: event_subscriber }
+
+  logger.channel.pronens_migrate:
+    parent: logger.channel_base
+    arguments: ['pronens_migrate']

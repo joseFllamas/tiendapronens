@@ -1,0 +1,25 @@
+_meta:
+  version: '1.0'
+  entity_type: commerce_product_attribute_value
+  uuid: 16f15948-b43e-4274-9ad9-6ef57ae433f5
+  bundle: medida
+  default_langcode: es
+default:
+  name:
+    -
+      value: 'Pequeño 20 x 20 cm'
+  weight:
+    -
+      value: 12
+  content_translation_source:
+    -
+      value: und
+  content_translation_outdated:
+    -
+      value: false
+  content_translation_uid:
+    -
+      target_id: 0
+  content_translation_status:
+    -
+      value: true
