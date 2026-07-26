@@ -1,0 +1,51 @@
+id: pronens_alias_termino
+label: 'Pronens: alias de URL de los términos de taxonomía'
+migration_tags:
+  - 'Drupal 7'
+  - Pronens
+migration_group: pronens
+audit: true
+source:
+  plugin: pronens_d7_url_alias
+  key: migrate
+  path_prefix: 'taxonomy/term/'
+  constants:
+    prefijo_destino: '/taxonomy/term/'
+process:
+  # migration_lookup acepta varias migraciones y prueba en orden. Los términos
+  # de color y talla no están en la lista a propósito: en Commerce 3 son valores
+  # de atributo, no términos, así que sus alias mueren aquí.
+  termino_id:
+    -
+      plugin: migration_lookup
+      migration:
+        - pronens_taxonomia_tipo_producto
+        - pronens_taxonomia_recomendaciones_de_lavado
+        - pronens_taxonomia_edades
+        - pronens_taxonomia_guia_tallas
+        - pronens_taxonomia_escuelas
+        - pronens_taxonomia_color_letra
+      source: entity_id
+      no_stub: true
+    -
+      plugin: skip_on_empty
+      method: row
+  path:
+    plugin: concat
+    source:
+      - constants/prefijo_destino
+      - '@termino_id'
+  alias: alias_con_barra
+  langcode:
+    plugin: default_value
+    default_value: es
+destination:
+  plugin: 'entity:path_alias'
+migration_dependencies:
+  required:
+    - pronens_taxonomia_tipo_producto
+    - pronens_taxonomia_recomendaciones_de_lavado
+    - pronens_taxonomia_edades
+    - pronens_taxonomia_guia_tallas
+    - pronens_taxonomia_escuelas
+    - pronens_taxonomia_color_letra

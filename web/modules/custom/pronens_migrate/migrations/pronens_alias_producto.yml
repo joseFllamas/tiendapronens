@@ -1,0 +1,40 @@
+id: pronens_alias_producto
+label: 'Pronens: alias de URL de los productos'
+migration_tags:
+  - 'Drupal 7'
+  - Pronens
+migration_group: pronens
+audit: true
+source:
+  plugin: pronens_d7_url_alias
+  key: migrate
+  path_prefix: 'node/'
+  constants:
+    prefijo_destino: '/product/'
+process:
+  # El nodo de display del D7 es ahora una entidad commerce_product con otro ID.
+  # Si el nodo no se migró, por ejemplo las páginas o los banners, la fila se
+  # descarta en lugar de generar un alias roto.
+  producto_id:
+    -
+      plugin: migration_lookup
+      migration: pronens_producto
+      source: entity_id
+      no_stub: true
+    -
+      plugin: skip_on_empty
+      method: row
+  path:
+    plugin: concat
+    source:
+      - constants/prefijo_destino
+      - '@producto_id'
+  alias: alias_con_barra
+  langcode:
+    plugin: default_value
+    default_value: es
+destination:
+  plugin: 'entity:path_alias'
+migration_dependencies:
+  required:
+    - pronens_producto
