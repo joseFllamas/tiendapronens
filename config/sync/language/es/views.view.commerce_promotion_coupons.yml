@@ -1,0 +1,45 @@
+label: Cupones
+display:
+  default:
+    display_title: Máster
+    display_options:
+      exposed_form:
+        options:
+          submit_button: Filtro
+          reset_button_label: Restablecer
+          exposed_sorts_label: 'Ordenar por'
+          sort_asc_label: Asc
+          sort_desc_label: Desc
+      pager:
+        options:
+          tags:
+            previous: ‹‹
+            next: ››
+            first: '« Primero'
+            last: 'Último »'
+          expose:
+            items_per_page_label: 'Elementos por página'
+            items_per_page_options_all_label: '- Todo -'
+      fields:
+        code:
+          label: Código
+          separator: ', '
+        usage_limit:
+          label: Uso
+          separator: ', '
+        usage_limit_customer:
+          label: 'Límite por cliente'
+          separator: ', '
+        operations:
+          label: Operaciones
+      filters:
+        code:
+          expose:
+            label: Código
+      title: Cupones
+      arguments:
+        promotion_id:
+          exception:
+            title: Todo(s)
+  page_1:
+    display_title: Página

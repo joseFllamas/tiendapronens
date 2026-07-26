@@ -54,6 +54,14 @@ content:
     third_party_settings: {  }
     weight: 2
     region: content
+  coupons:
+    type: entity_reference_label
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 12
+    region: content
   created:
     type: timestamp
     label: inline

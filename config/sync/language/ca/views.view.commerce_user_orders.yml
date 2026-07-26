@@ -1,0 +1,47 @@
+display:
+  default:
+    display_title: Mestre
+    display_options:
+      exposed_form:
+        options:
+          submit_button: Aplica
+          reset_button_label: Reinicialitza
+          exposed_sorts_label: 'Ordena per'
+          sort_asc_label: Asc
+          sort_desc_label: Desc
+      pager:
+        options:
+          tags:
+            previous: '‹ Anterior'
+            next: 'Següent ›'
+            first: '« Primer'
+            last: 'Últim »'
+          expose:
+            items_per_page_label: 'Elements per pàgina'
+            items_per_page_options_all_label: '- Tot -'
+            offset_label: Desplaçament
+      fields:
+        order_id:
+          label: ID
+          separator: ', '
+        order_number:
+          label: 'Número de comanda'
+          separator: ', '
+        placed:
+          label: Data
+          separator: ', '
+        total_price__number:
+          label: Total
+          separator: ', '
+        state:
+          label: Estat
+          separator: ', '
+      title: Comandes
+      arguments:
+        uid:
+          exception:
+            title: Tot
+  order_page:
+    display_options:
+      menu:
+        title: Comandes

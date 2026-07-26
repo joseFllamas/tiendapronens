@@ -1,0 +1,62 @@
+label: Comandes
+display:
+  default:
+    display_title: Mestre
+    display_options:
+      exposed_form:
+        options:
+          submit_button: Filtra
+          reset_button_label: Reinicialitza
+          exposed_sorts_label: 'Ordena per'
+          sort_asc_label: Asc
+          sort_desc_label: Desc
+      pager:
+        options:
+          expose:
+            items_per_page_label: 'Elements per pàgina'
+            items_per_page_options_all_label: '- Tot -'
+            offset_label: Desplaçament
+      fields:
+        order_number:
+          separator: ', '
+        placed:
+          label: Data
+          separator: ', '
+        type:
+          label: Tipus
+          separator: ', '
+        store_id:
+          label: Botiga
+          separator: ', '
+        uid:
+          label: Client
+          separator: ', '
+        mail:
+          label: 'Correu electrònic'
+          separator: ', '
+        state:
+          label: Estat
+          separator: ', '
+        total_price__number:
+          label: Total
+          separator: ', '
+        operations:
+          label: Operacions
+      filters:
+        order_number:
+          expose:
+            label: 'Número de comanda'
+        type:
+          expose:
+            label: Tipus
+        state:
+          expose:
+            label: Estat
+      title: Comandes
+  page_1:
+    display_title: Pàgina
+    display_options:
+      menu:
+        title: Comandes
+      tab_options:
+        title: Comandes

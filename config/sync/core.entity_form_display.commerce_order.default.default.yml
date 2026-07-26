@@ -52,6 +52,7 @@ content:
       draggable: true
     third_party_settings: {  }
 hidden:
+  coupons: true
   created: true
   customer_comments: true
   ip_address: true

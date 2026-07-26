@@ -1,0 +1,46 @@
+label: Productes
+display:
+  default:
+    display_title: Mestre
+    display_options:
+      exposed_form:
+        options:
+          submit_button: Filtra
+          reset_button_label: Reinicialitza
+          exposed_sorts_label: 'Ordena per'
+          sort_asc_label: Asc
+          sort_desc_label: Desc
+      pager:
+        options:
+          expose:
+            items_per_page_label: 'Elements per pàgina'
+            items_per_page_options_all_label: '- Tot -'
+            offset_label: Desplaçament
+      fields:
+        title:
+          label: Títol
+          separator: ', '
+        type:
+          label: Tipus
+          separator: ', '
+        status:
+          label: Estat
+          settings:
+            format_custom_true: Publicat
+            format_custom_false: 'Sense publicar'
+          separator: ', '
+        changed:
+          label: Actualitzat
+          separator: ', '
+        operations:
+          label: Operacions
+      filters:
+        type:
+          expose:
+            label: Tipus
+        title:
+          expose:
+            label: Títol
+      title: Productes
+  page_1:
+    display_title: Pàgina

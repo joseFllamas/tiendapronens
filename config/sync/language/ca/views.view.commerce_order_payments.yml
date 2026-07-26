@@ -1,0 +1,47 @@
+label: Pagaments
+display:
+  default:
+    display_title: 'Per defecte'
+    display_options:
+      title: Pagaments
+      fields:
+        amount__number:
+          label: Pagament
+          separator: ', '
+        refunded_amount__number:
+          separator: ', '
+        avs_response_code_label:
+          separator: ', '
+        avs_response_code:
+          separator: ', '
+        state:
+          label: Estat
+          separator: ', '
+        payment_gateway:
+          separator: ', '
+        authorized:
+          separator: ', '
+        completed:
+          label: Completat
+          separator: ', '
+        remote_id:
+          label: 'ID remota'
+          separator: ', '
+        operations:
+          label: Operacions
+      exposed_form:
+        options:
+          submit_button: Aplica
+          reset_button_label: Reinicialitza
+          exposed_sorts_label: 'Ordena per'
+          sort_asc_label: Asc
+          sort_desc_label: Desc
+      arguments:
+        order_id:
+          exception:
+            title: Tot
+  page_1:
+    display_title: Pàgina
+    display_options:
+      menu:
+        title: Pagaments

@@ -1,0 +1,55 @@
+display:
+  default:
+    display_title: 'Per defecte'
+    display_options:
+      exposed_form:
+        options:
+          submit_button: Aplica
+          reset_button_label: Reinicialitza
+          exposed_sorts_label: 'Ordena per'
+          sort_asc_label: Asc
+          sort_desc_label: Desc
+      pager:
+        options:
+          tags:
+            previous: ‹‹
+            next: ››
+            first: '« Primer'
+            last: 'Últim »'
+          expose:
+            items_per_page_label: 'Elements per pàgina'
+            items_per_page_options_all_label: '- Tot -'
+            offset_label: Desplaçament
+      fields:
+        name:
+          label: Nom
+          separator: ', '
+        offer__target_plugin_id:
+          separator: ', '
+        usage_limit:
+          label: Ús
+          separator: ', '
+        usage_limit_customer:
+          separator: ', '
+        start_date:
+          label: "Data d'inici"
+          separator: ', '
+        end_date:
+          label: 'Data de finalització'
+          separator: ', '
+        operations:
+          label: Operacions
+      filters:
+        name:
+          expose:
+            label: Nom
+        status:
+          expose:
+            label: Estat
+  admin:
+    display_title: Pàgina
+    display_options:
+      menu:
+        title: Llistat
+      tab_options:
+        title: Llistat

@@ -1,0 +1,28 @@
+display:
+  default:
+    display_title: Mestre
+    display_options:
+      exposed_form:
+        options:
+          submit_button: Aplica
+          reset_button_label: Reinicialitza
+          exposed_sorts_label: 'Ordena per'
+          sort_asc_label: Asc
+          sort_desc_label: Desc
+      fields:
+        title:
+          label: Títol
+          separator: ', '
+        unit_price__number:
+          label: 'Preu unitari'
+          separator: ', '
+        quantity:
+          label: Quantitat
+          separator: ', '
+        total_price__number:
+          label: 'Preu total'
+          separator: ', '
+      arguments:
+        order_item_id:
+          exception:
+            title: Tot

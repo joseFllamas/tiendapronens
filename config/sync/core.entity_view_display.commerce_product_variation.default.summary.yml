@@ -43,5 +43,6 @@ content:
     weight: -5
     region: content
 hidden:
+  langcode: true
   price: true
   sku: true

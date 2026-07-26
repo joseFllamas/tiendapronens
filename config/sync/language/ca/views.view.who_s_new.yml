@@ -1,0 +1,14 @@
+display:
+  default:
+    display_title: 'Per defecte'
+    display_options:
+      exposed_form:
+        options:
+          submit_button: Aplica
+          reset_button_label: Reinicialitza
+          exposed_sorts_label: 'Ordena per'
+          sort_asc_label: Asc
+          sort_desc_label: Desc
+  block_1:
+    display_options:
+      block_category: Usuari

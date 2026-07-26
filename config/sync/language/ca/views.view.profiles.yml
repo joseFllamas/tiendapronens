@@ -1,0 +1,25 @@
+label: Perfils
+display:
+  default:
+    display_title: Mestre
+    display_options:
+      exposed_form:
+        options:
+          submit_button: Aplica
+          reset_button_label: Reinicialitza
+          exposed_sorts_label: 'Ordena per'
+          sort_asc_label: Asc
+          sort_desc_label: Desc
+      arguments:
+        uid:
+          exception:
+            title: Tot
+        type:
+          exception:
+            title: Tot
+        status:
+          exception:
+            title: Tot
+      title: Perfils
+  user_page:
+    display_title: "Pàgina d'usuari"

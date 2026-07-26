@@ -1,0 +1,34 @@
+display:
+  default:
+    display_title: Principal
+    display_options:
+      exposed_form:
+        options:
+          submit_button: Appliquer
+          reset_button_label: Réinitialiser
+          exposed_sorts_label: 'Trier par'
+          sort_asc_label: Asc
+          sort_desc_label: Desc
+      fields:
+        title:
+          label: Titre
+          separator: ', '
+        shipping_method:
+          label: "Mode d'expédition"
+          separator: ', '
+        amount__number:
+          label: Montant
+          separator: ', '
+        tracking_code:
+          separator: ', '
+        state:
+          label: État
+          separator: ', '
+        operations:
+          label: "Liens d'actions"
+      arguments:
+        order_id:
+          exception:
+            title: Tout
+  page_1:
+    display_title: Page

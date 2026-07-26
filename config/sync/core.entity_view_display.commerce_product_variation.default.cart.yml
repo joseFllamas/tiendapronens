@@ -36,6 +36,7 @@ content:
     weight: 0
     region: content
 hidden:
+  langcode: true
   price: true
   sku: true
   title: true

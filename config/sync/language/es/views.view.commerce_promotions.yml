@@ -1,0 +1,63 @@
+label: Promociones
+display:
+  default:
+    display_title: 'Por defecto'
+    display_options:
+      exposed_form:
+        options:
+          submit_button: Aplicar
+          reset_button_label: Restablecer
+          exposed_sorts_label: 'Ordenar por'
+          sort_asc_label: Asc
+          sort_desc_label: Desc
+      pager:
+        options:
+          tags:
+            previous: ‹‹
+            next: ››
+            first: '« Primero'
+            last: 'Último »'
+          expose:
+            items_per_page_label: 'Elementos por página'
+            items_per_page_options_all_label: '- Todo -'
+      fields:
+        name:
+          label: Nombre
+          separator: ', '
+        offer__target_plugin_id:
+          label: 'Tipo de oferta'
+          separator: ', '
+        usage_limit:
+          label: Uso
+          separator: ', '
+        usage_limit_customer:
+          separator: ', '
+        start_date:
+          label: 'Fecha de inicio'
+          separator: ', '
+        end_date:
+          label: 'Fecha final'
+          separator: ', '
+        operations:
+          label: Operaciones
+      filters:
+        name:
+          expose:
+            label: Nombre
+        offer__target_plugin_id:
+          expose:
+            label: 'Tipo de oferta'
+        code:
+          expose:
+            label: 'Código del cupón'
+        status:
+          expose:
+            label: Estado
+      title: Promociones
+  admin:
+    display_title: Página
+    display_options:
+      menu:
+        title: Listado
+      tab_options:
+        title: Listado

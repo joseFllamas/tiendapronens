@@ -33,6 +33,7 @@ content:
 hidden:
   adjustments: true
   billing_profile: true
+  coupons: true
   customer_comments: true
   ip_address: true
   order_items: true
