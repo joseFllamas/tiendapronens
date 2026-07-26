@@ -1,13 +1,13 @@
 _meta:
   version: '1.0'
   entity_type: commerce_product_attribute_value
-  uuid: a86d7a6e-4fd1-4b72-b9a1-a9f3383f7680
-  bundle: talla
+  uuid: 3c34e516-3a57-44d6-8e84-20b1ad95b0ae
+  bundle: medida
   default_langcode: es
 default:
   name:
     -
-      value: '0 (0-1 años)'
+      value: '32 x 45 cm'
   weight:
     -
       value: 7

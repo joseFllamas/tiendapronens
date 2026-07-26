@@ -6,6 +6,9 @@ dependencies:
     - commerce_product.commerce_product_variation_type.default
     - core.entity_view_mode.commerce_product_variation.cart
     - field.field.commerce_product_variation.default.attribute_color
+    - field.field.commerce_product_variation.default.attribute_formato
+    - field.field.commerce_product_variation.default.attribute_medida
+    - field.field.commerce_product_variation.default.attribute_pieza
     - field.field.commerce_product_variation.default.attribute_talla
     - field.field.commerce_product_variation.default.dimensions
     - field.field.commerce_product_variation.default.field_imagenes
@@ -43,6 +46,9 @@ content:
     region: content
 hidden:
   attribute_color: true
+  attribute_formato: true
+  attribute_medida: true
+  attribute_pieza: true
   attribute_talla: true
   dimensions: true
   field_imagenes: true

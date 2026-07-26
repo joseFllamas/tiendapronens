@@ -10,7 +10,7 @@ default:
       value: '20 / M'
   weight:
     -
-      value: 12
+      value: 17
   content_translation_source:
     -
       value: und

@@ -10,7 +10,7 @@ default:
       value: '24 / XL'
   weight:
     -
-      value: 14
+      value: 19
   content_translation_source:
     -
       value: und

@@ -10,7 +10,7 @@ default:
       value: '22 / L'
   weight:
     -
-      value: 13
+      value: 18
   content_translation_source:
     -
       value: und

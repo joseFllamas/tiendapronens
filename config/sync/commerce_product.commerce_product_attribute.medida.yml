@@ -1,0 +1,7 @@
+uuid: 6d3612ac-9e5e-46f3-ad34-fb733ac632c4
+langcode: es
+status: true
+dependencies: {  }
+id: medida
+label: Medida
+elementType: select

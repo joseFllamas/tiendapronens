@@ -10,7 +10,7 @@ default:
       value: '26 / XXL'
   weight:
     -
-      value: 15
+      value: 20
   content_translation_source:
     -
       value: und

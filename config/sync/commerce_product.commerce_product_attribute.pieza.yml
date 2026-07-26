@@ -1,0 +1,7 @@
+uuid: 1372453f-5729-4f58-a058-ae5e7070c148
+langcode: es
+status: true
+dependencies: {  }
+id: pieza
+label: Pieza
+elementType: select

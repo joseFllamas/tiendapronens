@@ -1,0 +1,19 @@
+uuid: 69c9eca4-6df7-4c33-99d5-209fb180f022
+langcode: es
+status: true
+dependencies:
+  module:
+    - commerce_product
+id: commerce_product_variation.attribute_formato
+field_name: attribute_formato
+entity_type: commerce_product_variation
+type: entity_reference
+settings:
+  target_type: commerce_product_attribute_value
+module: core
+locked: false
+cardinality: 1
+translatable: false
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

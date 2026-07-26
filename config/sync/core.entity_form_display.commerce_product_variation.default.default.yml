@@ -5,6 +5,9 @@ dependencies:
   config:
     - commerce_product.commerce_product_variation_type.default
     - field.field.commerce_product_variation.default.attribute_color
+    - field.field.commerce_product_variation.default.attribute_formato
+    - field.field.commerce_product_variation.default.attribute_medida
+    - field.field.commerce_product_variation.default.attribute_pieza
     - field.field.commerce_product_variation.default.attribute_talla
     - field.field.commerce_product_variation.default.dimensions
     - field.field.commerce_product_variation.default.field_imagenes
@@ -23,6 +26,24 @@ content:
   attribute_color:
     type: options_select
     weight: 1
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  attribute_formato:
+    type: options_select
+    weight: 5
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  attribute_medida:
+    type: options_select
+    weight: 3
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  attribute_pieza:
+    type: options_select
+    weight: 4
     region: content
     settings: {  }
     third_party_settings: {  }

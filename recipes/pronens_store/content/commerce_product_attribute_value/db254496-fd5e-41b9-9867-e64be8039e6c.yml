@@ -10,7 +10,7 @@ default:
       value: '16 / XS'
   weight:
     -
-      value: 10
+      value: 15
   content_translation_source:
     -
       value: und

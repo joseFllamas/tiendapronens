@@ -10,7 +10,7 @@ default:
       value: '00 (8 meses)'
   weight:
     -
-      value: 1
+      value: 6
   content_translation_source:
     -
       value: und

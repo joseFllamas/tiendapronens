@@ -10,7 +10,7 @@ default:
       value: '4 (3-4 años)'
   weight:
     -
-      value: 4
+      value: 9
   content_translation_source:
     -
       value: und

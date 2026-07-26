@@ -1,16 +1,16 @@
 _meta:
   version: '1.0'
   entity_type: commerce_product_attribute_value
-  uuid: a86d7a6e-4fd1-4b72-b9a1-a9f3383f7680
+  uuid: 56e884f9-ff3a-4600-9dd0-63a463a568c0
   bundle: talla
   default_langcode: es
 default:
   name:
     -
-      value: '0 (0-1 años)'
+      value: '18 meses'
   weight:
     -
-      value: 7
+      value: 4
   content_translation_source:
     -
       value: und

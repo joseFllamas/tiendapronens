@@ -1,16 +1,16 @@
 _meta:
   version: '1.0'
   entity_type: commerce_product_attribute_value
-  uuid: a86d7a6e-4fd1-4b72-b9a1-a9f3383f7680
-  bundle: talla
+  uuid: db51b6d7-d614-4da9-8754-7e1663d52cff
+  bundle: pieza
   default_langcode: es
 default:
   name:
     -
-      value: '0 (0-1 años)'
+      value: 'Bolsa de almuerzo'
   weight:
     -
-      value: 7
+      value: 1
   content_translation_source:
     -
       value: und

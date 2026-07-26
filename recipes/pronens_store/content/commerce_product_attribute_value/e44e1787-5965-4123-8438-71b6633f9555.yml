@@ -10,7 +10,7 @@ default:
       value: '000 (6 meses)'
   weight:
     -
-      value: 0
+      value: 5
   content_translation_source:
     -
       value: und

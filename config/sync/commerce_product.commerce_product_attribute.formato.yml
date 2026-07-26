@@ -1,0 +1,7 @@
+uuid: 1b99e65f-1339-4ac7-9034-3ecccc0527b8
+langcode: es
+status: true
+dependencies: {  }
+id: formato
+label: Formato
+elementType: select

@@ -1,16 +1,16 @@
 _meta:
   version: '1.0'
   entity_type: commerce_product_attribute_value
-  uuid: a86d7a6e-4fd1-4b72-b9a1-a9f3383f7680
-  bundle: talla
+  uuid: 241f2d06-004f-449d-8e36-4abb8232d358
+  bundle: formato
   default_langcode: es
 default:
   name:
     -
-      value: '0 (0-1 años)'
+      value: 'Pack de 100'
   weight:
     -
-      value: 7
+      value: 4
   content_translation_source:
     -
       value: und

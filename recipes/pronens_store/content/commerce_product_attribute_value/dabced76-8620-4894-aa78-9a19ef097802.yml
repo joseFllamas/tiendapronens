@@ -1,16 +1,16 @@
 _meta:
   version: '1.0'
   entity_type: commerce_product_attribute_value
-  uuid: a86d7a6e-4fd1-4b72-b9a1-a9f3383f7680
-  bundle: talla
+  uuid: dabced76-8620-4894-aa78-9a19ef097802
+  bundle: medida
   default_langcode: es
 default:
   name:
     -
-      value: '0 (0-1 años)'
+      value: 'Infantil L (9-12 años), 8,5 x 17 cm'
   weight:
     -
-      value: 7
+      value: 2
   content_translation_source:
     -
       value: und

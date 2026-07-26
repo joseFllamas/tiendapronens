@@ -10,7 +10,7 @@ default:
       value: '18 / S'
   weight:
     -
-      value: 11
+      value: 16
   content_translation_source:
     -
       value: und

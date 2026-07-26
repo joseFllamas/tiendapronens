@@ -2,10 +2,11 @@
 <!--
   Project-level PHPUnit configuration, scoped to the custom modules only.
   Based on web/core/phpunit.xml.dist. Paths are relative to the project root,
-  so run it from there inside DDEV:
+  so run it from there inside DDEV, for example:
 
-    ddev exec vendor/bin/phpunit --testsuite=unit
-    ddev exec vendor/bin/phpunit web/modules/custom/pronens_personalizacion
+    ddev exec vendor/bin/phpunit web/modules/custom/pronens_migrate
+
+  or passing the testsuite flag with the suite name "unit".
 
   Copy to phpunit.xml to override values locally (phpunit.xml is gitignored).
 -->

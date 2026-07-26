@@ -1,16 +1,16 @@
 _meta:
   version: '1.0'
   entity_type: commerce_product_attribute_value
-  uuid: a86d7a6e-4fd1-4b72-b9a1-a9f3383f7680
-  bundle: talla
+  uuid: a3edc8ed-b05e-40f6-9711-a845e2fbd9a4
+  bundle: medida
   default_langcode: es
 default:
   name:
     -
-      value: '0 (0-1 años)'
+      value: 'Adulto (+12 años), 12 x 18 cm'
   weight:
     -
-      value: 7
+      value: 4
   content_translation_source:
     -
       value: und

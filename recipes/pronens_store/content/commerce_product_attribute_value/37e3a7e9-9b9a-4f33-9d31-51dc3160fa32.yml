@@ -10,7 +10,7 @@ default:
       value: '6 (5-6 años)'
   weight:
     -
-      value: 5
+      value: 10
   content_translation_source:
     -
       value: und

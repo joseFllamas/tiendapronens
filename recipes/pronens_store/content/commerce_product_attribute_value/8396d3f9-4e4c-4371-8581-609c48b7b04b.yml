@@ -10,7 +10,7 @@ default:
       value: '2 (2-3 años)'
   weight:
     -
-      value: 3
+      value: 8
   content_translation_source:
     -
       value: und

@@ -10,7 +10,7 @@ default:
       value: '12 (11-12 años)'
   weight:
     -
-      value: 8
+      value: 13
   content_translation_source:
     -
       value: und
