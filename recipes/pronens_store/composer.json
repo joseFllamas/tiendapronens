@@ -1,0 +1,9 @@
+{
+    "name": "pronens/pronens_store",
+    "description": "Crea la tienda única de Pronens, en euro y con facturación limitada a la Unión Europea.",
+    "type": "drupal-recipe",
+    "license": "GPL-2.0-or-later",
+    "require": {
+        "drupal/commerce": "^3"
+    }
+}

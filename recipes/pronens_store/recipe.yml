@@ -1,0 +1,15 @@
+name: 'Pronens: tienda'
+description: 'Crea la tienda única de Pronens, en euro y con facturación limitada a la Unión Europea. Existe porque la tienda es una entidad de contenido y no viaja en config/sync: sin esta recipe, una reconstrucción desde cero se queda sin tienda.'
+type: 'Commerce'
+
+recipes: []
+
+install:
+  - commerce_store
+  - commerce_price
+
+config:
+  # La tienda referencia la moneda EUR, que no la crea ningún módulo: la genera
+  # el importador de monedas. Por eso viaja en el directorio config/ de esta
+  # recipe. strict: false permite reaplicarla sobre un sitio que ya la tenga.
+  strict: false

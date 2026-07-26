@@ -1,0 +1,98 @@
+_meta:
+  version: '1.0'
+  entity_type: commerce_store
+  uuid: f812b134-42ef-4fc9-9270-66ba5183e278
+  bundle: online
+  default_langcode: en
+default:
+  uid:
+    -
+      target_id: 1
+  status:
+    -
+      value: true
+  name:
+    -
+      value: 'Tienda Pronens'
+  mail:
+    -
+      value: pronens@pronens.com
+  default_currency:
+    -
+      target_id: EUR
+  timezone:
+    -
+      value: Europe/Madrid
+  address:
+    -
+      langcode: ''
+      country_code: ES
+      administrative_area: B
+      locality: Barcelona
+      dependent_locality: ''
+      postal_code: '08016'
+      sorting_code: ''
+      address_line1: 'C/ Alcudia 100'
+      address_line2: ''
+  billing_countries:
+    -
+      value: AT
+    -
+      value: BE
+    -
+      value: BG
+    -
+      value: HR
+    -
+      value: CY
+    -
+      value: CZ
+    -
+      value: DK
+    -
+      value: EE
+    -
+      value: FI
+    -
+      value: FR
+    -
+      value: DE
+    -
+      value: GR
+    -
+      value: HU
+    -
+      value: IE
+    -
+      value: IT
+    -
+      value: LV
+    -
+      value: LT
+    -
+      value: LU
+    -
+      value: MT
+    -
+      value: NL
+    -
+      value: PL
+    -
+      value: PT
+    -
+      value: RO
+    -
+      value: SK
+    -
+      value: SI
+    -
+      value: ES
+    -
+      value: SE
+  path:
+    -
+      langcode: en
+      alias: null
+  is_default:
+    -
+      value: true
