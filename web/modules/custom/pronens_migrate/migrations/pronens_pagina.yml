@@ -1,0 +1,57 @@
+id: pronens_pagina
+label: 'Pronens: páginas de contenido propio del D7'
+migration_tags:
+  - 'Drupal 7'
+  - Pronens
+migration_group: pronens
+audit: true
+source:
+  plugin: d7_node
+  key: migrate
+  node_type: page
+process:
+  # De las 16 páginas del D7 solo cuatro tienen contenido propio y vigente:
+  #   nid 4   Envíos y Devoluciones  13005 caracteres
+  #   nid 8   Aviso Legal            11670
+  #   nid 5   Formas de Pago          3851, hay que reescribirla: cambian las pasarelas
+  #   nid 15  Nosotras                2454
+  # Quedan fuera a propósito:
+  #   nid 185 Política de cookies, copiada de otra web (menciona CESPEDYMAS.com)
+  #   nid 1, 2, 3, 7  Contact, About, Terms of Use, Service agreements: los cuatro
+  #     tienen exactamente 344 caracteres, son los textos de demo de Commerce
+  #     Kickstart sin tocar
+  #   nid 72  Atención, un aviso de vacaciones de agosto caducado
+  #   nid 9, 10  403 y 404, con 13 y 9 caracteres: se resuelven con configuración
+  #     de system.site, no con contenido
+  nid_permitido:
+    plugin: skip_on_value
+    source: nid
+    not_equals: true
+    method: row
+    value:
+      - 4
+      - 5
+      - 8
+      - 15
+    message: 'Página descartada: sin contenido propio o vigente.'
+  type:
+    plugin: default_value
+    default_value: page
+  langcode:
+    plugin: default_value
+    default_value: es
+  title: title
+  status: status
+  created: created
+  changed: changed
+  uid:
+    plugin: default_value
+    default_value: 1
+  body/value: body/0/value
+  body/summary: body/0/summary
+  body/format:
+    plugin: default_value
+    default_value: full_html
+destination:
+  plugin: 'entity:node'
+  default_bundle: page

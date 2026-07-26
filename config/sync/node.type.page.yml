@@ -1,0 +1,11 @@
+uuid: adaa814a-f1c8-425f-bb0a-b7432933891f
+langcode: es
+status: true
+dependencies: {  }
+name: Página
+type: page
+description: 'Página de contenido estático. La maquetación se hará con Paragraphs en el theme nuevo.'
+help: null
+new_revision: true
+preview_mode: 1
+display_submitted: false

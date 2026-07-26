@@ -1,0 +1,51 @@
+id: pronens_direccion
+label: 'Pronens: direcciones de los clientes'
+migration_tags:
+  - 'Drupal 7'
+  - Pronens
+migration_group: pronens
+audit: true
+source:
+  plugin: pronens_d7_customer_profile
+  key: migrate
+process:
+  type:
+    plugin: default_value
+    default_value: customer
+  # El cliente se resuelve por el mapa de usuarios: el uid del D7 no es el del
+  # destino, porque a propósito no se mapeó para no pisar el admin local.
+  uid:
+    -
+      plugin: migration_lookup
+      migration: pronens_usuario
+      source: uid
+      no_stub: true
+    -
+      plugin: skip_on_empty
+      method: row
+  # Subcampo a subcampo, en lugar del plugin addressfield de contrib, que espera
+  # una estructura distinta de la que produce este origen. El origen ya entrega
+  # los valores con los nombres de Drupal 11.
+  address/country_code: direccion/country_code
+  address/administrative_area: direccion/administrative_area
+  address/locality: direccion/locality
+  address/dependent_locality: direccion/dependent_locality
+  address/postal_code: direccion/postal_code
+  address/sorting_code: direccion/sorting_code
+  address/address_line1: direccion/address_line1
+  address/address_line2: direccion/address_line2
+  address/organization: direccion/organization
+  address/given_name: direccion/given_name
+  address/family_name: direccion/family_name
+  is_default: es_predeterminada
+  status:
+    plugin: default_value
+    default_value: 1
+  created: created
+  changed: changed
+destination:
+  plugin: 'entity:profile'
+  default_bundle: customer
+migration_dependencies:
+  required:
+    - pronens_usuario
