@@ -1,0 +1,43 @@
+_meta:
+  version: '1.0'
+  entity_type: commerce_shipping_method
+  uuid: 4f500469-a864-4dce-8553-f4f0b177a0ca
+  default_langcode: es
+  depends:
+    f812b134-42ef-4fc9-9270-66ba5183e278: commerce_store
+default:
+  stores:
+    -
+      entity: f812b134-42ef-4fc9-9270-66ba5183e278
+  plugin:
+    -
+      target_plugin_id: flat_rate
+      target_plugin_configuration:
+        rate_label: 'Envío España'
+        rate_description: ''
+        rate_amount:
+          number: '5.95'
+          currency_code: EUR
+        services:
+          - default
+  name:
+    -
+      value: 'Envío España peninsular'
+  conditions:
+    -
+      target_plugin_id: shipment_address
+      target_plugin_configuration:
+        zone:
+          territories:
+            -
+              country_code: ES
+              excluded_postal_codes: '/(07|35|38|51|52)[0-9]{3}/'
+  condition_operator:
+    -
+      value: AND
+  weight:
+    -
+      value: 0
+  status:
+    -
+      value: true

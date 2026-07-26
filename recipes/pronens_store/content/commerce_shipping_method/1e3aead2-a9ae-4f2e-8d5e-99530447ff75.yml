@@ -1,0 +1,43 @@
+_meta:
+  version: '1.0'
+  entity_type: commerce_shipping_method
+  uuid: 1e3aead2-a9ae-4f2e-8d5e-99530447ff75
+  default_langcode: es
+  depends:
+    f812b134-42ef-4fc9-9270-66ba5183e278: commerce_store
+default:
+  stores:
+    -
+      entity: f812b134-42ef-4fc9-9270-66ba5183e278
+  plugin:
+    -
+      target_plugin_id: flat_rate
+      target_plugin_configuration:
+        rate_label: 'Islas Baleares'
+        rate_description: ''
+        rate_amount:
+          number: '7.95'
+          currency_code: EUR
+        services:
+          - default
+  name:
+    -
+      value: 'Envío Islas Baleares'
+  conditions:
+    -
+      target_plugin_id: shipment_address
+      target_plugin_configuration:
+        zone:
+          territories:
+            -
+              country_code: ES
+              included_postal_codes: '/(07)[0-9]{3}/'
+  condition_operator:
+    -
+      value: AND
+  weight:
+    -
+      value: 1
+  status:
+    -
+      value: true

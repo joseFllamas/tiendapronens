@@ -5,6 +5,8 @@ dependencies:
   config:
     - commerce_product.commerce_product_variation_type.default
     - core.entity_view_mode.commerce_product_variation.summary
+    - field.field.commerce_product_variation.default.dimensions
+    - field.field.commerce_product_variation.default.weight
   module:
     - commerce_price
   enforced:
@@ -43,6 +45,8 @@ content:
     weight: -5
     region: content
 hidden:
+  dimensions: true
   langcode: true
   price: true
   sku: true
+  weight: true

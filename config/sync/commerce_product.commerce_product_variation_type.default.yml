@@ -5,8 +5,10 @@ dependencies: {  }
 _core:
   default_config_hash: 3vA4FKQ1Qu8B1R8UdGPnmMfJrYO6Y6uMqeNgDgXxods
 id: default
-label: Default
-traits: {  }
+label: 'Por defecto'
+traits:
+  - purchasable_entity_dimensions
+  - purchasable_entity_shippable
 locked: false
 orderItemType: default
 generateTitle: true

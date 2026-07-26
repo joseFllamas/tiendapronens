@@ -1,0 +1,90 @@
+_meta:
+  version: '1.0'
+  entity_type: commerce_shipping_method
+  uuid: 69f592c7-a68d-4089-8db5-3af385fadcca
+  default_langcode: es
+  depends:
+    f812b134-42ef-4fc9-9270-66ba5183e278: commerce_store
+default:
+  stores:
+    -
+      entity: f812b134-42ef-4fc9-9270-66ba5183e278
+  plugin:
+    -
+      target_plugin_id: flat_rate
+      target_plugin_configuration:
+        rate_label: 'Resto de la Unión Europea'
+        rate_description: ''
+        rate_amount:
+          number: '15.00'
+          currency_code: EUR
+        services:
+          - default
+  name:
+    -
+      value: 'Envío resto de la Unión Europea'
+  conditions:
+    -
+      target_plugin_id: shipment_address
+      target_plugin_configuration:
+        zone:
+          territories:
+            -
+              country_code: AT
+            -
+              country_code: BE
+            -
+              country_code: BG
+            -
+              country_code: HR
+            -
+              country_code: CY
+            -
+              country_code: CZ
+            -
+              country_code: DK
+            -
+              country_code: EE
+            -
+              country_code: FI
+            -
+              country_code: FR
+            -
+              country_code: DE
+            -
+              country_code: GR
+            -
+              country_code: HU
+            -
+              country_code: IE
+            -
+              country_code: IT
+            -
+              country_code: LV
+            -
+              country_code: LT
+            -
+              country_code: LU
+            -
+              country_code: MT
+            -
+              country_code: NL
+            -
+              country_code: PL
+            -
+              country_code: RO
+            -
+              country_code: SK
+            -
+              country_code: SI
+            -
+              country_code: SE
+  condition_operator:
+    -
+      value: AND
+  weight:
+    -
+      value: 4
+  status:
+    -
+      value: true

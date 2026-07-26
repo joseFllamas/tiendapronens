@@ -1,0 +1,42 @@
+_meta:
+  version: '1.0'
+  entity_type: commerce_shipping_method
+  uuid: 0fa4765d-41df-41b1-ba7a-541f1623f84b
+  default_langcode: es
+  depends:
+    f812b134-42ef-4fc9-9270-66ba5183e278: commerce_store
+default:
+  stores:
+    -
+      entity: f812b134-42ef-4fc9-9270-66ba5183e278
+  plugin:
+    -
+      target_plugin_id: flat_rate
+      target_plugin_configuration:
+        rate_label: Portugal
+        rate_description: ''
+        rate_amount:
+          number: '9.95'
+          currency_code: EUR
+        services:
+          - default
+  name:
+    -
+      value: 'Envío Portugal'
+  conditions:
+    -
+      target_plugin_id: shipment_address
+      target_plugin_configuration:
+        zone:
+          territories:
+            -
+              country_code: PT
+  condition_operator:
+    -
+      value: AND
+  weight:
+    -
+      value: 3
+  status:
+    -
+      value: true

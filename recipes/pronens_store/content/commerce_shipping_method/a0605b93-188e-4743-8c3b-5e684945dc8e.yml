@@ -1,0 +1,43 @@
+_meta:
+  version: '1.0'
+  entity_type: commerce_shipping_method
+  uuid: a0605b93-188e-4743-8c3b-5e684945dc8e
+  default_langcode: es
+  depends:
+    f812b134-42ef-4fc9-9270-66ba5183e278: commerce_store
+default:
+  stores:
+    -
+      entity: f812b134-42ef-4fc9-9270-66ba5183e278
+  plugin:
+    -
+      target_plugin_id: flat_rate
+      target_plugin_configuration:
+        rate_label: 'Canarias, Ceuta y Melilla'
+        rate_description: ''
+        rate_amount:
+          number: '12.00'
+          currency_code: EUR
+        services:
+          - default
+  name:
+    -
+      value: 'Envío Canarias, Ceuta y Melilla'
+  conditions:
+    -
+      target_plugin_id: shipment_address
+      target_plugin_configuration:
+        zone:
+          territories:
+            -
+              country_code: ES
+              included_postal_codes: '/(35|38|51|52)[0-9]{3}/'
+  condition_operator:
+    -
+      value: AND
+  weight:
+    -
+      value: 2
+  status:
+    -
+      value: true

@@ -1,0 +1,34 @@
+_meta:
+  version: '1.0'
+  entity_type: commerce_shipping_method
+  uuid: c1cc4a57-eb22-4bc5-8607-9a127d4baca2
+  default_langcode: es
+  depends:
+    f812b134-42ef-4fc9-9270-66ba5183e278: commerce_store
+default:
+  stores:
+    -
+      entity: f812b134-42ef-4fc9-9270-66ba5183e278
+  plugin:
+    -
+      target_plugin_id: flat_rate
+      target_plugin_configuration:
+        rate_label: 'Recoger en tienda (C/ Alcudia 100, Barcelona)'
+        rate_description: ''
+        rate_amount:
+          number: '0'
+          currency_code: EUR
+        services:
+          - default
+  name:
+    -
+      value: 'Recoger en Pronens'
+  condition_operator:
+    -
+      value: AND
+  weight:
+    -
+      value: -10
+  status:
+    -
+      value: true

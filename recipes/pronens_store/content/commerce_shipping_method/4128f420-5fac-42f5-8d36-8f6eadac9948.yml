@@ -1,0 +1,42 @@
+_meta:
+  version: '1.0'
+  entity_type: commerce_shipping_method
+  uuid: 4128f420-5fac-42f5-8d36-8f6eadac9948
+  default_langcode: es
+  depends:
+    f812b134-42ef-4fc9-9270-66ba5183e278: commerce_store
+default:
+  stores:
+    -
+      entity: f812b134-42ef-4fc9-9270-66ba5183e278
+  plugin:
+    -
+      target_plugin_id: flat_rate
+      target_plugin_configuration:
+        rate_label: 'Envío gratuito'
+        rate_description: ''
+        rate_amount:
+          number: '0'
+          currency_code: EUR
+        services:
+          - default
+  name:
+    -
+      value: 'Envío gratuito desde 60 €'
+  conditions:
+    -
+      target_plugin_id: order_total_price
+      target_plugin_configuration:
+        operator: '>='
+        amount:
+          number: '60.00'
+          currency_code: EUR
+  condition_operator:
+    -
+      value: AND
+  weight:
+    -
+      value: -20
+  status:
+    -
+      value: true

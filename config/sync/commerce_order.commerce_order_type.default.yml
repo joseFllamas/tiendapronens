@@ -1,11 +1,16 @@
 uuid: c48659bf-df8b-4f29-a8f4-d700d3ccad10
 langcode: en
 status: true
-dependencies: {  }
+dependencies:
+  module:
+    - commerce_shipping
+third_party_settings:
+  commerce_shipping:
+    shipment_type: default
 _core:
   default_config_hash: jn2Hj-04qG6O3dTtK8EaBB13jVPplONDb9L0Fat-0pI
 id: default
-label: Default
+label: 'Por defecto'
 traits: {  }
 locked: false
 workflow: order_default
