@@ -1,0 +1,37 @@
+_meta:
+  version: '1.0'
+  entity_type: taxonomy_term
+  uuid: d23f9320-a147-4455-8408-a4cde79b6324
+  bundle: color_letra
+  default_langcode: es
+  depends:
+    7d466ed9-c73d-438b-a216-7aa0d0248408: media
+default:
+  status:
+    -
+      value: true
+  name:
+    -
+      value: 'Perfil fucsia interior blanco'
+  weight:
+    -
+      value: 0
+  revision_translation_affected:
+    -
+      value: true
+  path:
+    -
+      alias: /color-letra/perfil-fucsia-interior-blanco
+      langcode: es
+  content_translation_source:
+    -
+      value: und
+  content_translation_outdated:
+    -
+      value: false
+  content_translation_uid:
+    -
+      target_id: 0
+  field_imagen:
+    -
+      entity: 7d466ed9-c73d-438b-a216-7aa0d0248408

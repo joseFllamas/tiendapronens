@@ -1,0 +1,37 @@
+_meta:
+  version: '1.0'
+  entity_type: taxonomy_term
+  uuid: 89193c8b-6cbb-4446-847c-a7b64dc102e2
+  bundle: color_letra
+  default_langcode: es
+  depends:
+    375ee6d8-8fc1-45f0-8aa3-7971e9a318ca: media
+default:
+  status:
+    -
+      value: true
+  name:
+    -
+      value: 'Perfil blanco interior turquesa'
+  weight:
+    -
+      value: 0
+  revision_translation_affected:
+    -
+      value: true
+  path:
+    -
+      alias: /color-letra/perfil-blanco-interior-turquesa
+      langcode: es
+  content_translation_source:
+    -
+      value: und
+  content_translation_outdated:
+    -
+      value: false
+  content_translation_uid:
+    -
+      target_id: 0
+  field_imagen:
+    -
+      entity: 375ee6d8-8fc1-45f0-8aa3-7971e9a318ca

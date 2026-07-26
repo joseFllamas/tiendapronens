@@ -10,6 +10,7 @@ dependencies:
     - field.field.commerce_order_item.default.field_posicion_bordado
     - field.field.commerce_order_item.default.field_texto_bordado
   module:
+    - commerce_order
     - commerce_product
   enforced:
     module:
@@ -22,20 +23,45 @@ targetEntityType: commerce_order_item
 bundle: default
 mode: add_to_cart
 content:
+  field_color_bordado:
+    type: options_buttons
+    weight: 4
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  field_fuente:
+    type: options_select
+    weight: 3
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  field_texto_bordado:
+    type: string_textfield
+    weight: 2
+    region: content
+    settings:
+      size: 30
+      placeholder: 'Escribe el nombre (máx. 30)'
+    third_party_settings: {  }
   purchased_entity:
     type: commerce_product_variation_attributes
     weight: 0
     region: content
-    settings: {  }
+    settings:
+      hide_single: false
+    third_party_settings: {  }
+  quantity:
+    type: commerce_quantity
+    weight: 1
+    region: content
+    settings:
+      placeholder: ''
+      step: '1'
     third_party_settings: {  }
 hidden:
   adjustments: true
   created: true
-  field_color_bordado: true
-  field_fuente: true
   field_posicion_bordado: true
-  field_texto_bordado: true
-  quantity: true
   status: true
   total_price: true
   uid: true

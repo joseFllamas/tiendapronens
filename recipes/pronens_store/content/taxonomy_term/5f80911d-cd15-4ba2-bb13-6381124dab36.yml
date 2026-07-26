@@ -1,0 +1,40 @@
+_meta:
+  version: '1.0'
+  entity_type: taxonomy_term
+  uuid: 5f80911d-cd15-4ba2-bb13-6381124dab36
+  bundle: color_letra
+  default_langcode: es
+default:
+  status:
+    -
+      value: true
+  name:
+    -
+      value: Turquesa
+  description:
+    -
+      value: 'Hilo plano del prototipo de diseño. El taller confirmará el catálogo definitivo.'
+      format: basic_html
+  weight:
+    -
+      value: 11
+  revision_translation_affected:
+    -
+      value: true
+  path:
+    -
+      langcode: es
+      alias: null
+  content_translation_source:
+    -
+      value: und
+  content_translation_outdated:
+    -
+      value: false
+  content_translation_uid:
+    -
+      target_id: 0
+  field_color:
+    -
+      color: '#2E9DAA'
+      opacity: 0.0

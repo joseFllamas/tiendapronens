@@ -3,4 +3,4 @@ _core:
 recargo:
   number: '5.00'
   currency_code: EUR
-longitud_maxima: 47
+longitud_maxima: 30

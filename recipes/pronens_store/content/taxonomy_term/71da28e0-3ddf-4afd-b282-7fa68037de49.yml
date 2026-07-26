@@ -1,0 +1,37 @@
+_meta:
+  version: '1.0'
+  entity_type: taxonomy_term
+  uuid: 71da28e0-3ddf-4afd-b282-7fa68037de49
+  bundle: color_letra
+  default_langcode: es
+  depends:
+    ec5a4148-50b8-4666-9f20-ea5a48729718: media
+default:
+  status:
+    -
+      value: true
+  name:
+    -
+      value: 'Perfil negro interior blanco'
+  weight:
+    -
+      value: 0
+  revision_translation_affected:
+    -
+      value: true
+  path:
+    -
+      alias: /color-letra/perfil-negro-interior-blanco
+      langcode: es
+  content_translation_source:
+    -
+      value: und
+  content_translation_outdated:
+    -
+      value: false
+  content_translation_uid:
+    -
+      target_id: 0
+  field_imagen:
+    -
+      entity: ec5a4148-50b8-4666-9f20-ea5a48729718

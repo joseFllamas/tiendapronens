@@ -9,7 +9,7 @@ field_name: field_texto_bordado
 entity_type: commerce_order_item
 type: string
 settings:
-  max_length: 47
+  max_length: 30
   case_sensitive: false
   is_ascii: false
 module: core

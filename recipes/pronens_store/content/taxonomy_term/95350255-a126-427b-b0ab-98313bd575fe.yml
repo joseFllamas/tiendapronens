@@ -1,0 +1,37 @@
+_meta:
+  version: '1.0'
+  entity_type: taxonomy_term
+  uuid: 95350255-a126-427b-b0ab-98313bd575fe
+  bundle: color_letra
+  default_langcode: es
+  depends:
+    44359559-7165-4e42-a016-543334d4780f: media
+default:
+  status:
+    -
+      value: true
+  name:
+    -
+      value: 'Perfil marino interior blanco'
+  weight:
+    -
+      value: 0
+  revision_translation_affected:
+    -
+      value: true
+  path:
+    -
+      alias: /color-letra/perfil-marino-interior-blanco
+      langcode: es
+  content_translation_source:
+    -
+      value: und
+  content_translation_outdated:
+    -
+      value: false
+  content_translation_uid:
+    -
+      target_id: 0
+  field_imagen:
+    -
+      entity: 44359559-7165-4e42-a016-543334d4780f

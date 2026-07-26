@@ -1,0 +1,37 @@
+_meta:
+  version: '1.0'
+  entity_type: taxonomy_term
+  uuid: 53a44a87-de59-47d2-9085-ef7afe28a813
+  bundle: color_letra
+  default_langcode: es
+  depends:
+    cb797d14-9aeb-4a52-9c24-ffc1e0db93d7: media
+default:
+  status:
+    -
+      value: true
+  name:
+    -
+      value: 'Perfil blanco interior rojo'
+  weight:
+    -
+      value: 0
+  revision_translation_affected:
+    -
+      value: true
+  path:
+    -
+      alias: /color-letra/perfil-blanco-interior-rojo
+      langcode: es
+  content_translation_source:
+    -
+      value: und
+  content_translation_outdated:
+    -
+      value: false
+  content_translation_uid:
+    -
+      target_id: 0
+  field_imagen:
+    -
+      entity: cb797d14-9aeb-4a52-9c24-ffc1e0db93d7
