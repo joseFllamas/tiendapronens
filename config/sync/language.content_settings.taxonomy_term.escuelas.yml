@@ -1,0 +1,16 @@
+uuid: d0f6b250-2937-403a-9c5f-4c062a6c6dc2
+langcode: es
+status: true
+dependencies:
+  config:
+    - taxonomy.vocabulary.escuelas
+  module:
+    - content_translation
+third_party_settings:
+  content_translation:
+    enabled: true
+id: taxonomy_term.escuelas
+target_entity_type_id: taxonomy_term
+target_bundle: escuelas
+default_langcode: site_default
+language_alterable: false

@@ -1,0 +1,26 @@
+_meta:
+  version: '1.0'
+  entity_type: commerce_product_attribute_value
+  uuid: 60649b33-d5d5-4043-9015-63d0ee311978
+  bundle: color
+  default_langcode: es
+default:
+  name:
+    -
+      value: Morado
+  weight:
+    -
+      value: 9
+  content_translation_source:
+    -
+      value: und
+  content_translation_outdated:
+    -
+      value: false
+  content_translation_status:
+    -
+      value: true
+  field_color:
+    -
+      color: '#BF4EFF'
+      opacity: 0.0

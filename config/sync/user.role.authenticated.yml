@@ -1,5 +1,5 @@
 uuid: 93c9a0e3-d23c-445c-a7b9-27289798aefb
-langcode: en
+langcode: es
 status: true
 dependencies:
   config:
@@ -11,11 +11,12 @@ dependencies:
     - commerce_product
     - file
     - filter
+    - media
     - system
 _core:
   default_config_hash: wkW7P5A53YhGmsgamrmTbfwpZrqdnPYiJdoAZQtdmJg
 id: authenticated
-label: 'Authenticated user'
+label: 'Usuario autenticado'
 weight: 1
 is_admin: false
 permissions:
@@ -25,4 +26,5 @@ permissions:
   - 'manage own commerce_payment_method'
   - 'use text format basic_html'
   - 'view commerce_product'
+  - 'view media'
   - 'view own commerce_order'

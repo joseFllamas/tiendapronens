@@ -1,0 +1,26 @@
+_meta:
+  version: '1.0'
+  entity_type: commerce_product_attribute_value
+  uuid: 00ba667b-3914-4cb9-bdc2-715cc08bf68f
+  bundle: color
+  default_langcode: es
+default:
+  name:
+    -
+      value: Granate
+  weight:
+    -
+      value: 6
+  content_translation_source:
+    -
+      value: und
+  content_translation_outdated:
+    -
+      value: false
+  content_translation_status:
+    -
+      value: true
+  field_color:
+    -
+      color: '#7D0101'
+      opacity: 0.0

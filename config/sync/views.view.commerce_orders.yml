@@ -1,5 +1,5 @@
 uuid: e68f6c02-0c64-4ca8-894e-4ba351a02a6f
-langcode: en
+langcode: es
 status: true
 dependencies:
   module:
@@ -13,7 +13,7 @@ dependencies:
 _core:
   default_config_hash: HFX6ZqjZ-Ph27nJoRvTzBtYCqiDzUaPdz-yRGWiQJtE
 id: commerce_orders
-label: Orders
+label: Pedidos
 module: views
 description: ''
 tag: Commerce
@@ -22,11 +22,11 @@ base_field: order_id
 display:
   default:
     id: default
-    display_title: Master
+    display_title: Máster
     display_plugin: default
     position: 0
     display_options:
-      title: Orders
+      title: Pedidos
       fields:
         commerce_order_bulk_form:
           id: commerce_order_bulk_form
@@ -156,7 +156,7 @@ display:
           entity_type: commerce_order
           entity_field: placed
           plugin_id: field
-          label: Date
+          label: Fecha
           exclude: false
           alter:
             alter_text: false
@@ -223,7 +223,7 @@ display:
           entity_type: commerce_order
           entity_field: type
           plugin_id: commerce_entity_bundle
-          label: Type
+          label: Tipo
           exclude: false
           alter:
             alter_text: false
@@ -289,7 +289,7 @@ display:
           entity_type: commerce_order
           entity_field: store_id
           plugin_id: commerce_store
-          label: Store
+          label: Tienda
           exclude: false
           alter:
             alter_text: false
@@ -355,7 +355,7 @@ display:
           entity_type: commerce_order
           entity_field: uid
           plugin_id: field
-          label: Customer
+          label: Cliente
           exclude: false
           alter:
             alter_text: false
@@ -420,7 +420,7 @@ display:
           entity_type: commerce_order
           entity_field: mail
           plugin_id: field
-          label: Email
+          label: 'Correo electrónico'
           exclude: false
           alter:
             alter_text: false
@@ -484,7 +484,7 @@ display:
           entity_type: commerce_order
           entity_field: status
           plugin_id: field
-          label: State
+          label: Estado
           exclude: false
           alter:
             alter_text: false
@@ -613,7 +613,7 @@ display:
           admin_label: ''
           entity_type: commerce_order
           plugin_id: entity_operations
-          label: Operations
+          label: Operaciones
           exclude: false
           alter:
             alter_text: false
@@ -669,20 +669,20 @@ display:
             last: 'last »'
           expose:
             items_per_page: false
-            items_per_page_label: 'Items per page'
+            items_per_page_label: 'Elementos por página'
             items_per_page_options: '5, 10, 25, 50'
             items_per_page_options_all: false
-            items_per_page_options_all_label: '- All -'
+            items_per_page_options_all_label: '- Todo -'
             offset: false
             offset_label: Offset
           quantity: 9
       exposed_form:
         type: basic
         options:
-          submit_button: Filter
+          submit_button: Filtro
           reset_button: false
-          reset_button_label: Reset
-          exposed_sorts_label: 'Sort by'
+          reset_button_label: Restablecer
+          exposed_sorts_label: 'Ordenar por'
           expose_sort_order: true
           sort_asc_label: Asc
           sort_desc_label: Desc
@@ -724,7 +724,7 @@ display:
           exposed: true
           expose:
             operator_id: order_number_op
-            label: 'Order number'
+            label: 'Número de pedido'
             description: ''
             use_operator: false
             operator: order_number_op
@@ -763,7 +763,7 @@ display:
           exposed: true
           expose:
             operator_id: type_op
-            label: Type
+            label: Tipo
             description: ''
             use_operator: false
             operator: type_op
@@ -804,7 +804,7 @@ display:
           exposed: true
           expose:
             operator_id: state_op
-            label: State
+            label: Estado
             description: ''
             use_operator: false
             operator: state_op
@@ -946,7 +946,7 @@ display:
       cacheable: false
   page_1:
     id: page_1
-    display_title: Page
+    display_title: Página
     display_plugin: page
     position: 1
     display_options:
@@ -954,7 +954,7 @@ display:
       path: admin/commerce/orders/list
       menu:
         type: 'default tab'
-        title: Orders
+        title: Pedidos
         description: ''
         weight: -10
         expanded: false
@@ -963,8 +963,8 @@ display:
         context: '0'
       tab_options:
         type: normal
-        title: Orders
-        description: 'Manage your orders.'
+        title: Pedidos
+        description: 'Gestione sus pedidos.'
         weight: 0
     cache_metadata:
       max-age: 0

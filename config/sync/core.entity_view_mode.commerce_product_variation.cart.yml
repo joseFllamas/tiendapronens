@@ -1,5 +1,5 @@
 uuid: 4304e907-2403-4800-9566-5b0b6f0644da
-langcode: en
+langcode: es
 status: true
 dependencies:
   module:
@@ -11,7 +11,7 @@ dependencies:
 _core:
   default_config_hash: xtrHHgI_SwA-1npf3GB0ntU65fMvm4mxImBtkbmZWSk
 id: commerce_product_variation.cart
-label: Cart
+label: 'Cesta de la compra'
 description: null
 targetEntityType: commerce_product_variation
 cache: true

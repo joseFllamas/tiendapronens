@@ -1,0 +1,25 @@
+_meta:
+  version: '1.0'
+  entity_type: commerce_product_attribute_value
+  uuid: 3a05dd2c-cff0-405a-aad3-2e5d751048a3
+  bundle: talla
+  default_langcode: es
+default:
+  name:
+    -
+      value: '00 (8 meses)'
+  weight:
+    -
+      value: 1
+  content_translation_source:
+    -
+      value: und
+  content_translation_outdated:
+    -
+      value: false
+  content_translation_uid:
+    -
+      target_id: 0
+  content_translation_status:
+    -
+      value: true

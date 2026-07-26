@@ -1,5 +1,5 @@
 uuid: 358bd495-8666-4c30-a764-02f0a60c8519
-langcode: en
+langcode: es
 status: true
 dependencies:
   enforced:
@@ -11,8 +11,8 @@ third_party_settings:
 _core:
   default_config_hash: I3_fH4tUQVejPgxvJzH1-mGg9A9OaY4Hm5iN2G2Fz20
 id: customer
-label: Customer
-display_label: 'Customer information'
+label: Cliente
+display_label: 'Datos del cliente'
 multiple: true
 registration: false
 roles: {  }

@@ -1,0 +1,26 @@
+_meta:
+  version: '1.0'
+  entity_type: commerce_product_attribute_value
+  uuid: 6352f257-5b9f-4333-b05e-ce34aa7075fe
+  bundle: color
+  default_langcode: es
+default:
+  name:
+    -
+      value: Turquesa
+  weight:
+    -
+      value: 16
+  content_translation_source:
+    -
+      value: und
+  content_translation_outdated:
+    -
+      value: false
+  content_translation_status:
+    -
+      value: true
+  field_color:
+    -
+      color: '#009D9C'
+      opacity: 0.0

@@ -1,0 +1,24 @@
+uuid: c1e1209a-04bb-4669-9217-4815fe7b870f
+langcode: es
+status: true
+dependencies:
+  config:
+    - commerce_product.commerce_product_variation_type.default
+    - field.storage.commerce_product_variation.field_imagenes
+    - media.type.image
+id: commerce_product_variation.default.field_imagenes
+field_name: field_imagenes
+entity_type: commerce_product_variation
+bundle: default
+label: Imágenes
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:media'
+  handler_settings:
+    target_bundles:
+      image: image
+field_type: entity_reference

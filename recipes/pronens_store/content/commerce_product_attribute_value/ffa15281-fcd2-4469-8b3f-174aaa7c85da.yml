@@ -1,0 +1,22 @@
+_meta:
+  version: '1.0'
+  entity_type: commerce_product_attribute_value
+  uuid: ffa15281-fcd2-4469-8b3f-174aaa7c85da
+  bundle: color
+  default_langcode: es
+default:
+  name:
+    -
+      value: Arena
+  weight:
+    -
+      value: 1
+  content_translation_source:
+    -
+      value: und
+  content_translation_outdated:
+    -
+      value: false
+  content_translation_status:
+    -
+      value: true

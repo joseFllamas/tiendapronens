@@ -1,5 +1,5 @@
 uuid: dc540a13-eac6-4a28-8aaf-4d9a870ffbab
-langcode: en
+langcode: es
 status: true
 dependencies:
   config:
@@ -8,11 +8,12 @@ dependencies:
     - commerce_checkout
     - commerce_product
     - filter
+    - media
     - system
 _core:
   default_config_hash: Tus1ZTNXKIOnrennR1hnTbc7wUPBXHTUm5UdCpEhJSk
 id: anonymous
-label: 'Anonymous user'
+label: 'Usuario anónimo'
 weight: 0
 is_admin: false
 permissions:
@@ -20,3 +21,4 @@ permissions:
   - 'access content'
   - 'use text format restricted_html'
   - 'view commerce_product'
+  - 'view media'

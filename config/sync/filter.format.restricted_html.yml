@@ -1,10 +1,10 @@
 uuid: 6a9fa46a-3a64-4d1c-9376-701ef5c486f5
-langcode: en
+langcode: es
 status: true
 dependencies: {  }
 _core:
   default_config_hash: QiKqQS_YGAT3Qr4vaAgZICJknm-MGCzt_xBAMqg-tRM
-name: 'Restricted HTML'
+name: 'HTML Restringido'
 format: restricted_html
 weight: 1
 filters:

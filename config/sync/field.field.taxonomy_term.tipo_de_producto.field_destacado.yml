@@ -1,0 +1,21 @@
+uuid: c329cba9-de71-43e7-ba18-f96abc502122
+langcode: es
+status: true
+dependencies:
+  config:
+    - field.storage.taxonomy_term.field_destacado
+    - taxonomy.vocabulary.tipo_de_producto
+id: taxonomy_term.tipo_de_producto.field_destacado
+field_name: field_destacado
+entity_type: taxonomy_term
+bundle: tipo_de_producto
+label: 'Destacado en portada'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  on_label: Activado
+  off_label: Desactivado
+field_type: boolean

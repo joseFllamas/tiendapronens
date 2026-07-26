@@ -1,0 +1,16 @@
+uuid: b82e1c1c-db74-4efd-b6e0-6320e27912f6
+langcode: es
+status: true
+dependencies:
+  config:
+    - taxonomy.vocabulary.guia_tallas
+  module:
+    - content_translation
+third_party_settings:
+  content_translation:
+    enabled: true
+id: taxonomy_term.guia_tallas
+target_entity_type_id: taxonomy_term
+target_bundle: guia_tallas
+default_langcode: site_default
+language_alterable: false

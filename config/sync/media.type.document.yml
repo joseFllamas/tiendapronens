@@ -1,0 +1,16 @@
+uuid: d3556d67-7382-42e2-bf21-b38f54160b0c
+langcode: es
+status: true
+dependencies: {  }
+_core:
+  default_config_hash: QgF3JDg2h0tf2gaqzc4mNvlHttNkUpmxk1LZefP82hE
+id: document
+label: Documento
+description: 'Documento alojado localmente, como un archivo PDF.'
+source: file
+queue_thumbnail_downloads: false
+new_revision: true
+source_configuration:
+  source_field: field_media_document
+field_map:
+  name: name

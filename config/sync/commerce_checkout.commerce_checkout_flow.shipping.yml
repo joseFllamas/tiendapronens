@@ -1,12 +1,12 @@
 uuid: 3c085def-ab95-4eae-ad46-bc5c821d64aa
-langcode: en
+langcode: es
 status: true
 dependencies:
   module:
     - commerce_shipping
 _core:
   default_config_hash: myCcwzwqRTCPQuTJ-qnKDEA9xv4UHWSC3P0BEQ48MLw
-label: Shipping
+label: Envío
 id: shipping
 plugin: multistep_default
 configuration:

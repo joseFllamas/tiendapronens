@@ -1,0 +1,23 @@
+uuid: bba360b7-439b-4a68-b17e-77e0c9de3109
+langcode: es
+status: true
+dependencies:
+  config:
+    - field.storage.taxonomy_term.field_posicion
+    - taxonomy.vocabulary.tipo_de_producto
+id: taxonomy_term.tipo_de_producto.field_posicion
+field_name: field_posicion
+entity_type: taxonomy_term
+bundle: tipo_de_producto
+label: Posición
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  min: null
+  max: null
+  prefix: ''
+  suffix: ''
+field_type: integer

@@ -1,5 +1,5 @@
 uuid: 689636fd-1315-4d6b-80fc-6ffeae90f868
-langcode: en
+langcode: es
 status: true
 dependencies:
   config:
@@ -13,8 +13,8 @@ id: user.user.user_picture
 field_name: user_picture
 entity_type: user
 bundle: user
-label: Picture
-description: 'Your virtual face or picture.'
+label: Imagen
+description: 'Su cara o foto virtual.'
 required: false
 translatable: true
 default_value: {  }

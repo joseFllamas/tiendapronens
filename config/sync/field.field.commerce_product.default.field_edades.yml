@@ -1,0 +1,24 @@
+uuid: 081c8c3b-1ea2-420b-a730-0f389c517815
+langcode: es
+status: true
+dependencies:
+  config:
+    - commerce_product.commerce_product_type.default
+    - field.storage.commerce_product.field_edades
+    - taxonomy.vocabulary.edades
+id: commerce_product.default.field_edades
+field_name: field_edades
+entity_type: commerce_product
+bundle: default
+label: Edades
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:taxonomy_term'
+  handler_settings:
+    target_bundles:
+      edades: edades
+field_type: entity_reference

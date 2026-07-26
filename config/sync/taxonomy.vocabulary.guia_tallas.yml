@@ -1,0 +1,9 @@
+uuid: 265253e2-d99a-4f8a-a367-fdae8f242f3d
+langcode: es
+status: true
+dependencies: {  }
+name: 'Guía de tallas'
+vid: guia_tallas
+description: 'Migrado desde el vocabulario homólogo del Drupal 7.'
+weight: 0
+new_revision: false

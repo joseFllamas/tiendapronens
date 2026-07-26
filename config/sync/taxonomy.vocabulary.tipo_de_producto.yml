@@ -1,0 +1,9 @@
+uuid: 3aab68ad-1f9d-4641-ba0f-575fb8bf904c
+langcode: es
+status: true
+dependencies: {  }
+name: 'Tipo de producto'
+vid: tipo_de_producto
+description: 'Migrado desde el vocabulario homólogo del Drupal 7.'
+weight: 0
+new_revision: false

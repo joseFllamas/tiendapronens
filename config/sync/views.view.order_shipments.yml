@@ -1,5 +1,5 @@
 uuid: 1e5f566e-6a76-42c8-a5aa-3f3c935602ec
-langcode: en
+langcode: es
 status: true
 dependencies:
   module:
@@ -18,7 +18,7 @@ base_field: shipment_id
 display:
   default:
     id: default
-    display_title: Master
+    display_title: Máster
     display_plugin: default
     position: 0
     display_options:
@@ -34,7 +34,7 @@ display:
           entity_type: null
           entity_field: title
           plugin_id: field
-          label: Title
+          label: Título
           exclude: false
           alter:
             alter_text: false
@@ -99,7 +99,7 @@ display:
           entity_type: commerce_shipment
           entity_field: shipping_method
           plugin_id: field
-          label: 'Shipping method'
+          label: 'Método de envío'
           exclude: false
           alter:
             alter_text: false
@@ -164,7 +164,7 @@ display:
           entity_type: commerce_shipment
           entity_field: amount
           plugin_id: field
-          label: Amount
+          label: Cantidad
           exclude: false
           alter:
             alter_text: false
@@ -294,7 +294,7 @@ display:
           entity_type: commerce_shipment
           entity_field: state
           plugin_id: field
-          label: State
+          label: Estado
           exclude: false
           alter:
             alter_text: false
@@ -359,7 +359,7 @@ display:
           admin_label: ''
           entity_type: commerce_shipment
           plugin_id: entity_operations
-          label: 'Operations links'
+          label: 'Enlaces de operación'
           exclude: false
           alter:
             alter_text: false
@@ -409,10 +409,10 @@ display:
       exposed_form:
         type: basic
         options:
-          submit_button: Apply
+          submit_button: Aplicar
           reset_button: false
-          reset_button_label: Reset
-          exposed_sorts_label: 'Sort by'
+          reset_button_label: Restablecer
+          exposed_sorts_label: 'Ordenar por'
           expose_sort_order: true
           sort_asc_label: Asc
           sort_desc_label: Desc
@@ -465,7 +465,7 @@ display:
           exception:
             value: all
             title_enable: false
-            title: All
+            title: Todo(s)
           title_enable: false
           title: ''
           default_argument_type: fixed
@@ -566,7 +566,7 @@ display:
       tags: {  }
   page_1:
     id: page_1
-    display_title: Page
+    display_title: Página
     display_plugin: page
     position: 1
     display_options:

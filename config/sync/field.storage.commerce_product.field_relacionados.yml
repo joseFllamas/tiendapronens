@@ -1,0 +1,19 @@
+uuid: daab39dc-321d-48d6-909f-b0bf0d015a7d
+langcode: es
+status: true
+dependencies:
+  module:
+    - commerce_product
+id: commerce_product.field_relacionados
+field_name: field_relacionados
+entity_type: commerce_product
+type: entity_reference
+settings:
+  target_type: commerce_product
+module: core
+locked: false
+cardinality: -1
+translatable: false
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

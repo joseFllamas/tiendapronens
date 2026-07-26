@@ -1,11 +1,11 @@
 uuid: 0a1d1cb5-322f-4db1-8b4c-1947378f816d
-langcode: en
+langcode: es
 status: true
 dependencies: {  }
 _core:
   default_config_hash: hqMH9C7kamyh9ei_oI1WgbF9blY8Fy9J9zXuu0XHFpU
 id: default
-label: Default
+label: 'Por defecto'
 traits: {  }
 profileType: customer
 sendConfirmation: false

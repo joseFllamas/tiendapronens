@@ -1,0 +1,7 @@
+uuid: a1a0c4b6-d651-4eed-935d-258cb1783fb2
+langcode: es
+status: true
+dependencies: {  }
+id: talla
+label: Talla
+elementType: select

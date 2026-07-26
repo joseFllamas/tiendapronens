@@ -5,6 +5,16 @@ dependencies:
   config:
     - commerce_product.commerce_product_type.default
     - field.field.commerce_product.default.body
+    - field.field.commerce_product.default.field_composicion
+    - field.field.commerce_product.default.field_destacado
+    - field.field.commerce_product.default.field_edades
+    - field.field.commerce_product.default.field_escuela
+    - field.field.commerce_product.default.field_galeria
+    - field.field.commerce_product.default.field_guia_tallas
+    - field.field.commerce_product.default.field_imagen_principal
+    - field.field.commerce_product.default.field_lavado
+    - field.field.commerce_product.default.field_relacionados
+    - field.field.commerce_product.default.field_tipo_de_producto
   module:
     - commerce
     - path
@@ -80,4 +90,14 @@ content:
       placeholder: ''
     third_party_settings: {  }
 hidden:
+  field_composicion: true
+  field_destacado: true
+  field_edades: true
+  field_escuela: true
+  field_galeria: true
+  field_guia_tallas: true
+  field_imagen_principal: true
+  field_lavado: true
+  field_relacionados: true
+  field_tipo_de_producto: true
   variations: true

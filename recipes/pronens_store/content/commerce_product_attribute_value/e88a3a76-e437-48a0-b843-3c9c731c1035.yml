@@ -1,0 +1,25 @@
+_meta:
+  version: '1.0'
+  entity_type: commerce_product_attribute_value
+  uuid: e88a3a76-e437-48a0-b843-3c9c731c1035
+  bundle: talla
+  default_langcode: es
+default:
+  name:
+    -
+      value: '22 / L'
+  weight:
+    -
+      value: 13
+  content_translation_source:
+    -
+      value: und
+  content_translation_outdated:
+    -
+      value: false
+  content_translation_uid:
+    -
+      target_id: 0
+  content_translation_status:
+    -
+      value: true

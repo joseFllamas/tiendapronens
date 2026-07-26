@@ -1,0 +1,16 @@
+uuid: f2f63511-168c-4832-a3c7-0a202df46a5b
+langcode: es
+status: true
+dependencies:
+  config:
+    - taxonomy.vocabulary.tipo_de_producto
+  module:
+    - content_translation
+third_party_settings:
+  content_translation:
+    enabled: true
+id: taxonomy_term.tipo_de_producto
+target_entity_type_id: taxonomy_term
+target_bundle: tipo_de_producto
+default_langcode: site_default
+language_alterable: false

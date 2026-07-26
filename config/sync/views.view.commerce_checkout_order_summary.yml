@@ -1,5 +1,5 @@
 uuid: 9029d426-6e4f-4c82-a85f-d38beb803f36
-langcode: en
+langcode: es
 status: true
 dependencies:
   module:
@@ -21,7 +21,7 @@ base_field: order_id
 display:
   default:
     id: default
-    display_title: Master
+    display_title: Máster
     display_plugin: default
     position: 0
     display_options:
@@ -232,10 +232,10 @@ display:
       exposed_form:
         type: basic
         options:
-          submit_button: Apply
+          submit_button: Aplicar
           reset_button: false
-          reset_button_label: Reset
-          exposed_sorts_label: 'Sort by'
+          reset_button_label: Restablecer
+          exposed_sorts_label: 'Ordenar por'
           expose_sort_order: true
           sort_asc_label: Asc
           sort_desc_label: Desc
@@ -276,7 +276,7 @@ display:
           exception:
             value: all
             title_enable: false
-            title: All
+            title: Todo(s)
           title_enable: false
           title: ''
           default_argument_type: fixed

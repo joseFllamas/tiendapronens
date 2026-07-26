@@ -1,0 +1,24 @@
+uuid: f9bac28d-26ce-4f4e-bb20-e8e34509bf46
+langcode: es
+status: true
+dependencies:
+  config:
+    - commerce_product.commerce_product_type.default
+    - field.storage.commerce_product.field_imagen_principal
+    - media.type.image
+id: commerce_product.default.field_imagen_principal
+field_name: field_imagen_principal
+entity_type: commerce_product
+bundle: default
+label: 'Imagen principal'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:media'
+  handler_settings:
+    target_bundles:
+      image: image
+field_type: entity_reference

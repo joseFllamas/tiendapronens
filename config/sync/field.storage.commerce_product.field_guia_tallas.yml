@@ -1,0 +1,20 @@
+uuid: 2328caea-8e21-4e23-a552-b4bf40261ee9
+langcode: es
+status: true
+dependencies:
+  module:
+    - commerce_product
+    - taxonomy
+id: commerce_product.field_guia_tallas
+field_name: field_guia_tallas
+entity_type: commerce_product
+type: entity_reference
+settings:
+  target_type: taxonomy_term
+module: core
+locked: false
+cardinality: 1
+translatable: false
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

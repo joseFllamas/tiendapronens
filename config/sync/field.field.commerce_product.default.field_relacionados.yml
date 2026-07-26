@@ -1,0 +1,23 @@
+uuid: f9e5914f-0d16-41f0-adcd-5b25ff2b1420
+langcode: es
+status: true
+dependencies:
+  config:
+    - commerce_product.commerce_product_type.default
+    - field.storage.commerce_product.field_relacionados
+id: commerce_product.default.field_relacionados
+field_name: field_relacionados
+entity_type: commerce_product
+bundle: default
+label: 'Productos relacionados'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:commerce_product'
+  handler_settings:
+    target_bundles:
+      default: default
+field_type: entity_reference

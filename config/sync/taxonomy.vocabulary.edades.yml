@@ -1,0 +1,9 @@
+uuid: dcf42a6c-cd1a-4eee-aa0d-07862776b59e
+langcode: es
+status: true
+dependencies: {  }
+name: Edades
+vid: edades
+description: 'Migrado desde el vocabulario homólogo del Drupal 7.'
+weight: 0
+new_revision: false

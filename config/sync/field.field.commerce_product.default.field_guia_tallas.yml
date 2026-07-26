@@ -1,0 +1,24 @@
+uuid: 261b0b6e-161e-4441-b66f-ca8b8885e7d5
+langcode: es
+status: true
+dependencies:
+  config:
+    - commerce_product.commerce_product_type.default
+    - field.storage.commerce_product.field_guia_tallas
+    - taxonomy.vocabulary.guia_tallas
+id: commerce_product.default.field_guia_tallas
+field_name: field_guia_tallas
+entity_type: commerce_product
+bundle: default
+label: 'Guía de tallas'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:taxonomy_term'
+  handler_settings:
+    target_bundles:
+      guia_tallas: guia_tallas
+field_type: entity_reference

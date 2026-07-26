@@ -1,0 +1,20 @@
+uuid: a5261b22-7f3d-449b-8922-f3de5de25824
+langcode: es
+status: true
+dependencies:
+  module:
+    - commerce_product
+    - media
+id: commerce_product.field_galeria
+field_name: field_galeria
+entity_type: commerce_product
+type: entity_reference
+settings:
+  target_type: media
+module: core
+locked: false
+cardinality: -1
+translatable: false
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false
