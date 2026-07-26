@@ -13,9 +13,25 @@ process:
   vid:
     plugin: default_value
     default_value: color_letra
+  # Solo términos en castellano o sin idioma definido. En el D7 las traducciones
+  # son términos independientes, no traducciones de la misma entidad, y sin este
+  # filtro entran como si fuesen castellanos: 47 de los 77 de tipo_de_producto
+  # y 12 de los 16 de recomendaciones_de_lavado lo eran.
   langcode:
-    plugin: default_value
-    default_value: es
+    -
+      plugin: skip_on_value
+      source: language
+      not_equals: true
+      method: row
+      value:
+        - es
+        - und
+      message: 'Término en otro idioma: solo se migra castellano.'
+    -
+      plugin: static_map
+      map:
+        es: es
+        und: es
   name: name
   description/value: description
   description/format:

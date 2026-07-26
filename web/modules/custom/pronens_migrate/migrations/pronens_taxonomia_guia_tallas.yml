@@ -14,9 +14,25 @@ process:
   vid:
     plugin: default_value
     default_value: guia_tallas
+  # Solo términos en castellano o sin idioma definido. En el D7 las traducciones
+  # son términos independientes, no traducciones de la misma entidad, y sin este
+  # filtro entran como si fuesen castellanos: 47 de los 77 de tipo_de_producto
+  # y 12 de los 16 de recomendaciones_de_lavado lo eran.
   langcode:
-    plugin: default_value
-    default_value: es
+    -
+      plugin: skip_on_value
+      source: language
+      not_equals: true
+      method: row
+      value:
+        - es
+        - und
+      message: 'Término en otro idioma: solo se migra castellano.'
+    -
+      plugin: static_map
+      map:
+        es: es
+        und: es
   name: name
   description/value: description
   description/format:
@@ -29,8 +45,14 @@ process:
       method: process
       source: parent
     -
+      # Sin no_stub, migrate intenta crear un stub del padre cuando el hijo se
+      # procesa primero. El stub no lleva las propiedades de origen, así que el
+      # filtro de idioma lo descarta y arrastra al hijo. Con no_stub el término
+      # queda temporalmente sin padre y una segunda pasada con --update lo
+      # resuelve, cuando ya todos los términos están en el mapa.
       plugin: migration_lookup
       migration: pronens_taxonomia_guia_tallas
+      no_stub: true
   parent:
     plugin: default_value
     default_value: 0
