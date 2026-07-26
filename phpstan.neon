@@ -1,0 +1,22 @@
+parameters:
+  # High level. Drupal's loose typing makes 9/10 impractical without a large
+  # baseline, so 8 is the strictest level that stays useful here.
+  level: 8
+
+  paths:
+    - web/modules/custom
+
+  drupal:
+    # Stricter than the extension defaults: we write config schema for the
+    # custom module, so let PHPStan type config:get() and flag unknown keys.
+    configGetReturnType: true
+    rules:
+      configGetUnknownKeyRule: true
+      pluginManagerInspectionRule: true
+
+  excludePaths:
+    analyseAndScan:
+      - web/modules/custom/*/tests/fixtures/*
+
+  # Treat PHP notices/warnings raised during analysis as errors.
+  reportUnmatchedIgnoredErrors: true
