@@ -1,0 +1,39 @@
+id: pronens_taxonomia_recomendaciones_de_lavado
+label: 'Pronens: taxonomía Recomendaciones de lavado'
+migration_tags:
+  - 'Drupal 7'
+  - Pronens
+migration_group: pronens
+audit: true
+source:
+  plugin: d7_taxonomy_term
+  key: migrate
+  bundle: recomendaciones_de_lavado
+process:
+  vid:
+    plugin: default_value
+    default_value: recomendaciones_de_lavado
+  langcode:
+    plugin: default_value
+    default_value: es
+  name: name
+  description/value: description
+  description/format:
+    plugin: default_value
+    default_value: basic_html
+  weight: weight
+  parent_id:
+    -
+      plugin: skip_on_empty
+      method: process
+      source: parent
+    -
+      plugin: migration_lookup
+      migration: pronens_taxonomia_recomendaciones_de_lavado
+  parent:
+    plugin: default_value
+    default_value: 0
+    source: '@parent_id'
+destination:
+  plugin: 'entity:taxonomy_term'
+  default_bundle: recomendaciones_de_lavado

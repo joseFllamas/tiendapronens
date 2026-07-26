@@ -1,0 +1,49 @@
+id: pronens_taxonomia_guia_tallas
+label: 'Pronens: guías de tallas con su tabla escaneada'
+migration_tags:
+  - 'Drupal 7'
+  - Pronens
+migration_group: pronens
+audit: true
+source:
+  # En el D7 este vocabulario se llama tablas_tallas.
+  plugin: d7_taxonomy_term
+  key: migrate
+  bundle: tablas_tallas
+process:
+  vid:
+    plugin: default_value
+    default_value: guia_tallas
+  langcode:
+    plugin: default_value
+    default_value: es
+  name: name
+  description/value: description
+  description/format:
+    plugin: default_value
+    default_value: basic_html
+  weight: weight
+  parent_id:
+    -
+      plugin: skip_on_empty
+      method: process
+      source: parent
+    -
+      plugin: migration_lookup
+      migration: pronens_taxonomia_guia_tallas
+  parent:
+    plugin: default_value
+    default_value: 0
+    source: '@parent_id'
+  # La tabla de tallas ES una imagen escaneada, no texto.
+  field_imagen/target_id:
+    plugin: migration_lookup
+    migration: pronens_media_imagen
+    source: field_imatge/0/fid
+    no_stub: true
+destination:
+  plugin: 'entity:taxonomy_term'
+  default_bundle: guia_tallas
+migration_dependencies:
+  required:
+    - pronens_media_imagen
