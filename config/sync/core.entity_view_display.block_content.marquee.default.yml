@@ -1,0 +1,23 @@
+uuid: 80e998b9-d613-4839-8ab9-ae40713dcf72
+langcode: es
+status: true
+dependencies:
+  config:
+    - block_content.type.marquee
+    - field.field.block_content.marquee.field_mensajes
+id: block_content.marquee.default
+targetEntityType: block_content
+bundle: marquee
+mode: default
+content:
+  field_mensajes:
+    type: string
+    label: hidden
+    settings:
+      link_to_entity: false
+      link_rel: canonical
+    third_party_settings: {  }
+    weight: 0
+    region: content
+hidden:
+  langcode: true

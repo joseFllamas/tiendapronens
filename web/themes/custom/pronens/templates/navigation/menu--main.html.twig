@@ -1,0 +1,54 @@
+{#
+/**
+ * @file
+ * Menú principal con mega panel a 2 niveles.
+ *
+ * Variables añadidas en PronensHooks::preprocessMenu():
+ * - items[].is_sale: TRUE si el enlace lleva la clase pro-sale (Rebajas).
+ * - items[].mega_image: render array de la imagen destacada del término.
+ *
+ * Los ítems con hijos son botones disclosure (aria-expanded); la navegación
+ * a la categoría se hace desde "Ver todo" dentro del panel.
+ */
+#}
+{% if items %}
+  <nav class="pro-nav" aria-label="{{ 'Main navigation'|t }}">
+    <ul class="pro-nav__list">
+      {% for item in items %}
+        {% if item.below %}
+          <li class="pro-nav__item pro-nav__item--mega" data-pro-mega>
+            <button type="button" class="pro-nav__link" data-pro-mega-toggle aria-expanded="false">
+              {{ item.title }} <span class="pro-nav__chevron" aria-hidden="true">▾</span>
+            </button>
+            <div class="pro-mega">
+              <div class="pro-mega__inner pro-container">
+                <div class="pro-mega__primary">
+                  <a class="pro-mega__all" href="{{ item.url }}">{{ 'View all'|t }}</a>
+                  <a class="pro-mega__new" href="{{ item.url }}">{{ 'New in'|t }} <span class="pro-mega__new-tag">NEW</span></a>
+                </div>
+                {% set half = ((item.below|length) / 2)|round(0, 'ceil') %}
+                {% for col in [item.below|slice(0, half), item.below|slice(half)] %}
+                  <div class="pro-mega__col">
+                    {% for child in col %}
+                      <a class="pro-mega__link{{ child.is_sale ? ' pro-mega__link--sale' }}" href="{{ child.url }}">{{ child.title }}</a>
+                    {% endfor %}
+                  </div>
+                {% endfor %}
+                {% if item.mega_image %}
+                  <a class="pro-mega__feature" href="{{ item.url }}">
+                    <div class="pro-mega__feature-img">{{ item.mega_image }}</div>
+                    <div class="pro-mega__feature-label">{{ item.title }}</div>
+                  </a>
+                {% endif %}
+              </div>
+            </div>
+          </li>
+        {% else %}
+          <li class="pro-nav__item">
+            <a class="pro-nav__link{{ item.is_sale ? ' pro-nav__link--sale' }}" href="{{ item.url }}">{{ item.title }}</a>
+          </li>
+        {% endif %}
+      {% endfor %}
+    </ul>
+  </nav>
+{% endif %}

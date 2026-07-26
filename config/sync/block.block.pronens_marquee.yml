@@ -1,0 +1,23 @@
+uuid: 7eb9594c-fc7c-416c-8356-e8550ada9a98
+langcode: es
+status: true
+dependencies:
+  content:
+    - 'block_content:marquee:7f1394df-998c-408a-abdc-aa0c85e6819c'
+  module:
+    - block_content
+  theme:
+    - pronens
+id: pronens_marquee
+theme: pronens
+region: marquee
+weight: 0
+provider: null
+plugin: 'block_content:7f1394df-998c-408a-abdc-aa0c85e6819c'
+settings:
+  id: 'block_content:7f1394df-998c-408a-abdc-aa0c85e6819c'
+  label: 'Marquee de avisos'
+  label_display: '0'
+  provider: block_content
+  view_mode: full
+visibility: {  }

@@ -1,0 +1,25 @@
+uuid: 8d50cc15-1247-4f10-a630-caa0a207bacd
+langcode: es
+status: true
+dependencies:
+  config:
+    - system.menu.footer-empresa
+  module:
+    - system
+  theme:
+    - pronens
+id: pronens_footer_empresa
+theme: pronens
+region: footer
+weight: 3
+provider: null
+plugin: 'system_menu_block:footer-empresa'
+settings:
+  id: 'system_menu_block:footer-empresa'
+  label: Empresa
+  label_display: visible
+  provider: system
+  level: 1
+  depth: null
+  expand_all_items: false
+visibility: {  }

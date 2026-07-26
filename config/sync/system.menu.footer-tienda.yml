@@ -1,0 +1,8 @@
+uuid: 7aaee250-3ee8-4342-b10e-a14eca92771e
+langcode: es
+status: true
+dependencies: {  }
+id: footer-tienda
+label: 'Footer: Tienda'
+description: null
+locked: false

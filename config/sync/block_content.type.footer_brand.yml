@@ -1,0 +1,8 @@
+uuid: cef8ae5a-4481-42cc-a217-6fa32c0c08b0
+langcode: es
+status: true
+dependencies: {  }
+id: footer_brand
+label: 'Footer: marca y contacto'
+revision: false
+description: 'Columna de marca del pie de página.'

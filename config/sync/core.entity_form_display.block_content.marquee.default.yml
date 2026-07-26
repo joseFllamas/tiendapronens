@@ -1,0 +1,36 @@
+uuid: d5fbb899-10d7-4e0e-8c20-4d1393c9978d
+langcode: es
+status: true
+dependencies:
+  config:
+    - block_content.type.marquee
+    - field.field.block_content.marquee.field_mensajes
+id: block_content.marquee.default
+targetEntityType: block_content
+bundle: marquee
+mode: default
+content:
+  field_mensajes:
+    type: string_textfield
+    weight: 0
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  info:
+    type: string_textfield
+    weight: -5
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  langcode:
+    type: language_select
+    weight: 2
+    region: content
+    settings:
+      include_locked: true
+    third_party_settings: {  }
+hidden: {  }

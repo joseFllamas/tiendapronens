@@ -1,0 +1,13 @@
+{#
+/**
+ * @file
+ * Columna de marca del footer: logo "pronens." + descripción y contacto
+ * (el body del bloque, editable por el cliente).
+ */
+#}
+<div{{ attributes.addClass('pro-footer-brand') }}>
+  <a class="pro-footer-brand__logo" href="{{ path('<front>') }}" rel="home">Pronens<span class="pro-brand__dot">.</span></a>
+  <div class="pro-footer-brand__body">
+    {{ content }}
+  </div>
+</div>

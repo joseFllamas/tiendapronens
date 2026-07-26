@@ -1,0 +1,16 @@
+{#
+/**
+ * @file
+ * Selector de idioma compacto: códigos ES / CA / FR / EN.
+ *
+ * PronensHooks::preprocessLinksLanguageBlock() sustituye el nombre del
+ * idioma por su código y marca el activo con .is-active.
+ */
+#}
+{% if links %}
+  <ul{{ attributes.addClass('pro-lang') }}>
+    {% for item in links %}
+      <li class="pro-lang__item">{{ item.link }}</li>
+    {% endfor %}
+  </ul>
+{% endif %}

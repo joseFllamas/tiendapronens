@@ -1,0 +1,19 @@
+uuid: a2d924f2-5a3a-486d-a6fa-232b07c66df1
+langcode: es
+status: true
+dependencies:
+  config:
+    - block_content.type.marquee
+    - field.storage.block_content.field_mensajes
+id: block_content.marquee.field_mensajes
+field_name: field_mensajes
+entity_type: block_content
+bundle: marquee
+label: Mensajes
+description: ''
+required: true
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

@@ -1,0 +1,23 @@
+uuid: 01668148-996f-48fb-8bf7-4a208ef1dbd0
+langcode: es
+status: true
+dependencies:
+  content:
+    - 'block_content:footer_brand:f3585e63-2584-4347-9250-9290a69d18a8'
+  module:
+    - block_content
+  theme:
+    - pronens
+id: pronens_footer_brand
+theme: pronens
+region: footer
+weight: 0
+provider: null
+plugin: 'block_content:f3585e63-2584-4347-9250-9290a69d18a8'
+settings:
+  id: 'block_content:f3585e63-2584-4347-9250-9290a69d18a8'
+  label: 'Footer: marca'
+  label_display: '0'
+  provider: block_content
+  view_mode: full
+visibility: {  }

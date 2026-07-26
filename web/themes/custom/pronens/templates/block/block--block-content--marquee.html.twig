@@ -1,0 +1,22 @@
+{#
+/**
+ * @file
+ * Marquee de avisos: mensajes en bucle sobre banda oscura.
+ *
+ * La variable mensajes (array de strings) la aporta
+ * PronensHooks::preprocessBlock(). El contenido se duplica (segunda copia
+ * aria-hidden) para que la animación translateX(-50%) encadene sin salto.
+ */
+#}
+<div{{ attributes.addClass('pro-marquee') }}>
+  <div class="pro-marquee__track">
+    {% for copy in 0..1 %}
+      <div class="pro-marquee__group" {% if copy > 0 %}aria-hidden="true"{% endif %}>
+        {% for mensaje in mensajes %}
+          <span class="pro-marquee__msg">{{ mensaje }}</span>
+          <span class="pro-marquee__dot" aria-hidden="true">●</span>
+        {% endfor %}
+      </div>
+    {% endfor %}
+  </div>
+</div>

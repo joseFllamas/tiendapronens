@@ -1,0 +1,16 @@
+{#
+/**
+ * @file
+ * Icono de carrito del header con badge de unidades.
+ *
+ * Renderizado por el lazy builder de commerce_cart (cache-safe).
+ */
+#}
+<div{{ attributes.addClass('pro-cart-btn') }}>
+  <a class="pro-cart-btn__link" href="{{ url }}" aria-label="{{ count_text }}">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 8h12l-1.2 12.2a1.8 1.8 0 0 1-1.8 1.8H9a1.8 1.8 0 0 1-1.8-1.8L6 8z"/><path d="M9 10V6a3 3 0 0 1 6 0v4"/></svg>
+    {% if count > 0 %}
+      <span class="pro-cart-btn__badge">{{ count }}</span>
+    {% endif %}
+  </a>
+</div>

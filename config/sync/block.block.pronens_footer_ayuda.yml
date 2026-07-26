@@ -1,0 +1,25 @@
+uuid: 83965a05-43ae-4488-9161-6c61442c1c55
+langcode: es
+status: true
+dependencies:
+  config:
+    - system.menu.footer-ayuda
+  module:
+    - system
+  theme:
+    - pronens
+id: pronens_footer_ayuda
+theme: pronens
+region: footer
+weight: 2
+provider: null
+plugin: 'system_menu_block:footer-ayuda'
+settings:
+  id: 'system_menu_block:footer-ayuda'
+  label: Ayuda
+  label_display: visible
+  provider: system
+  level: 1
+  depth: null
+  expand_all_items: false
+visibility: {  }

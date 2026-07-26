@@ -1,0 +1,25 @@
+uuid: f04180f8-22a8-409b-81d1-81e7939b8342
+langcode: es
+status: true
+dependencies:
+  config:
+    - system.menu.footer
+  module:
+    - system
+  theme:
+    - pronens
+id: pronens_footer_legal
+theme: pronens
+region: footer_legal
+weight: 0
+provider: null
+plugin: 'system_menu_block:footer'
+settings:
+  id: 'system_menu_block:footer'
+  label: Legal
+  label_display: '0'
+  provider: system
+  level: 1
+  depth: null
+  expand_all_items: false
+visibility: {  }

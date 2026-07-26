@@ -1,0 +1,8 @@
+uuid: a650b62a-5bf6-4c6d-be7b-7e8e1b6d16fc
+langcode: es
+status: true
+dependencies: {  }
+id: footer-empresa
+label: 'Footer: Empresa'
+description: null
+locked: false

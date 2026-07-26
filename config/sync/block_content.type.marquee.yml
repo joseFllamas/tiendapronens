@@ -1,0 +1,8 @@
+uuid: 1c7b0ad5-6ba4-4d7a-a530-2ea89f028201
+langcode: es
+status: true
+dependencies: {  }
+id: marquee
+label: 'Marquee de avisos'
+revision: false
+description: 'Banda de avisos en bucle de la cabecera.'

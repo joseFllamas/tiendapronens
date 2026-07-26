@@ -18,6 +18,9 @@
   --pro-teal: #2e9daa;
   --pro-teal-light: #7fd4dd;
   --pro-teal-bg: #effafb;
+  /* Teal oscurecido para TEXTO sobre fondos claros (AA 4.5:1; el turquesa
+     del prototipo se queda en 3.2:1 sobre crema). */
+  --pro-teal-ink: #1e6e77;
   --pro-orange: #f4854e;
   --pro-orange-hover: #e06f37;
   --pro-yellow: #f9e547;

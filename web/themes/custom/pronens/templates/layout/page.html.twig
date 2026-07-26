@@ -10,13 +10,38 @@
  * @see html.html.twig
  */
 #}
+{{ attach_library('pronens/marquee') }}
+{{ attach_library('pronens/header') }}
+{{ attach_library('pronens/footer') }}
 <div class="pro-page">
 
   {{ page.marquee }}
 
-  <header class="pro-page__header">
-    {{ page.header }}
-    {{ page.primary_menu }}
+  <header class="pro-header" data-pro-header>
+    <div class="pro-header__inner pro-container">
+      <button class="pro-header__burger" type="button" data-pro-burger
+              aria-expanded="false" aria-controls="pro-nav"
+              aria-label="{{ 'Open menu'|t }}">
+        <span class="pro-header__burger-bar"></span>
+        <span class="pro-header__burger-bar"></span>
+        <span class="pro-header__burger-bar"></span>
+      </button>
+      <div class="pro-header__nav" id="pro-nav" data-pro-nav>
+        {{ page.primary_menu }}
+      </div>
+      <div class="pro-header__brand">
+        {{ page.header }}
+      </div>
+      <div class="pro-header__actions">
+        <a class="pro-header__icon pro-header__icon--search" href="{{ path('<front>') }}buscar" aria-label="{{ 'Search'|t }}">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.5" y2="16.5"/></svg>
+        </a>
+        <a class="pro-header__icon pro-header__icon--account" href="{{ path('user.page') }}" aria-label="{{ 'My account'|t }}">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-7 8-7s8 2.6 8 7"/></svg>
+        </a>
+        {{ page.header_actions }}
+      </div>
+    </div>
   </header>
 
   {{ page.breadcrumb }}
@@ -30,10 +55,16 @@
     {{ page.content }}
   </main>
 
-  {% if page.footer %}
-    <footer class="pro-page__footer">
+  <footer class="pro-footer">
+    <div class="pro-footer__grid pro-container">
       {{ page.footer }}
-    </footer>
-  {% endif %}
+    </div>
+    <div class="pro-footer__legal">
+      <div class="pro-footer__legal-inner pro-container">
+        <span class="pro-footer__copyright">© {{ 'now'|date('Y') }} Pronens. {{ 'All rights reserved.'|t }}</span>
+        {{ page.footer_legal }}
+      </div>
+    </div>
+  </footer>
 
 </div>

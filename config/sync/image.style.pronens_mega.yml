@@ -1,0 +1,21 @@
+uuid: 349451bf-5467-4e0b-9a29-77e8a41981ee
+langcode: es
+status: true
+dependencies: {  }
+name: pronens_mega
+label: 'Pronens: mega menú (720x420 WebP)'
+effects:
+  739af322-7cb9-4f42-a7dd-f0c28494ff82:
+    uuid: 739af322-7cb9-4f42-a7dd-f0c28494ff82
+    id: image_scale_and_crop
+    weight: 0
+    data:
+      width: 720
+      height: 420
+      anchor: center-center
+  5e265d0a-0c5c-4f3b-80a8-c2f0557e6144:
+    uuid: 5e265d0a-0c5c-4f3b-80a8-c2f0557e6144
+    id: image_convert
+    weight: 1
+    data:
+      extension: webp

@@ -1,0 +1,16 @@
+uuid: 3230f0b2-b720-4b24-90be-b90518414819
+langcode: es
+status: true
+dependencies:
+  config:
+    - block_content.type.marquee
+  module:
+    - content_translation
+third_party_settings:
+  content_translation:
+    enabled: true
+id: block_content.marquee
+target_entity_type_id: block_content
+target_bundle: marquee
+default_langcode: es
+language_alterable: true

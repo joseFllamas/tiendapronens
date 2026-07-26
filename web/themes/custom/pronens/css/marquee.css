@@ -1,0 +1,52 @@
+/**
+ * @file
+ * Marquee de avisos: banda oscura con mensajes en bucle.
+ *
+ * Altura fija (--pro-marquee-height) para evitar CLS. El track duplica el
+ * contenido (segunda copia aria-hidden) y anima translateX(-50%) en bucle.
+ */
+
+.pro-marquee {
+  height: var(--pro-marquee-height);
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  background: var(--pro-ink-dark);
+  color: #e8f2f4;
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.pro-marquee__track {
+  display: inline-flex;
+  animation: pro-marquee 28s linear infinite;
+}
+
+.pro-marquee__group {
+  display: inline-flex;
+  gap: 40px;
+  padding-right: 40px;
+}
+
+.pro-marquee__dot {
+  color: var(--pro-teal);
+}
+
+@keyframes pro-marquee {
+  from {
+    transform: translateX(0);
+  }
+
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pro-marquee__track {
+    animation: none;
+  }
+}

@@ -1,0 +1,22 @@
+uuid: 1d482d36-4cd8-4f35-a97c-7c0c5693d7f7
+langcode: es
+status: true
+dependencies:
+  config:
+    - block_content.type.footer_brand
+    - field.storage.block_content.body
+  module:
+    - text
+id: block_content.footer_brand.body
+field_name: body
+entity_type: block_content
+bundle: footer_brand
+label: Texto
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  allowed_formats: {  }
+field_type: text_long

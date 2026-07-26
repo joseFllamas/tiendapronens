@@ -1,0 +1,22 @@
+uuid: 79453af5-d376-4072-8d06-233796e392a3
+langcode: es
+status: true
+dependencies:
+  module:
+    - commerce_cart
+  theme:
+    - pronens
+id: pronens_cart
+theme: pronens
+region: header_actions
+weight: 5
+provider: null
+plugin: commerce_cart
+settings:
+  id: commerce_cart
+  label: Carrito
+  label_display: '0'
+  provider: commerce_cart
+  dropdown: false
+  show_if_empty: true
+visibility: {  }

@@ -1,0 +1,132 @@
+/**
+ * @file
+ * Footer: marca+contacto | TIENDA | AYUDA | EMPRESA + fila legal.
+ */
+
+.pro-footer {
+  background: var(--pro-cream-2);
+  border-top: 1px solid #e8e0d3;
+  margin-top: auto;
+}
+
+.pro-footer__grid {
+  display: grid;
+  grid-template-columns: 1.6fr 1fr 1fr 1fr;
+  gap: 44px;
+  padding-top: 56px;
+  padding-bottom: 40px;
+}
+
+/* Títulos de columna (label del bloque). */
+.pro-footer__grid h2 {
+  font-family: var(--pro-font-ui);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--pro-ink);
+  margin: 0 0 14px;
+}
+
+.pro-footer__grid .menu {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: 13.5px;
+}
+
+.pro-footer__grid .menu a {
+  color: var(--pro-text-2);
+}
+
+.pro-footer__grid .menu a:hover {
+  color: var(--pro-teal);
+}
+
+/* Columna de marca (block--block-content--footer-brand.html.twig). */
+.pro-footer-brand__logo {
+  font-family: var(--pro-font-display);
+  font-weight: 800;
+  font-size: 23px;
+  letter-spacing: -0.02em;
+  color: var(--pro-ink);
+  text-transform: lowercase;
+}
+
+.pro-footer-brand__logo .pro-brand__dot {
+  color: var(--pro-teal);
+}
+
+.pro-footer-brand__body {
+  font-size: 13.5px;
+  line-height: 1.65;
+  color: var(--pro-text-2);
+  max-width: 280px;
+}
+
+.pro-footer-brand__body p {
+  margin: 12px 0 0;
+}
+
+.pro-footer-brand__body a {
+  color: var(--pro-teal-ink);
+}
+
+/* Fila legal. */
+.pro-footer__legal {
+  border-top: 1px solid #e8e0d3;
+}
+
+.pro-footer__legal-inner {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  padding-top: 18px;
+  padding-bottom: 18px;
+  font-size: 12px;
+  /* --pro-mute no llega a AA sobre crema; se usa el gris de texto. */
+  color: var(--pro-text-2);
+}
+
+.pro-footer__legal-inner .menu {
+  display: flex;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.pro-footer__legal-inner .menu li:not(:last-child)::after {
+  content: '·';
+  margin-left: 6px;
+}
+
+.pro-footer__legal-inner .menu a {
+  color: var(--pro-text-2);
+}
+
+.pro-footer__legal-inner .menu a:hover {
+  color: var(--pro-ink);
+}
+
+@media (max-width: 1024px) {
+  .pro-footer__grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 32px;
+  }
+}
+
+@media (max-width: 480px) {
+  .pro-footer__grid {
+    grid-template-columns: 1fr;
+  }
+
+  .pro-footer__legal-inner {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}

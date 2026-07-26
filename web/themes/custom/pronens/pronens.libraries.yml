@@ -14,6 +14,29 @@ caveat:
     base:
       css/caveat.css: {}
 
+marquee:
+  version: VERSION
+  css:
+    component:
+      css/marquee.css: {}
+
+header:
+  version: VERSION
+  css:
+    component:
+      css/header.css: {}
+  js:
+    js/header.js: {}
+  dependencies:
+    - core/drupal
+    - core/once
+
+footer:
+  version: VERSION
+  css:
+    component:
+      css/footer.css: {}
+
 base:
   version: VERSION
   css:

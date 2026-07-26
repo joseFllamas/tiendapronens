@@ -1,0 +1,25 @@
+uuid: 761e9210-d0aa-4621-a8bb-ab95b59af166
+langcode: es
+status: true
+dependencies:
+  config:
+    - system.menu.footer-tienda
+  module:
+    - system
+  theme:
+    - pronens
+id: pronens_footer_tienda
+theme: pronens
+region: footer
+weight: 1
+provider: null
+plugin: 'system_menu_block:footer-tienda'
+settings:
+  id: 'system_menu_block:footer-tienda'
+  label: Tienda
+  label_display: visible
+  provider: system
+  level: 1
+  depth: null
+  expand_all_items: false
+visibility: {  }
