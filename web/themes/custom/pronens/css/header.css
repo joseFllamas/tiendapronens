@@ -158,6 +158,15 @@
 }
 
 /* --- Mega menú (desktop). --- */
+
+/* Con contextual links (usuarios con permiso de edición), el bloque del menú
+   recibe .contextual-region (position: relative en core) y se convertiría en
+   el containing block del panel: quedaría estrecho y anclado bajo el nav en
+   vez de full-width bajo el header. El anclaje debe ser siempre .pro-header. */
+.pro-header__nav .contextual-region {
+  position: static;
+}
+
 .pro-mega {
   display: none;
   position: absolute;
@@ -218,10 +227,12 @@
   color: var(--pro-ink);
 }
 
+/* En el panel, el prototipo pinta "REBAJAS" en mayúsculas y 800. */
 .pro-mega__link--sale {
   background: var(--pro-yellow);
   padding: 2px 7px;
-  font-weight: 700;
+  font-weight: 800;
+  text-transform: uppercase;
 }
 
 .pro-mega__link--sale:hover {

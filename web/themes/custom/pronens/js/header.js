@@ -89,6 +89,18 @@
       });
     });
 
+    // Como en el prototipo: pasar sobre un ítem sin panel (Rebajas,
+    // Personaliza) cierra el mega abierto y cancela la apertura pendiente.
+    header.querySelectorAll('.pro-nav__item:not([data-pro-mega])').forEach((item) => {
+      item.addEventListener('mouseenter', () => {
+        if (isMobile()) {
+          return;
+        }
+        clearTimeout(hoverTimer);
+        closeAllMegas(header);
+      });
+    });
+
     // Al salir del header (que incluye el panel), cerrar (desktop).
     header.addEventListener('mouseleave', () => {
       if (!isMobile()) {

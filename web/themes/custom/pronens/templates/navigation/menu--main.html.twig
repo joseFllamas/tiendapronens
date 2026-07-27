@@ -1,11 +1,14 @@
 {#
 /**
  * @file
- * Menú principal con mega panel a 2 niveles.
+ * Menú principal con mega panel a 2 niveles (esquema del prototipo).
  *
  * Variables añadidas en PronensHooks::preprocessMenu():
  * - items[].is_sale: TRUE si el enlace lleva la clase pro-sale (Rebajas).
- * - items[].mega_image: render array de la imagen destacada del término.
+ * - items[].mega_columns: las 2 columnas de hijos ya repartidas (la segunda
+ *   empieza en el hijo con clase pro-col-2).
+ * - items[].mega_feature: columna destacada {image, label, url} del hijo con
+ *   clase pro-featured (o del propio término padre).
  *
  * Los ítems con hijos son botones disclosure (aria-expanded); la navegación
  * a la categoría se hace desde "Ver todo" dentro del panel.
@@ -26,18 +29,17 @@
                   <a class="pro-mega__all" href="{{ item.url }}">{{ 'View all'|t }}</a>
                   <a class="pro-mega__new" href="{{ item.url }}">{{ 'New in'|t }} <span class="pro-mega__new-tag">NEW</span></a>
                 </div>
-                {% set half = ((item.below|length) / 2)|round(0, 'ceil') %}
-                {% for col in [item.below|slice(0, half), item.below|slice(half)] %}
+                {% for col in item.mega_columns %}
                   <div class="pro-mega__col">
                     {% for child in col %}
                       <a class="pro-mega__link{{ child.is_sale ? ' pro-mega__link--sale' }}" href="{{ child.url }}">{{ child.title }}</a>
                     {% endfor %}
                   </div>
                 {% endfor %}
-                {% if item.mega_image %}
-                  <a class="pro-mega__feature" href="{{ item.url }}">
-                    <div class="pro-mega__feature-img">{{ item.mega_image }}</div>
-                    <div class="pro-mega__feature-label">{{ item.title }}</div>
+                {% if item.mega_feature %}
+                  <a class="pro-mega__feature" href="{{ item.mega_feature.url }}">
+                    <div class="pro-mega__feature-img">{{ item.mega_feature.image }}</div>
+                    <div class="pro-mega__feature-label">{{ item.mega_feature.label }}</div>
                   </a>
                 {% endif %}
               </div>

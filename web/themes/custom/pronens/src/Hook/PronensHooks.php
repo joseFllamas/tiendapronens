@@ -208,13 +208,15 @@ class PronensHooks {
       return;
     }
     foreach ($variables['items'] as &$item) {
-      $item['is_sale'] = $this->linkIsSale($item['url']);
+      $item['is_sale'] = $this->linkHasClass($item['url'], 'pro-sale');
+      if (!$item['below']) {
+        continue;
+      }
       foreach ($item['below'] as &$child) {
-        $child['is_sale'] = $this->linkIsSale($child['url']);
+        $child['is_sale'] = $this->linkHasClass($child['url'], 'pro-sale');
       }
-      if ($item['below']) {
-        $item['mega_image'] = $this->buildMegaImage($item['url']);
-      }
+      $item['mega_columns'] = $this->splitMegaColumns($item['below']);
+      $item['mega_feature'] = $this->buildMegaFeature($item);
     }
   }
 
@@ -619,11 +621,74 @@ class PronensHooks {
   }
 
   /**
-   * Comprueba si un enlace de menú lleva la clase de rebajas.
+   * Comprueba si un enlace de menú lleva una clase en sus opciones.
    */
-  protected function linkIsSale(Url $url): bool {
+  protected function linkHasClass(Url $url, string $class): bool {
     $attributes = $url->getOption('attributes') ?? [];
-    return in_array('pro-sale', $attributes['class'] ?? [], TRUE);
+    return in_array($class, $attributes['class'] ?? [], TRUE);
+  }
+
+  /**
+   * Reparte los hijos del mega menú en las 2 columnas del prototipo.
+   *
+   * La segunda columna empieza en el primer hijo con la clase pro-col-2;
+   * si ningún hijo la lleva, se reparte a la mitad (redondeo arriba).
+   *
+   * @param array<string, array<string, mixed>> $children
+   *   Ítems hijos del enlace de primer nivel.
+   *
+   * @return array{0: array<string, array<string, mixed>>, 1: array<string, array<string, mixed>>}
+   *   Las dos columnas de enlaces (array_slice conserva las claves del
+   *   árbol de menú, que son IDs de plugin).
+   */
+  protected function splitMegaColumns(array $children): array {
+    $break = NULL;
+    $index = 0;
+    foreach ($children as $child) {
+      if ($index > 0 && $this->linkHasClass($child['url'], 'pro-col-2')) {
+        $break = $index;
+        break;
+      }
+      $index++;
+    }
+    $break ??= (int) ceil(count($children) / 2);
+    return [array_slice($children, 0, $break), array_slice($children, $break)];
+  }
+
+  /**
+   * Columna destacada del panel: imagen, etiqueta y destino.
+   *
+   * Usa el hijo marcado con pro-featured (su término aporta la foto y su
+   * título el pie, como el "Bodys bebé" del prototipo); si no hay ninguno
+   * o su término no tiene imagen, cae al término del enlace padre.
+   *
+   * @param array<string, mixed> $item
+   *   Ítem de primer nivel con sus hijos.
+   *
+   * @return array{image: array<string, mixed>, label: string, url: \Drupal\Core\Url}|null
+   *   Datos de la columna destacada o NULL si no hay imagen.
+   */
+  protected function buildMegaFeature(array $item): ?array {
+    $source = NULL;
+    foreach ($item['below'] as $child) {
+      if ($this->linkHasClass($child['url'], 'pro-featured')) {
+        $source = $child;
+        break;
+      }
+    }
+    $image = $source !== NULL ? $this->buildMegaImage($source['url']) : NULL;
+    if ($image === NULL) {
+      $source = $item;
+      $image = $this->buildMegaImage($item['url']);
+    }
+    if ($image === NULL) {
+      return NULL;
+    }
+    return [
+      'image' => $image,
+      'label' => $source['title'],
+      'url' => $source['url'],
+    ];
   }
 
   /**
