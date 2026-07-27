@@ -123,12 +123,12 @@ button {
 }
 
 .pro-btn--cta {
-  background: var(--pro-orange);
+  background: var(--pro-orange-cta);
   color: #fff;
 }
 
 .pro-btn--cta:hover {
-  background: var(--pro-orange-hover);
+  background: var(--pro-orange-ink);
   color: #fff;
 }
 

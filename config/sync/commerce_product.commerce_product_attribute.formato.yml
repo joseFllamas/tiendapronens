@@ -4,4 +4,4 @@ status: true
 dependencies: {  }
 id: formato
 label: Formato
-elementType: select
+elementType: radios

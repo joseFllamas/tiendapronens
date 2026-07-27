@@ -108,7 +108,8 @@
   min-width: 17px;
   height: 17px;
   border-radius: var(--pro-radius-pill);
-  background: var(--pro-orange);
+  /* Texto blanco encima: hace falta el naranja accesible, no el del prototipo. */
+  background: var(--pro-orange-cta);
   color: #fff;
   font-size: 10.5px;
   font-weight: 800;
@@ -256,8 +257,8 @@
 }
 
 .pro-filters__chip.is-active {
-  background: var(--pro-orange);
-  border-color: var(--pro-orange);
+  background: var(--pro-orange-cta);
+  border-color: var(--pro-orange-cta);
 }
 
 .pro-filters__chip.is-active a {

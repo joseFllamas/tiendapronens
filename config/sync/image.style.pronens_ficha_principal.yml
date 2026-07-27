@@ -1,0 +1,21 @@
+uuid: 6e2187dd-c41f-41c8-af6a-5a62b61bb547
+langcode: es
+status: true
+dependencies: {  }
+name: pronens_ficha_principal
+label: 'Pronens ficha principal (800x1066 WebP)'
+effects:
+  b1451663-7aaa-4ce7-ad2e-5f476f184baf:
+    uuid: b1451663-7aaa-4ce7-ad2e-5f476f184baf
+    id: image_scale_and_crop
+    weight: 0
+    data:
+      width: 800
+      height: 1066
+      anchor: center-center
+  3f2509df-ccfa-48d9-8b98-d83374ed4efb:
+    uuid: 3f2509df-ccfa-48d9-8b98-d83374ed4efb
+    id: image_convert
+    weight: 1
+    data:
+      extension: webp

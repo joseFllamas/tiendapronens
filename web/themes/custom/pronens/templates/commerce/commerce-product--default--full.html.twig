@@ -1,0 +1,94 @@
+{#
+/**
+ * @file
+ * Ficha de producto: galería 3:4 a la izquierda, compra a la derecha.
+ *
+ * ficha (eyebrow, titulo, fotos, precio, recargo_texto, personalizable,
+ * guia_tallas, relacionados) viene de FichaHooks::buildFicha(). El bloque de
+ * compra es el formulario de añadir al carrito de Commerce, ya reordenado y
+ * con clases por FichaHooks::formAlter(): atributos, card de personalización,
+ * y cantidad junto al CTA.
+ *
+ * La zona de valoraciones del prototipo no se pinta: hace falta un módulo de
+ * reseñas que aún no está elegido (ver CLAUDE.md).
+ */
+#}
+<article{{ attributes.addClass('pro-ficha') }}>
+  <div class="pro-ficha__grid">
+    <div class="pro-ficha__gallery">
+      {% for foto in ficha.fotos %}
+        <div class="pro-ficha__shot{{ loop.first ? ' pro-ficha__shot--main' }}"
+             {{ loop.first ? 'data-pro-preview-target' : '' }}>
+          {{ foto }}
+          {% if loop.first and ficha.personalizable %}
+            {# Vista previa en vivo: el JS escribe aquí lo que se teclea. El
+               ancla bottom:44px es la del prototipo. #}
+            <div class="pro-ficha__preview" data-pro-preview hidden>
+              <span class="pro-ficha__preview-text" data-pro-preview-text></span>
+            </div>
+          {% endif %}
+        </div>
+      {% endfor %}
+    </div>
+
+    <div class="pro-ficha__buy">
+      {% if ficha.eyebrow %}
+        <p class="pro-eyebrow">{{ ficha.eyebrow }}</p>
+      {% endif %}
+      <h1 class="pro-ficha__title">{{ ficha.titulo }}</h1>
+
+      <div class="pro-ficha__prices">
+        <span class="pro-ficha__price" data-pro-total>{{ ficha.precio }}</span>
+        {% if ficha.recargo_texto %}
+          <span class="pro-ficha__breakdown" data-pro-breakdown hidden>
+            {{ ficha.precio }} + {{ ficha.recargo_texto }} {{ 'embroidery'|t }}
+          </span>
+        {% endif %}
+      </div>
+
+      {{ product.variations }}
+
+      <ul class="pro-ficha__trust">
+        <li>{{ 'Free shipping over €60'|t }}</li>
+        <li>{{ 'Embroidered in 72h'|t }}</li>
+        <li>{{ 'Returns within 30 days'|t }}</li>
+      </ul>
+
+      {% if product.body|render|trim %}
+        <details class="pro-acc" open>
+          <summary class="pro-acc__title">{{ 'Description'|t }}</summary>
+          <div class="pro-acc__body">{{ product.body }}</div>
+        </details>
+      {% endif %}
+      {% if product.field_lavado|render|trim %}
+        <details class="pro-acc">
+          <summary class="pro-acc__title">{{ 'Care and washing'|t }}</summary>
+          <div class="pro-acc__body">{{ product.field_lavado }}</div>
+        </details>
+      {% endif %}
+      {% if ficha.guia_tallas %}
+        <details class="pro-acc" id="guia-tallas">
+          <summary class="pro-acc__title">{{ 'Size guide'|t }}</summary>
+          <div class="pro-acc__body">{{ ficha.guia_tallas.contenido }}</div>
+        </details>
+      {% endif %}
+      <details class="pro-acc pro-acc--last">
+        <summary class="pro-acc__title">{{ 'Shipping and returns'|t }}</summary>
+        <div class="pro-acc__body">
+          <p>{{ 'Free shipping to Spain, France and Portugal on orders over €60. We ship worldwide. Returns within 30 days for items without embroidery.'|t }}</p>
+        </div>
+      </details>
+    </div>
+  </div>
+
+  {% if ficha.relacionados %}
+    <section class="pro-ficha__related">
+      <h2 class="pro-ficha__related-title">{{ 'Pair it with'|t }}</h2>
+      <div class="pro-grid" data-pro-cols="4">
+        {% for tarjeta in ficha.relacionados %}
+          <div class="pro-grid__cell">{{ tarjeta }}</div>
+        {% endfor %}
+      </div>
+    </section>
+  {% endif %}
+</article>

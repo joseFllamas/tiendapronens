@@ -100,6 +100,19 @@ catalogo:
     - core/drupal
     - core/once
 
+ficha:
+  version: VERSION
+  css:
+    component:
+      css/ficha.css: {}
+  js:
+    js/ficha.js: {}
+  dependencies:
+    - core/drupal
+    - core/once
+    - core/drupalSettings
+    - core/drupal.states
+
 historia:
   version: VERSION
   css:

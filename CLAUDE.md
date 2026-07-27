@@ -76,6 +76,27 @@ Donde este documento y la realidad del repo discrepan, manda esta lista (decidid
   bordado" a 552.308,13 €, "prueba slogan", "Pedido 7682") están publicados pero **sin categoría**,
   así que no salen en ninguna página de categoría. Ensuciarían un buscador o catálogo global.
   Aparte, el producto 238 (sudadera lila) cuesta 388,41 €, que parece error de datos.
+- **Las fotos de letra bordada NO existen (2026-07-27)**: la resolución de la ficha daba por hecho
+  que los 9 términos de `color_letra` del D7 traían la foto de una letra bordada. No es así: son
+  miniaturas de **82×93 de camisetas dobladas**, restos de un muestrario de color de prenda, y
+  encima tres términos comparten fichero y otros dos también (en el propio D7 `color2.jpg`,
+  `color2_0.jpg` y `color2_1.jpg` son idénticos byte a byte, así que el dedupe de medias fue
+  correcto). Los otros 3 términos (Negro, Coral, Turquesa) solo tienen `field_color`. La ficha
+  está construida para usar la foto cuando exista y con **200px de ancho mínimo** como umbral; por
+  debajo cae a una muestra de color de `field_color`, y sin color al nombre a secas. En cuanto el
+  taller suba las 12 fotos de letra a `field_imagen` la ficha las usa sin tocar código.
+- **`field_relacionados` está vacío en los 370 productos**, así que "Combínalo con" cae a los 4
+  productos más recientes del mismo término. Si el cliente rellena el campo, manda el campo.
+- **Contraste AA del naranja**: el `#f4854e` del prototipo con texto blanco da 2,5:1 y el CTA es
+  texto de 17px (no cuenta como texto grande), así que los **fondos** naranjas con texto blanco usan
+  `--pro-orange-cta: #c2551f` (4,6:1) y el **texto** naranja sobre fondos claros usa
+  `--pro-orange-ink: #a94d1c`. Mismo criterio que `--pro-teal-ink`. Si el cliente prefiere el
+  naranja exacto del prototipo, la alternativa que pasa AA es texto oscuro sobre el naranja claro.
+- **La zona de valoraciones de la ficha sigue sin maquetar**: falta elegir el módulo de reseñas.
+- **Descripciones internas de campo**: `field_texto_bordado` y `field_color_bordado` traen notas de
+  desarrollo ("Máximo real observado en el Drupal 7: 47 caracteres") que se veían en la tienda. El
+  tema las oculta en el formulario y pone un placeholder con el límite real; conviene limpiarlas en
+  la config del módulo cuando se pueda tocar.
 
 ## Orden de trabajo
 1. **Tema `pronens`**: tokens CSS (custom properties con los colores/tipos del README), fuentes

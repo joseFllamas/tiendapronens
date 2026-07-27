@@ -4,4 +4,4 @@ status: true
 dependencies: {  }
 id: medida
 label: Medida
-elementType: select
+elementType: radios

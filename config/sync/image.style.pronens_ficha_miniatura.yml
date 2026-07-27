@@ -1,0 +1,21 @@
+uuid: 328867d0-8ced-4e2f-bb5e-cf3f212da354
+langcode: es
+status: true
+dependencies: {  }
+name: pronens_ficha_miniatura
+label: 'Pronens ficha miniatura (740x986 WebP)'
+effects:
+  54cece40-12a8-422a-bd8d-3b6555174068:
+    uuid: 54cece40-12a8-422a-bd8d-3b6555174068
+    id: image_scale_and_crop
+    weight: 0
+    data:
+      width: 740
+      height: 986
+      anchor: center-center
+  e4740f56-84bb-4419-9b1e-6d3b11ce7d46:
+    uuid: e4740f56-84bb-4419-9b1e-6d3b11ce7d46
+    id: image_convert
+    weight: 1
+    data:
+      extension: webp

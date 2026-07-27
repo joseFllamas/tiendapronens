@@ -1,0 +1,21 @@
+uuid: 24a720c9-f6f1-47c7-8150-036a4c00aa01
+langcode: es
+status: true
+dependencies: {  }
+name: pronens_formato
+label: 'Pronens formato de bordado (120x136 WebP)'
+effects:
+  a027004a-eea1-4c22-9923-ec7f7e3ad091:
+    uuid: a027004a-eea1-4c22-9923-ec7f7e3ad091
+    id: image_scale_and_crop
+    weight: 0
+    data:
+      width: 120
+      height: 136
+      anchor: center-center
+  5500d62b-c312-4825-8b55-c4f05a8a7aa8:
+    uuid: 5500d62b-c312-4825-8b55-c4f05a8a7aa8
+    id: image_convert
+    weight: 1
+    data:
+      extension: webp

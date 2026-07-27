@@ -25,9 +25,13 @@
   --pro-orange: #f4854e;
   --pro-orange-hover: #e06f37;
   --pro-orange-bg: #fdefe6;
-  /* Naranja oscurecido para TEXTO sobre --pro-orange-bg: el #e06f37 del
-     prototipo se queda en 2,9:1 y el chip de filtro es texto de 13px. */
+  /* Naranja oscurecido para TEXTO sobre fondos claros (--pro-orange-bg y el
+     turquesa de la card): el #e06f37 del prototipo se queda en 2,9:1. */
   --pro-orange-ink: #a94d1c;
+  /* Naranja de FONDO para botones con texto blanco: sobre el #f4854e del
+     prototipo, el blanco da 2,5:1 y el CTA es texto de 17px, que no cuenta
+     como texto grande. Este llega a 4,6:1. */
+  --pro-orange-cta: #c2551f;
   --pro-yellow: #f9e547;
   --pro-text-2: #5b7078;
   --pro-mute: #8aa0a6;

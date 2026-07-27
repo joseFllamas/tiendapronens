@@ -34,7 +34,24 @@ content:
     label: hidden
     settings: {  }
     third_party_settings: {  }
-    weight: 0
+    weight: 10
+    region: content
+  field_composicion:
+    type: string
+    label: hidden
+    settings:
+      link_to_entity: false
+      link_rel: canonical
+    third_party_settings: {  }
+    weight: 11
+    region: content
+  field_lavado:
+    type: entity_reference_label
+    label: hidden
+    settings:
+      link: false
+    third_party_settings: {  }
+    weight: 12
     region: content
   title:
     type: string
@@ -56,7 +73,6 @@ content:
     region: content
 hidden:
   created: true
-  field_composicion: true
   field_destacado: true
   field_edades: true
   field_escuela: true
@@ -64,12 +80,12 @@ hidden:
   field_galeria: true
   field_guia_tallas: true
   field_imagen_principal: true
-  field_lavado: true
   field_modo_personalizacion: true
   field_personalizable: true
   field_recargo: true
   field_relacionados: true
   field_tipo_de_producto: true
   langcode: true
+  search_api_excerpt: true
   stores: true
   uid: true

@@ -94,33 +94,6 @@ class CatalogoHooks {
   }
 
   /**
-   * Implements hook_preprocess_breadcrumb().
-   *
-   * Core deja fuera la página actual; el prototipo la enseña como último
-   * tramo sin enlace ("Inicio / Bebé / Bodys bebé"). No se puede usar
-   * hook_system_breadcrumb_alter: BreadcrumbManager lo invoca por
-   * ModuleHandler, que no llama a los temas.
-   *
-   * @param array<string, mixed> $variables
-   *   Variables del template de la miga de pan.
-   */
-  #[Hook('preprocess_breadcrumb')]
-  public function preprocessBreadcrumb(array &$variables): void {
-    if (!$this->esRutaDelCatalogo()) {
-      return;
-    }
-    $termino = $this->routeMatch->getParameter(self::TERM_PARAM);
-    if (is_scalar($termino)) {
-      $termino = $this->entityTypeManager->getStorage('taxonomy_term')->load((int) $termino);
-    }
-    if (!$termino instanceof TermInterface) {
-      return;
-    }
-    $traducido = $this->entityRepository->getTranslationFromContext($termino);
-    $variables['breadcrumb'][] = ['text' => $traducido->label()];
-  }
-
-  /**
    * Construye las facetas visibles, en orden de peso.
    *
    * @return array<int, array<string, mixed>>

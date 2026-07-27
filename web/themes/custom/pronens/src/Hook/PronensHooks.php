@@ -5,6 +5,7 @@ namespace Drupal\pronens\Hook;
 use CommerceGuys\Intl\Formatter\CurrencyFormatterInterface;
 use Drupal\commerce_product\Entity\ProductInterface;
 use Drupal\Core\Cache\Cache;
+use Drupal\Core\Entity\EntityRepositoryInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Field\EntityReferenceFieldItemListInterface;
 use Drupal\Core\Hook\Attribute\Hook;
@@ -14,12 +15,15 @@ use Drupal\Core\Url;
 use Drupal\file\FileInterface;
 use Drupal\media\MediaInterface;
 use Drupal\paragraphs\ParagraphInterface;
+use Drupal\pronens\CamposTrait;
 use Drupal\taxonomy\TermInterface;
 
 /**
  * Hook implementations for pronens.
  */
 class PronensHooks {
+
+  use CamposTrait;
   /**
    * @file
    * Functions to support theming.
@@ -30,6 +34,8 @@ class PronensHooks {
     protected LanguageManagerInterface $languageManager,
     protected CurrencyFormatterInterface $currencyFormatter,
     protected RouteMatchInterface $routeMatch,
+    protected FichaHooks $fichaHooks,
+    protected EntityRepositoryInterface $entityRepository,
   ) {
   }
 
@@ -47,13 +53,17 @@ class PronensHooks {
     // portada es full-width; la fase 5 ampliará la condición.
     $variables['main_boxed'] = empty($variables['is_front']);
 
-    // En la categoría el H1 va dentro de la plantilla de la view, junto al
-    // recuento de productos, que solo se conoce con la view ya ejecutada
-    // (ver CatalogoHooks). El bloque de título imprimiría un segundo H1.
-    // Views no crea una ruta nueva cuando su path choca con una existente:
-    // sobreescribe entity.taxonomy_term.canonical y le mete view_id, así que
-    // el nombre de la ruta sigue siendo el de la entidad.
-    if ($this->routeMatch->getParameter('view_id') === 'catalogo') {
+    // En la categoría y en la ficha el H1 va dentro de la plantilla: en la
+    // categoría acompañado del recuento de productos (que solo se conoce con la
+    // view ya ejecutada) y en la ficha dentro de la columna de compra. El
+    // bloque de título imprimiría un segundo H1.
+    //
+    // La categoría se reconoce por view_id y no por el nombre de la ruta:
+    // Views no crea una ruta nueva cuando su path choca con una existente,
+    // sobreescribe entity.taxonomy_term.canonical y le añade view_id.
+    $es_catalogo = $this->routeMatch->getParameter('view_id') === 'catalogo';
+    $es_ficha = $this->routeMatch->getRouteName() === 'entity.commerce_product.canonical';
+    if ($es_catalogo || $es_ficha) {
       foreach (array_keys($variables['page']['content'] ?? []) as $key) {
         $bloque = $variables['page']['content'][$key];
         if (is_array($bloque) && ($bloque['#base_plugin_id'] ?? '') === 'page_title_block') {
@@ -75,6 +85,70 @@ class PronensHooks {
   #[Hook('preprocess_pager')]
   public function preprocessPager(array &$variables): void {
     $variables['pagination_heading_level'] = 'h2';
+  }
+
+  /**
+   * Implements hook_preprocess_breadcrumb().
+   *
+   * Core no incluye la página actual, y para un producto de Commerce solo
+   * devuelve "Inicio" porque no hay constructor de migas por taxonomía. El
+   * prototipo enseña el recorrido completo: Inicio / Categoría / Producto.
+   *
+   * No vale hook_system_breadcrumb_alter: BreadcrumbManager lo invoca por
+   * ModuleHandler, que no llama a los temas.
+   *
+   * @param array<string, mixed> $variables
+   *   Variables del template de la miga de pan.
+   */
+  #[Hook('preprocess_breadcrumb')]
+  public function preprocessBreadcrumb(array &$variables): void {
+    $ruta = $this->routeMatch->getRouteName();
+
+    // Categoría: core ya trae los ancestros, falta el término abierto.
+    if ($this->routeMatch->getParameter('view_id') === 'catalogo') {
+      $termino = $this->routeMatch->getParameter('taxonomy_term');
+      if (is_scalar($termino)) {
+        $termino = $this->entityTypeManager->getStorage('taxonomy_term')->load((int) $termino);
+      }
+      if ($termino instanceof TermInterface) {
+        $variables['breadcrumb'][] = ['text' => $this->traducido($termino)->label()];
+      }
+      return;
+    }
+
+    // Ficha: se reconstruye entera desde el término del producto.
+    if ($ruta !== 'entity.commerce_product.canonical') {
+      return;
+    }
+    $producto = $this->routeMatch->getParameter('commerce_product');
+    if (!$producto instanceof ProductInterface) {
+      return;
+    }
+    $termino = $this->termFromField($producto, 'field_tipo_de_producto');
+    if ($termino !== NULL) {
+      $storage = $this->entityTypeManager->getStorage('taxonomy_term');
+      // De la raíz hacia abajo, como el recorrido que hizo quien navega.
+      /** @var array<int, \Drupal\taxonomy\TermInterface> $ancestros */
+      $ancestros = array_reverse($storage->loadAllParents((int) $termino->id()));
+      foreach ($ancestros as $ancestro) {
+        $traducido = $this->traducido($ancestro);
+        $variables['breadcrumb'][] = [
+          'text' => $traducido->label(),
+          'url' => $traducido->toUrl()->toString(),
+        ];
+      }
+    }
+    $variables['breadcrumb'][] = ['text' => $producto->label()];
+  }
+
+  /**
+   * Traducción de un término al idioma de la página.
+   */
+  protected function traducido(TermInterface $termino): TermInterface {
+    /** @var \Drupal\taxonomy\TermInterface $traducido */
+    $traducido = $this->entityRepository->getTranslationFromContext($termino);
+
+    return $traducido;
   }
 
   /**
@@ -294,11 +368,18 @@ class PronensHooks {
    */
   #[Hook('preprocess_commerce_product')]
   public function preprocessCommerceProduct(array &$variables): void {
-    if (($variables['elements']['#view_mode'] ?? '') !== 'tarjeta') {
-      return;
-    }
     $product = $variables['elements']['#commerce_product'] ?? NULL;
     if (!$product instanceof ProductInterface) {
+      return;
+    }
+    $view_mode = $variables['elements']['#view_mode'] ?? '';
+    // Un tema solo puede implementar cada preprocess una vez, así que la ficha
+    // se atiende desde aquí y su lógica vive en FichaHooks.
+    if ($view_mode === 'full') {
+      $this->fichaHooks->buildFicha($variables, $product);
+      return;
+    }
+    if ($view_mode !== 'tarjeta') {
       return;
     }
     $card = [
@@ -484,67 +565,8 @@ class PronensHooks {
     ];
   }
 
-  /**
-   * Primer media referenciado por un campo de una entidad.
-   */
-  protected function mediaFromField(object $entity, string $field_name): ?MediaInterface {
-    if (!$entity instanceof \Drupal\Core\Entity\FieldableEntityInterface || !$entity->hasField($field_name)) {
-      return NULL;
-    }
-    $field = $entity->get($field_name);
-    $referenced = $field instanceof EntityReferenceFieldItemListInterface ? $field->referencedEntities() : [];
-    $media = reset($referenced);
-    return $media instanceof MediaInterface ? $media : NULL;
-  }
 
-  /**
-   * Primer término referenciado por un campo de una entidad.
-   */
-  protected function termFromField(object $entity, string $field_name): ?TermInterface {
-    if (!$entity instanceof \Drupal\Core\Entity\FieldableEntityInterface || !$entity->hasField($field_name)) {
-      return NULL;
-    }
-    $field = $entity->get($field_name);
-    $referenced = $field instanceof EntityReferenceFieldItemListInterface ? $field->referencedEntities() : [];
-    $term = reset($referenced);
-    return $term instanceof TermInterface ? $term : NULL;
-  }
 
-  /**
-   * Render array de la imagen de un media con un estilo (WebP).
-   *
-   * @return array<string, mixed>|null
-   *   Render array con cache tags del media y el fichero, o NULL.
-   */
-  protected function buildStyledImage(MediaInterface $media, string $style_name, bool $eager = FALSE): ?array {
-    if (!$media->hasField('field_media_image')) {
-      return NULL;
-    }
-    $field = $media->get('field_media_image');
-    $files = $field instanceof EntityReferenceFieldItemListInterface ? $field->referencedEntities() : [];
-    $file = reset($files);
-    if (!$file instanceof FileInterface) {
-      return NULL;
-    }
-    $item = $field->first();
-    $values = $item !== NULL ? $item->getValue() : [];
-    $attributes = $eager
-      ? ['loading' => 'eager', 'fetchpriority' => 'high']
-      : ['loading' => 'lazy'];
-
-    return [
-      '#theme' => 'image_style',
-      '#style_name' => $style_name,
-      '#uri' => $file->getFileUri(),
-      '#alt' => $values['alt'] ?? '',
-      '#width' => $values['width'] ?? NULL,
-      '#height' => $values['height'] ?? NULL,
-      '#attributes' => $attributes,
-      '#cache' => [
-        'tags' => Cache::mergeTags($media->getCacheTags(), $file->getCacheTags()),
-      ],
-    ];
-  }
 
   /**
    * Añade el preload de la imagen hero (LCP) al head.

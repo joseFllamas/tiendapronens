@@ -1,0 +1,13 @@
+uuid: 83ef4848-b7ea-4940-bc3f-59cfdcc18e8c
+langcode: es
+status: true
+dependencies: {  }
+id: commerce_product
+label: Producto
+tags:
+  title: '[commerce_product:title] | [site:name]'
+  description: '[commerce_product:body]'
+  canonical_url: '[commerce_product:url:absolute]'
+  og_title: '[commerce_product:title]'
+  og_description: '[commerce_product:body]'
+  og_type: product
