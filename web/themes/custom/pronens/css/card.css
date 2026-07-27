@@ -18,12 +18,25 @@
   display: block;
 }
 
-/* Hover-cycle: imagen superpuesta (background pintado por card.js). */
+/* Hover-cycle: imagen superpuesta (background pintado por card.js).
+   Cada capa entra con slide derecha→izquierda sobre la anterior. */
 .pro-card__cycle {
   position: absolute;
   inset: 0;
+  z-index: 1;
   background-size: cover;
   background-position: center;
+  animation: pro-card-slide 350ms ease;
+}
+
+@keyframes pro-card-slide {
+  from {
+    transform: translateX(100%);
+  }
+
+  to {
+    transform: translateX(0);
+  }
 }
 
 /* Barra de progreso segmentada del cycle. */
@@ -32,6 +45,7 @@
   left: 12px;
   right: 12px;
   bottom: 10px;
+  z-index: 2;
   display: flex;
   gap: 4px;
   pointer-events: none;
