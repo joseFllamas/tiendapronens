@@ -318,6 +318,11 @@
 }
 
 .pro-sort select {
+  /* width:auto en un select mide la opción MÁS LARGA ("Precio: de menor a
+     mayor", 173px) y deja un hueco antes de la flecha; field-sizing lo ajusta
+     a la opción elegida, como el "Ordenar: Destacados ▾" del prototipo. Donde
+     no esté soportado se queda en auto, que es correcto pero más ancho. */
+  field-sizing: content;
   width: auto;
   max-width: 100%;
   border: 0;
