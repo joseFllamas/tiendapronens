@@ -1,0 +1,29 @@
+display:
+  default:
+    display_options:
+      exposed_form:
+        options:
+          exposed_sorts_label: Ordenar
+      sorts:
+        destacado:
+          expose:
+            label: Destacats
+        created:
+          expose:
+            label: Novetats
+        precio:
+          expose:
+            label: 'Preu: de menor a major'
+        precio_1:
+          expose:
+            label: 'Preu: de major a menor'
+        nombre:
+          expose:
+            label: 'Nom: A-Z'
+      pager:
+        options:
+          tags:
+            next: 'Següent →'
+            previous: '← Anterior'
+            first: '« Primera'
+            last: 'Última »'

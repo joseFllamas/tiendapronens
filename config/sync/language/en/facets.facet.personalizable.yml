@@ -1,0 +1,5 @@
+name: Customisable
+processor_configs:
+  boolean_item:
+    settings:
+      on_value: 'Customisable only'

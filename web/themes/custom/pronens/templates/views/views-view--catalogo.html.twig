@@ -1,0 +1,78 @@
+{#
+/**
+ * @file
+ * Pantalla de categoría: cabecera, barra de filtros y grid de tarjetas.
+ *
+ * catalogo (titulo, descripcion, total, facetas, reset) viene de
+ * CatalogoHooks::preprocessViewsView(). El H1 va aquí y no en el bloque de
+ * título de página porque el recuento se pinta a su lado y solo se conoce con
+ * la view ya ejecutada; ese bloque se quita en el preprocess de página.
+ *
+ * exposed es el formulario de orden expuesto de Views (un único select, con
+ * expose_sort_order desactivado en la view).
+ */
+#}
+<div{{ attributes.addClass('pro-catalogo') }}>
+  <header class="pro-catalogo__head">
+    <div class="pro-catalogo__titles">
+      <h1 class="pro-catalogo__title">{{ catalogo.titulo }}</h1>
+      <span class="pro-catalogo__count">
+        {% trans %}1 product{% plural catalogo.total %}@count products{% endtrans %}
+      </span>
+    </div>
+    {% if catalogo.descripcion %}
+      <div class="pro-catalogo__intro">{{ catalogo.descripcion }}</div>
+    {% endif %}
+  </header>
+
+  <div class="pro-filters" data-pro-filters>
+    {# 108 productos del catálogo tienen una sola variación sin atributos: en
+       esas categorías no hay nada que filtrar y la etiqueta sobra. #}
+    {% if catalogo.facetas %}
+      <span class="pro-filters__label">{{ 'Filter'|t }}</span>
+    {% endif %}
+
+    {% for faceta in catalogo.facetas %}
+      {% if faceta.directa %}
+        {# Un solo valor: el enlace de facets ES el chip. #}
+        <div class="pro-filters__chip{{ faceta.activos ? ' is-active' }}">{{ faceta.contenido }}</div>
+      {% else %}
+        <div class="pro-filters__facet" data-pro-facet>
+          <button type="button"
+                  class="pro-filters__pill{{ faceta.activos ? ' is-active' }}"
+                  aria-expanded="false"
+                  data-pro-facet-toggle>
+            {{ faceta.nombre }}
+            {% if faceta.activos %}<span class="pro-filters__badge">{{ faceta.activos }}</span>{% endif %}
+            <span class="pro-filters__chevron" aria-hidden="true">▾</span>
+          </button>
+          <div class="pro-filters__panel" data-pro-facet-panel hidden>
+            {{ faceta.contenido }}
+          </div>
+        </div>
+      {% endif %}
+    {% endfor %}
+
+    {% if catalogo.reset %}
+      <a class="pro-filters__reset" href="{{ catalogo.reset }}">{{ 'Clear filters'|t }}</a>
+    {% endif %}
+
+    <div class="pro-filters__right">
+      <div class="pro-view-toggle" data-pro-view-toggle>
+        <span class="pro-view-toggle__label">{{ 'View'|t }}</span>
+        <button type="button" class="pro-view-toggle__btn" data-pro-view="2" aria-pressed="false">2</button>
+        <button type="button" class="pro-view-toggle__btn" data-pro-view="4" aria-pressed="true">4</button>
+      </div>
+      {{ exposed }}
+    </div>
+  </div>
+
+  {% if rows %}
+    {{ rows }}
+  {% elseif empty %}
+    <div class="pro-catalogo__empty">{{ empty }}</div>
+  {% endif %}
+
+  {{ pager }}
+  {{ feed_icons }}
+</div>

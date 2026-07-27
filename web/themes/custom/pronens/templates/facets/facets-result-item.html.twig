@@ -1,0 +1,25 @@
+{#
+/**
+ * @file
+ * Valor de faceta: casilla falsa + etiqueta + recuento.
+ *
+ * El enlace lo envuelve facets (widget de enlaces), así que aquí solo va el
+ * contenido. La casilla es un span decorativo: el estado real lo lleva la
+ * clase is-active del <li>, que facets ya pone, y el enlace sigue siendo
+ * navegable sin JS.
+ *
+ * Al precio se le pega el símbolo y se cambia el guion por raya: el procesador
+ * de granularidad devuelve "10 - 20" a secas.
+ */
+#}
+<span class="pro-facet__box" aria-hidden="true"></span>
+<span class="pro-facet__value">
+  {%- if facet.id == 'precio' -%}
+    {{ value|replace({' - ': ' – '}) }} €
+  {%- else -%}
+    {{ value }}
+  {%- endif -%}
+</span>
+{% if show_count %}
+  <span class="pro-facet__count">{{ count }}</span>
+{% endif %}

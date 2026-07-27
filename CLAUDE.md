@@ -49,6 +49,33 @@ Donde este documento y la realidad del repo discrepan, manda esta lista (decidid
 - Los campos `field_posicion_bordado` y el modo inicial A-Z existen en el modelo pero NO se exponen.
 - Las estrellas de valoración de la ficha requieren un módulo de reseñas aún no elegido (el D7
   tenía fivestar sin migrar): decidir antes de maquetar esa zona.
+- **Facetas del catálogo (2026-07-27)**: el prototipo pinta Color / Talla / Precio / Solo
+  personalizables, pero **el color no existe en los datos**: solo 19 de las 1076 variaciones tienen
+  `attribute_color` y con 4 valores. Los ejes reales son **talla** (528 variaciones), **medida**
+  (412) y **pieza** (224), y cada producto usa uno solo (109 variaciones no tienen ninguno). Las
+  facetas son esas tres más precio y personalizable; facets oculta sola la que no aplica en la
+  categoría abierta. Las muestras de color de la tarjeta se sustituyen por chips del eje real, que
+  enlazan a la ficha con `?v=ID` (así preselecciona Commerce la variación).
+- **Precio: dos campos en el índice**. `precio` = mínimo agregado, de valor único, para **ordenar**
+  (el backend SQL no ordena por multivalor) y para el "desde X €". `precios` = todos los precios de
+  las variaciones, para la **faceta**: dentro de una categoría el mínimo suele ser idéntico en todos
+  los productos (las 74 bolsas arrancan las tres en 7,87 €) y filtrar por él no separa nada. La
+  faceta de precio va **sin recuento**: el campo es multivalor y el backend cuenta filas, así que un
+  producto con dos variaciones en el mismo tramo se contaría dos veces (el filtro sí es correcto).
+- **La view del catálogo sobreescribe `entity.taxonomy_term.canonical`**, no crea ruta nueva: Views
+  hace eso cuando su path choca con una existente. Consecuencias: la pantalla se reconoce por
+  `view_id`, no por el nombre de ruta; se ha deshabilitado `views.view.taxonomy_term` de core; y las
+  páginas de término de los vocabularios de atributo (`tamaño`, `escuelas`, `color_letra`…) pasan de
+  200 vacío a **404**, que es correcto porque nunca listaron nada (la view de core lista nodos y
+  aquí los productos no son nodos).
+- **Los 433 alias del D7 son solo `es`**, así que `/ca/productos/<slug>` da 404 mientras
+  `/ca/taxonomy/term/<tid>` funciona, y es lo que generan los menús: la navegación está bien en los
+  4 idiomas. Pasar los alias a `und` haría funcionar los bonitos en todos los idiomas; es un cambio
+  de datos con impacto en SEO, pendiente de decisión.
+- **Basura del D7 en el catálogo**: los productos 5, 6, 7 y 359 ("Producto de ejemplo A", "prueba
+  bordado" a 552.308,13 €, "prueba slogan", "Pedido 7682") están publicados pero **sin categoría**,
+  así que no salen en ninguna página de categoría. Ensuciarían un buscador o catálogo global.
+  Aparte, el producto 238 (sudadera lila) cuesta 388,41 €, que parece error de datos.
 
 ## Orden de trabajo
 1. **Tema `pronens`**: tokens CSS (custom properties con los colores/tipos del README), fuentes

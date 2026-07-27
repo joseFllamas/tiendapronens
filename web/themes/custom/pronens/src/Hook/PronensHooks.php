@@ -9,6 +9,7 @@ use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Field\EntityReferenceFieldItemListInterface;
 use Drupal\Core\Hook\Attribute\Hook;
 use Drupal\Core\Language\LanguageManagerInterface;
+use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\Url;
 use Drupal\file\FileInterface;
 use Drupal\media\MediaInterface;
@@ -28,6 +29,7 @@ class PronensHooks {
     protected EntityTypeManagerInterface $entityTypeManager,
     protected LanguageManagerInterface $languageManager,
     protected CurrencyFormatterInterface $currencyFormatter,
+    protected RouteMatchInterface $routeMatch,
   ) {
   }
 
@@ -42,8 +44,37 @@ class PronensHooks {
     // Las pantallas del rediseño (home, categoría, ficha) son full-width y
     // cada componente acota con .pro-container; el resto de páginas (CMS,
     // checkout, usuario…) usa el contenedor central. De momento solo la
-    // portada es full-width; las fases 4 y 5 ampliarán la condición.
+    // portada es full-width; la fase 5 ampliará la condición.
     $variables['main_boxed'] = empty($variables['is_front']);
+
+    // En la categoría el H1 va dentro de la plantilla de la view, junto al
+    // recuento de productos, que solo se conoce con la view ya ejecutada
+    // (ver CatalogoHooks). El bloque de título imprimiría un segundo H1.
+    // Views no crea una ruta nueva cuando su path choca con una existente:
+    // sobreescribe entity.taxonomy_term.canonical y le mete view_id, así que
+    // el nombre de la ruta sigue siendo el de la entidad.
+    if ($this->routeMatch->getParameter('view_id') === 'catalogo') {
+      foreach (array_keys($variables['page']['content'] ?? []) as $key) {
+        $bloque = $variables['page']['content'][$key];
+        if (is_array($bloque) && ($bloque['#base_plugin_id'] ?? '') === 'page_title_block') {
+          unset($variables['page']['content'][$key]);
+        }
+      }
+    }
+  }
+
+  /**
+   * Implements hook_preprocess_pager().
+   *
+   * El nivel por defecto del título oculto del paginador es h4, y con un solo
+   * h1 por página eso salta niveles (lo detecta heading-order de Lighthouse).
+   *
+   * @param array<string, mixed> $variables
+   *   Variables del template del paginador.
+   */
+  #[Hook('preprocess_pager')]
+  public function preprocessPager(array &$variables): void {
+    $variables['pagination_heading_level'] = 'h2';
   }
 
   /**
@@ -85,9 +116,14 @@ class PronensHooks {
   /**
    * Implements hook_preprocess_menu().
    *
-   * Para el menú principal: marca los enlaces "Rebajas" (clase pro-sale en
-   * las opciones del enlace) y construye la imagen destacada del mega menú
-   * a partir del término de taxonomía enlazado (field_imagen → media).
+   * Para el menú principal, replica el esquema del mega menú del prototipo
+   * a partir de clases en las opciones del enlace (campo "Clases CSS" del
+   * enlace de menú), sin lógica en el template:
+   * - pro-sale: chip amarillo de rebajas (nav y panel).
+   * - pro-col-2: el enlace hijo que abre la segunda columna del panel
+   *   (transversales + REBAJAS); sin ella se reparte a la mitad.
+   * - pro-featured: enlace hijo cuya imagen de término (field_imagen) y
+   *   título forman la columna destacada; sin ella se usa el término padre.
    *
    * @param array<string, mixed> $variables
    *   Variables del template de menú.
@@ -282,7 +318,68 @@ class PronensHooks {
       $card['price'] = $this->currencyFormatter->format($price->getNumber(), $price->getCurrencyCode());
       $variables['#cache']['tags'] = Cache::mergeTags($variables['#cache']['tags'] ?? [], $variation->getCacheTags());
     }
+    $card['opciones'] = $this->buildCardOptions($variables, $product);
     $variables['card'] = $card;
+  }
+
+  /**
+   * Chips de selección rápida de la tarjeta.
+   *
+   * El prototipo pinta muestras de color y tallas, pero el color no existe en
+   * los datos: solo 19 de las 1076 variaciones migradas tienen atributo color.
+   * El eje real cambia según el producto (talla en ropa, medida en cojines,
+   * pieza en los conjuntos de bolsas), así que se coge el atributo que más
+   * variaciones usan y se pintan sus valores en el orden en que el taller
+   * ordenó las variaciones (3, 6, 9, 12, 18 meses; no alfabético).
+   *
+   * Cada chip enlaza a la ficha con ?v=ID, que es como Commerce preselecciona
+   * la variación (ProductVariationStorage::loadFromContext()).
+   *
+   * @param array<string, mixed> $variables
+   *   Variables del template (se anotan cache tags de las variaciones).
+   *
+   * @return array<int, array<string, string>>
+   *   Lista de chips con etiqueta y URL.
+   */
+  protected function buildCardOptions(array &$variables, ProductInterface $product): array {
+    $variations = $product->getVariations();
+    if (count($variations) < 2) {
+      return [];
+    }
+
+    // Eje dominante: el atributo presente en más variaciones.
+    $usos = [];
+    foreach ($variations as $variation) {
+      foreach (array_keys($variation->getAttributeValueIds()) as $campo) {
+        $usos[$campo] = ($usos[$campo] ?? 0) + 1;
+      }
+    }
+    if ($usos === []) {
+      return [];
+    }
+    arsort($usos);
+    $eje = (string) array_key_first($usos);
+
+    $opciones = [];
+    $vistos = [];
+    foreach ($variations as $variation) {
+      $valor = $variation->getAttributeValue($eje);
+      if ($valor === NULL || isset($vistos[$valor->id()])) {
+        continue;
+      }
+      $vistos[$valor->id()] = TRUE;
+      $opciones[] = [
+        'etiqueta' => (string) $valor->label(),
+        'url' => $product->toUrl('canonical', ['query' => ['v' => $variation->id()]])->toString(),
+      ];
+      $variables['#cache']['tags'] = Cache::mergeTags($variables['#cache']['tags'] ?? [], $valor->getCacheTags());
+      // Seis chips ya llenan el ancho de la tarjeta en vista 4.
+      if (count($opciones) === 6) {
+        break;
+      }
+    }
+
+    return count($opciones) > 1 ? $opciones : [];
   }
 
   /**

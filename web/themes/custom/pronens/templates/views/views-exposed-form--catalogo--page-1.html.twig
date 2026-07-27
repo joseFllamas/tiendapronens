@@ -1,0 +1,14 @@
+{#
+/**
+ * @file
+ * Orden expuesto de la categoría: un único select "Ordenar".
+ *
+ * La view lleva expose_sort_order desactivado, así que cada criterio expuesto
+ * trae su propia dirección y aquí solo hay un select. El botón Aplicar se
+ * mantiene para navegación sin JS; con JS, catalogo.js envía al cambiar y lo
+ * oculta.
+ */
+#}
+<div class="pro-sort" data-pro-sort>
+  {{ form }}
+</div>

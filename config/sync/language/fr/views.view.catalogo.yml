@@ -1,0 +1,29 @@
+display:
+  default:
+    display_options:
+      exposed_form:
+        options:
+          exposed_sorts_label: Trier
+      sorts:
+        destacado:
+          expose:
+            label: 'À la une'
+        created:
+          expose:
+            label: Nouveautés
+        precio:
+          expose:
+            label: 'Prix : croissant'
+        precio_1:
+          expose:
+            label: 'Prix : décroissant'
+        nombre:
+          expose:
+            label: 'Nom : A-Z'
+      pager:
+        options:
+          tags:
+            next: 'Suivant →'
+            previous: '← Précédent'
+            first: '« Première'
+            last: 'Dernière »'

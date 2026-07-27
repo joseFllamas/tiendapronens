@@ -128,3 +128,32 @@
   font-weight: 600;
   color: var(--pro-text-2);
 }
+
+/* --- Selección rápida: chips del eje real de variación del producto. --- */
+.pro-card__opts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.pro-card__opt {
+  display: inline-block;
+  border: 1px solid var(--pro-border-2);
+  border-radius: var(--pro-radius-pill);
+  padding: 4px 10px;
+  font-size: 11.5px;
+  font-weight: 700;
+  color: var(--pro-ink-3);
+  white-space: nowrap;
+  transition: border-color 150ms ease, background-color 150ms ease;
+}
+
+.pro-card__opt:hover,
+.pro-card__opt:focus-visible {
+  border-color: var(--pro-ink-2);
+  background: var(--pro-ink-2);
+  color: #fff;
+}

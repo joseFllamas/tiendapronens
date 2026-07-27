@@ -1,0 +1,29 @@
+display:
+  default:
+    display_options:
+      exposed_form:
+        options:
+          exposed_sorts_label: 'Sort by'
+      sorts:
+        destacado:
+          expose:
+            label: Featured
+        created:
+          expose:
+            label: 'New in'
+        precio:
+          expose:
+            label: 'Price: low to high'
+        precio_1:
+          expose:
+            label: 'Price: high to low'
+        nombre:
+          expose:
+            label: 'Name: A-Z'
+      pager:
+        options:
+          tags:
+            next: 'Next →'
+            previous: '← Previous'
+            first: '« First'
+            last: 'Last »'

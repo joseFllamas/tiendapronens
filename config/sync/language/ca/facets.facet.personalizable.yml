@@ -1,0 +1,5 @@
+name: Personalitzable
+processor_configs:
+  boolean_item:
+    settings:
+      on_value: 'Només personalitzables'

@@ -83,6 +83,23 @@ card:
     - core/drupal
     - core/once
 
+breadcrumb:
+  version: VERSION
+  css:
+    component:
+      css/breadcrumb.css: {}
+
+catalogo:
+  version: VERSION
+  css:
+    component:
+      css/catalogo.css: {}
+  js:
+    js/catalogo.js: {}
+  dependencies:
+    - core/drupal
+    - core/once
+
 historia:
   version: VERSION
   css:

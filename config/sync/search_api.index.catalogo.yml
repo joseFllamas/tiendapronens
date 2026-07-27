@@ -1,0 +1,165 @@
+uuid: 97b5027c-0ffd-431a-9c45-7194a0df80c0
+langcode: es
+status: true
+dependencies:
+  config:
+    - field.storage.commerce_product.field_destacado
+    - field.storage.commerce_product.field_personalizable
+    - field.storage.commerce_product.field_tipo_de_producto
+    - field.storage.commerce_product_variation.attribute_medida
+    - field.storage.commerce_product_variation.attribute_pieza
+    - field.storage.commerce_product_variation.attribute_talla
+    - search_api.server.pronens
+  module:
+    - commerce_product
+id: catalogo
+name: Catálogo
+description: 'Productos del catálogo para la pantalla de categoría y el buscador.'
+read_only: false
+field_settings:
+  created:
+    label: 'Fecha de creación'
+    datasource_id: 'entity:commerce_product'
+    property_path: created
+    type: date
+    dependencies:
+      module:
+        - commerce_product
+  destacado:
+    label: Destacado
+    datasource_id: 'entity:commerce_product'
+    property_path: field_destacado
+    type: boolean
+    dependencies:
+      config:
+        - field.storage.commerce_product.field_destacado
+  medida:
+    label: Medida
+    datasource_id: 'entity:commerce_product'
+    property_path: 'variations:entity:attribute_medida:entity:name'
+    type: string
+    dependencies:
+      config:
+        - field.storage.commerce_product_variation.attribute_medida
+      module:
+        - commerce_product
+  nombre:
+    label: 'Nombre (orden)'
+    datasource_id: 'entity:commerce_product'
+    property_path: title
+    type: string
+    dependencies:
+      module:
+        - commerce_product
+  personalizable:
+    label: 'Admite bordado'
+    datasource_id: 'entity:commerce_product'
+    property_path: field_personalizable
+    type: boolean
+    dependencies:
+      config:
+        - field.storage.commerce_product.field_personalizable
+  pieza:
+    label: Pieza
+    datasource_id: 'entity:commerce_product'
+    property_path: 'variations:entity:attribute_pieza:entity:name'
+    type: string
+    dependencies:
+      config:
+        - field.storage.commerce_product_variation.attribute_pieza
+      module:
+        - commerce_product
+  precio:
+    label: 'Precio (desde)'
+    property_path: aggregated_field
+    type: decimal
+    configuration:
+      type: min
+      fields:
+        - 'entity:commerce_product/variations:entity:price:number'
+  precios:
+    label: 'Precios de las variaciones'
+    datasource_id: 'entity:commerce_product'
+    property_path: 'variations:entity:price:number'
+    type: decimal
+    dependencies:
+      module:
+        - commerce_product
+  status:
+    label: Publicado
+    datasource_id: 'entity:commerce_product'
+    property_path: status
+    type: boolean
+    dependencies:
+      module:
+        - commerce_product
+  talla:
+    label: Talla
+    datasource_id: 'entity:commerce_product'
+    property_path: 'variations:entity:attribute_talla:entity:name'
+    type: string
+    dependencies:
+      config:
+        - field.storage.commerce_product_variation.attribute_talla
+      module:
+        - commerce_product
+  tipo:
+    label: 'Tipo de producto'
+    datasource_id: 'entity:commerce_product'
+    property_path: field_tipo_de_producto
+    type: integer
+    dependencies:
+      config:
+        - field.storage.commerce_product.field_tipo_de_producto
+  titulo:
+    label: Título
+    datasource_id: 'entity:commerce_product'
+    property_path: title
+    type: text
+    boost: 3.0
+    dependencies:
+      module:
+        - commerce_product
+datasource_settings:
+  'entity:commerce_product':
+    bundles:
+      default: false
+      selected:
+        - default
+    languages:
+      default: true
+      selected: {  }
+processor_settings:
+  add_url: {  }
+  aggregated_field: {  }
+  custom_value: {  }
+  entity_status: {  }
+  entity_type: {  }
+  hierarchy:
+    fields:
+      tipo: taxonomy_term-parent
+  ignorecase:
+    all_fields: false
+    fields:
+      - titulo
+  language_with_fallback: {  }
+  rendered_item: {  }
+  tokenizer:
+    all_fields: false
+    spaces: ''
+    ignored: ._-
+    overlap_cjk: 1
+    minimum_word_size: '3'
+  transliteration:
+    all_fields: false
+    fields:
+      - titulo
+tracker_settings:
+  default:
+    indexing_order: fifo
+options:
+  cron_limit: 50
+  delete_on_fail: true
+  index_directly: true
+  track_changes_in_references: true
+server: pronens

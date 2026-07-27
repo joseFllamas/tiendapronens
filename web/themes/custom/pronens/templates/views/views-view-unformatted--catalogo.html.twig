@@ -1,0 +1,15 @@
+{#
+/**
+ * @file
+ * Grid de tarjetas de la categoría.
+ *
+ * Las columnas las decide el atributo data-pro-cols, que pone el JS del
+ * toggle Vista 2/4 leyendo localStorage. El valor por defecto (4) va en el
+ * markup para que no haya salto de layout antes de que corra el JS.
+ */
+#}
+<div class="pro-grid" data-pro-grid data-pro-cols="4">
+  {% for row in rows %}
+    <div class="pro-grid__cell">{{ row.content }}</div>
+  {% endfor %}
+</div>

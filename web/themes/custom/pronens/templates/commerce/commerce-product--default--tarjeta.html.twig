@@ -3,9 +3,10 @@
  * @file
  * Tarjeta de producto para listados (best sellers, categoría).
  *
- * card (image, url, title, price, personalizable) viene de
- * PronensHooks::preprocessCommerceProduct(). El hover-cycle de galería y la
- * selección rápida de color/talla llegan en la fase de categoría.
+ * card (image, url, title, price, personalizable, cycle, opciones) viene de
+ * PronensHooks::preprocessCommerceProduct(). Los chips de opciones son el eje
+ * real de variación del producto (talla, medida o pieza) y llevan a la ficha
+ * con la variación ya elegida.
  */
 #}
 {{ attach_library('pronens/card') }}
@@ -24,6 +25,13 @@
     </div>
     {% if card.personalizable %}
       <div class="pro-card__note">{{ 'Embroidered in 72h'|t }}</div>
+    {% endif %}
+    {% if card.opciones %}
+      <ul class="pro-card__opts">
+        {% for opcion in card.opciones %}
+          <li><a class="pro-card__opt" href="{{ opcion.url }}">{{ opcion.etiqueta }}</a></li>
+        {% endfor %}
+      </ul>
     {% endif %}
   </div>
 </article>

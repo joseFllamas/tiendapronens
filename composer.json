@@ -26,12 +26,14 @@
         "drupal/core-project-message": "^11.4",
         "drupal/core-recipe-unpack": "^11.4",
         "drupal/core-recommended": "^11.4",
+        "drupal/facets": "^3.0",
         "drupal/metatag": "^2.2",
         "drupal/migrate_plus": "^6.0",
         "drupal/migrate_tools": "^6.0",
         "drupal/paragraphs": "^1.21",
         "drupal/pathauto": "^1.15",
         "drupal/recipe_tracker": "^1",
+        "drupal/search_api": "^1.41",
         "drush/drush": "^13.7"
     },
     "conflict": {

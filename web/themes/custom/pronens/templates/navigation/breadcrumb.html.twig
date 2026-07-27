@@ -1,25 +1,28 @@
 {#
 /**
  * @file
- * Theme override for a breadcrumb trail.
+ * Miga de pan: separadores "/" y último tramo sin enlace, como el prototipo.
  *
- * Available variables:
- * - breadcrumb: Breadcrumb trail items.
+ * Variables:
+ * - breadcrumb: tramos de la miga. El de la página actual lo añade
+ *   CatalogoHooks::preprocessBreadcrumb() en la pantalla de categoría (core
+ *   solo devuelve los ancestros).
  */
 #}
 {% if breadcrumb %}
-  <nav class="breadcrumb" aria-labelledby="system-breadcrumb">
+  {{ attach_library('pronens/breadcrumb') }}
+  <nav class="pro-breadcrumb" aria-labelledby="system-breadcrumb">
     <h2 id="system-breadcrumb" class="visually-hidden">{{ 'Breadcrumb'|t }}</h2>
-    <ol>
-    {% for item in breadcrumb %}
-      <li>
-        {% if item.url %}
-          <a href="{{ item.url }}">{{ item.text }}</a>
-        {% else %}
-          {{ item.text }}
-        {% endif %}
-      </li>
-    {% endfor %}
+    <ol class="pro-breadcrumb__list pro-container">
+      {% for item in breadcrumb %}
+        <li class="pro-breadcrumb__item">
+          {% if item.url %}
+            <a class="pro-breadcrumb__link" href="{{ item.url }}">{{ item.text }}</a>
+          {% else %}
+            <span class="pro-breadcrumb__current" aria-current="page">{{ item.text }}</span>
+          {% endif %}
+        </li>
+      {% endfor %}
     </ol>
   </nav>
 {% endif %}

@@ -1,0 +1,466 @@
+/**
+ * @file
+ * Pantalla de categoría: cabecera, barra de filtros, grid y paginador.
+ */
+
+/* --- Cabecera. --- */
+.pro-catalogo__head {
+  margin-bottom: 28px;
+}
+
+.pro-catalogo__titles {
+  display: flex;
+  align-items: baseline;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-bottom: 10px;
+}
+
+.pro-catalogo__title {
+  font-family: var(--pro-font-display);
+  font-weight: 700;
+  font-size: 38px;
+  line-height: 1.1;
+  letter-spacing: -0.01em;
+  margin: 0;
+  color: var(--pro-ink-2);
+}
+
+.pro-catalogo__count {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--pro-text-2);
+}
+
+.pro-catalogo__intro {
+  max-width: 640px;
+  color: var(--pro-text-2);
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+.pro-catalogo__intro p {
+  margin: 0;
+}
+
+.pro-catalogo__empty {
+  padding: 64px 0;
+  text-align: center;
+  color: var(--pro-text-2);
+}
+
+/* --- Barra de filtros. --- */
+.pro-filters {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  border-top: 1px solid var(--pro-border);
+  border-bottom: 1px solid var(--pro-border);
+  padding: 14px 0;
+  margin-bottom: 32px;
+}
+
+.pro-filters__label {
+  font-size: 13px;
+  font-weight: 800;
+  color: var(--pro-ink-2);
+  margin-right: 4px;
+}
+
+/* El panel se ancla al chip, así que el contenedor es el containing block. */
+.pro-filters__facet {
+  position: relative;
+}
+
+.pro-filters__pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: none;
+  border: 1px solid var(--pro-border-2);
+  border-radius: var(--pro-radius-pill);
+  padding: 8px 14px;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--pro-ink-3);
+  cursor: pointer;
+  transition: border-color 150ms ease;
+}
+
+.pro-filters__pill:hover,
+.pro-filters__pill[aria-expanded='true'] {
+  border-color: var(--pro-teal);
+}
+
+/* Con filtros puestos el chip se marca, como el chip naranja del prototipo. */
+.pro-filters__pill.is-active {
+  border-color: var(--pro-orange);
+  background: var(--pro-orange-bg);
+  color: var(--pro-orange-ink);
+}
+
+.pro-filters__badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 17px;
+  height: 17px;
+  border-radius: var(--pro-radius-pill);
+  background: var(--pro-orange);
+  color: #fff;
+  font-size: 10.5px;
+  font-weight: 800;
+}
+
+.pro-filters__chevron {
+  font-size: 10px;
+}
+
+.pro-filters__panel {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  z-index: 20;
+  min-width: 220px;
+  max-height: 320px;
+  overflow-y: auto;
+  background: #fff;
+  border: 1px solid var(--pro-border);
+  box-shadow: var(--pro-shadow-panel);
+  padding: 10px;
+}
+
+.pro-filters__panel[hidden] {
+  display: none;
+}
+
+.pro-filters__reset {
+  font-size: 12.5px;
+  font-weight: 700;
+  color: var(--pro-text-2);
+  text-decoration: underline;
+}
+
+.pro-filters__reset:hover {
+  color: var(--pro-ink);
+}
+
+.pro-filters__right {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+/* --- Valores de faceta dentro del panel. --- */
+.pro-filters__panel .facet-item {
+  list-style: none;
+}
+
+.pro-filters__panel ul {
+  margin: 0;
+  padding: 0;
+}
+
+.pro-filters__panel a {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 7px 8px;
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--pro-ink-3);
+  border-radius: 4px;
+}
+
+.pro-filters__panel a:hover {
+  background: var(--pro-cream);
+  color: var(--pro-ink);
+}
+
+.pro-facet__box {
+  flex: 0 0 auto;
+  width: 15px;
+  height: 15px;
+  border: 1px solid var(--pro-border-2);
+  border-radius: 3px;
+  background: #fff;
+}
+
+.pro-filters__panel .is-active .pro-facet__box,
+.pro-filters__panel a.is-active .pro-facet__box {
+  border-color: var(--pro-teal);
+  background: var(--pro-teal);
+  /* Check en CSS: sin icono extra que cargar. */
+  background-image: linear-gradient(45deg, transparent 46%, #fff 46%, #fff 54%, transparent 54%),
+    linear-gradient(-45deg, transparent 60%, #fff 60%, #fff 68%, transparent 68%);
+  background-size: 9px 9px, 9px 9px;
+  background-position: 4px 2px, 1px 4px;
+  background-repeat: no-repeat;
+}
+
+.pro-facet__value {
+  flex: 1 1 auto;
+}
+
+.pro-facet__count {
+  flex: 0 0 auto;
+  font-size: 11.5px;
+  font-weight: 700;
+  color: var(--pro-text-2);
+}
+
+/* Facets marca el enlace activo con esta clase (js-facet-deactivate). */
+.pro-filters__panel .facet-item__status {
+  display: none;
+}
+
+/* Faceta de una sola opción: chip directo, sin desplegable (el "Solo
+   personalizables" naranja del prototipo). */
+.pro-filters__chip {
+  border: 1px solid var(--pro-orange);
+  background: var(--pro-orange-bg);
+  border-radius: var(--pro-radius-pill);
+  transition: border-color 150ms ease;
+}
+
+.pro-filters__chip:hover {
+  border-color: var(--pro-orange-hover);
+}
+
+.pro-filters__chip ul,
+.pro-filters__chip li {
+  margin: 0;
+  padding: 0;
+  /* El widget de enlaces pinta una lista: aquí solo hay un valor y la viñeta
+     sobra. */
+  list-style: none;
+}
+
+.pro-filters__chip a {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--pro-orange-ink);
+}
+
+/* El lápiz del prototipo, sin cargar ningún icono. */
+.pro-filters__chip a::before {
+  content: '✎';
+  font-size: 13px;
+}
+
+.pro-filters__chip.is-active {
+  background: var(--pro-orange);
+  border-color: var(--pro-orange);
+}
+
+.pro-filters__chip.is-active a {
+  color: #fff;
+}
+
+.pro-filters__chip .pro-facet__count,
+.pro-filters__chip .pro-facet__box {
+  display: none;
+}
+
+/* --- Toggle Vista 2/4. --- */
+.pro-view-toggle {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--pro-text-2);
+}
+
+/* 24x24 mínimo: por debajo, target-size de Lighthouse lo marca como fallo
+   de accesibilidad en móvil. */
+.pro-view-toggle__btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 24px;
+  min-height: 24px;
+  background: none;
+  border: 0;
+  padding: 0 4px;
+  font: inherit;
+  font-weight: 600;
+  color: var(--pro-text-2);
+  cursor: pointer;
+}
+
+.pro-view-toggle__btn[aria-pressed='true'] {
+  font-weight: 800;
+  color: var(--pro-ink-2);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+/* --- Orden expuesto. --- */
+.pro-sort .form-item {
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.pro-sort label {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--pro-text-2);
+}
+
+.pro-sort select {
+  width: auto;
+  max-width: 100%;
+  border: 0;
+  background: none;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--pro-text-2);
+  cursor: pointer;
+  padding: 2px 0;
+}
+
+.pro-sort .form-actions {
+  margin: 0;
+}
+
+/* Con JS el select envía solo; sin JS hace falta el botón. */
+.pro-sort.is-auto .form-actions {
+  display: none;
+}
+
+/* --- Grid. --- */
+.pro-grid {
+  display: grid;
+  row-gap: 36px;
+}
+
+.pro-grid[data-pro-cols='4'] {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  column-gap: 16px;
+}
+
+/* Vista 2: menos separación porque las fotos son mucho más grandes. */
+.pro-grid[data-pro-cols='2'] {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  column-gap: 4px;
+}
+
+/* --- Paginador circular. --- */
+.pro-catalogo .pager__items {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+  margin: 48px 0 0;
+  padding: 0;
+  list-style: none;
+  font-family: var(--pro-font-display);
+  font-weight: 700;
+  font-size: 14px;
+}
+
+.pro-catalogo .pager__item {
+  margin: 0;
+}
+
+.pro-catalogo .pager__item a,
+.pro-catalogo .pager__item.is-active span {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  border: 1px solid var(--pro-border-2);
+  color: var(--pro-ink-3);
+  transition: border-color 150ms ease;
+}
+
+.pro-catalogo .pager__item a:hover {
+  border-color: var(--pro-teal);
+  color: var(--pro-ink);
+}
+
+.pro-catalogo .pager__item.is-active span,
+.pro-catalogo .pager__item.is-active a {
+  background: var(--pro-teal);
+  border-color: var(--pro-teal);
+  color: #fff;
+}
+
+/* Anterior / Siguiente son pastillas, no círculos. */
+.pro-catalogo .pager__item--previous a,
+.pro-catalogo .pager__item--next a,
+.pro-catalogo .pager__item--first a,
+.pro-catalogo .pager__item--last a {
+  width: auto;
+  border-radius: var(--pro-radius-pill);
+  padding: 0 16px;
+}
+
+.pro-catalogo .pager__item--ellipsis {
+  display: flex;
+  align-items: center;
+  color: var(--pro-text-2);
+}
+
+/* --- Responsive: la vista 4 baja a 2 y la 2 a 1, como el handoff. --- */
+@media (max-width: 1024px) {
+  .pro-catalogo__title {
+    font-size: 30px;
+  }
+
+  .pro-grid[data-pro-cols='4'] {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 768px) {
+  .pro-grid[data-pro-cols='4'] {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .pro-grid[data-pro-cols='2'] {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .pro-filters__right {
+    margin-left: 0;
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .pro-catalogo__title {
+    font-size: 26px;
+  }
+}
+
+@media (max-width: 480px) {
+  .pro-filters {
+    gap: 8px;
+  }
+
+  .pro-filters__pill {
+    padding: 7px 12px;
+    font-size: 12.5px;
+  }
+
+  /* En móvil el panel se despliega a lo ancho del contenedor. */
+  .pro-filters__panel {
+    position: fixed;
+    left: var(--pro-container-pad);
+    right: var(--pro-container-pad);
+    min-width: 0;
+  }
+}

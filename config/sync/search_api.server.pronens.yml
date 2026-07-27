@@ -1,0 +1,17 @@
+uuid: d41040f4-8721-485e-b0ea-dd80d2a2c528
+langcode: es
+status: true
+dependencies:
+  module:
+    - search_api_db
+id: pronens
+name: 'Pronens (base de datos)'
+description: 'Backend SQL para el catálogo. Suficiente para 370 productos.'
+backend: search_api_db
+backend_config:
+  database: 'default:default'
+  min_chars: 3
+  matching: words
+  autocomplete:
+    suggest_suffix: true
+    suggest_words: true

@@ -7,6 +7,7 @@
   /* Color. */
   --pro-ink: #10222b;
   --pro-ink-2: #173039;
+  --pro-ink-3: #1e3a42;
   --pro-ink-dark: #0e1b20;
   --pro-bg: #fcfbf9;
   --pro-cream: #f3eee6;
@@ -23,6 +24,10 @@
   --pro-teal-ink: #1e6e77;
   --pro-orange: #f4854e;
   --pro-orange-hover: #e06f37;
+  --pro-orange-bg: #fdefe6;
+  /* Naranja oscurecido para TEXTO sobre --pro-orange-bg: el #e06f37 del
+     prototipo se queda en 2,9:1 y el chip de filtro es texto de 13px. */
+  --pro-orange-ink: #a94d1c;
   --pro-yellow: #f9e547;
   --pro-text-2: #5b7078;
   --pro-mute: #8aa0a6;

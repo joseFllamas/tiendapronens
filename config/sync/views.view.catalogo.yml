@@ -1,0 +1,252 @@
+uuid: 9d5327e5-9c6c-4b7b-b827-8299b1919401
+langcode: es
+status: true
+dependencies:
+  config:
+    - search_api.index.catalogo
+    - taxonomy.vocabulary.tipo_de_producto
+  module:
+    - search_api
+id: catalogo
+label: Catálogo
+module: views
+description: 'Listado de productos por categoría. Sustituye a la página de término de taxonomía para los términos de tipo_de_producto.'
+tag: pronens
+base_table: search_api_index_catalogo
+base_field: search_api_id
+display:
+  default:
+    id: default
+    display_title: Master
+    display_plugin: default
+    position: 0
+    display_options:
+      title: ''
+      fields: {  }
+      pager:
+        type: full
+        options:
+          offset: 0
+          items_per_page: 24
+          total_pages: null
+          id: 0
+          tags:
+            next: 'Siguiente →'
+            previous: '← Anterior'
+            first: '« Primera'
+            last: 'Última »'
+          expose:
+            items_per_page: false
+            items_per_page_label: 'Elementos por página'
+            items_per_page_options: '12, 24, 48'
+            items_per_page_options_all: false
+            items_per_page_options_all_label: '- Todos -'
+            offset: false
+            offset_label: Desplazamiento
+          quantity: 5
+      exposed_form:
+        type: basic
+        options:
+          submit_button: Aplicar
+          reset_button: false
+          reset_button_label: Restablecer
+          exposed_sorts_label: Ordenar
+          expose_sort_order: false
+          sort_asc_label: Ascendente
+          sort_desc_label: Descendente
+      access:
+        type: none
+        options: {  }
+      cache:
+        type: search_api_tag
+        options: {  }
+      empty:
+        area_text_custom:
+          id: area_text_custom
+          table: views
+          field: area_text_custom
+          relationship: none
+          group_type: group
+          admin_label: ''
+          plugin_id: text_custom
+          empty: true
+          content: 'No hay productos que coincidan con los filtros seleccionados.'
+          tokenize: false
+      sorts:
+        destacado:
+          id: destacado
+          table: search_api_index_catalogo
+          field: destacado
+          relationship: none
+          group_type: group
+          admin_label: ''
+          plugin_id: search_api
+          order: DESC
+          expose:
+            label: Destacados
+            field_identifier: destacados
+          exposed: true
+        created:
+          id: created
+          table: search_api_index_catalogo
+          field: created
+          relationship: none
+          group_type: group
+          admin_label: ''
+          plugin_id: search_api
+          order: DESC
+          expose:
+            label: Novedades
+            field_identifier: novedades
+          exposed: true
+          granularity: second
+        precio:
+          id: precio
+          table: search_api_index_catalogo
+          field: precio
+          relationship: none
+          group_type: group
+          admin_label: ''
+          plugin_id: search_api
+          order: ASC
+          expose:
+            label: 'Precio: de menor a mayor'
+            field_identifier: precio_asc
+          exposed: true
+        precio_1:
+          id: precio_1
+          table: search_api_index_catalogo
+          field: precio
+          relationship: none
+          group_type: group
+          admin_label: ''
+          plugin_id: search_api
+          order: DESC
+          expose:
+            label: 'Precio: de mayor a menor'
+            field_identifier: precio_desc
+          exposed: true
+        nombre:
+          id: nombre
+          table: search_api_index_catalogo
+          field: nombre
+          relationship: none
+          group_type: group
+          admin_label: ''
+          plugin_id: search_api
+          order: ASC
+          expose:
+            label: 'Nombre: A-Z'
+            field_identifier: nombre_az
+          exposed: true
+        created_1:
+          id: created_1
+          table: search_api_index_catalogo
+          field: created
+          relationship: none
+          group_type: group
+          admin_label: 'Desempate estable'
+          plugin_id: search_api
+          order: DESC
+          exposed: false
+          granularity: second
+      arguments:
+        tipo:
+          id: tipo
+          table: search_api_index_catalogo
+          field: tipo
+          relationship: none
+          group_type: group
+          admin_label: ''
+          plugin_id: search_api_term
+          default_action: 'not found'
+          exception:
+            value: all
+            title_enable: false
+            title: All
+          title_enable: true
+          title: '{{ arguments.tipo }}'
+          default_argument_type: fixed
+          default_argument_options:
+            argument: ''
+          summary_options:
+            base_path: ''
+            count: true
+            override: false
+            items_per_page: 25
+          summary:
+            sort_order: asc
+            number_of_records: 0
+            format: default_summary
+          specify_validation: true
+          validate:
+            type: 'entity:taxonomy_term'
+            fail: 'not found'
+          validate_options:
+            bundles:
+              tipo_de_producto: tipo_de_producto
+            access: false
+            operation: view
+            multiple: 0
+          break_phrase: false
+      filters: {  }
+      style:
+        type: default
+        options:
+          grouping: {  }
+          row_class: pro-grid__cell
+          default_row_class: false
+          uses_fields: false
+      row:
+        type: search_api
+        options:
+          view_modes:
+            'entity:commerce_product':
+              ':default': tarjeta
+              default: tarjeta
+      query:
+        type: search_api_query
+        options:
+          bypass_access: false
+          skip_access: false
+          preserve_facet_query_args: false
+      relationships: {  }
+      css_class: pro-catalogo
+      use_ajax: false
+      header: {  }
+      footer: {  }
+      display_extenders: {  }
+    cache_metadata:
+      max-age: -1
+      contexts:
+        - 'languages:language_interface'
+        - url
+        - url.query_args
+        - 'url.query_args:sort_by'
+      tags:
+        - 'config:search_api.index.catalogo'
+        - 'search_api_list:catalogo'
+  page_1:
+    id: page_1
+    display_title: 'Página de categoría'
+    display_plugin: page
+    position: 1
+    display_options:
+      display_extenders: {  }
+      path: taxonomy/term/%
+    cache_metadata:
+      max-age: -1
+      contexts:
+        - 'facets_filter:f'
+        - 'languages:language_interface'
+        - url
+        - url.query_args
+        - 'url.query_args:sort_by'
+      tags:
+        - 'config:facets.facet.medida'
+        - 'config:facets.facet.personalizable'
+        - 'config:facets.facet.pieza'
+        - 'config:facets.facet.precio'
+        - 'config:facets.facet.talla'
+        - 'config:search_api.index.catalogo'
+        - 'search_api_list:catalogo'

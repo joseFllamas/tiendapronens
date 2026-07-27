@@ -1,0 +1,64 @@
+uuid: d348bdd6-c4d0-4d83-b060-9270ca55eb29
+langcode: es
+status: true
+dependencies:
+  config:
+    - search_api.index.catalogo
+    - views.view.catalogo
+  module:
+    - search_api
+id: precio
+name: Precio
+weight: 4
+min_count: 1
+missing: false
+missing_label: others
+url_alias: precio
+facet_source_id: 'search_api:views_page__catalogo__page_1'
+field_identifier: precios
+query_operator: or
+hard_limit: 0
+exclude: false
+use_hierarchy: false
+keep_hierarchy_parents_active: false
+hierarchy:
+  type: taxonomy
+  config: {  }
+expand_hierarchy: false
+enable_parent_when_child_gets_disabled: true
+widget:
+  type: links
+  config:
+    show_numbers: false
+    soft_limit: 0
+    soft_limit_settings:
+      show_less_label: 'Ver menos'
+      show_more_label: 'Ver más'
+empty_behavior:
+  behavior: none
+only_visible_when_facet_source_is_visible: true
+show_only_one_result: false
+show_title: false
+processor_configs:
+  granularity_item:
+    processor_id: granularity_item
+    weights:
+      build: 10
+    settings:
+      granularity: 10
+      min_value: 0
+      max_value: null
+      include_lower: true
+      include_upper: false
+      include_edges: true
+  hide_1_result_facet:
+    processor_id: hide_1_result_facet
+    weights:
+      build: 45
+    settings: {  }
+  url_processor_handler:
+    processor_id: url_processor_handler
+    weights:
+      pre_query: -10
+      build: -10
+    settings: {  }
