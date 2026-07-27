@@ -275,6 +275,7 @@ class PronensHooks {
     $media = $this->mediaFromField($product, 'field_imagen_principal');
     if ($media !== NULL) {
       $card['image'] = $this->buildStyledImage($media, 'pronens_card');
+      $card['cycle'] = $this->buildCardCycle($variables, $product, $media);
     }
     $variation = $product->getDefaultVariation();
     if ($variation !== NULL && ($price = $variation->getPrice()) !== NULL) {
@@ -300,6 +301,64 @@ class PronensHooks {
     if (isset($data['preview']['#access']) && $data['preview']['#access'] === FALSE) {
       unset($data['preview']);
     }
+  }
+
+  /**
+   * URLs para el hover-cycle de la tarjeta (JSON): principal + galería.
+   *
+   * Sin <img> extra en el markup: el JS pinta la siguiente imagen como
+   * background solo al hacer hover, así no hay fetch anticipado. Si el
+   * producto solo tiene una imagen, se duplica para mantener el efecto.
+   *
+   * @param array<string, mixed> $variables
+   *   Variables del template (se anotan cache tags de la galería).
+   */
+  protected function buildCardCycle(array &$variables, ProductInterface $product, MediaInterface $main): string {
+    $urls = [];
+    $medias = [$main];
+    if ($product->hasField('field_galeria')) {
+      $galeria = $product->get('field_galeria');
+      if ($galeria instanceof EntityReferenceFieldItemListInterface) {
+        // La principal + hasta 4 de la galería: más segmentos no se leen.
+        $medias = array_merge($medias, array_slice($galeria->referencedEntities(), 0, 4));
+      }
+    }
+    foreach ($medias as $media) {
+      if (!$media instanceof MediaInterface) {
+        continue;
+      }
+      $url = $this->styledImageUrl($media, 'pronens_card');
+      if ($url === NULL) {
+        continue;
+      }
+      $urls[] = $url;
+      $variables['#cache']['tags'] = Cache::mergeTags($variables['#cache']['tags'] ?? [], $media->getCacheTags());
+    }
+    if (count($urls) === 1) {
+      $urls[] = $urls[0];
+    }
+    return (string) json_encode($urls);
+  }
+
+  /**
+   * URL de la imagen de un media pasada por un estilo.
+   */
+  protected function styledImageUrl(MediaInterface $media, string $style_name): ?string {
+    if (!$media->hasField('field_media_image')) {
+      return NULL;
+    }
+    $field = $media->get('field_media_image');
+    $files = $field instanceof EntityReferenceFieldItemListInterface ? $field->referencedEntities() : [];
+    $file = reset($files);
+    if (!$file instanceof FileInterface) {
+      return NULL;
+    }
+    $uri = $file->getFileUri();
+    $style = $this->entityTypeManager->getStorage('image_style')->load($style_name);
+    if (!$style instanceof \Drupal\image\ImageStyleInterface || $uri === NULL) {
+      return NULL;
+    }
+    return $style->buildUrl($uri);
   }
 
   /**

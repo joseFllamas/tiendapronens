@@ -18,6 +18,57 @@
   display: block;
 }
 
+/* Hover-cycle: imagen superpuesta (background pintado por card.js). */
+.pro-card__cycle {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+}
+
+/* Barra de progreso segmentada del cycle. */
+.pro-card__dots {
+  position: absolute;
+  left: 12px;
+  right: 12px;
+  bottom: 10px;
+  display: flex;
+  gap: 4px;
+  pointer-events: none;
+}
+
+.pro-card__dot {
+  flex: 1;
+  height: 2.5px;
+  background: rgba(255, 255, 255, 0.45);
+  overflow: hidden;
+}
+
+.pro-card__dot-fill {
+  display: block;
+  width: 0;
+  height: 100%;
+  background: #fff;
+}
+
+.pro-card__dot.is-done .pro-card__dot-fill {
+  width: 100%;
+}
+
+.pro-card__dot.is-active .pro-card__dot-fill {
+  animation: pro-fillbar 1.4s linear forwards;
+}
+
+@keyframes pro-fillbar {
+  from {
+    width: 0;
+  }
+
+  to {
+    width: 100%;
+  }
+}
+
 .pro-card__badge {
   position: absolute;
   top: 12px;

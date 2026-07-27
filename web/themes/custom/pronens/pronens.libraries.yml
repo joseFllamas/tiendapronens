@@ -77,6 +77,11 @@ card:
   css:
     component:
       css/card.css: {}
+  js:
+    js/card.js: {}
+  dependencies:
+    - core/drupal
+    - core/once
 
 historia:
   version: VERSION

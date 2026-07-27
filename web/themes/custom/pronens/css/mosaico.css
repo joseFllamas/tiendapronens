@@ -62,6 +62,18 @@
   display: block;
 }
 
+/* Zoom suave de la foto al hacer hover en el tile. */
+@media (prefers-reduced-motion: no-preference) {
+  .pro-tile__media img {
+    transition: transform 400ms ease;
+  }
+
+  .pro-tile:hover .pro-tile__media img,
+  .pro-tile:focus-visible .pro-tile__media img {
+    transform: scale(1.05);
+  }
+}
+
 .pro-tile__media {
   position: absolute;
   inset: 0;

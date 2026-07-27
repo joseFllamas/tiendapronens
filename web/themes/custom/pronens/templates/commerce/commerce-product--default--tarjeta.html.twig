@@ -10,7 +10,7 @@
 #}
 {{ attach_library('pronens/card') }}
 <article{{ attributes.addClass('pro-card') }}>
-  <a class="pro-card__media" href="{{ card.url }}">
+  <a class="pro-card__media" href="{{ card.url }}"{% if card.cycle %} data-pro-cycle="{{ card.cycle }}"{% endif %}>
     {% if card.image %}
       {{ card.image }}
     {% endif %}
