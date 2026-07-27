@@ -309,14 +309,14 @@ class PronensHooks {
    * Sin <img> extra en el markup: el JS pinta la siguiente imagen como
    * background solo al hacer hover, así no hay fetch anticipado.
    *
-   * La migración del D7 dejó la misma foto guardada dos veces con nombres
-   * distintos (patrón "foto.jpg" / "foto_0.jpg") en 345 de los 368
-   * productos, así que la imagen principal suele repetirse como primera
-   * de la galería. Se descartan las repetidas comparando peso y
-   * dimensiones del fichero: bytes idénticos siempre coinciden en ambos, y
-   * que dos fotos distintas del mismo producto coincidan en los tres
-   * valores es descartable. Con una sola imagen única (206 productos) se
-   * devuelve una sola URL y el JS hace el slide sin cargar nada más.
+   * Se descartan las fotos repetidas comparando peso y dimensiones del
+   * fichero: bytes idénticos siempre coinciden en ambos, y que dos fotos
+   * distintas del mismo producto coincidan en los tres valores es
+   * descartable. Los duplicados que dejó la migración del D7 ya se
+   * limpiaron en los datos, así que esto es solo red de seguridad para
+   * futuras subidas del cliente. Con una sola imagen única (205 productos
+   * del catálogo) se devuelve una sola URL y el JS hace el slide sin
+   * cargar nada más.
    *
    * @param array<string, mixed> $variables
    *   Variables del template (se anotan cache tags de la galería).

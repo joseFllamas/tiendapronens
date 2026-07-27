@@ -35,6 +35,17 @@ Donde este documento y la realidad del repo discrepan, manda esta lista (decidid
   el bordado (misma regla que el envío), verificado y documentado.
 - **Copys a corregir en el tema**: "Bordado incluido" (home) y "Bordado gratis" (tarjetas) son
   falsas: el bordado se cobra +5 €. Usar "Bordado en 72 h" o equivalente.
+- **Medias deduplicados (2026-07-27)**: la migración guardó cada foto dos veces con nombres
+  distintos (`foto.jpg` / `foto_0.jpg`, bytes idénticos), así que la imagen principal se repetía
+  como primera de la galería en 344 productos. Se dedujeron los 467 grupos idénticos: referencias
+  repuntadas al media canónico (galerías, `field_imagenes` de variaciones, términos), **2325 → 1008
+  medias**, 484,8 MB liberados y los mapas `migrate_map_pronens_media_imagen`/`_file` apuntando al
+  supervivente (un re-import ya no recrearía copias). **205 productos solo tienen una foto real**:
+  la tarjeta hace el slide con esa misma imagen. Copia previa: snapshot `pre-dedupe-medias` y
+  `/var/www/_backups_pronens/medias-duplicados-pre-dedupe.tar.gz`.
+- **Ordenación por `created`, no por `changed`**: el re-guardado masivo del dedupe aplanó los
+  `changed` de los productos. `created` conserva las fechas reales del D7 (2014–2026), así que es
+  el campo para "novedades" y para la view de destacados.
 - Los campos `field_posicion_bordado` y el modo inicial A-Z existen en el modelo pero NO se exponen.
 - Las estrellas de valoración de la ficha requieren un módulo de reseñas aún no elegido (el D7
   tenía fivestar sin migrar): decidir antes de maquetar esa zona.
