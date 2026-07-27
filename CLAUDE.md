@@ -97,6 +97,23 @@ Donde este documento y la realidad del repo discrepan, manda esta lista (decidid
   desarrollo ("Máximo real observado en el Drupal 7: 47 caracteres") que se veían en la tienda. El
   tema las oculta en el formulario y pone un placeholder con el límite real; conviene limpiarlas en
   la config del módulo cuando se pueda tocar.
+- **Carrito flyout sin `commerce_cart_flyout` (2026-07-27)**: el módulo es compatible con D11 y está
+  cubierto por seguridad, pero depende de **jQuery, Backbone y Underscore** (los dos últimos marcados
+  como *internal* en core) más `commerce_cart_api`, y encima habría que rehacer el diseño dentro de
+  sus vistas Backbone. En su lugar: el bloque de carrito de Commerce con `dropdown: true`, que ya es
+  un `#lazy_builder` cache-safe, la view `commerce_cart_block` ampliada con el botón de quitar de
+  Commerce (Views la envuelve en un formulario, así que **quitar funciona sin JS**) y unas 100 líneas
+  de JS del tema para abrir/cerrar con foco atrapado y Escape.
+- **El umbral de envío gratuito no está escrito a mano**: se lee de la condición `order_total_price`
+  del método de envío id 7 ("Envío gratuito desde 60 €"), así que si el cliente lo cambia en
+  `/admin/commerce/config/shipping-methods` la barra del flyout lo sigue. Se compara contra el
+  **total** del pedido, que es lo que compara la condición, de modo que el recargo del bordado
+  cuenta para llegar a los 60 €.
+- **El total de línea de Commerce no incluye los ajustes**, así que el flyout enseña el recargo del
+  bordado aparte ("24,81 € + 5,00 €"): sin eso las líneas no sumaban el subtotal del pie.
+- **El panel del carrito se mueve al `body` por JS**: el bloque vive en el header sticky, que crea
+  contexto de apilamiento, y ahí el overlay se comía los clics del panel. Es el mismo problema que
+  ya apareció con el off-canvas del menú.
 
 ## Orden de trabajo
 1. **Tema `pronens`**: tokens CSS (custom properties con los colores/tipos del README), fuentes

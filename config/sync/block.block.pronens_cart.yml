@@ -17,6 +17,6 @@ settings:
   label: Carrito
   label_display: '0'
   provider: commerce_cart
-  dropdown: false
+  dropdown: true
   show_if_empty: true
 visibility: {  }

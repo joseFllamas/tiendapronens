@@ -1,0 +1,21 @@
+uuid: d66fdb2b-3030-474a-b8e9-b7b149237410
+langcode: es
+status: true
+dependencies: {  }
+name: pronens_carrito
+label: 'Pronens línea de carrito (148x148 WebP)'
+effects:
+  25b6687d-3df4-4eec-af40-5a3bb89a7bba:
+    uuid: 25b6687d-3df4-4eec-af40-5a3bb89a7bba
+    id: image_scale_and_crop
+    weight: 0
+    data:
+      width: 148
+      height: 148
+      anchor: center-center
+  83dcf6ab-f1b9-4020-b349-858c40273498:
+    uuid: 83dcf6ab-f1b9-4020-b349-858c40273498
+    id: image_convert
+    weight: 1
+    data:
+      extension: webp

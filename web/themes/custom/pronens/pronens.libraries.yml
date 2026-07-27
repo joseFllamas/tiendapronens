@@ -89,6 +89,17 @@ breadcrumb:
     component:
       css/breadcrumb.css: {}
 
+carrito:
+  version: VERSION
+  css:
+    component:
+      css/carrito.css: {}
+  js:
+    js/carrito.js: {}
+  dependencies:
+    - core/drupal
+    - core/once
+
 catalogo:
   version: VERSION
   css:

@@ -10,13 +10,6 @@ display:
           exposed_sorts_label: 'Ordena per'
           sort_asc_label: Asc
           sort_desc_label: Desc
-      fields:
-        quantity:
-          separator: ', '
-        title:
-          separator: ', '
-        total_price__number:
-          separator: ', '
       arguments:
         order_id:
           exception:

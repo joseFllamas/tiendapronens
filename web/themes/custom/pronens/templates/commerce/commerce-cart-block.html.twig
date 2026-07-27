@@ -1,16 +1,66 @@
 {#
 /**
  * @file
- * Icono de carrito del header con badge de unidades.
+ * Carrito: icono con badge en el header y panel flyout.
  *
- * Renderizado por el lazy builder de commerce_cart (cache-safe).
+ * Todo lo pinta el lazy builder de commerce_cart (cache-safe), con "dropdown"
+ * activado para que llegue también el contenido: content es la view
+ * commerce_cart_block, que Views envuelve en un formulario, así que los botones
+ * de quitar funcionan sin JS.
+ *
+ * carrito (total_texto, envio, checkout_url) viene de CarritoHooks. Sin JS el
+ * icono es un enlace a /cart y el panel nace cerrado: solo lo abre el JS.
  */
 #}
-<div{{ attributes.addClass('pro-cart-btn') }}>
-  <a class="pro-cart-btn__link" href="{{ url }}" aria-label="{{ count_text }}">
+<div{{ attributes.addClass('pro-cart') }} data-pro-cart>
+  <a class="pro-cart-btn__link"
+     href="{{ url }}"
+     aria-label="{{ count_text }}"
+     aria-expanded="false" aria-controls="pro-cart-panel" data-pro-cart-toggle>
     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 8h12l-1.2 12.2a1.8 1.8 0 0 1-1.8 1.8H9a1.8 1.8 0 0 1-1.8-1.8L6 8z"/><path d="M9 10V6a3 3 0 0 1 6 0v4"/></svg>
     {% if count > 0 %}
       <span class="pro-cart-btn__badge">{{ count }}</span>
     {% endif %}
   </a>
+
+  {# El panel se pinta siempre, también vacío: el diseño enseña el estado
+     vacío y así el icono nunca cambia de comportamiento. #}
+  <aside class="pro-flyout" id="pro-cart-panel" data-pro-cart-panel hidden
+           role="dialog" aria-modal="true" aria-label="{{ 'Your basket'|t }}">
+      <header class="pro-flyout__head">
+        <h2 class="pro-flyout__title">{{ 'Your basket'|t }} ({{ count }})</h2>
+        <button type="button" class="pro-flyout__close" data-pro-cart-close aria-label="{{ 'Close'|t }}">✕</button>
+      </header>
+
+      {% if carrito.envio %}
+        <div class="pro-flyout__ship{{ carrito.envio.conseguido ? ' is-done' }}">
+          <p class="pro-flyout__ship-msg">{{ carrito.envio.mensaje }}</p>
+          <div class="pro-flyout__bar" role="progressbar"
+               aria-valuenow="{{ carrito.envio.porcentaje }}" aria-valuemin="0" aria-valuemax="100"
+               aria-label="{{ 'Progress towards free shipping'|t }}">
+            <span class="pro-flyout__bar-fill" style="--pro-ship-progress:{{ carrito.envio.porcentaje }}%"></span>
+          </div>
+        </div>
+      {% endif %}
+
+      <div class="pro-flyout__items">
+        {% if content %}
+          {{ content }}
+        {% else %}
+          <p class="pro-flyout__empty">
+            {{ 'Your basket is empty.'|t }}<br>{{ 'Have a look at our personalised pieces!'|t }}
+          </p>
+        {% endif %}
+      </div>
+
+      <footer class="pro-flyout__foot">
+        <div class="pro-flyout__row">
+          <span>{{ 'Subtotal'|t }}</span>
+          <span>{{ carrito.total_texto }}</span>
+        </div>
+        <p class="pro-flyout__note">{{ 'Taxes included. Shipping calculated at checkout.'|t }}</p>
+        <a class="pro-btn pro-btn--cta pro-flyout__checkout" href="{{ carrito.checkout_url ?: url }}">{{ 'Checkout'|t }}</a>
+        <button type="button" class="pro-flyout__keep" data-pro-cart-close>{{ 'Keep shopping'|t }}</button>
+      </footer>
+  </aside>
 </div>

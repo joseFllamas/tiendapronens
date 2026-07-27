@@ -1,0 +1,279 @@
+/**
+ * @file
+ * Carrito flyout: panel lateral, barra de envío gratuito y líneas.
+ */
+
+.pro-cart {
+  position: relative;
+  display: inline-flex;
+}
+
+/* --- Panel. --- */
+.pro-flyout {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 70;
+  width: min(420px, 100vw);
+  display: flex;
+  flex-direction: column;
+  background: var(--pro-bg);
+  box-shadow: -16px 0 48px rgba(18, 38, 44, 0.25);
+  transform: translateX(100%);
+  transition: transform 280ms var(--pro-ease-panel);
+}
+
+.pro-flyout[hidden] {
+  /* hidden a secas lo saca del flujo y no habría transición; el JS lo destapa
+     antes de animar y lo vuelve a tapar al terminar de cerrarse. */
+  display: none;
+}
+
+.pro-flyout.is-open {
+  transform: translateX(0);
+}
+
+.pro-flyout__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 20px 24px;
+  border-bottom: 1px solid var(--pro-border);
+}
+
+.pro-flyout__title {
+  font-family: var(--pro-font-display);
+  font-weight: 700;
+  font-size: 19px;
+  margin: 0;
+  color: var(--pro-ink-2);
+}
+
+.pro-flyout__close {
+  background: none;
+  border: 0;
+  font-size: 22px;
+  line-height: 1;
+  cursor: pointer;
+  color: var(--pro-text-2);
+  padding: 4px 6px;
+}
+
+.pro-flyout__close:hover {
+  color: var(--pro-ink);
+}
+
+/* --- Barra de envío gratuito. --- */
+.pro-flyout__ship {
+  padding: 16px 24px;
+  border-bottom: 1px solid var(--pro-border);
+  background: var(--pro-teal-bg);
+}
+
+.pro-flyout__ship-msg {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--pro-ink-2);
+  margin: 0 0 8px;
+}
+
+.pro-flyout__bar {
+  height: 8px;
+  border-radius: var(--pro-radius-pill);
+  background: #d8ecef;
+  overflow: hidden;
+}
+
+.pro-flyout__bar-fill {
+  display: block;
+  height: 100%;
+  width: var(--pro-ship-progress, 0%);
+  border-radius: var(--pro-radius-pill);
+  background: var(--pro-teal);
+  transition: width 400ms var(--pro-ease-panel);
+}
+
+.pro-flyout__ship.is-done .pro-flyout__bar-fill {
+  background: var(--pro-teal-ink);
+}
+
+/* --- Líneas. --- */
+.pro-flyout__items {
+  flex: 1;
+  overflow-y: auto;
+  padding: 20px 24px;
+}
+
+.pro-flyout__items .views-row + .views-row {
+  margin-top: 18px;
+}
+
+.pro-line {
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+}
+
+.pro-line__media {
+  flex: 0 0 auto;
+  width: 74px;
+  height: 74px;
+  border-radius: 14px;
+  overflow: hidden;
+  background: var(--pro-teal-bg);
+}
+
+.pro-line__media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.pro-line__body {
+  flex: 1;
+  min-width: 0;
+}
+
+.pro-line__name {
+  font-weight: 800;
+  font-size: 14px;
+  color: var(--pro-ink-2);
+  margin: 0;
+}
+
+.pro-line__meta,
+.pro-line__perso {
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--pro-text-2);
+  margin: 3px 0 0;
+}
+
+.pro-line__perso {
+  color: var(--pro-teal-ink);
+}
+
+.pro-line__row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  margin-top: 8px;
+}
+
+.pro-line__qty {
+  font-size: 12.5px;
+  font-weight: 700;
+  color: var(--pro-text-2);
+}
+
+.pro-line__total {
+  font-weight: 800;
+  font-size: 14px;
+  color: var(--pro-ink-2);
+  white-space: nowrap;
+}
+
+.pro-line__fee {
+  font-size: 11.5px;
+  font-weight: 700;
+  color: var(--pro-orange-ink);
+}
+
+/* El botón de quitar de Commerce, con la ✕ en su value (CarritoHooks). */
+.pro-line__remove-btn {
+  background: none;
+  border: 0;
+  padding: 2px 4px;
+  cursor: pointer;
+  font-size: 14px;
+  line-height: 1;
+  color: var(--pro-mute);
+}
+
+.pro-line__remove-btn:hover {
+  color: var(--pro-orange-ink);
+}
+
+.pro-line__remove-btn:focus-visible {
+  outline: 2px solid var(--pro-teal);
+  outline-offset: 2px;
+}
+
+/* --- Pie. --- */
+.pro-flyout__foot {
+  padding: 20px 24px;
+  border-top: 1px solid var(--pro-border);
+  background: #fff;
+}
+
+.pro-flyout__row {
+  display: flex;
+  justify-content: space-between;
+  font-weight: 800;
+  font-size: 16px;
+  color: var(--pro-ink-2);
+  margin-bottom: 4px;
+}
+
+.pro-flyout__note {
+  font-size: 12px;
+  color: var(--pro-text-2);
+  font-weight: 600;
+  margin: 0 0 14px;
+}
+
+.pro-flyout__checkout {
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
+  text-align: center;
+  font-size: 16px;
+  padding: 15px;
+}
+
+.pro-flyout__keep {
+  display: block;
+  width: 100%;
+  background: none;
+  border: 0;
+  color: var(--pro-teal-ink);
+  font-family: var(--pro-font-display);
+  font-weight: 700;
+  font-size: 14px;
+  padding: 12px;
+  cursor: pointer;
+  margin-top: 4px;
+}
+
+.pro-flyout__keep:hover {
+  color: var(--pro-ink);
+}
+
+/* Carrito vacío. */
+.pro-flyout__empty,
+.pro-flyout__items .view-empty {
+  text-align: center;
+  color: var(--pro-mute);
+  font-weight: 600;
+  padding: 48px 0;
+}
+
+/* --- Overlay (lo crea carrito.js). --- */
+.pro-cart-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  background: rgba(18, 38, 44, 0.45);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 280ms var(--pro-ease-panel), visibility 280ms;
+}
+
+.pro-cart-overlay.is-visible {
+  opacity: 1;
+  visibility: visible;
+}
