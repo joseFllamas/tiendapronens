@@ -1,9 +1,15 @@
 /**
  * @file
- * Hover-cycle de la tarjeta de producto: al entrar muestra la 2ª imagen
- * con una barra segmentada que se llena en 1.4s y encadena 3ª, 4ª… en
- * bucle. Al salir vuelve a la 1ª. Las imágenes extra se cargan como
- * background solo on-hover (sin fetch anticipado).
+ * Hover-cycle de la tarjeta de producto.
+ *
+ * Con varias fotos: al entrar entra la 2ª deslizando de derecha a
+ * izquierda, con la barra segmentada que se llena en 1.4s y encadena 3ª,
+ * 4ª… en bucle; al salir vuelve a la 1ª. Con una sola foto (la mayoría
+ * del catálogo tras descartar los duplicados de la migración) se hace un
+ * único slide de esa misma imagen, sin barra y sin cargar nada más.
+ *
+ * Las fotos extra viajan como URLs en data-pro-cycle y se pintan como
+ * background solo a partir del hover, nunca en el listado.
  *
  * El overlay y la barra se crean UNA vez por hover y cada paso solo
  * cambia background y clases: recrear nodos con animación en marcha
@@ -28,10 +34,11 @@
     catch {
       return;
     }
-    if (!Array.isArray(urls) || urls.length < 2) {
+    if (!Array.isArray(urls) || urls.length === 0) {
       return;
     }
 
+    const single = urls.length === 1;
     let overlay = null;
     let bar = null;
     let index = 0;
@@ -83,10 +90,12 @@
       if (overlay) {
         return;
       }
-      preload(urls[1]);
 
       if (reduced.matches) {
-        // Sin animación: solo el cambio a la 2ª imagen.
+        if (single) {
+          // Nada que mostrar: la foto visible ya es la única.
+          return;
+        }
         overlay = document.createElement('div');
         overlay.className = 'pro-card__cycle';
         overlay.style.backgroundImage = `url("${urls[1]}")`;
@@ -94,6 +103,13 @@
         return;
       }
 
+      if (single) {
+        // Un solo slide de la misma imagen (ya cargada por el <img>).
+        pushLayer(urls[0]);
+        return;
+      }
+
+      preload(urls[1]);
       bar = document.createElement('div');
       bar.className = 'pro-card__dots';
       urls.forEach(() => {

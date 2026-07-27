@@ -304,53 +304,69 @@ class PronensHooks {
   }
 
   /**
-   * URLs para el hover-cycle de la tarjeta (JSON): principal + galería.
+   * URLs distintas para el hover-cycle de la tarjeta (JSON).
    *
    * Sin <img> extra en el markup: el JS pinta la siguiente imagen como
-   * background solo al hacer hover, así no hay fetch anticipado. Si el
-   * producto solo tiene una imagen, se duplica para mantener el efecto.
+   * background solo al hacer hover, así no hay fetch anticipado.
+   *
+   * La migración del D7 dejó la misma foto guardada dos veces con nombres
+   * distintos (patrón "foto.jpg" / "foto_0.jpg") en 345 de los 368
+   * productos, así que la imagen principal suele repetirse como primera
+   * de la galería. Se descartan las repetidas comparando peso y
+   * dimensiones del fichero: bytes idénticos siempre coinciden en ambos, y
+   * que dos fotos distintas del mismo producto coincidan en los tres
+   * valores es descartable. Con una sola imagen única (206 productos) se
+   * devuelve una sola URL y el JS hace el slide sin cargar nada más.
    *
    * @param array<string, mixed> $variables
    *   Variables del template (se anotan cache tags de la galería).
    */
   protected function buildCardCycle(array &$variables, ProductInterface $product, MediaInterface $main): string {
-    $urls = [];
     $medias = [$main];
     if ($product->hasField('field_galeria')) {
       $galeria = $product->get('field_galeria');
       if ($galeria instanceof EntityReferenceFieldItemListInterface) {
-        // La principal + hasta 4 de la galería: más segmentos no se leen.
-        $medias = array_merge($medias, array_slice($galeria->referencedEntities(), 0, 4));
+        $medias = array_merge($medias, $galeria->referencedEntities());
       }
     }
+
+    $urls = [];
+    $seen = [];
     foreach ($medias as $media) {
       if (!$media instanceof MediaInterface) {
         continue;
       }
-      $url = $this->styledImageUrl($media, 'pronens_card');
-      if ($url === NULL) {
+      $image = $this->styledImageData($media, 'pronens_card');
+      if ($image === NULL || isset($seen[$image['fingerprint']])) {
         continue;
       }
-      $urls[] = $url;
+      $seen[$image['fingerprint']] = TRUE;
+      $urls[] = $image['url'];
       $variables['#cache']['tags'] = Cache::mergeTags($variables['#cache']['tags'] ?? [], $media->getCacheTags());
+      // Cinco fotos son más segmentos de los que nadie mira.
+      if (count($urls) === 5) {
+        break;
+      }
     }
-    if (count($urls) === 1) {
-      $urls[] = $urls[0];
-    }
+
     return (string) json_encode($urls);
   }
 
   /**
-   * URL de la imagen de un media pasada por un estilo.
+   * URL de la imagen de un media con un estilo, y huella del fichero.
+   *
+   * @return array{url: string, fingerprint: string}|null
+   *   URL con el estilo aplicado y huella peso:ancho x alto, o NULL.
    */
-  protected function styledImageUrl(MediaInterface $media, string $style_name): ?string {
+  protected function styledImageData(MediaInterface $media, string $style_name): ?array {
     if (!$media->hasField('field_media_image')) {
       return NULL;
     }
     $field = $media->get('field_media_image');
     $files = $field instanceof EntityReferenceFieldItemListInterface ? $field->referencedEntities() : [];
     $file = reset($files);
-    if (!$file instanceof FileInterface) {
+    $item = $field->first();
+    if (!$file instanceof FileInterface || $item === NULL) {
       return NULL;
     }
     $uri = $file->getFileUri();
@@ -358,7 +374,17 @@ class PronensHooks {
     if (!$style instanceof \Drupal\image\ImageStyleInterface || $uri === NULL) {
       return NULL;
     }
-    return $style->buildUrl($uri);
+    $values = $item->getValue();
+
+    return [
+      'url' => $style->buildUrl($uri),
+      'fingerprint' => sprintf(
+        '%s:%sx%s',
+        $file->getSize() ?? 0,
+        $values['width'] ?? 0,
+        $values['height'] ?? 0,
+      ),
+    ];
   }
 
   /**
