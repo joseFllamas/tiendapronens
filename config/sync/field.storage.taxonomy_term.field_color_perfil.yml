@@ -1,0 +1,20 @@
+uuid: e23bc68d-8b98-44dc-989f-02d4e81187b7
+langcode: es
+status: true
+dependencies:
+  module:
+    - color_field
+    - taxonomy
+id: taxonomy_term.field_color_perfil
+field_name: field_color_perfil
+entity_type: taxonomy_term
+type: color_field_type
+settings:
+  format: '#HEXHEX'
+module: color_field
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

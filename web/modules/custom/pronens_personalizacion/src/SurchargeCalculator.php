@@ -28,6 +28,10 @@ final class SurchargeCalculator {
    * @param int $cantidad
    *   Unidades de la línea. El bordado se cobra por unidad, porque cada prenda
    *   se borda por separado.
+   * @param bool $es_modo_inicial
+   *   Si el producto se personaliza con una inicial. En esos productos la
+   *   inicial no se cobra nunca: es el reclamo con el que se venden, no un
+   *   añadido, y manda sobre cualquier recargo configurado.
    *
    * @return \Drupal\commerce_price\Price|null
    *   El importe a añadir, o NULL si no hay nada que cobrar.
@@ -37,8 +41,9 @@ final class SurchargeCalculator {
     ?Price $recargo_producto,
     ?Price $recargo_por_defecto,
     int $cantidad = 1,
+    bool $es_modo_inicial = FALSE,
   ): ?Price {
-    if (!$tiene_personalizacion || $cantidad < 1) {
+    if (!$tiene_personalizacion || $cantidad < 1 || $es_modo_inicial) {
       return NULL;
     }
 

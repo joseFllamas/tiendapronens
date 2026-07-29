@@ -95,8 +95,21 @@
     const desglose = document.querySelector('[data-pro-breakdown]');
     const ctaBase = cta ? cta.value : '';
 
+    // En modo inicial el texto es una rejilla de radios y el marcador cae en su
+    // envoltorio, no en cada input; en modo nombre es un input y lo lleva él.
+    function valorTexto() {
+      if (!texto) {
+        return '';
+      }
+      if (texto.tagName === 'INPUT') {
+        return (texto.value || '').trim();
+      }
+      const marcado = texto.querySelector('input:checked');
+      return marcado ? marcado.value : '';
+    }
+
     function bordadoActivo() {
-      return Boolean(casilla && casilla.checked && texto && texto.value.trim() !== '');
+      return Boolean(casilla && casilla.checked && valorTexto() !== '');
     }
 
     // Suma de los extras marcados. El valor de cada casilla es el id del
@@ -109,14 +122,30 @@
       return suma;
     }
 
-    // Color del hilo del formato marcado, si su ficha trae muestra de color.
-    function colorHilo() {
+    // Perfil e interior del formato marcado, para dibujar letra y vista previa.
+    function coloresFormato() {
       const marcado = form.querySelector('.pro-formatos input[type="radio"]:checked');
-      if (!marcado) {
-        return null;
+      const colores = marcado ? (ajustes.formatos || {})[marcado.value] : null;
+      return colores || null;
+    }
+
+    // Las letras de la rejilla y la vista previa se dibujan con esos colores:
+    // el relleno en color y el contorno con text-stroke, que es lo más parecido
+    // al parche bordado sin necesitar una foto por combinación.
+    function pintaLetras() {
+      const colores = coloresFormato();
+      const rejilla = form.querySelector('.pro-letras');
+      const destinos = [];
+      if (rejilla) {
+        destinos.push(rejilla);
       }
-      const muestra = marcado.parentNode.querySelector('.pro-formato__color');
-      return muestra ? getComputedStyle(muestra).backgroundColor : null;
+      if (preview) {
+        destinos.push(preview);
+      }
+      destinos.forEach((destino) => {
+        destino.style.setProperty('--pro-letra-interior', colores ? colores.interior : '');
+        destino.style.setProperty('--pro-letra-perfil', colores ? colores.perfil : '');
+      });
     }
 
     function pinta() {
@@ -124,11 +153,10 @@
       const unidades = Math.max(1, parseInt(cantidad && cantidad.value, 10) || 1);
       const unitario = base + (activo ? recargo : 0) + totalExtras();
 
+      pintaLetras();
       if (preview && previewTexto) {
         preview.hidden = !activo;
-        previewTexto.textContent = activo ? texto.value.trim() : '';
-        const color = colorHilo();
-        previewTexto.style.setProperty('--pro-preview-color', color || '');
+        previewTexto.textContent = activo ? valorTexto() : '';
       }
       if (desglose) {
         desglose.hidden = !activo;
@@ -154,6 +182,10 @@
     form.querySelectorAll('[data-pro-extras] input[type="checkbox"]').forEach((casillaExtra) => {
       casillaExtra.addEventListener('change', pinta);
     });
+    // Con la rejilla, el change burbujea desde cada radio hasta el envoltorio.
+    if (texto && texto.tagName !== 'INPUT') {
+      texto.addEventListener('change', pinta);
+    }
     pinta();
   }
 

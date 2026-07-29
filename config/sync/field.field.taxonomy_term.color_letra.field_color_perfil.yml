@@ -1,0 +1,22 @@
+uuid: ab5776d5-1f97-4ff6-a70b-ac2624abe643
+langcode: es
+status: true
+dependencies:
+  config:
+    - field.storage.taxonomy_term.field_color_perfil
+    - taxonomy.vocabulary.color_letra
+  module:
+    - color_field
+id: taxonomy_term.color_letra.field_color_perfil
+field_name: field_color_perfil
+entity_type: taxonomy_term
+bundle: color_letra
+label: 'Color del perfil'
+description: 'El contorno de la letra. El relleno va en "Color", y con los dos se dibuja la letra de muestra en la ficha.'
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  opacity: 1
+field_type: color_field_type

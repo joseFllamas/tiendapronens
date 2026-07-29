@@ -131,9 +131,32 @@ Donde este documento y la realidad del repo discrepan, manda esta lista (decidid
   cliente salía como `/product/373`. Añadidos dos patrones con el esquema del D7:
   `productos/[commerce_product:title]` y `productos/[term:name]` para `tipo_de_producto`. Los 370
   alias migrados y los 30 de término no se tocan: pathauto solo genera para lo que no tiene alias.
+- **La inicial NO se cobra nunca (2026-07-29, cliente)**: en los productos de modo `inicial` el
+  bordado va incluido, es el reclamo con el que se venden ("Lisa o Personalizada"). La regla vive en
+  `SurchargeCalculator::calculate()` con su prueba unitaria y manda sobre `field_recargo` y sobre el
+  ajuste global, así que no hay que acordarse de poner 0 en cada producto. En modo `texto` se sigue
+  cobrando el +5 €.
+- **La inicial se elige de una rejilla A–Z**, no se teclea: es una sola letra mayúscula y así no hay
+  forma de equivocarse. Cada letra se dibuja con los colores del formato elegido (relleno con `color`
+  y contorno con `-webkit-text-stroke`), que es lo que permite **ver** la combinación sin una foto por
+  letra y formato. Por eso cada término de `color_letra` tiene ahora dos colores, `field_color_perfil`
+  (contorno) y `field_color` (relleno, con la etiqueta cambiada a "Color del interior"), y la muestra
+  del chip es un círculo de dos tonos: con uno solo, "perfil negro interior blanco" y "todo blanco" se
+  confundían. El alfabeto entero está en `FichaHooks::LETRAS`; si el taller no tiene parche de alguna
+  letra, se quita de ahí.
+- **El selector de color enseña la foto del producto en ese color y nada más**: con la foto, el punto
+  de color y el nombre sobran a la vista, así que el nombre se queda solo para lectores de pantalla y
+  para el carrito y el pedido. Los colores sin foto (el resto del catálogo) siguen mostrando el punto.
+- **La vista previa sigue anclada a `bottom: 44px`** como el prototipo, que estaba pensado para una
+  foto de prenda plana. En la mochila el parche va más arriba, así que la letra cae por debajo de su
+  sitio. El modelo tiene un `field_posicion_bordado` dormido que sería el lugar natural para
+  resolverlo por producto o por foto.
 - **Los 289 productos personalizables siguen en modo `texto`**: el selector de formato y su guía solo
   se ven en el de inicial. Para activarlos en otro producto basta cambiar "Modo de personalización" a
   *inicial* en su formulario de edición.
+- **El nombre de los extras y de los formatos no está traducido** en CA/FR/EN porque son términos de
+  taxonomía y los vocabularios no son traducibles: en este sitio **el contenido es solo español** (0
+  traducciones de producto), así que es coherente con el resto. La interfaz sí está en los 4 idiomas.
 - **`field_relacionados` está vacío en los 370 productos**, así que "Combínalo con" cae a los 4
   productos más recientes del mismo término. Si el cliente rellena el campo, manda el campo.
 - **Contraste AA del naranja**: el `#f4854e` del prototipo con texto blanco da 2,5:1 y el CTA es

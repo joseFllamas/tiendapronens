@@ -11,8 +11,8 @@ id: taxonomy_term.color_letra.field_color
 field_name: field_color
 entity_type: taxonomy_term
 bundle: color_letra
-label: 'Color plano'
-description: 'Solo para hilos de un color. Los bicolores usan la imagen de muestra.'
+label: 'Color del interior'
+description: 'El relleno de la letra.'
 required: false
 translatable: true
 default_value: {  }

@@ -1,0 +1,89 @@
+uuid: 0c24b377-0378-48ea-810b-93e5f4bae9b0
+langcode: es
+status: true
+dependencies:
+  config:
+    - field.field.taxonomy_term.color_letra.field_color
+    - field.field.taxonomy_term.color_letra.field_color_perfil
+    - field.field.taxonomy_term.color_letra.field_imagen
+    - taxonomy.vocabulary.color_letra
+  module:
+    - color_field
+    - media_library
+    - path
+    - text
+id: taxonomy_term.color_letra.default
+targetEntityType: taxonomy_term
+bundle: color_letra
+mode: default
+content:
+  description:
+    type: text_textfield
+    weight: 0
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  field_color:
+    type: color_field_widget_box
+    weight: 1
+    region: content
+    settings:
+      default_colors: |-
+
+        #ac725e,#d06b64,#f83a22,#fa573c,#ff7537,#ffad46
+        #42d692,#16a765,#7bd148,#b3dc6c,#fbe983
+        #92e1c0,#9fe1e7,#9fc6e7,#4986e7,#9a9cff
+        #b99aff,#c2c2c2,#cabdbf,#cca6ac,#f691b2
+        #cd74e6,#a47ae2
+    third_party_settings: {  }
+  field_color_perfil:
+    type: color_field_widget_box
+    weight: 0
+    region: content
+    settings:
+      default_colors: |-
+
+        #ac725e,#d06b64,#f83a22,#fa573c,#ff7537,#ffad46
+        #42d692,#16a765,#7bd148,#b3dc6c,#fbe983
+        #92e1c0,#9fe1e7,#9fc6e7,#4986e7,#9a9cff
+        #b99aff,#c2c2c2,#cabdbf,#cca6ac,#f691b2
+        #cd74e6,#a47ae2
+    third_party_settings: {  }
+  field_imagen:
+    type: media_library_widget
+    weight: 2
+    region: content
+    settings:
+      media_types: {  }
+    third_party_settings: {  }
+  langcode:
+    type: language_select
+    weight: 2
+    region: content
+    settings:
+      include_locked: true
+    third_party_settings: {  }
+  name:
+    type: string_textfield
+    weight: -5
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  path:
+    type: path
+    weight: 30
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  status:
+    type: boolean_checkbox
+    weight: 100
+    region: content
+    settings:
+      display_label: true
+    third_party_settings: {  }
+hidden: {  }

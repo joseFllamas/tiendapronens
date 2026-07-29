@@ -7,25 +7,11 @@ dependencies:
     - core.entity_view_mode.commerce_product_attribute_value.add_to_cart
     - field.field.commerce_product_attribute_value.color.field_color
     - field.field.commerce_product_attribute_value.color.field_imagen
-  module:
-    - color_field
 id: commerce_product_attribute_value.color.add_to_cart
 targetEntityType: commerce_product_attribute_value
 bundle: color
 mode: add_to_cart
 content:
-  field_color:
-    type: color_field_formatter_swatch
-    label: hidden
-    settings:
-      shape: circle
-      width: '30'
-      height: '30'
-      opacity: false
-      data_attribute: false
-    third_party_settings: {  }
-    weight: 0
-    region: content
   field_imagen:
     type: entity_reference_entity_view
     label: hidden
@@ -33,7 +19,7 @@ content:
       view_mode: default
       link: false
     third_party_settings: {  }
-    weight: -1
+    weight: 0
     region: content
   name:
     type: string
@@ -45,5 +31,6 @@ content:
     weight: 1
     region: content
 hidden:
+  field_color: true
   langcode: true
   search_api_excerpt: true

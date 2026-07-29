@@ -100,4 +100,38 @@ final class SurchargeCalculatorTest extends UnitTestCase {
     $this->assertNull($this->calculator->calculate(TRUE, NULL, new Price('3.00', 'EUR'), 0));
   }
 
+  /**
+   * En un producto de inicial el bordado no se cobra, aunque haya recargo.
+   *
+   * Es el reclamo con el que se vende el producto: la inicial va incluida.
+   */
+  public function testElModoInicialNoCobraNunca(): void {
+    $resultado = $this->calculator->calculate(
+      TRUE,
+      new Price('5.00', 'EUR'),
+      new Price('5.00', 'EUR'),
+      3,
+      TRUE
+    );
+
+    $this->assertNull($resultado, 'La inicial va incluida en el precio del producto.');
+  }
+
+  /**
+   * El mismo caso sin modo inicial sí cobra, para que la prueba anterior no
+   * pase por casualidad.
+   */
+  public function testFueraDelModoInicialSiCobra(): void {
+    $resultado = $this->calculator->calculate(
+      TRUE,
+      new Price('5.00', 'EUR'),
+      new Price('5.00', 'EUR'),
+      3,
+      FALSE
+    );
+
+    $this->assertInstanceOf(Price::class, $resultado);
+    $this->assertTrue($resultado->equals(new Price('15.00', 'EUR')));
+  }
+
 }

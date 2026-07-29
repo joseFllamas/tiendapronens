@@ -38,6 +38,11 @@ final class PersonalizacionOrderProcessor implements OrderProcessorInterface {
   public const CAMPO_RECARGO_PRODUCTO = 'field_recargo';
 
   /**
+   * Campo del producto con el modo de personalización.
+   */
+  public const CAMPO_MODO = 'field_modo_personalizacion';
+
+  /**
    * Identificador del origen del ajuste, para poder reconocerlo y reemplazarlo.
    */
   private const SOURCE_ID = 'pronens_personalizacion';
@@ -66,11 +71,14 @@ final class PersonalizacionOrderProcessor implements OrderProcessorInterface {
         continue;
       }
 
+      // La regla de que la inicial no se cobra vive en el calculador, con el
+      // resto de reglas de precio y con sus pruebas unitarias.
       $recargo = $this->calculator->calculate(
         TRUE,
         $this->recargoDelProducto($item),
         $por_defecto,
         (int) $item->getQuantity(),
+        $this->esModoInicial($item),
       );
       if ($recargo === NULL) {
         continue;
@@ -83,6 +91,22 @@ final class PersonalizacionOrderProcessor implements OrderProcessorInterface {
         'source_id' => self::SOURCE_ID,
       ]));
     }
+  }
+
+  /**
+   * Si el producto de la línea se personaliza con una inicial.
+   */
+  private function esModoInicial(OrderItemInterface $item): bool {
+    $variacion = $item->getPurchasedEntity();
+    if (!$variacion instanceof ProductVariationInterface) {
+      return FALSE;
+    }
+    $producto = $variacion->getProduct();
+    if ($producto === NULL || !$producto->hasField(self::CAMPO_MODO)) {
+      return FALSE;
+    }
+
+    return (string) $producto->get(self::CAMPO_MODO)->value === 'inicial';
   }
 
   /**

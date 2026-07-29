@@ -35,6 +35,17 @@ class FichaHooks {
    */
   protected const MAX_FOTOS = 6;
 
+  /**
+   * Letras que se pueden bordar.
+   *
+   * El alfabeto entero: la competencia deja la X fuera, pero Ximena y Xavier
+   * existen. Si el taller no tiene parche de alguna letra, se quita de aquí.
+   */
+  protected const LETRAS = [
+    'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M',
+    'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z',
+  ];
+
   public function __construct(
     protected EntityTypeManagerInterface $entityTypeManager,
     protected CurrencyFormatterInterface $currencyFormatter,
@@ -86,6 +97,9 @@ class FichaHooks {
       'moneda' => $variables['ficha']['moneda'],
       // Precio de cada extra, para que el CTA sume en vivo lo que se marca.
       'extras' => $this->preciosDeExtras($producto),
+      // Perfil e interior de cada formato: con eso el JS dibuja las letras y la
+      // vista previa tal como quedarán bordadas.
+      'formatos' => $this->coloresDeFormatos(),
     ];
   }
 
@@ -144,6 +158,16 @@ class FichaHooks {
       if (isset($form['pro_perso']['field_texto_bordado']['widget'][0]['value'])) {
         $valor = &$form['pro_perso']['field_texto_bordado']['widget'][0]['value'];
         $valor['#attributes']['data-pro-perso-texto'] = TRUE;
+        // En modo inicial se elige la letra de una rejilla en vez de teclearla:
+        // es una sola letra mayúscula, así no hay forma de equivocarse y cada
+        // letra se dibuja con los colores del formato elegido, que es la única
+        // manera de ver cómo va a quedar sin foto de cada combinación.
+        if ($producto instanceof ProductInterface && $this->esModoInicial($producto)) {
+          $valor['#type'] = 'radios';
+          $valor['#options'] = array_combine(self::LETRAS, self::LETRAS);
+          $valor['#attributes']['class'][] = 'pro-letras';
+          unset($valor['#size'], $valor['#maxlength'], $valor['#placeholder']);
+        }
         // La descripción del campo es una nota interna de la migración ("máximo
         // real observado en el Drupal 7…"): en la tienda va un placeholder con
         // el límite real, que es lo que dice el diseño.
@@ -264,6 +288,11 @@ class FichaHooks {
    * /admin/commerce/config/personalizacion.
    */
   protected function recargo(ProductInterface $producto): float {
+    // La inicial nunca se cobra: es el reclamo del producto, no un extra
+    // (misma regla que PersonalizacionOrderProcessor).
+    if ($this->esModoInicial($producto)) {
+      return 0.0;
+    }
     if ($producto->hasField('field_recargo') && !$producto->get('field_recargo')->isEmpty()) {
       return (float) $producto->get('field_recargo')->number;
     }
@@ -401,13 +430,17 @@ class FichaHooks {
       $numero++;
       $media = $this->mediaFromField($termino, 'field_imagen');
       $foto = $media !== NULL ? $this->buildStyledImage($media, 'pronens_formato') : NULL;
-      $color = $this->colorDeFormato($termino);
+      $interior = $this->colorDeCampo($termino, 'field_color');
+      $perfil = $this->colorDeCampo($termino, 'field_color_perfil');
 
       if ($foto !== NULL && $this->fotoUtil($media)) {
         $muestra = '<span class="pro-formato__foto">' . $this->renderer->render($foto) . '</span>';
       }
-      elseif ($color !== NULL) {
-        $muestra = '<span class="pro-formato__color" style="--pro-formato-color:' . $color . '"></span>';
+      elseif ($interior !== NULL) {
+        // Dos tonos: el aro es el perfil y el centro el interior. Con un solo
+        // color, "perfil negro interior blanco" y "todo blanco" se confundían.
+        $muestra = '<span class="pro-formato__color" style="--pro-formato-interior:' . $interior
+          . ';--pro-formato-perfil:' . ($perfil ?? $interior) . '"></span>';
       }
       else {
         $muestra = '<span class="pro-formato__num">' . $numero . '</span>';
@@ -430,12 +463,7 @@ class FichaHooks {
     }
     // color_field_type guarda el hexadecimal en la propiedad "color", no en
     // "value": leerlo por ->value devuelve NULL.
-    $valor = (string) ($termino->get('field_color')->first()?->get('color')->getValue() ?? '');
-
-    // Solo hexadecimales: el valor va directo a un style inline.
-    return preg_match('/^#?[0-9a-fA-F]{6}$/', $valor) === 1
-      ? (str_starts_with($valor, '#') ? $valor : '#' . $valor)
-      : NULL;
+    return $this->colorDeCampo($termino, 'field_color');
   }
 
   /**
@@ -453,6 +481,41 @@ class FichaHooks {
     return $item !== NULL && (int) ($item->getValue()['width'] ?? 0) >= 200;
   }
 
+
+  /**
+   * Colores de perfil e interior de cada formato de bordado.
+   *
+   * @return array<int, array<string, string>>
+   *   Colores indexados por id de término.
+   */
+  protected function coloresDeFormatos(): array {
+    $colores = [];
+    /** @var array<int, \Drupal\taxonomy\TermInterface> $terminos */
+    $terminos = $this->entityTypeManager->getStorage('taxonomy_term')
+      ->loadByProperties(['vid' => 'color_letra', 'status' => 1]);
+    foreach ($terminos as $termino) {
+      $colores[(int) $termino->id()] = [
+        'perfil' => $this->colorDeCampo($termino, 'field_color_perfil') ?? '#1B1F27',
+        'interior' => $this->colorDeCampo($termino, 'field_color') ?? '#F5F1E6',
+      ];
+    }
+
+    return $colores;
+  }
+
+  /**
+   * Hexadecimal de un campo de color, o NULL.
+   */
+  protected function colorDeCampo(object $entidad, string $campo): ?string {
+    if (!$entidad instanceof \Drupal\Core\Entity\FieldableEntityInterface
+      || !$entidad->hasField($campo)
+      || $entidad->get($campo)->isEmpty()) {
+      return NULL;
+    }
+    $valor = (string) ($entidad->get($campo)->first()?->get('color')->getValue() ?? '');
+
+    return preg_match('/^#[0-9a-fA-F]{6}$/', $valor) === 1 ? $valor : NULL;
+  }
 
   /**
    * Precio unitario de cada extra que ofrece el producto.
