@@ -48,6 +48,19 @@
 
       {{ product.variations }}
 
+      {% if ficha.guia_bordado %}
+        {# Diálogo nativo: sin librerías, cierra con Escape y atrapa el foco él
+           solo. El enlace que lo abre lo añade ficha.js junto al selector de
+           formato, que es donde hace falta la ayuda. #}
+        <dialog class="pro-guia" id="pro-guia-bordado" data-pro-guia>
+          <div class="pro-guia__head">
+            <h2 class="pro-guia__title">{{ 'How the embroidery looks'|t }}</h2>
+            <button type="button" class="pro-guia__close" data-pro-guia-close aria-label="{{ 'Close'|t }}">✕</button>
+          </div>
+          <div class="pro-guia__body">{{ ficha.guia_bordado }}</div>
+        </dialog>
+      {% endif %}
+
       <ul class="pro-ficha__trust">
         <li>{{ 'Free shipping over €60'|t }}</li>
         <li>{{ 'Embroidered in 72h'|t }}</li>

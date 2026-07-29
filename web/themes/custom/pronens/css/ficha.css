@@ -342,6 +342,113 @@
   display: block;
 }
 
+/* Número de la combinación: el mismo que lleva en la foto guía. */
+.pro-formato__num {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: var(--pro-teal);
+  color: #fff;
+  font-size: 11px;
+  font-weight: 800;
+}
+
+/* Enlace de ayuda junto al selector (lo añade ficha.js). */
+.pro-formato-ayuda {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: none;
+  border: 0;
+  padding: 0;
+  margin-top: 10px;
+  font: inherit;
+  font-size: 12.5px;
+  font-weight: 700;
+  color: var(--pro-teal-ink);
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.pro-formato-ayuda:hover {
+  color: var(--pro-ink);
+}
+
+/* --- Diálogo de la guía. --- */
+.pro-guia {
+  width: min(560px, calc(100vw - 32px));
+  max-height: min(86vh, 900px);
+  padding: 0;
+  border: 0;
+  border-radius: 18px;
+  background: #fff;
+  box-shadow: var(--pro-shadow-panel);
+  overflow: hidden;
+}
+
+.pro-guia::backdrop {
+  background: rgba(18, 38, 44, 0.45);
+}
+
+.pro-guia__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 18px 22px;
+  border-bottom: 1px solid var(--pro-border);
+}
+
+.pro-guia__title {
+  font-family: var(--pro-font-display);
+  font-weight: 700;
+  font-size: 17px;
+  margin: 0;
+  color: var(--pro-ink-2);
+}
+
+.pro-guia__close {
+  background: none;
+  border: 0;
+  font-size: 20px;
+  line-height: 1;
+  cursor: pointer;
+  color: var(--pro-text-2);
+  padding: 4px 6px;
+}
+
+.pro-guia__close:hover {
+  color: var(--pro-ink);
+}
+
+.pro-guia__body {
+  padding: 22px;
+  overflow-y: auto;
+  max-height: calc(86vh - 62px);
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--pro-text-2);
+}
+
+.pro-guia__body img {
+  display: block;
+  width: 100%;
+  height: auto;
+  margin-bottom: 14px;
+}
+
+.pro-guia__body p {
+  margin: 0 0 10px;
+}
+
+.pro-guia__body p:last-child {
+  margin-bottom: 0;
+}
+
 /* --- Cantidad y CTA. --- */
 .pro-buy-form .pro-qty,
 .pro-buy-form .pro-buy {

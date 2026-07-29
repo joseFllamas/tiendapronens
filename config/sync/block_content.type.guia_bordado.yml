@@ -1,0 +1,8 @@
+uuid: 0e97926b-037a-428c-9ad7-2a684c27dbe3
+langcode: es
+status: true
+dependencies: {  }
+id: guia_bordado
+label: 'Guía del formato del bordado'
+revision: false
+description: 'Foto de muestra con las combinaciones de letra que se pueden elegir. Se abre en un diálogo desde la ficha de producto.'

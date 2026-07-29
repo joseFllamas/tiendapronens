@@ -1,0 +1,49 @@
+uuid: 7086cf2f-2faa-425f-b026-3cdaa0696e8e
+langcode: es
+status: true
+dependencies:
+  config:
+    - block_content.type.guia_bordado
+    - field.field.block_content.guia_bordado.body
+    - field.field.block_content.guia_bordado.field_imagen_media
+  module:
+    - media_library
+    - text
+id: block_content.guia_bordado.default
+targetEntityType: block_content
+bundle: guia_bordado
+mode: default
+content:
+  body:
+    type: text_textarea_with_summary
+    weight: 26
+    region: content
+    settings:
+      rows: 9
+      summary_rows: 3
+      placeholder: ''
+      show_summary: false
+    third_party_settings: {  }
+  field_imagen_media:
+    type: media_library_widget
+    weight: 0
+    region: content
+    settings:
+      media_types: {  }
+    third_party_settings: {  }
+  info:
+    type: string_textfield
+    weight: -5
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  langcode:
+    type: language_select
+    weight: 2
+    region: content
+    settings:
+      include_locked: true
+    third_party_settings: {  }
+hidden: {  }

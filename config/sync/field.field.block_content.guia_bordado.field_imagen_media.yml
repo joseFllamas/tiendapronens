@@ -1,0 +1,24 @@
+uuid: 81b4168c-96f0-46e1-9646-42bc84563b92
+langcode: es
+status: true
+dependencies:
+  config:
+    - block_content.type.guia_bordado
+    - field.storage.block_content.field_imagen_media
+    - media.type.image
+id: block_content.guia_bordado.field_imagen_media
+field_name: field_imagen_media
+entity_type: block_content
+bundle: guia_bordado
+label: 'Foto de la guía'
+description: ''
+required: true
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:media'
+  handler_settings:
+    target_bundles:
+      image: image
+field_type: entity_reference

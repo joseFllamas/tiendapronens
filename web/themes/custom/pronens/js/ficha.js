@@ -143,10 +143,47 @@
     pinta();
   }
 
+  /**
+   * Diálogo con la guía del formato, y el enlace que lo abre.
+   *
+   * El enlace se pone aquí, junto al selector de formato, en lugar de en la
+   * plantilla, porque el selector lo pinta el formulario de Commerce. Sin JS el
+   * diálogo no se abre, así que el enlace tampoco aparece.
+   *
+   * @param {Element} dialogo - El elemento [data-pro-guia].
+   */
+  function iniciaGuia(dialogo) {
+    const selector = document.querySelector('.pro-formatos');
+    if (!selector || typeof dialogo.showModal !== 'function') {
+      return;
+    }
+
+    const enlace = document.createElement('button');
+    enlace.type = 'button';
+    enlace.className = 'pro-formato-ayuda';
+    enlace.setAttribute('aria-haspopup', 'dialog');
+    enlace.textContent = Drupal.t('How does it look?');
+    selector.appendChild(enlace);
+
+    enlace.addEventListener('click', () => dialogo.showModal());
+    dialogo.querySelectorAll('[data-pro-guia-close]').forEach((boton) => {
+      boton.addEventListener('click', () => dialogo.close());
+    });
+    // Clic en el fondo: el backdrop no es un elemento, así que se compara con
+    // el propio dialog, que es lo que recibe el evento fuera del contenido.
+    dialogo.addEventListener('click', (e) => {
+      if (e.target === dialogo) {
+        dialogo.close();
+      }
+    });
+    dialogo.addEventListener('close', () => enlace.focus());
+  }
+
   Drupal.behaviors.pronensFicha = {
     attach(context) {
       once('pro-qty', '[data-pro-qty-input]', context).forEach(iniciaStepper);
       once('pro-buy-form', '.pro-buy-form', context).forEach(iniciaPersonalizacion);
+      once('pro-guia', '[data-pro-guia]', context).forEach(iniciaGuia);
     },
   };
 })(Drupal, once, drupalSettings);

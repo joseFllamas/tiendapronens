@@ -75,6 +75,7 @@ class FichaHooks {
         : NULL,
       'personalizable' => $this->esPersonalizable($producto),
       'guia_tallas' => $this->guiaTallas($producto),
+      'guia_bordado' => $this->esModoInicial($producto) ? $this->guiaBordado($variables) : NULL,
       'relacionados' => $this->relacionados($variables, $producto),
     ];
     $variables['#attached']['library'][] = 'pronens/ficha';
@@ -152,7 +153,16 @@ class FichaHooks {
         unset($valor);
       }
       if (isset($form['pro_perso']['field_color_bordado'])) {
-        $this->vistealosFormatos($form['pro_perso']['field_color_bordado']);
+        // El formato solo se elige en los productos de inicial: en el D7 el
+        // campo existía únicamente en el tipo de línea `custom_color_product`
+        // de un solo producto, y el cliente confirma que la elección de
+        // combinación es cosa de la inicial, no del nombre completo.
+        if ($producto instanceof ProductInterface && $this->esModoInicial($producto)) {
+          $this->vistealosFormatos($form['pro_perso']['field_color_bordado']);
+        }
+        else {
+          $form['pro_perso']['field_color_bordado']['#access'] = FALSE;
+        }
       }
     }
 
@@ -362,11 +372,15 @@ class FichaHooks {
     $terminos = $this->entityTypeManager->getStorage('taxonomy_term')
       ->loadMultiple(array_keys($elemento['widget']['#options']));
 
+    // Los términos vienen ordenados por peso, que es el orden de la foto guía:
+    // el número de la pastilla y el de la foto tienen que coincidir.
+    $numero = 0;
     foreach ($elemento['widget']['#options'] as $tid => $etiqueta) {
       $termino = $terminos[$tid] ?? NULL;
       if ($termino === NULL) {
         continue;
       }
+      $numero++;
       $media = $this->mediaFromField($termino, 'field_imagen');
       $foto = $media !== NULL ? $this->buildStyledImage($media, 'pronens_formato') : NULL;
       $color = $this->colorDeFormato($termino);
@@ -378,7 +392,7 @@ class FichaHooks {
         $muestra = '<span class="pro-formato__color" style="--pro-formato-color:' . $color . '"></span>';
       }
       else {
-        $muestra = '';
+        $muestra = '<span class="pro-formato__num">' . $numero . '</span>';
       }
       $elemento['widget']['#options'][$tid] = Markup::create(
         $muestra . '<span class="pro-formato__nombre">' . $etiqueta . '</span>'
@@ -419,6 +433,43 @@ class FichaHooks {
     $item = $media->get('field_media_image')->first();
 
     return $item !== NULL && (int) ($item->getValue()['width'] ?? 0) >= 200;
+  }
+
+
+  /**
+   * TRUE si el producto se personaliza con una inicial y no con un nombre.
+   */
+  protected function esModoInicial(ProductInterface $producto): bool {
+    return $producto->hasField('field_modo_personalizacion')
+      && (string) $producto->get('field_modo_personalizacion')->value === 'inicial';
+  }
+
+  /**
+   * Guía visual del formato del bordado, para el diálogo de ayuda.
+   *
+   * Es un bloque de contenido del tipo guia_bordado, así que el cliente cambia
+   * la foto y el texto desde /admin/content/block sin tocar código.
+   *
+   * @param array<string, mixed> $variables
+   *   Variables del template (se anotan cache tags).
+   *
+   * @return array<string, mixed>|null
+   *   Render array del bloque.
+   */
+  protected function guiaBordado(array &$variables): ?array {
+    $almacen = $this->entityTypeManager->getStorage('block_content');
+    $bloques = $almacen->loadByProperties(['type' => 'guia_bordado']);
+    $bloque = reset($bloques);
+    if ($bloque === FALSE) {
+      return NULL;
+    }
+    // Lista del bundle además del bloque: si el cliente crea otro, se recalcula.
+    $variables['#cache']['tags'] = Cache::mergeTags(
+      $variables['#cache']['tags'] ?? [],
+      Cache::mergeTags($bloque->getCacheTags(), ['block_content_list'])
+    );
+
+    return $this->entityTypeManager->getViewBuilder('block_content')->view($bloque, 'default');
   }
 
 }

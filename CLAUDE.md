@@ -77,14 +77,37 @@ Donde este documento y la realidad del repo discrepan, manda esta lista (decidid
   así que no salen en ninguna página de categoría. Ensuciarían un buscador o catálogo global.
   Aparte, el producto 238 (sudadera lila) cuesta 388,41 €, que parece error de datos.
 - **Las fotos de letra bordada NO existen (2026-07-27)**: la resolución de la ficha daba por hecho
-  que los 9 términos de `color_letra` del D7 traían la foto de una letra bordada. No es así: son
+  que los términos de `color_letra` del D7 traían la foto de una letra bordada. No es así: son
   miniaturas de **82×93 de camisetas dobladas**, restos de un muestrario de color de prenda, y
   encima tres términos comparten fichero y otros dos también (en el propio D7 `color2.jpg`,
   `color2_0.jpg` y `color2_1.jpg` son idénticos byte a byte, así que el dedupe de medias fue
-  correcto). Los otros 3 términos (Negro, Coral, Turquesa) solo tienen `field_color`. La ficha
-  está construida para usar la foto cuando exista y con **200px de ancho mínimo** como umbral; por
-  debajo cae a una muestra de color de `field_color`, y sin color al nombre a secas. En cuanto el
-  taller suba las 12 fotos de letra a `field_imagen` la ficha las usa sin tocar código.
+  correcto). La ficha está construida para usar la foto cuando exista y con **200px de ancho mínimo**
+  como umbral; por debajo cae a una muestra de color de `field_color`, y sin color al **número** de la
+  combinación. En cuanto el taller suba las 6 fotos de letra a `field_imagen` la ficha las usa sin
+  tocar código.
+- **Los formatos del bordado son 6, y el selector es solo del modo inicial (2026-07-29)**. Lo que
+  había venía de un experimento muerto: el vocabulario `color_letra` del D7 existía únicamente en el
+  tipo de línea `custom_color_product`, de un solo producto (`producto_costumizado_color`, 1 ficha), y
+  **ningún pedido lo usó jamás** (de las 7879 líneas con bordado del D7 todas eran `producto_bordado`
+  y `field_data_field_color_bordado` está vacía). Los 3 términos Negro/Coral/Turquesa se habían creado
+  a mano aquí con los colores del prototipo. La lista real la fija la foto de tienda "MOCHILA INICIAL
+  BORDADA · STEP 3: CHOOSE YOUR INITIAL COLOUR": **negro/blanco, blanco/verde, blanco/rojo,
+  blanco/marino, blanco/rosa y todo blanco**, con la convención del D7 (perfil = contorno, interior =
+  relleno) y **numeradas 1–6 igual que en la foto**. Los que no se ofrecen quedan **despublicados**,
+  no borrados: `TermSelection` filtra por `status` para quien no administra taxonomía, así que
+  desaparecen de la tienda y el histórico se conserva.
+- **El D7 tenía cuatro tipos de producto**, no dos: `product` (estándar, 92 fichas),
+  `producto_costumizado` (326, solo texto a bordar), `producto_costumizado_color` (1, texto + color) y
+  `producto_escuela` (19). Y ojo: `field_nombre_del_ni_o_a` (3883 registros) **no es bordado**, está
+  en `commerce_customer_profile` y es el nombre del niño en la dirección de entrega. El bordado real
+  es `field_bordar_texto`, 3374 registros en la línea de pedido.
+- **Guía visual del bordado**: bloque de contenido del tipo `guia_bordado` (foto + texto) que el
+  cliente edita en `/admin/content/block`. La ficha lo abre en un `<dialog>` nativo desde el enlace
+  "¿Cómo queda?" que el JS pone junto al selector. La foto actual se importó de la ficha de Amazon de
+  Pronens (679×699): **conviene sustituirla por el original del taller**.
+- **Ningún producto está en modo `inicial`** (los 289 personalizables están en `texto`), así que hoy
+  el selector de formato y su guía no se ven en la tienda. Para activarlos en un producto basta
+  cambiar "Modo de personalización" a *inicial* en su formulario de edición.
 - **`field_relacionados` está vacío en los 370 productos**, así que "Combínalo con" cae a los 4
   productos más recientes del mismo término. Si el cliente rellena el campo, manda el campo.
 - **Contraste AA del naranja**: el `#f4854e` del prototipo con texto blanco da 2,5:1 y el CTA es

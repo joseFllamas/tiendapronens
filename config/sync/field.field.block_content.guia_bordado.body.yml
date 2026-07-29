@@ -1,0 +1,22 @@
+uuid: 295db8fd-fe87-4ca5-aada-116906a05c24
+langcode: es
+status: true
+dependencies:
+  config:
+    - block_content.type.guia_bordado
+    - field.storage.block_content.body
+  module:
+    - text
+id: block_content.guia_bordado.body
+field_name: body
+entity_type: block_content
+bundle: guia_bordado
+label: Body
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  allowed_formats: {  }
+field_type: text_long
