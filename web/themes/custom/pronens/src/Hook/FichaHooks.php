@@ -4,6 +4,7 @@ namespace Drupal\pronens\Hook;
 
 use CommerceGuys\Intl\Formatter\CurrencyFormatterInterface;
 use Drupal\commerce_product\Entity\ProductInterface;
+use Drupal\commerce_product\Entity\ProductVariationInterface;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Field\EntityReferenceFieldItemListInterface;
@@ -103,6 +104,8 @@ class FichaHooks {
       // Perfil e interior de cada formato: con eso el JS dibuja las letras y la
       // vista previa tal como quedarán bordadas.
       'formatos' => $this->coloresDeFormatos(),
+      // Para rehacer el desglose al cambiar de variación.
+      'etiquetaBordado' => (string) $this->t('embroidery'),
     ];
   }
 
@@ -122,8 +125,21 @@ class FichaHooks {
     if (!str_starts_with($form_id, 'commerce_order_item_add_to_cart_form_commerce_product')) {
       return;
     }
+    $producto = $form_state->get('product');
 
     $form['#attributes']['class'][] = 'pro-buy-form';
+
+    // El precio de la variación elegida viaja en el propio formulario, que es lo
+    // único que Commerce vuelve a renderizar al cambiar de talla o color. Sin
+    // esto, el precio grande y el total del CTA se quedaban con el de la
+    // variación por defecto: se elegía la talla adulto y seguía diciendo 18,95 €
+    // cuando se iba a pagar 23,95 €.
+    $variacion = $this->variacionElegida($form_state, $producto);
+    if ($variacion !== NULL && ($precio = $variacion->getPrice()) !== NULL) {
+      $form['#attributes']['data-pro-precio'] = $precio->getNumber();
+      $form['#attributes']['data-pro-precio-texto'] = $this->currencyFormatter
+        ->format($precio->getNumber(), $precio->getCurrencyCode());
+    }
 
     // Atributos (talla, medida…): pastillas.
     if (isset($form['purchased_entity'])) {
@@ -149,7 +165,6 @@ class FichaHooks {
       }
       $form['pro_perso']['personalizacion_activa']['#attributes']['data-pro-perso-toggle'] = TRUE;
       // El prototipo canta el recargo junto al texto del checkbox.
-      $producto = $form_state->get('product');
       $recargo = $producto instanceof ProductInterface ? $this->recargo($producto) : 0.0;
       if ($recargo > 0) {
         $titulo = (string) $form['pro_perso']['personalizacion_activa']['#title'];
@@ -235,6 +250,24 @@ class FichaHooks {
       $form['pro_compra']['actions'] = $form['actions'];
       unset($form['actions']);
     }
+  }
+
+  /**
+   * Variación que el formulario tiene elegida ahora mismo.
+   *
+   * Commerce guarda la elegida en el form state tras cada refresco por AJAX;
+   * en la primera carga todavía no hay ninguna y manda la de por defecto.
+   */
+  protected function variacionElegida(FormStateInterface $form_state, mixed $producto): ?ProductVariationInterface {
+    $id = $form_state->get('selected_variation');
+    if ($id) {
+      $variacion = $this->entityTypeManager->getStorage('commerce_product_variation')->load($id);
+      if ($variacion instanceof ProductVariationInterface) {
+        return $variacion;
+      }
+    }
+
+    return $producto instanceof ProductInterface ? $producto->getDefaultVariation() : NULL;
   }
 
   /**

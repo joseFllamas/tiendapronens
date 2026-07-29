@@ -80,7 +80,11 @@
    */
   function iniciaPersonalizacion(form) {
     const ajustes = (drupalSettings.pronens && drupalSettings.pronens.ficha) || {};
-    const base = Number(ajustes.precioBase) || 0;
+    // El precio sale del formulario, no de drupalSettings: los settings se
+    // fijan al renderizar la página y no cambian al elegir otra variación,
+    // mientras que el formulario sí lo vuelve a traer en cada refresco AJAX.
+    const base = Number(form.dataset.proPrecio) || Number(ajustes.precioBase) || 0;
+    const baseTexto = form.dataset.proPrecioTexto || '';
     const recargo = Number(ajustes.recargo) || 0;
     const moneda = ajustes.moneda || 'EUR';
     const preciosExtra = ajustes.extras || {};
@@ -160,6 +164,11 @@
       }
       if (desglose) {
         desglose.hidden = !activo;
+        // El desglose lo pinta PHP con la variación por defecto; al cambiar de
+        // talla hay que rehacerlo con el precio de la elegida.
+        if (activo && baseTexto && recargo > 0) {
+          desglose.textContent = `${baseTexto} + ${formatea(recargo, moneda)} ${ajustes.etiquetaBordado || ''}`.trim();
+        }
       }
       if (total && base > 0) {
         total.textContent = formatea(unitario, moneda);
@@ -190,17 +199,39 @@
   }
 
   /**
-   * Diálogo con la guía del formato, y el enlace que lo abre.
+   * Handlers del diálogo de la guía: cerrar, fondo y foco.
    *
-   * El enlace se pone aquí, junto al selector de formato, en lugar de en la
-   * plantilla, porque el selector lo pinta el formulario de Commerce. Sin JS el
-   * diálogo no se abre, así que el enlace tampoco aparece.
+   * Va aparte del enlace porque el diálogo vive en la plantilla del producto y
+   * no se reemplaza nunca, mientras que el formulario sí.
    *
    * @param {Element} dialogo - El elemento [data-pro-guia].
    */
-  function iniciaGuia(dialogo) {
-    const selector = document.querySelector('.pro-formatos');
-    if (!selector || typeof dialogo.showModal !== 'function') {
+  function iniciaGuiaDialogo(dialogo) {
+    dialogo.querySelectorAll('[data-pro-guia-close]').forEach((boton) => {
+      boton.addEventListener('click', () => dialogo.close());
+    });
+    // Clic en el fondo: el backdrop no es un elemento, así que el evento llega
+    // al propio dialog cuando se pulsa fuera del contenido.
+    dialogo.addEventListener('click', (e) => {
+      if (e.target === dialogo) {
+        dialogo.close();
+      }
+    });
+  }
+
+  /**
+   * Enlace que abre la guía, junto al selector de formato.
+   *
+   * El enlace se pone aquí y no en la plantilla porque el selector lo pinta el
+   * formulario de Commerce. Y el `once` va sobre el selector, no sobre el
+   * diálogo: al cambiar de talla o color, Commerce reemplaza el formulario por
+   * AJAX y hay que volver a poner el enlace en el selector nuevo.
+   *
+   * @param {Element} selector - El contenedor .pro-formatos.
+   */
+  function iniciaGuiaEnlace(selector) {
+    const dialogo = document.querySelector('[data-pro-guia]');
+    if (!dialogo || typeof dialogo.showModal !== 'function') {
       return;
     }
 
@@ -212,19 +243,14 @@
     selector.appendChild(enlace);
 
     enlace.addEventListener('click', () => dialogo.showModal());
-    dialogo.querySelectorAll('[data-pro-guia-close]').forEach((boton) => {
-      boton.addEventListener('click', () => dialogo.close());
-    });
-    // Clic en el fondo: el backdrop no es un elemento, así que se compara con
-    // el propio dialog, que es lo que recibe el evento fuera del contenido.
-    dialogo.addEventListener('click', (e) => {
-      if (e.target === dialogo) {
-        dialogo.close();
+    // Al cerrar, el foco vuelve al enlace que lo abrió, que puede ser uno nuevo
+    // si el formulario se ha reemplazado entre medias.
+    dialogo.addEventListener('close', () => {
+      if (enlace.isConnected) {
+        enlace.focus();
       }
     });
-    dialogo.addEventListener('close', () => enlace.focus());
   }
-
 
   /**
    * Lightbox de la galería: la foto entera, sin el recorte 3:4 de la cuadrícula.
@@ -337,7 +363,8 @@
     attach(context) {
       once('pro-qty', '[data-pro-qty-input]', context).forEach(iniciaStepper);
       once('pro-buy-form', '.pro-buy-form', context).forEach(iniciaPersonalizacion);
-      once('pro-guia', '[data-pro-guia]', context).forEach(iniciaGuia);
+      once('pro-guia-dialogo', '[data-pro-guia]', context).forEach(iniciaGuiaDialogo);
+      once('pro-guia-enlace', '.pro-formatos', context).forEach(iniciaGuiaEnlace);
       once('pro-galeria', '[data-pro-galeria]', context).forEach(iniciaZoom);
     },
   };

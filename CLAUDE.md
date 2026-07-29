@@ -155,6 +155,15 @@ Donde este documento y la realidad del repo discrepan, manda esta lista (decidid
   original de 6480px sirve 1400 nítidos y uno de 679 sirve 679 sin emborronar. El diálogo usa
   `width: fit-content` para no dejar hueco alrededor de las fotos pequeñas. Se pasa con flechas,
   botones o arrastrando, y **sin JS cada foto es un enlace a su versión grande**.
+- **Cuidado con el AJAX del add-to-cart**: al cambiar de talla o color, Commerce vuelve a renderizar
+  **el formulario entero**, así que todo lo que el tema le añada tiene que ir con un `once()` puesto
+  en algo que esté **dentro** del formulario. El enlace "¿Cómo queda?" se perdía porque su `once`
+  estaba en el `<dialog>` de la guía, que vive en la plantilla del producto y no se reemplaza nunca.
+  Y por lo mismo, **el precio no puede salir de `drupalSettings`**: se fija al renderizar la página y
+  no cambia con la variación, de modo que se elegía la talla adulto y seguía diciendo 18,95 € cuando
+  se iban a pagar 23,95 €. Ahora el precio de la variación elegida viaja en `data-pro-precio` del
+  propio formulario, que es lo único que se rehace en cada refresco. Afectaba a los **152 productos
+  migrados con precios distintos por variación**, no solo a la mochila.
 - **El texto alternativo de las fotos migradas es el nombre del fichero** ("Foto Cupcake 1 -
   copia.jpg"). El lightbox suprime el pie de foto cuando detecta un nombre de fichero, pero el `alt`
   sigue siendo ese en más de mil medias: es una tarea de datos pendiente que afecta a accesibilidad y
