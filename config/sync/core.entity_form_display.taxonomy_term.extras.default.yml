@@ -1,0 +1,76 @@
+uuid: 22b85ce0-d44f-4922-899b-9825a49009f8
+langcode: es
+status: true
+dependencies:
+  config:
+    - field.field.taxonomy_term.extras.field_imagen
+    - field.field.taxonomy_term.extras.field_pide_texto
+    - field.field.taxonomy_term.extras.field_precio
+    - taxonomy.vocabulary.extras
+  module:
+    - commerce_price
+    - media_library
+    - path
+    - text
+id: taxonomy_term.extras.default
+targetEntityType: taxonomy_term
+bundle: extras
+mode: default
+content:
+  description:
+    type: text_textarea
+    weight: 0
+    region: content
+    settings:
+      rows: 5
+      placeholder: ''
+    third_party_settings: {  }
+  field_imagen:
+    type: media_library_widget
+    weight: 3
+    region: content
+    settings:
+      media_types: {  }
+    third_party_settings: {  }
+  field_pide_texto:
+    type: boolean_checkbox
+    weight: 2
+    region: content
+    settings:
+      display_label: true
+    third_party_settings: {  }
+  field_precio:
+    type: commerce_price_default
+    weight: 1
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  langcode:
+    type: language_select
+    weight: 2
+    region: content
+    settings:
+      include_locked: true
+    third_party_settings: {  }
+  name:
+    type: string_textfield
+    weight: -5
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  path:
+    type: path
+    weight: 30
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  status:
+    type: boolean_checkbox
+    weight: 100
+    region: content
+    settings:
+      display_label: true
+    third_party_settings: {  }
+hidden: {  }

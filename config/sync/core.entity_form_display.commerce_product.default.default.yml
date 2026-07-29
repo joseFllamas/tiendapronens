@@ -9,6 +9,7 @@ dependencies:
     - field.field.commerce_product.default.field_destacado
     - field.field.commerce_product.default.field_edades
     - field.field.commerce_product.default.field_escuela
+    - field.field.commerce_product.default.field_extras_disponibles
     - field.field.commerce_product.default.field_fuentes_permitidas
     - field.field.commerce_product.default.field_galeria
     - field.field.commerce_product.default.field_guia_tallas
@@ -42,6 +43,12 @@ content:
   created:
     type: datetime_timestamp
     weight: 5
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  field_extras_disponibles:
+    type: options_buttons
+    weight: 30
     region: content
     settings: {  }
     third_party_settings: {  }

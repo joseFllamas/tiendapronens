@@ -170,6 +170,39 @@
   outline-offset: 2px;
 }
 
+/* Muestra de color del atributo: el punto del hex o la foto del estampado,
+   ambos al mismo tamaño. La foto llega renderizada como media completo, así que
+   se recorta aquí en vez de crear un view mode solo para esto. */
+.pro-attrs .field--name-field-color .color_field__swatch {
+  width: 30px !important;
+  height: 30px !important;
+  border: 1px solid rgba(16, 34, 43, 0.15);
+}
+
+.pro-attrs .field--name-field-imagen img {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  object-fit: cover;
+  display: block;
+}
+
+.pro-attrs .field--name-field-imagen .field__label {
+  display: none;
+}
+
+/* Con foto, el punto del color sobra: es solo el respaldo. */
+.pro-attrs label:has(.field--name-field-imagen img) .field--name-field-color {
+  display: none;
+}
+
+.pro-attrs .form-radios label > div {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+
 /* --- Card del personalizador. --- */
 .pro-perso {
   border: 2px solid var(--pro-teal-light);
@@ -447,6 +480,113 @@
 
 .pro-guia__body p:last-child {
   margin-bottom: 0;
+}
+
+/* --- Card de extras. --- */
+.pro-extras {
+  border: 1px solid var(--pro-border-2);
+  border-radius: 18px;
+  padding: 18px 20px;
+  margin-bottom: 26px;
+}
+
+.pro-extras .form-item {
+  margin: 0;
+}
+
+.pro-extras > div > label,
+.pro-extras legend {
+  display: block;
+  font-family: var(--pro-font-display);
+  font-weight: 700;
+  font-size: 15px;
+  color: var(--pro-ink-2);
+  margin-bottom: 12px;
+  padding: 0;
+}
+
+.pro-extras fieldset {
+  border: 0;
+  padding: 0;
+  margin: 0;
+  min-width: 0;
+}
+
+.pro-extras .form-checkboxes {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.pro-extras .form-type-checkbox {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.pro-extras input[type='checkbox'] {
+  width: 18px;
+  height: 18px;
+  accent-color: var(--pro-teal);
+  cursor: pointer;
+  margin: 0;
+  flex: 0 0 auto;
+}
+
+.pro-extras label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--pro-ink-2);
+  cursor: pointer;
+  margin: 0;
+}
+
+.pro-extra__foto {
+  flex: 0 0 auto;
+  display: block;
+  width: 36px;
+  height: 40px;
+  border-radius: 6px;
+  overflow: hidden;
+  background: var(--pro-img-bg);
+}
+
+.pro-extra__foto img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.pro-extras .field--name-field-extras-texto {
+  margin-top: 14px;
+}
+
+.pro-extras .field--name-field-extras-texto label {
+  display: block;
+  font-family: var(--pro-font-ui);
+  font-size: 12.5px;
+  font-weight: 800;
+  margin-bottom: 6px;
+}
+
+.pro-extras input[type='text'] {
+  width: 100%;
+  box-sizing: border-box;
+  border: 1px solid var(--pro-border-2);
+  border-radius: 12px;
+  padding: 11px 15px;
+  font-size: 15px;
+  font-family: var(--pro-font-ui);
+  background: #fff;
+}
+
+.pro-extras input[type='text']:focus {
+  outline: 2px solid var(--pro-teal);
+  outline-offset: 1px;
 }
 
 /* --- Cantidad y CTA. --- */

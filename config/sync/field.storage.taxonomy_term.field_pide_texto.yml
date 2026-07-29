@@ -1,0 +1,18 @@
+uuid: 52a09fd2-3eb6-43cb-aaa1-ebf84c7ce85c
+langcode: es
+status: true
+dependencies:
+  module:
+    - taxonomy
+id: taxonomy_term.field_pide_texto
+field_name: field_pide_texto
+entity_type: taxonomy_term
+type: boolean
+settings: {  }
+module: core
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

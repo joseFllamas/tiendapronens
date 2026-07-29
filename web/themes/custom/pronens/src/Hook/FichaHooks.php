@@ -84,6 +84,8 @@ class FichaHooks {
       'precioBase' => $variables['ficha']['precio_base'],
       'recargo' => $recargo,
       'moneda' => $variables['ficha']['moneda'],
+      // Precio de cada extra, para que el CTA sume en vivo lo que se marca.
+      'extras' => $this->preciosDeExtras($producto),
     ];
   }
 
@@ -164,6 +166,22 @@ class FichaHooks {
           $form['pro_perso']['field_color_bordado']['#access'] = FALSE;
         }
       }
+    }
+
+    // Extras (llavero y compañía) en su propia card: no dependen del bordado.
+    if (isset($form['field_extras']) && ($form['field_extras']['#access'] ?? TRUE) !== FALSE) {
+      $form['pro_extras'] = [
+        '#type' => 'container',
+        '#attributes' => ['class' => ['pro-extras'], 'data-pro-extras' => TRUE],
+        '#weight' => 7,
+      ];
+      foreach (['field_extras', 'field_extras_texto'] as $clave) {
+        if (isset($form[$clave])) {
+          $form['pro_extras'][$clave] = $form[$clave];
+          unset($form[$clave]);
+        }
+      }
+      $this->vistealosExtras($form['pro_extras']['field_extras']);
     }
 
     // Cantidad y CTA en la misma fila, después de la card.
@@ -437,6 +455,33 @@ class FichaHooks {
 
 
   /**
+   * Precio unitario de cada extra que ofrece el producto.
+   *
+   * @return array<int, float>
+   *   Precios indexados por id de término.
+   */
+  protected function preciosDeExtras(ProductInterface $producto): array {
+    if (!$producto->hasField('field_extras_disponibles')) {
+      return [];
+    }
+    $lista = $producto->get('field_extras_disponibles');
+    if (!$lista instanceof EntityReferenceFieldItemListInterface) {
+      return [];
+    }
+    $precios = [];
+    foreach ($lista->referencedEntities() as $extra) {
+      if (!$extra instanceof \Drupal\Core\Entity\FieldableEntityInterface
+        || !$extra->hasField('field_precio')
+        || $extra->get('field_precio')->isEmpty()) {
+        continue;
+      }
+      $precios[(int) $extra->id()] = (float) ($extra->get('field_precio')->first()?->get('number')->getValue() ?? 0);
+    }
+
+    return $precios;
+  }
+
+  /**
    * TRUE si el producto se personaliza con una inicial y no con un nombre.
    */
   protected function esModoInicial(ProductInterface $producto): bool {
@@ -470,6 +515,41 @@ class FichaHooks {
     );
 
     return $this->entityTypeManager->getViewBuilder('block_content')->view($bloque, 'default');
+  }
+
+
+  /**
+   * Pone la foto del extra junto a su casilla.
+   *
+   * El widget de opciones pinta etiquetas de texto; el diseño de la referencia
+   * enseña el llavero, así que la foto del término se cuela en la etiqueta.
+   *
+   * @param array<string, mixed> $elemento
+   *   El elemento de formulario del campo, por referencia.
+   */
+  protected function vistealosExtras(array &$elemento): void {
+    if (!isset($elemento['widget']['#options'])) {
+      return;
+    }
+    $elemento['#attributes']['class'][] = 'pro-extras__lista';
+    /** @var array<int, \Drupal\taxonomy\TermInterface> $terminos */
+    $terminos = $this->entityTypeManager->getStorage('taxonomy_term')
+      ->loadMultiple(array_keys($elemento['widget']['#options']));
+
+    foreach ($elemento['widget']['#options'] as $tid => $etiqueta) {
+      $termino = $terminos[$tid] ?? NULL;
+      if ($termino === NULL) {
+        continue;
+      }
+      $media = $this->mediaFromField($termino, 'field_imagen');
+      $foto = $media !== NULL ? $this->buildStyledImage($media, 'pronens_formato') : NULL;
+      $muestra = $foto !== NULL
+        ? '<span class="pro-extra__foto">' . $this->renderer->render($foto) . '</span>'
+        : '';
+      $elemento['widget']['#options'][$tid] = Markup::create(
+        $muestra . '<span class="pro-extra__nombre">' . $etiqueta . '</span>'
+      );
+    }
   }
 
 }

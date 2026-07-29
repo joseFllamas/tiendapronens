@@ -1,0 +1,23 @@
+uuid: 6f6f661c-22e1-496d-af7e-0c7861df0166
+langcode: es
+status: true
+dependencies:
+  config:
+    - field.storage.taxonomy_term.field_precio
+    - taxonomy.vocabulary.extras
+  module:
+    - commerce_price
+id: taxonomy_term.extras.field_precio
+field_name: field_precio
+entity_type: taxonomy_term
+bundle: extras
+label: 'Precio del extra'
+description: 'Lo que se suma por unidad del producto. Déjalo a 0 para un extra gratuito.'
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  available_currencies: {  }
+  allow_negative: false
+field_type: commerce_price

@@ -21,3 +21,17 @@ services:
       # unitario en lugar de añadir un ajuste, y entonces el cliente perdería el
       # desglose de qué paga por la prenda y qué por el bordado.
       - { name: commerce_order.order_processor, priority: 150 }
+
+  Drupal\pronens_personalizacion\ExtrasCalculator:
+    class: Drupal\pronens_personalizacion\ExtrasCalculator
+
+  Drupal\pronens_personalizacion\OrderProcessor\ExtrasOrderProcessor:
+    class: Drupal\pronens_personalizacion\OrderProcessor\ExtrasOrderProcessor
+    arguments:
+      - '@Drupal\pronens_personalizacion\ExtrasCalculator'
+    tags:
+      # Mismo tramo que el recargo del bordado (150) pero un punto después, así
+      # el orden de los ajustes en la línea es estable: primero el bordado,
+      # luego los extras. Como el recargo, entra antes de la promoción y del
+      # IVA, así que el IVA los incluye y el cupón no los descuenta.
+      - { name: commerce_order.order_processor, priority: 149 }

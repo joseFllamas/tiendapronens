@@ -105,9 +105,35 @@ Donde este documento y la realidad del repo discrepan, manda esta lista (decidid
   cliente edita en `/admin/content/block`. La ficha lo abre en un `<dialog>` nativo desde el enlace
   "¿Cómo queda?" que el JS pone junto al selector. La foto actual se importó de la ficha de Amazon de
   Pronens (679×699): **conviene sustituirla por el original del taller**.
-- **Ningún producto está en modo `inicial`** (los 289 personalizables están en `texto`), así que hoy
-  el selector de formato y su guía no se ven en la tienda. Para activarlos en un producto basta
-  cambiar "Modo de personalización" a *inicial* en su formulario de edición.
+- **Extras de producto (2026-07-29)**: complementos opcionales con o sin sobrecoste, montados sobre la
+  misma maquinaria del +5 € del bordado. Se descartó contrib: `commerce_product_bundle` es alpha para
+  core ^9, `commerce_addon` está abandonado y `commerce_product_options` solo tiene `1.0.x-dev` sin
+  cobertura de seguridad, que no se pone en la ruta de compra de una tienda viva. El modelo:
+  vocabulario `extras` (con `field_precio`, `field_pide_texto` y `field_imagen`), `field_extras_disponibles`
+  en el producto (qué extras ofrece **ese** producto, de modo que el llavero no aparece en un polo sin
+  tocar código), y `field_extras` + `field_extras_texto` en la línea de pedido. `ExtrasOrderProcessor`
+  añade un ajuste `fee` por extra y por unidad, con el nombre del extra como etiqueta; va en prioridad
+  149, justo detrás del recargo del bordado. `ExtrasCalculator` es lógica pura con sus tests unitarios.
+- **El primer producto de inicial ya existe**: "Mochila personalizada con inicial bordada" (id 373,
+  `/productos/mochila-personalizada-con-inicial-bordada`), con 2 tamaños × 10 colores = **20
+  variaciones**, la inicial, el formato, la guía y el extra del llavero (+6 €). **Los precios (18,95 €
+  infantil / 23,95 € adulto) y el stock (100 uds) son marcadores**: no se facilitaron y hay que
+  revisarlos. Las fotos vienen de la carpeta `initials/` del repo, ya importadas como media.
+- **Muestras de color en el selector de variación**: el atributo `color` ya venía con
+  `commerce_product_rendered_attribute`, así que solo faltaba que el display `add_to_cart` del valor
+  mostrara algo más que el nombre. Ahora enseña `field_color` como círculo de 30px, y para estampados
+  como Camuflaje un nuevo `field_imagen` en el valor de atributo, porque un color plano no sirve. El
+  tema recorta la foto al tamaño del círculo y esconde el hex cuando hay foto.
+- **Stock**: la migración dio 500 uds por variación con transacciones de `commerce_stock_local`. Un
+  producto nuevo sin transacciones sale **"Agotado"** con el botón desactivado, porque
+  `commerce_stock_enforcement` mira el nivel real y no basta con dejar `field_stock` vacío.
+- **Pathauto estaba instalado sin ningún patrón** desde la fase 2, así que todo lo que creara el
+  cliente salía como `/product/373`. Añadidos dos patrones con el esquema del D7:
+  `productos/[commerce_product:title]` y `productos/[term:name]` para `tipo_de_producto`. Los 370
+  alias migrados y los 30 de término no se tocan: pathauto solo genera para lo que no tiene alias.
+- **Los 289 productos personalizables siguen en modo `texto`**: el selector de formato y su guía solo
+  se ven en el de inicial. Para activarlos en otro producto basta cambiar "Modo de personalización" a
+  *inicial* en su formulario de edición.
 - **`field_relacionados` está vacío en los 370 productos**, así que "Combínalo con" cae a los 4
   productos más recientes del mismo término. Si el cliente rellena el campo, manda el campo.
 - **Contraste AA del naranja**: el `#f4854e` del prototipo con texto blanco da 2,5:1 y el CTA es

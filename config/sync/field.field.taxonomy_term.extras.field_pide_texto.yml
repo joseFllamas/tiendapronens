@@ -1,0 +1,21 @@
+uuid: fb0c996f-24c6-4ddb-a31a-6628d83539e0
+langcode: es
+status: true
+dependencies:
+  config:
+    - field.storage.taxonomy_term.field_pide_texto
+    - taxonomy.vocabulary.extras
+id: taxonomy_term.extras.field_pide_texto
+field_name: field_pide_texto
+entity_type: taxonomy_term
+bundle: extras
+label: 'Pide un texto al cliente'
+description: 'Márcalo si el extra necesita que el cliente escriba algo, como el nombre del llavero.'
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  on_label: Activado
+  off_label: Desactivado
+field_type: boolean

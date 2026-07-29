@@ -105,7 +105,7 @@ class CarritoHooks {
       'bordado' => $this->bordadoDeLinea($linea),
       // El total de línea de Commerce no incluye los ajustes, así que sin esto
       // las líneas no suman el subtotal del pie.
-      'recargo' => $this->recargoDeLinea($linea),
+      'ajustes' => $this->ajustesDeLinea($linea),
     ];
   }
 
@@ -173,18 +173,25 @@ class CarritoHooks {
   }
 
   /**
-   * Recargo por bordado de una línea, ya formateado, o NULL.
+   * Ajustes de tarifa de una línea, con su etiqueta y su importe.
+   *
+   * Se enseñan uno a uno y no sumados: con bordado y llavero en la misma línea,
+   * "+11,00 €" no le dice nada a nadie y "+5,00 € bordado, +6,00 € llavero" sí.
+   *
+   * @return array<int, array<string, string>>
+   *   Lista de ajustes con etiqueta e importe formateado.
    */
-  protected function recargoDeLinea(OrderItemInterface $linea): ?string {
-    $suma = NULL;
+  protected function ajustesDeLinea(OrderItemInterface $linea): array {
+    $ajustes = [];
     foreach ($linea->getAdjustments(['fee']) as $ajuste) {
       $importe = $ajuste->getAmount();
-      $suma = $suma === NULL ? $importe : $suma->add($importe);
+      $ajustes[] = [
+        'etiqueta' => (string) $ajuste->getLabel(),
+        'importe' => $this->currencyFormatter->format($importe->getNumber(), $importe->getCurrencyCode()),
+      ];
     }
 
-    return $suma === NULL
-      ? NULL
-      : $this->currencyFormatter->format($suma->getNumber(), $suma->getCurrencyCode());
+    return $ajustes;
   }
 
   /**

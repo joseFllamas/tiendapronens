@@ -10,7 +10,12 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Hook\Attribute\Hook;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
+use CommerceGuys\Intl\Formatter\CurrencyFormatterInterface;
+use Drupal\commerce_price\Plugin\Field\FieldType\PriceItem;
+use Drupal\Core\Field\EntityReferenceFieldItemListInterface;
+use Drupal\pronens_personalizacion\OrderProcessor\ExtrasOrderProcessor;
 use Drupal\pronens_personalizacion\OrderProcessor\PersonalizacionOrderProcessor;
+use Drupal\taxonomy\TermInterface;
 
 /**
  * Adapta el formulario de añadir al carrito a la card de personalización.
@@ -34,6 +39,26 @@ final class PersonalizacionHooks {
   ];
 
   /**
+   * Campo de la línea de pedido con los extras elegidos.
+   */
+  private const CAMPO_EXTRAS = ExtrasOrderProcessor::CAMPO_EXTRAS;
+
+  /**
+   * Campo de la línea con el texto que pide un extra.
+   */
+  private const CAMPO_EXTRAS_TEXTO = ExtrasOrderProcessor::CAMPO_TEXTO;
+
+  /**
+   * Campo del producto con los extras que ofrece.
+   */
+  private const CAMPO_EXTRAS_PRODUCTO = 'field_extras_disponibles';
+
+  public function __construct(
+    private readonly CurrencyFormatterInterface $currencyFormatter,
+  ) {
+  }
+
+  /**
    * Altera todos los formularios de añadir al carrito.
    *
    * @param array<string, mixed> $form
@@ -49,6 +74,10 @@ final class PersonalizacionHooks {
     if (!$producto instanceof ProductInterface) {
       return;
     }
+
+    // Los extras no dependen del bordado: un producto sin bordado puede ofrecer
+    // llavero o envoltorio, así que se resuelven antes de nada.
+    $this->preparaExtras($form, $producto);
 
     // En un producto sin bordado los campos sobran por completo: 81 de los 370
     // migrados no lo admiten.
@@ -99,6 +128,44 @@ final class PersonalizacionHooks {
   }
 
   /**
+   * Comprueba que los extras que piden texto lo traigan.
+   *
+   * Se registra siempre que haya extras en el formulario, aunque el producto no
+   * admita bordado: son cosas independientes.
+   *
+   * @param array<string, mixed> $form
+   *   El formulario.
+   */
+  public static function validarExtras(array &$form, FormStateInterface $form_state): void {
+    $elegidos = array_filter((array) $form_state->getValue(self::CAMPO_EXTRAS, []));
+    $texto = trim((string) $form_state->getValue([self::CAMPO_EXTRAS_TEXTO, 0, 'value'], ''));
+
+    if ($elegidos === []) {
+      // Sin extras, el texto sobra: se vacía para que no quede colgado.
+      $form_state->setValue(self::CAMPO_EXTRAS_TEXTO, []);
+      return;
+    }
+
+    $tids = array_map(static fn ($valor) => is_array($valor) ? ($valor['target_id'] ?? $valor) : $valor, $elegidos);
+    /** @var array<int, \Drupal\taxonomy\TermInterface> $extras */
+    $extras = \Drupal::entityTypeManager()->getStorage('taxonomy_term')->loadMultiple($tids);
+    foreach ($extras as $extra) {
+      $pide = $extra->hasField('field_pide_texto')
+        && !$extra->get('field_pide_texto')->isEmpty()
+        && (bool) $extra->get('field_pide_texto')->value;
+      if ($pide && $texto === '') {
+        $form_state->setErrorByName(self::CAMPO_EXTRAS_TEXTO, new TranslatableMarkup(
+          'Escribe el nombre para @extra.',
+          ['@extra' => $extra->label()]
+        ));
+        return;
+      }
+    }
+
+    $form_state->setValue([self::CAMPO_EXTRAS_TEXTO, 0, 'value'], $texto);
+  }
+
+  /**
    * Normaliza y valida el texto a bordar según el modo del producto.
    *
    * Los datos del D7 contienen bordados de solo espacios: se normaliza aquí
@@ -133,6 +200,102 @@ final class PersonalizacionHooks {
     }
 
     $form_state->setValue([$campo, 0, 'value'], $texto);
+  }
+
+  /**
+   * Deja en el formulario solo los extras que ofrece este producto.
+   *
+   * El campo de la línea de pedido apunta a todo el vocabulario, así que aquí se
+   * recorta a lo que declara el producto en field_extras_disponibles. Un
+   * producto que no declara ninguno no ve el bloque: es lo que hace que el
+   * llavero no aparezca en un polo con inicial.
+   *
+   * @param array<string, mixed> $form
+   *   El formulario.
+   */
+  private function preparaExtras(array &$form, ProductInterface $producto): void {
+    $disponibles = $this->extrasDisponibles($producto);
+    if ($disponibles === [] || !isset($form[self::CAMPO_EXTRAS]['widget']['#options'])) {
+      foreach ([self::CAMPO_EXTRAS, self::CAMPO_EXTRAS_TEXTO] as $campo) {
+        if (isset($form[$campo])) {
+          $form[$campo]['#access'] = FALSE;
+        }
+      }
+      return;
+    }
+
+    $opciones = [];
+    $piden_texto = [];
+    foreach ($disponibles as $extra) {
+      $opciones[$extra->id()] = $this->etiquetaDeExtra($extra);
+      if ($this->extraPideTexto($extra)) {
+        $piden_texto[] = $extra->id();
+      }
+    }
+    $form[self::CAMPO_EXTRAS]['widget']['#options'] = $opciones;
+    $form['#validate'][] = [self::class, 'validarExtras'];
+
+    if ($piden_texto === []) {
+      $form[self::CAMPO_EXTRAS_TEXTO]['#access'] = FALSE;
+      return;
+    }
+    // El texto solo se pide si está marcado alguno de los extras que lo piden.
+    $condiciones = [];
+    foreach ($piden_texto as $tid) {
+      $condiciones[] = [':input[name="' . self::CAMPO_EXTRAS . '[' . $tid . ']"]' => ['checked' => TRUE]];
+    }
+    $form[self::CAMPO_EXTRAS_TEXTO]['#states'] = ['visible' => count($condiciones) === 1 ? $condiciones[0] : [$condiciones]];
+  }
+
+  /**
+   * Extras que declara el producto.
+   *
+   * @return array<int, \Drupal\taxonomy\TermInterface>
+   *   Los términos de extra.
+   */
+  private function extrasDisponibles(ProductInterface $producto): array {
+    if (!$producto->hasField(self::CAMPO_EXTRAS_PRODUCTO)) {
+      return [];
+    }
+    $campo = $producto->get(self::CAMPO_EXTRAS_PRODUCTO);
+    if (!$campo instanceof EntityReferenceFieldItemListInterface) {
+      return [];
+    }
+
+    return array_values(array_filter(
+      $campo->referencedEntities(),
+      static fn ($extra) => $extra instanceof TermInterface && $extra->isPublished()
+    ));
+  }
+
+  /**
+   * Etiqueta de la casilla de un extra, con su precio si lo tiene.
+   */
+  private function etiquetaDeExtra(TermInterface $extra): TranslatableMarkup|string {
+    $precio = $extra->hasField('field_precio') && !$extra->get('field_precio')->isEmpty()
+      ? $extra->get('field_precio')->first()
+      : NULL;
+    if (!$precio instanceof PriceItem) {
+      return (string) $extra->label();
+    }
+    $importe = $precio->toPrice();
+    if ($importe->isZero()) {
+      return (string) $extra->label();
+    }
+
+    return new TranslatableMarkup('@extra +@precio', [
+      '@extra' => $extra->label(),
+      '@precio' => $this->currencyFormatter->format($importe->getNumber(), $importe->getCurrencyCode()),
+    ]);
+  }
+
+  /**
+   * Si un extra necesita un texto del cliente.
+   */
+  private function extraPideTexto(TermInterface $extra): bool {
+    return $extra->hasField('field_pide_texto')
+      && !$extra->get('field_pide_texto')->isEmpty()
+      && (bool) $extra->get('field_pide_texto')->value;
   }
 
   /**

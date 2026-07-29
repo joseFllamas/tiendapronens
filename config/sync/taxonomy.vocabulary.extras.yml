@@ -1,0 +1,9 @@
+uuid: a3f1e8e2-36db-4dc0-b102-5c520a598e0d
+langcode: es
+status: true
+dependencies: {  }
+name: 'Extras de producto'
+vid: extras
+description: 'Complementos que se pueden añadir al comprar: llavero con nombre, envoltorio de regalo… Cada uno lleva su precio, que puede ser 0.'
+weight: 0
+new_revision: false

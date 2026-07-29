@@ -1,0 +1,23 @@
+uuid: 837daad2-7ab0-42cb-985b-4249ac50e2ad
+langcode: es
+status: true
+dependencies:
+  config:
+    - taxonomy.vocabulary.tipo_de_producto
+  module:
+    - taxonomy
+id: categoria_producto
+label: 'Categoría de producto'
+type: 'canonical_entities:taxonomy_term'
+pattern: '/productos/[term:name]'
+selection_criteria:
+  14494da7-e707-4aa1-a940-ca5b5c973aaa:
+    id: 'entity_bundle:taxonomy_term'
+    negate: false
+    context_mapping:
+      taxonomy_term: taxonomy_term
+    bundles:
+      tipo_de_producto: tipo_de_producto
+selection_logic: and
+weight: 0
+relationships: {  }

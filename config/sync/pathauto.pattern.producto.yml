@@ -1,0 +1,23 @@
+uuid: 6b43a295-77f5-4a57-873f-30a5062ebf4d
+langcode: es
+status: true
+dependencies:
+  config:
+    - commerce_product.commerce_product_type.default
+  module:
+    - commerce_product
+id: producto
+label: Producto
+type: 'canonical_entities:commerce_product'
+pattern: '/productos/[commerce_product:title]'
+selection_criteria:
+  04226d63-128b-4801-9e6c-a1751eac8dd3:
+    id: 'entity_bundle:commerce_product'
+    negate: false
+    context_mapping:
+      commerce_product: commerce_product
+    bundles:
+      default: default
+selection_logic: and
+weight: 0
+relationships: {  }

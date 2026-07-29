@@ -1,0 +1,20 @@
+uuid: 54f484cf-a2f6-4ce4-9e78-23e6e16c5a77
+langcode: es
+status: true
+dependencies:
+  module:
+    - commerce_order
+    - taxonomy
+id: commerce_order_item.field_extras
+field_name: field_extras
+entity_type: commerce_order_item
+type: entity_reference
+settings:
+  target_type: taxonomy_term
+module: core
+locked: false
+cardinality: -1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

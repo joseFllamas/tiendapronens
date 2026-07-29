@@ -83,6 +83,7 @@
     const base = Number(ajustes.precioBase) || 0;
     const recargo = Number(ajustes.recargo) || 0;
     const moneda = ajustes.moneda || 'EUR';
+    const preciosExtra = ajustes.extras || {};
 
     const casilla = form.querySelector('[data-pro-perso-toggle]');
     const texto = form.querySelector('[data-pro-perso-texto]');
@@ -98,6 +99,16 @@
       return Boolean(casilla && casilla.checked && texto && texto.value.trim() !== '');
     }
 
+    // Suma de los extras marcados. El valor de cada casilla es el id del
+    // término, que es la clave con la que llegan los precios.
+    function totalExtras() {
+      let suma = 0;
+      form.querySelectorAll('[data-pro-extras] input[type="checkbox"]:checked').forEach((casillaExtra) => {
+        suma += Number(preciosExtra[casillaExtra.value]) || 0;
+      });
+      return suma;
+    }
+
     // Color del hilo del formato marcado, si su ficha trae muestra de color.
     function colorHilo() {
       const marcado = form.querySelector('.pro-formatos input[type="radio"]:checked');
@@ -111,7 +122,7 @@
     function pinta() {
       const activo = bordadoActivo();
       const unidades = Math.max(1, parseInt(cantidad && cantidad.value, 10) || 1);
-      const unitario = base + (activo ? recargo : 0);
+      const unitario = base + (activo ? recargo : 0) + totalExtras();
 
       if (preview && previewTexto) {
         preview.hidden = !activo;
@@ -139,6 +150,9 @@
     });
     form.querySelectorAll('.pro-formatos input[type="radio"]').forEach((radio) => {
       radio.addEventListener('change', pinta);
+    });
+    form.querySelectorAll('[data-pro-extras] input[type="checkbox"]').forEach((casillaExtra) => {
+      casillaExtra.addEventListener('change', pinta);
     });
     pinta();
   }

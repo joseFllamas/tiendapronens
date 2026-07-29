@@ -3,7 +3,7 @@
  * @file
  * Línea del carrito en el flyout: foto, nombre, opciones, cantidad y total.
  *
- * linea (nombre, url, foto, opciones, bordado, recargo) viene de CarritoHooks. El botón
+ * linea (nombre, url, foto, opciones, bordado, ajustes) viene de CarritoHooks. El botón
  * de quitar es el de Commerce (commerce_order_item_remove_button), así que
  * funciona sin JS.
  */
@@ -24,7 +24,9 @@
       <span class="pro-line__qty">{{ 'Qty.'|t }} {{ fields.quantity.content }}</span>
       <span class="pro-line__total">
         {{ fields.total_price__number.content }}
-        {% if linea.recargo %}<span class="pro-line__fee">+ {{ linea.recargo }}</span>{% endif %}
+        {% for ajuste in linea.ajustes %}
+          <span class="pro-line__fee">+ {{ ajuste.importe }} {{ ajuste.etiqueta|lower }}</span>
+        {% endfor %}
       </span>
     </div>
   </div>
