@@ -147,6 +147,18 @@ Donde este documento y la realidad del repo discrepan, manda esta lista (decidid
 - **El selector de color enseña la foto del producto en ese color y nada más**: con la foto, el punto
   de color y el nombre sobran a la vista, así que el nombre se queda solo para lectores de pantalla y
   para el carrito y el pedido. Los colores sin foto (el resto del catálogo) siguen mostrando el punto.
+- **Lightbox de la galería en vez de lupa (2026-07-29)**: la referencia (Natura Selection) hace las
+  dos cosas, lupa al pasar el ratón y modal al hacer clic, pero aquí manda el dato: la **mediana del
+  catálogo son 945px de ancho** y solo el 36% llega a 1200, así que ampliar se vería peor. El
+  lightbox sí aporta, porque la cuadrícula recorta a 3:4 y ahí se ve la foto **entera**. Estilo
+  `pronens_lightbox` con `image_scale` (no `scale_and_crop`) y `upscale: FALSE`, tope 1400px: un
+  original de 6480px sirve 1400 nítidos y uno de 679 sirve 679 sin emborronar. El diálogo usa
+  `width: fit-content` para no dejar hueco alrededor de las fotos pequeñas. Se pasa con flechas,
+  botones o arrastrando, y **sin JS cada foto es un enlace a su versión grande**.
+- **El texto alternativo de las fotos migradas es el nombre del fichero** ("Foto Cupcake 1 -
+  copia.jpg"). El lightbox suprime el pie de foto cuando detecta un nombre de fichero, pero el `alt`
+  sigue siendo ese en más de mil medias: es una tarea de datos pendiente que afecta a accesibilidad y
+  a SEO de imágenes.
 - **La vista previa sigue anclada a `bottom: 44px`** como el prototipo, que estaba pensado para una
   foto de prenda plana. En la mochila el parche va más arriba, así que la letra cae por debajo de su
   sitio. El modelo tiene un `field_posicion_bordado` dormido que sería el lugar natural para

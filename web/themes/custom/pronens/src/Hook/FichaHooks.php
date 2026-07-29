@@ -7,6 +7,9 @@ use Drupal\commerce_product\Entity\ProductInterface;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Field\EntityReferenceFieldItemListInterface;
+use Drupal\file\FileInterface;
+use Drupal\image\ImageStyleInterface;
+use Drupal\media\MediaInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Hook\Attribute\Hook;
 use Drupal\Core\Config\ConfigFactoryInterface;
@@ -255,7 +258,17 @@ class FichaHooks {
       if ($imagen === NULL) {
         continue;
       }
-      $fotos[] = $imagen;
+      $alt = (string) ($imagen['#alt'] ?? '');
+      $fotos[] = [
+        'imagen' => $imagen,
+        // La cuadrícula recorta a 3:4; en el lightbox se ve entera. El enlace
+        // sirve además sin JS: lleva a la foto grande directamente.
+        'grande' => $this->urlDeEstilo($media, 'pronens_lightbox'),
+        'alt' => $alt,
+        // La migración dejó el nombre del fichero como texto alternativo en las
+        // fotos del D7, y "Foto Cupcake 1 - copia.jpg" no es un pie de foto.
+        'pie' => $this->pareceNombreDeFichero($alt) ? '' : $alt,
+      ];
       $variables['#cache']['tags'] = Cache::mergeTags($variables['#cache']['tags'] ?? [], $media->getCacheTags());
       if (\count($fotos) === self::MAX_FOTOS) {
         break;
@@ -263,6 +276,34 @@ class FichaHooks {
     }
 
     return $fotos;
+  }
+
+  /**
+   * Si un texto parece el nombre de un fichero y no una descripción.
+   */
+  protected function pareceNombreDeFichero(string $texto): bool {
+    return preg_match('/\.(jpe?g|png|gif|webp|avif)$/i', trim($texto)) === 1;
+  }
+
+  /**
+   * URL de la imagen de un media con un estilo dado.
+   */
+  protected function urlDeEstilo(MediaInterface $media, string $estilo): ?string {
+    if (!$media->hasField('field_media_image')) {
+      return NULL;
+    }
+    $campo = $media->get('field_media_image');
+    $ficheros = $campo instanceof EntityReferenceFieldItemListInterface ? $campo->referencedEntities() : [];
+    $fichero = reset($ficheros);
+    if (!$fichero instanceof FileInterface) {
+      return NULL;
+    }
+    $estilo_imagen = $this->entityTypeManager->getStorage('image_style')->load($estilo);
+    if (!$estilo_imagen instanceof ImageStyleInterface) {
+      return NULL;
+    }
+
+    return $estilo_imagen->buildUrl((string) $fichero->getFileUri());
   }
 
   /**

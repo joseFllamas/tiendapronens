@@ -225,11 +225,120 @@
     dialogo.addEventListener('close', () => enlace.focus());
   }
 
+
+  /**
+   * Lightbox de la galería: la foto entera, sin el recorte 3:4 de la cuadrícula.
+   *
+   * Sin JS cada foto es un enlace a su versión grande, así que la galería sigue
+   * siendo útil; con JS el clic abre el diálogo y se pasan las fotos con las
+   * flechas, arrastrando o con los botones. Escape y el foco los gestiona el
+   * propio <dialog>.
+   *
+   * @param {Element} galeria - Contenedor [data-pro-galeria].
+   */
+  function iniciaZoom(galeria) {
+    const dialogo = document.querySelector('[data-pro-zoom-dialog]');
+    const enlaces = Array.from(galeria.querySelectorAll('[data-pro-zoom]'));
+    if (!dialogo || enlaces.length === 0 || typeof dialogo.showModal !== 'function') {
+      return;
+    }
+    const img = dialogo.querySelector('[data-pro-zoom-img]');
+    const pie = dialogo.querySelector('[data-pro-zoom-caption]');
+    const contador = dialogo.querySelector('[data-pro-zoom-count]');
+    // Título e imagen de cada foto salen del propio enlace y su <img>.
+    const fotos = enlaces.map((enlace) => ({
+      url: enlace.getAttribute('href'),
+      alt: (enlace.querySelector('img') || {}).alt || '',
+      // El pie llega vacío cuando el alt es un nombre de fichero heredado.
+      pie: enlace.dataset.proPie || '',
+    }));
+    let actual = 0;
+    let origen = null;
+
+    function muestra(indice) {
+      actual = (indice + fotos.length) % fotos.length;
+      img.src = fotos[actual].url;
+      img.alt = fotos[actual].alt;
+      if (pie) {
+        pie.textContent = fotos[actual].pie;
+      }
+      if (contador) {
+        contador.textContent = `${actual + 1} / ${fotos.length}`;
+      }
+    }
+
+    function abre(indice, disparador) {
+      origen = disparador || null;
+      muestra(indice);
+      dialogo.showModal();
+    }
+
+    enlaces.forEach((enlace, indice) => {
+      enlace.addEventListener('click', (e) => {
+        e.preventDefault();
+        abre(indice, enlace);
+      });
+    });
+
+    const prev = dialogo.querySelector('[data-pro-zoom-prev]');
+    const next = dialogo.querySelector('[data-pro-zoom-next]');
+    if (prev) {
+      prev.addEventListener('click', () => muestra(actual - 1));
+    }
+    if (next) {
+      next.addEventListener('click', () => muestra(actual + 1));
+    }
+    dialogo.querySelectorAll('[data-pro-zoom-close]').forEach((boton) => {
+      boton.addEventListener('click', () => dialogo.close());
+    });
+    // Clic en el fondo: el evento llega al propio dialog, no al contenido.
+    dialogo.addEventListener('click', (e) => {
+      if (e.target === dialogo) {
+        dialogo.close();
+      }
+    });
+    dialogo.addEventListener('keydown', (e) => {
+      if (fotos.length < 2) {
+        return;
+      }
+      if (e.key === 'ArrowRight') {
+        e.preventDefault();
+        muestra(actual + 1);
+      }
+      else if (e.key === 'ArrowLeft') {
+        e.preventDefault();
+        muestra(actual - 1);
+      }
+    });
+    dialogo.addEventListener('close', () => {
+      if (origen) {
+        origen.focus();
+      }
+    });
+
+    // Arrastrar de lado en táctil.
+    let inicioX = null;
+    dialogo.addEventListener('touchstart', (e) => {
+      inicioX = e.changedTouches[0].clientX;
+    }, { passive: true });
+    dialogo.addEventListener('touchend', (e) => {
+      if (inicioX === null || fotos.length < 2) {
+        return;
+      }
+      const avance = e.changedTouches[0].clientX - inicioX;
+      if (Math.abs(avance) > 45) {
+        muestra(actual + (avance < 0 ? 1 : -1));
+      }
+      inicioX = null;
+    }, { passive: true });
+  }
+
   Drupal.behaviors.pronensFicha = {
     attach(context) {
       once('pro-qty', '[data-pro-qty-input]', context).forEach(iniciaStepper);
       once('pro-buy-form', '.pro-buy-form', context).forEach(iniciaPersonalizacion);
       once('pro-guia', '[data-pro-guia]', context).forEach(iniciaGuia);
+      once('pro-galeria', '[data-pro-galeria]', context).forEach(iniciaZoom);
     },
   };
 })(Drupal, once, drupalSettings);

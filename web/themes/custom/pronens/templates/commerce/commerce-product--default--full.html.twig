@@ -15,11 +15,16 @@
 #}
 <article{{ attributes.addClass('pro-ficha') }}>
   <div class="pro-ficha__grid">
-    <div class="pro-ficha__gallery">
+    <div class="pro-ficha__gallery" data-pro-galeria>
       {% for foto in ficha.fotos %}
-        <div class="pro-ficha__shot{{ loop.first ? ' pro-ficha__shot--main' }}"
-             {{ loop.first ? 'data-pro-preview-target' : '' }}>
-          {{ foto }}
+        {# Enlace y no div: sin JS lleva a la foto grande, y con JS el propio JS
+           intercepta el clic y abre el lightbox. #}
+        <a class="pro-ficha__shot{{ loop.first ? ' pro-ficha__shot--main' }}"
+           href="{{ foto.grande }}"
+           data-pro-zoom="{{ loop.index0 }}"
+           data-pro-pie="{{ foto.pie }}"
+           {{ loop.first ? 'data-pro-preview-target' : '' }}>
+          {{ foto.imagen }}
           {% if loop.first and ficha.personalizable %}
             {# Vista previa en vivo: el JS escribe aquí lo que se teclea. El
                ancla bottom:44px es la del prototipo. #}
@@ -27,9 +32,28 @@
               <span class="pro-ficha__preview-text" data-pro-preview-text></span>
             </div>
           {% endif %}
-        </div>
+        </a>
       {% endfor %}
     </div>
+
+    {% if ficha.fotos|length %}
+      {# Lightbox: dialog nativo, así Escape y el foco los gestiona el navegador.
+         Las fotos se ven enteras, sin el recorte 3:4 de la cuadrícula. #}
+      <dialog class="pro-zoom" data-pro-zoom-dialog>
+        <div class="pro-zoom__bar">
+          <span class="pro-zoom__count" data-pro-zoom-count></span>
+          <button type="button" class="pro-zoom__close" data-pro-zoom-close aria-label="{{ 'Close'|t }}">✕</button>
+        </div>
+        <figure class="pro-zoom__figure">
+          <img data-pro-zoom-img alt="">
+          <figcaption class="pro-zoom__caption" data-pro-zoom-caption></figcaption>
+        </figure>
+        {% if ficha.fotos|length > 1 %}
+          <button type="button" class="pro-zoom__nav pro-zoom__nav--prev" data-pro-zoom-prev aria-label="{{ 'Previous image'|t }}">‹</button>
+          <button type="button" class="pro-zoom__nav pro-zoom__nav--next" data-pro-zoom-next aria-label="{{ 'Next image'|t }}">›</button>
+        {% endif %}
+      </dialog>
+    {% endif %}
 
     <div class="pro-ficha__buy">
       {% if ficha.eyebrow %}

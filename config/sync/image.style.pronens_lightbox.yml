@@ -1,0 +1,21 @@
+uuid: adf64c53-5214-42e2-ba48-dfc253a32412
+langcode: es
+status: true
+dependencies: {  }
+name: pronens_lightbox
+label: 'Pronens lightbox (máx 1400, sin recortar ni ampliar)'
+effects:
+  007a0f6c-a2a1-4a44-873a-7f9cd5f163c8:
+    uuid: 007a0f6c-a2a1-4a44-873a-7f9cd5f163c8
+    id: image_scale
+    weight: 0
+    data:
+      width: 1400
+      height: 1400
+      upscale: false
+  3d2c27ec-9257-48b9-870f-c6dcde26f17f:
+    uuid: 3d2c27ec-9257-48b9-870f-c6dcde26f17f
+    id: image_convert
+    weight: 1
+    data:
+      extension: webp
