@@ -28,7 +28,10 @@
           {% if loop.first and ficha.personalizable %}
             {# Vista previa en vivo: el JS escribe aquí lo que se teclea. El
                ancla bottom:44px es la del prototipo. #}
-            <div class="pro-ficha__preview" data-pro-preview hidden>
+            {# El montaje se coloca en porcentajes del alto y del ancho de la
+               foto, así que vale igual en cualquier tamaño de pantalla. #}
+            <div class="pro-ficha__preview" data-pro-preview hidden
+                 style="--pro-inicial-x:{{ ficha.inicial.x }}%;--pro-inicial-y:{{ ficha.inicial.y }}%;--pro-inicial-tamano:{{ ficha.inicial.tamano }}%">
               <span class="pro-ficha__preview-text" data-pro-preview-text></span>
             </div>
           {% endif %}

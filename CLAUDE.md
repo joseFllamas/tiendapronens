@@ -168,10 +168,26 @@ Donde este documento y la realidad del repo discrepan, manda esta lista (decidid
   copia.jpg"). El lightbox suprime el pie de foto cuando detecta un nombre de fichero, pero el `alt`
   sigue siendo ese en más de mil medias: es una tarea de datos pendiente que afecta a accesibilidad y
   a SEO de imágenes.
-- **La vista previa sigue anclada a `bottom: 44px`** como el prototipo, que estaba pensado para una
-  foto de prenda plana. En la mochila el parche va más arriba, así que la letra cae por debajo de su
-  sitio. El modelo tiene un `field_posicion_bordado` dormido que sería el lugar natural para
-  resolverlo por producto o por foto.
+- **Colocación del montaje en proporciones, no en píxeles (2026-07-29)**: `field_inicial_x`,
+  `field_inicial_y` y `field_inicial_tamano` en el producto, en **porcentaje** de la foto, porque la
+  misma foto se sirve en varios estilos de imagen y a varios anchos de pantalla: un 37% vale igual en
+  la miniatura de 740px, en el lightbox de 1400 y en móvil, mientras que "128px desde la izquierda"
+  solo valdría para un tamaño. Se descartó **focal_point**, que resuelve una interacción parecida y es
+  compatible con D11: guarda el punto como entidad `Crop` **atada al fichero**
+  (`Crop::findCrop($file->getFileUri(), …)`), arrastra el módulo `crop` y **no guarda tamaño**. Aquí la
+  decisión es del producto y el parche necesita tamaño. De focal_point se toma la idea de marcar sobre
+  la propia foto: `MontajeHooks` añade al formulario del producto un lienzo con la letra arrastrable y
+  una barra de tamaño que rellenan los tres números, que siguen visibles y editables a mano.
+- **La foto base del montaje es la de la variación** (`field_imagenes`), por convención la foto **sin
+  letra**. Al elegir color, la ficha cambia la foto principal por la de esa variación y dibuja encima
+  la inicial. La URL viaja en `data-pro-montaje` del formulario, por la misma razón que el precio.
+- **Cuidado con el encuadre**: la posición es una sola para todo el producto, así que **las fotos base
+  de cada color tienen que compartir encuadre**. Las de la mochila vienen de recortes distintos de
+  Amazon y solo el marino es una base propia, así que en los otros colores la letra queda algo
+  desplazada hasta que haya una base por color con el mismo encuadre. El widget del backoffice mide
+  siempre sobre `field_imagen_principal` para no medir sobre un encuadre y pintar sobre otro.
+- El `field_posicion_bordado` del modelo (`lateral` / `centro`) **no sirve para esto**: es una lista de
+  dos valores en la línea de pedido, no una coordenada.
 - **Los 289 productos personalizables siguen en modo `texto`**: el selector de formato y su guía solo
   se ven en el de inicial. Para activarlos en otro producto basta cambiar "Modo de personalización" a
   *inicial* en su formulario de edición.

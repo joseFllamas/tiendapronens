@@ -1,0 +1,23 @@
+uuid: 110962cb-f404-4246-9f5a-e4fa94991cae
+langcode: es
+status: true
+dependencies:
+  config:
+    - commerce_product.commerce_product_type.default
+    - field.storage.commerce_product.field_inicial_tamano
+id: commerce_product.default.field_inicial_tamano
+field_name: field_inicial_tamano
+entity_type: commerce_product
+bundle: default
+label: 'Inicial: tamaño (% del ancho)'
+description: 'Ancho del parche respecto al ancho de la foto. El parche real mide 9 x 9 cm.'
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  min: 0.0
+  max: 100.0
+  prefix: ''
+  suffix: ''
+field_type: decimal

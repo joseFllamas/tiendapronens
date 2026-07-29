@@ -1,0 +1,20 @@
+uuid: c2967148-2b1c-41e2-9714-42b3d96506dd
+langcode: es
+status: true
+dependencies:
+  module:
+    - commerce_product
+id: commerce_product.field_inicial_y
+field_name: field_inicial_y
+entity_type: commerce_product
+type: decimal
+settings:
+  precision: 5
+  scale: 2
+module: core
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

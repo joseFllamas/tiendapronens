@@ -96,6 +96,7 @@
     const preview = document.querySelector('[data-pro-preview]');
     const previewTexto = document.querySelector('[data-pro-preview-text]');
     const total = document.querySelector('[data-pro-total]');
+    const fotoPrincipal = document.querySelector('.pro-ficha__shot--main img');
     const desglose = document.querySelector('[data-pro-breakdown]');
     const ctaBase = cta ? cta.value : '';
 
@@ -152,12 +153,23 @@
       });
     }
 
+    // La foto de la variación elegida es la base sin letra del montaje, así que
+    // al cambiar de color la foto principal cambia con ella.
+    function sincronizaFoto() {
+      const url = form.dataset.proMontaje;
+      if (fotoPrincipal && url && fotoPrincipal.getAttribute('src') !== url) {
+        fotoPrincipal.setAttribute('src', url);
+        fotoPrincipal.removeAttribute('srcset');
+      }
+    }
+
     function pinta() {
       const activo = bordadoActivo();
       const unidades = Math.max(1, parseInt(cantidad && cantidad.value, 10) || 1);
       const unitario = base + (activo ? recargo : 0) + totalExtras();
 
       pintaLetras();
+      sincronizaFoto();
       if (preview && previewTexto) {
         preview.hidden = !activo;
         previewTexto.textContent = activo ? valorTexto() : '';

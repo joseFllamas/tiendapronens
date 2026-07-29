@@ -1,0 +1,20 @@
+uuid: b753175c-5631-4964-879c-0d56bea15b3a
+langcode: es
+status: true
+dependencies:
+  module:
+    - commerce_product
+id: commerce_product.field_inicial_tamano
+field_name: field_inicial_tamano
+entity_type: commerce_product
+type: decimal
+settings:
+  precision: 5
+  scale: 2
+module: core
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

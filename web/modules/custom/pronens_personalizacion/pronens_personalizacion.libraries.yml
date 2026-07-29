@@ -1,0 +1,10 @@
+montaje:
+  version: VERSION
+  css:
+    theme:
+      css/montaje.css: {}
+  js:
+    js/montaje.js: {}
+  dependencies:
+    - core/drupal
+    - core/once

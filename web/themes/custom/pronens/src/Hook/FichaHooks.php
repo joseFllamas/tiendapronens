@@ -89,6 +89,10 @@ class FichaHooks {
         ? $this->currencyFormatter->format((string) $recargo, $precio?->getCurrencyCode() ?? 'EUR')
         : NULL,
       'personalizable' => $this->esPersonalizable($producto),
+      // Dónde y de qué tamaño va la inicial sobre la foto, en porcentaje: la
+      // misma foto se sirve en varios estilos y anchos, así que en píxeles solo
+      // valdría para un tamaño.
+      'inicial' => $this->posicionInicial($producto),
       'guia_tallas' => $this->guiaTallas($producto),
       'guia_bordado' => $this->esModoInicial($producto) ? $this->guiaBordado($variables) : NULL,
       'relacionados' => $this->relacionados($variables, $producto),
@@ -139,6 +143,16 @@ class FichaHooks {
       $form['#attributes']['data-pro-precio'] = $precio->getNumber();
       $form['#attributes']['data-pro-precio-texto'] = $this->currencyFormatter
         ->format($precio->getNumber(), $precio->getCurrencyCode());
+    }
+    // Foto de la variación elegida: por convención es la foto sin letra, así que
+    // es la que sirve de base para el montaje de la inicial. Viaja en el
+    // formulario porque es lo único que Commerce rehace al cambiar de variación.
+    if ($variacion !== NULL) {
+      $medias = $this->mediasFromFields($variacion, ['field_imagenes']);
+      $media = reset($medias);
+      if ($media !== FALSE) {
+        $form['#attributes']['data-pro-montaje'] = $this->urlDeEstilo($media, 'pronens_ficha_principal');
+      }
     }
 
     // Atributos (talla, medida…): pastillas.
@@ -250,6 +264,28 @@ class FichaHooks {
       $form['pro_compra']['actions'] = $form['actions'];
       unset($form['actions']);
     }
+  }
+
+  /**
+   * Posición y tamaño de la inicial sobre la foto, en porcentaje.
+   *
+   * @return array<string, float>
+   *   Claves x, y y tamaño.
+   */
+  protected function posicionInicial(ProductInterface $producto): array {
+    $lee = static function (string $campo, float $defecto) use ($producto): float {
+      if (!$producto->hasField($campo) || $producto->get($campo)->isEmpty()) {
+        return $defecto;
+      }
+
+      return (float) $producto->get($campo)->value;
+    };
+
+    return [
+      'x' => $lee('field_inicial_x', 50.0),
+      'y' => $lee('field_inicial_y', 50.0),
+      'tamano' => $lee('field_inicial_tamano', 12.0),
+    ];
   }
 
   /**

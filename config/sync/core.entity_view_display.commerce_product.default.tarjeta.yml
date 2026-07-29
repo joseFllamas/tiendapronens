@@ -15,6 +15,9 @@ dependencies:
     - field.field.commerce_product.default.field_galeria
     - field.field.commerce_product.default.field_guia_tallas
     - field.field.commerce_product.default.field_imagen_principal
+    - field.field.commerce_product.default.field_inicial_tamano
+    - field.field.commerce_product.default.field_inicial_x
+    - field.field.commerce_product.default.field_inicial_y
     - field.field.commerce_product.default.field_lavado
     - field.field.commerce_product.default.field_modo_personalizacion
     - field.field.commerce_product.default.field_personalizable
@@ -38,6 +41,9 @@ hidden:
   field_galeria: true
   field_guia_tallas: true
   field_imagen_principal: true
+  field_inicial_tamano: true
+  field_inicial_x: true
+  field_inicial_y: true
   field_lavado: true
   field_modo_personalizacion: true
   field_personalizable: true

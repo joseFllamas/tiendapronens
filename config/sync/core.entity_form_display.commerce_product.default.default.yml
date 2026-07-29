@@ -14,6 +14,9 @@ dependencies:
     - field.field.commerce_product.default.field_galeria
     - field.field.commerce_product.default.field_guia_tallas
     - field.field.commerce_product.default.field_imagen_principal
+    - field.field.commerce_product.default.field_inicial_tamano
+    - field.field.commerce_product.default.field_inicial_x
+    - field.field.commerce_product.default.field_inicial_y
     - field.field.commerce_product.default.field_lavado
     - field.field.commerce_product.default.field_modo_personalizacion
     - field.field.commerce_product.default.field_personalizable
@@ -51,6 +54,27 @@ content:
     weight: 30
     region: content
     settings: {  }
+    third_party_settings: {  }
+  field_inicial_tamano:
+    type: number
+    weight: 33
+    region: content
+    settings:
+      placeholder: ''
+    third_party_settings: {  }
+  field_inicial_x:
+    type: number
+    weight: 31
+    region: content
+    settings:
+      placeholder: ''
+    third_party_settings: {  }
+  field_inicial_y:
+    type: number
+    weight: 32
+    region: content
+    settings:
+      placeholder: ''
     third_party_settings: {  }
   langcode:
     type: language_select

@@ -37,14 +37,26 @@
   display: block;
 }
 
-/* Vista previa del bordado sobre la primera foto. */
+/* Vista previa del bordado sobre la primera foto.
+   Sin posición configurada cae al ancla del prototipo (centrado, 44px desde
+   abajo); con ella, el montaje va donde diga el producto, en porcentajes. */
 .pro-ficha__preview {
   position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 44px;
+  /* Solo top: poniendo también bottom, la caja se estiraba entre las dos y
+     dejaba de ser cuadrada, que es la forma del parche. */
+  left: var(--pro-inicial-x, 50%);
+  top: var(--pro-inicial-y, 80%);
+  width: var(--pro-inicial-tamano, 40%);
+  transform: translate(-50%, -50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  aspect-ratio: 1;
   text-align: center;
   pointer-events: none;
+  /* La letra se dimensiona con la caja del parche: hace falta declarar el
+     contenedor para poder usar cqw/cqh. */
+  container-type: size;
 }
 
 .pro-ficha__preview[hidden] {
@@ -65,7 +77,9 @@
 .pro-ficha__preview[style*='--pro-letra-interior'] .pro-ficha__preview-text {
   font-family: var(--pro-font-display);
   font-weight: 800;
-  font-size: 56px;
+  /* La letra ocupa la caja del parche: así crece y decrece con la foto. */
+  font-size: min(100cqw, 100cqh);
+  line-height: 1;
   color: var(--pro-letra-interior, var(--pro-ink));
   -webkit-text-stroke: 3px var(--pro-letra-perfil, transparent);
   paint-order: stroke fill;
