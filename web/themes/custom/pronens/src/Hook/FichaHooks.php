@@ -144,16 +144,6 @@ class FichaHooks {
       $form['#attributes']['data-pro-precio-texto'] = $this->currencyFormatter
         ->format($precio->getNumber(), $precio->getCurrencyCode());
     }
-    // Foto de la variación elegida: por convención es la foto sin letra, así que
-    // es la que sirve de base para el montaje de la inicial. Viaja en el
-    // formulario porque es lo único que Commerce rehace al cambiar de variación.
-    if ($variacion !== NULL) {
-      $medias = $this->mediasFromFields($variacion, ['field_imagenes']);
-      $media = reset($medias);
-      if ($media !== FALSE) {
-        $form['#attributes']['data-pro-montaje'] = $this->urlDeEstilo($media, 'pronens_ficha_principal');
-      }
-    }
 
     // Atributos (talla, medida…): pastillas.
     if (isset($form['purchased_entity'])) {

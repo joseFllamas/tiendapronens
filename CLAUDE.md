@@ -178,14 +178,12 @@ Donde este documento y la realidad del repo discrepan, manda esta lista (decidid
   decisión es del producto y el parche necesita tamaño. De focal_point se toma la idea de marcar sobre
   la propia foto: `MontajeHooks` añade al formulario del producto un lienzo con la letra arrastrable y
   una barra de tamaño que rellenan los tres números, que siguen visibles y editables a mano.
-- **La foto base del montaje es la de la variación** (`field_imagenes`), por convención la foto **sin
-  letra**. Al elegir color, la ficha cambia la foto principal por la de esa variación y dibuja encima
-  la inicial. La URL viaja en `data-pro-montaje` del formulario, por la misma razón que el precio.
-- **Cuidado con el encuadre**: la posición es una sola para todo el producto, así que **las fotos base
-  de cada color tienen que compartir encuadre**. Las de la mochila vienen de recortes distintos de
-  Amazon y solo el marino es una base propia, así que en los otros colores la letra queda algo
-  desplazada hasta que haya una base por color con el mismo encuadre. El widget del backoffice mide
-  siempre sobre `field_imagen_principal` para no medir sobre un encuadre y pintar sobre otro.
+- **La foto del montaje es siempre `field_imagen_principal`**, y no cambia al elegir color (decisión
+  del cliente, 2026-07-29). Es la foto **sin letra** sobre la que se mide la posición en el
+  backoffice, así que tiene que ser la misma que se pinta en la tienda: si cambiara con la variación,
+  la posición medida sobre una foto se aplicaría sobre otra con distinto encuadre. El widget del
+  backoffice mide sobre esa misma foto, de modo que lo que se coloca es exactamente lo que se ve.
+  Las fotos de cada color siguen usándose en la muestra del selector y en la línea del carrito.
 - El `field_posicion_bordado` del modelo (`lateral` / `centro`) **no sirve para esto**: es una lista de
   dos valores en la línea de pedido, no una coordenada.
 - **Los 289 productos personalizables siguen en modo `texto`**: el selector de formato y su guía solo
