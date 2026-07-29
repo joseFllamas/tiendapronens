@@ -93,9 +93,12 @@ Donde este documento y la realidad del repo discrepan, manda esta lista (decidid
   a mano aquí con los colores del prototipo. La lista real la fija la foto de tienda "MOCHILA INICIAL
   BORDADA · STEP 3: CHOOSE YOUR INITIAL COLOUR": **negro/blanco, blanco/verde, blanco/rojo,
   blanco/marino, blanco/rosa y todo blanco**, con la convención del D7 (perfil = contorno, interior =
-  relleno) y **numeradas 1–6 igual que en la foto**. Los que no se ofrecen quedan **despublicados**,
-  no borrados: `TermSelection` filtra por `status` para quien no administra taxonomía, así que
-  desaparecen de la tienda y el histórico se conserva.
+  relleno) y **numeradas 1–6 igual que en la foto**. Los 8 que no se
+  ofrecen (5 del D7 y los 3 del prototipo) se despublicaron primero y se **borraron** el 2026-07-29 a
+  petición del cliente, porque ensuciaban la lista del vocabulario en la administración: se verificó
+  antes que no tenían ni una referencia en contenido y que ninguna línea de pedido los usaba. Las filas
+  de `migrate_map_pronens_taxonomia_color_letra` se dejaron a propósito: con la fila en el mapa y el
+  término borrado, un re-import **no los recrea**. Copia previa: snapshot `pre-borrado-formatos`.
 - **El D7 tenía cuatro tipos de producto**, no dos: `product` (estándar, 92 fichas),
   `producto_costumizado` (326, solo texto a bordar), `producto_costumizado_color` (1, texto + color) y
   `producto_escuela` (19). Y ojo: `field_nombre_del_ni_o_a` (3883 registros) **no es bordado**, está

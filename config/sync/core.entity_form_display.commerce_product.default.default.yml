@@ -25,6 +25,8 @@ dependencies:
     - field.field.commerce_product.default.field_tipo_de_producto
   module:
     - commerce
+    - commerce_price
+    - media_library
     - path
     - text
 _core:
@@ -36,12 +38,13 @@ mode: default
 content:
   body:
     type: text_textarea_with_summary
-    weight: 2
+    weight: 3
     region: content
     settings:
       rows: 9
       summary_rows: 3
       placeholder: ''
+      show_summary: false
     third_party_settings: {  }
   created:
     type: datetime_timestamp
@@ -49,32 +52,120 @@ content:
     region: content
     settings: {  }
     third_party_settings: {  }
-  field_extras_disponibles:
+  field_composicion:
+    type: string_textfield
+    weight: 12
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  field_destacado:
+    type: boolean_checkbox
+    weight: 14
+    region: content
+    settings:
+      display_label: true
+    third_party_settings: {  }
+  field_edades:
     type: options_buttons
-    weight: 30
+    weight: 13
     region: content
     settings: {  }
     third_party_settings: {  }
+  field_escuela:
+    type: options_buttons
+    weight: 15
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  field_extras_disponibles:
+    type: options_buttons
+    weight: 8
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  field_galeria:
+    type: media_library_widget
+    weight: 16
+    region: content
+    settings:
+      media_types: {  }
+    third_party_settings: {  }
+  field_guia_tallas:
+    type: options_select
+    weight: 17
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  field_imagen_principal:
+    type: media_library_widget
+    weight: 18
+    region: content
+    settings:
+      media_types: {  }
+    third_party_settings: {  }
   field_inicial_tamano:
     type: number
-    weight: 33
+    weight: 11
     region: content
     settings:
       placeholder: ''
     third_party_settings: {  }
   field_inicial_x:
     type: number
-    weight: 31
+    weight: 9
     region: content
     settings:
       placeholder: ''
     third_party_settings: {  }
   field_inicial_y:
     type: number
-    weight: 32
+    weight: 10
     region: content
     settings:
       placeholder: ''
+    third_party_settings: {  }
+  field_lavado:
+    type: options_select
+    weight: 19
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  field_modo_personalizacion:
+    type: options_select
+    weight: 20
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  field_personalizable:
+    type: boolean_checkbox
+    weight: 21
+    region: content
+    settings:
+      display_label: true
+    third_party_settings: {  }
+  field_recargo:
+    type: commerce_price_default
+    weight: 22
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  field_relacionados:
+    type: entity_reference_autocomplete
+    weight: 24
+    region: content
+    settings:
+      match_operator: CONTAINS
+      match_limit: 10
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  field_tipo_de_producto:
+    type: options_select
+    weight: 23
+    region: content
+    settings: {  }
     third_party_settings: {  }
   langcode:
     type: language_select
@@ -85,13 +176,13 @@ content:
     third_party_settings: {  }
   path:
     type: path
-    weight: 7
+    weight: 6
     region: content
     settings: {  }
     third_party_settings: {  }
   status:
     type: boolean_checkbox
-    weight: 8
+    weight: 7
     region: content
     settings:
       display_label: true
@@ -125,18 +216,5 @@ content:
       placeholder: ''
     third_party_settings: {  }
 hidden:
-  field_composicion: true
-  field_destacado: true
-  field_edades: true
-  field_escuela: true
   field_fuentes_permitidas: true
-  field_galeria: true
-  field_guia_tallas: true
-  field_imagen_principal: true
-  field_lavado: true
-  field_modo_personalizacion: true
-  field_personalizable: true
-  field_recargo: true
-  field_relacionados: true
-  field_tipo_de_producto: true
   variations: true
