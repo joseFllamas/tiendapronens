@@ -1,0 +1,42 @@
+label: 'TMGMT DeepL glossary'
+display:
+  default:
+    display_title: Default
+    display_options:
+      title: 'DeepL glossaries'
+      fields:
+        label:
+          label: Name
+          separator: ', '
+        tmgmt_translator:
+          label: Translator
+          separator: ', '
+        related_dictionaries:
+          label: Dictionaries
+        operations:
+          label: Operations
+      pager:
+        options:
+          tags:
+            next: ››
+            previous: ‹‹
+          expose:
+            items_per_page_label: 'Items per page'
+            items_per_page_options_all_label: '- All -'
+            offset_label: Offset
+      exposed_form:
+        options:
+          submit_button: Apply
+          reset_button_label: Reset
+          exposed_sorts_label: 'Sort by'
+          sort_asc_label: Asc
+          sort_desc_label: Desc
+      empty:
+        area_text_custom:
+          content: 'No DeepL glossaries available. Use <a href="/admin/tmgmt/deepl_glossaries/fetch">Fetch DeepL glossaries</a> or add a new glossary.'
+      filters:
+        tmgmt_translator:
+          expose:
+            label: Translator
+  page_1:
+    display_title: Page

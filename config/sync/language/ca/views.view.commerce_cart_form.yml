@@ -11,6 +11,7 @@ display:
           sort_desc_label: Desc
       fields:
         purchased_entity:
+          label: Element
           separator: ', '
         unit_price__number:
           label: Preu

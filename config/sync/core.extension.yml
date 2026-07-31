@@ -2,6 +2,9 @@ _core:
   default_config_hash: 4GIX5Esnc_umpXUBj4IIocRX7Mt5fPhm4AgXfE3E56E
 module:
   address: 0
+  ai: 0
+  ai_provider_openai: 0
+  ai_tmgmt: 0
   announcements_feed: 0
   automated_cron: 0
   big_pipe: 0
@@ -47,6 +50,7 @@ module:
   help: 0
   image: 0
   inline_entity_form: 0
+  key: 0
   language: 0
   layout_builder: 0
   layout_discovery: 0
@@ -66,6 +70,7 @@ module:
   node: 0
   options: 0
   page_cache: 0
+  paragraphs_asymmetric_translation_widgets: 0
   path: 0
   path_alias: 0
   phpass: 0
@@ -84,6 +89,13 @@ module:
   taxonomy: 0
   telephone: 0
   text: 0
+  tmgmt: 0
+  tmgmt_config: 0
+  tmgmt_content: 0
+  tmgmt_deepl: 0
+  tmgmt_deepl_glossary: 0
+  tmgmt_language_combination: 0
+  tmgmt_locale: 0
   token: 0
   update: 0
   user: 0

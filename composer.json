@@ -16,6 +16,10 @@
     ],
     "require": {
         "composer/installers": "^2.3",
+        "cweagans/composer-patches": "^1.7",
+        "drupal/ai": "^1.4",
+        "drupal/ai_provider_openai": "^1.2",
+        "drupal/ai_tmgmt": "^1.0@beta",
         "drupal/color_field": "^3.0",
         "drupal/commerce": "^3",
         "drupal/commerce_paypal": "^2.1",
@@ -31,9 +35,12 @@
         "drupal/migrate_plus": "^6.0",
         "drupal/migrate_tools": "^6.0",
         "drupal/paragraphs": "^1.21",
+        "drupal/paragraphs_asymmetric_translation_widgets": "^1.4",
         "drupal/pathauto": "^1.15",
         "drupal/recipe_tracker": "^1",
         "drupal/search_api": "^1.41",
+        "drupal/tmgmt": "^1.18",
+        "drupal/tmgmt_deepl_glossary": "^2.2",
         "drush/drush": "^13.7"
     },
     "conflict": {
@@ -51,11 +58,18 @@
             "dealerdirect/phpcodesniffer-composer-installer": true,
             "php-http/discovery": true,
             "php-tuf/composer-integration": true,
-            "symfony/runtime": true
+            "symfony/runtime": true,
+            "cweagans/composer-patches": true
         },
         "sort-packages": true
     },
     "extra": {
+        "composer-exit-on-patch-failure": true,
+        "patches": {
+            "drupal/tmgmt": {
+                "#3134922: TMGMT crea traducciones de paragraph, pero paragraphs_asymmetric_translation_widgets espera duplicados independientes por idioma; sin esto las traducciones automáticas de la Home comparten target_id y se muestra el idioma equivocado. Sigue en Needs review, no está en ninguna release. https://www.drupal.org/project/tmgmt/issues/3134922#comment-158624172": "patches/tmgmt-3134922-46-paragraphs-asimetricos.patch"
+            }
+        },
         "drupal-scaffold": {
             "locations": {
                 "web-root": "web/"
@@ -118,5 +132,19 @@
     "require-dev": {
         "drupal/core-dev": "^11.4",
         "mglaman/phpstan-drupal": "^2.1"
+    },
+    "scripts": {
+        "remove-deprecated-ai-translate": [
+            "rm -rf web/modules/contrib/ai/modules/ai_translate"
+        ],
+        "post-install-cmd": [
+            "@remove-deprecated-ai-translate"
+        ],
+        "post-update-cmd": [
+            "@remove-deprecated-ai-translate"
+        ]
+    },
+    "scripts-descriptions": {
+        "remove-deprecated-ai-translate": "drupal/ai 1.4.5 aún empaqueta el submódulo ai_translate marcado como obsoleto (lifecycle: deprecated), que desaparece en AI 2.0.0 y cuyo sustituto es el proyecto suelto drupal/ai_translate (change record https://www.drupal.org/node/3570275). Aquí no se usa ninguno de los dos: TMGMT traduce con ai_tmgmt en modo prompt básico. Se borra la copia obsoleta para que no aparezca en la lista de módulos y nadie la active, y para que, si algún día se hace composer require drupal/ai_translate, las dos copias no compitan por el mismo nombre de máquina (el descubrimiento de extensiones de Drupal elegiría una u otra según el orden del sistema de ficheros). Se podrá quitar cuando drupal/ai deje de empaquetarla."
     }
 }

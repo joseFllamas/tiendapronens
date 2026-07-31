@@ -5,6 +5,8 @@ display:
     display_options:
       title: Boutiques
       fields:
+        commerce_store_bulk_form:
+          action_title: 'Pour la sélection'
         is_default:
           label: 'Par défaut'
           separator: ', '
@@ -21,6 +23,11 @@ display:
           label: Actions
       pager:
         options:
+          tags:
+            next: "suivant\_›"
+            previous: "‹\_précédent"
+            first: "«\_premier"
+            last: "dernier\_»"
           expose:
             items_per_page_label: 'Éléments par page'
             items_per_page_options_all_label: '- Tout -'

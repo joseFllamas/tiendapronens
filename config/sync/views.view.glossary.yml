@@ -10,7 +10,7 @@ dependencies:
 _core:
   default_config_hash: msJ3UFBLYSIFO9zalGlk3_7z1reoZ7EHJ4qeRzO5iAE
 id: glossary
-label: Glossary
+label: Glosario
 module: node
 description: 'All content, by letter.'
 tag: default
@@ -466,7 +466,7 @@ display:
       path: glossary
       menu:
         type: normal
-        title: Glossary
+        title: Glosario
         weight: 0
         menu_name: main
         parent: ''

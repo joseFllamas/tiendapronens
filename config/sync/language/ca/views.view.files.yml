@@ -64,6 +64,7 @@ display:
           label: "Tipus d'entitat"
         count:
           label: "Comptador d'ús"
+          format_plural_string: !!binary MQNAY291bnQ=
       pager:
         options:
           tags:

@@ -15,7 +15,14 @@ display:
             items_per_page_label: 'Elements per pàgina'
             items_per_page_options_all_label: '- Tot -'
             offset_label: Desplaçament
+          tags:
+            previous: '‹ anterior'
+            next: 'següent ›'
+            first: '« primer'
+            last: 'últim »'
       fields:
+        commerce_order_bulk_form:
+          action_title: 'Amb la selecció'
         type:
           label: Tipus
           separator: ', '

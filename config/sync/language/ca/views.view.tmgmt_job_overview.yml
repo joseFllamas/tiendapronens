@@ -1,0 +1,56 @@
+display:
+  default:
+    display_title: Mestre
+    display_options:
+      fields:
+        state:
+          label: Estat
+          separator: ', '
+        label:
+          label: Etiqueta
+        source_language_1:
+          label: De
+          separator: ', '
+        target_language:
+          label: Per
+          separator: ', '
+        translator:
+          label: Proveïdor
+        tags_count:
+          label: Etiquetes
+        file_count:
+          label: Fitxers
+        changed:
+          label: Canviat
+        operations:
+          label: Operacions
+      pager:
+        options:
+          tags:
+            next: 'següent ›'
+            previous: '‹ anterior'
+            first: '« primer'
+            last: 'últim »'
+          expose:
+            items_per_page_label: 'Elements per pàgina'
+            items_per_page_options_all_label: '- Tot -'
+            offset_label: Desplaçament
+      exposed_form:
+        options:
+          submit_button: Aplica
+          reset_button_label: Reinicialitza
+          exposed_sorts_label: 'Ordena per'
+          sort_asc_label: Asc
+          sort_desc_label: Desc
+      filters:
+        state:
+          expose:
+            label: Estat
+        source_language:
+          expose:
+            label: 'Llengua de la font'
+        translator:
+          expose:
+            label: Proveïdor
+  page_1:
+    display_title: Pàgina

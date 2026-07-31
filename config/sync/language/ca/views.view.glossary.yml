@@ -1,3 +1,4 @@
+label: Glossari
 display:
   default:
     display_title: 'Per defecte'
@@ -27,3 +28,6 @@ display:
     display_title: Adjunt
   page_1:
     display_title: Pàgina
+    display_options:
+      menu:
+        title: Glossari

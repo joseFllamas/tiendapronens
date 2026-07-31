@@ -1,3 +1,4 @@
+label: Glossary
 display:
   default:
     display_title: 'Par défaut'
@@ -27,3 +28,6 @@ display:
     display_title: 'Élément joint'
   page_1:
     display_title: Page
+    display_options:
+      menu:
+        title: Glossary

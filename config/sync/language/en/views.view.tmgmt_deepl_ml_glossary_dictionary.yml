@@ -1,0 +1,45 @@
+label: 'TMGMT DeepL glossary dictionaries'
+display:
+  default:
+    display_title: Default
+    display_options:
+      title: Dictionaries
+      fields:
+        label_1:
+          label: Name
+          separator: ', '
+        source_lang:
+          label: 'Source language'
+          separator: ', '
+        entry_count:
+          label: 'Entry count'
+          separator: ', '
+        operations:
+          label: Operations
+      pager:
+        options:
+          tags:
+            next: 'Next ›'
+            previous: '‹ Previous'
+            first: '« First'
+            last: 'Last »'
+          expose:
+            items_per_page_label: 'Items per page'
+            items_per_page_options_all_label: '- All -'
+            offset_label: Offset
+      exposed_form:
+        options:
+          submit_button: Apply
+          reset_button_label: Reset
+          exposed_sorts_label: 'Sort by'
+          sort_asc_label: Asc
+          sort_desc_label: Desc
+      empty:
+        area_text_custom:
+          content: 'No dictionaries available for the given glossary.'
+      arguments:
+        glossary_id:
+          exception:
+            title: All
+  dictionaries:
+    display_title: Embed

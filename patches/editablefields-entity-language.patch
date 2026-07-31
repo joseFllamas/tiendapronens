@@ -1,0 +1,80 @@
+--- a/src/Form/EditableFieldsForm.php
++++ b/src/Form/EditableFieldsForm.php
+@@ -132,17 +132,43 @@
+     $entity = $this->entityTypeManager
+       ->getStorage($entity->getEntityTypeId())
+       ->load($entity->id());
++
++    // Resolve the row language to ensure we edit the correct translation.
++    // Priority 1: explicit query param added by fxasesores_ef_lang behavior.
++    // Try the merged request bag first (covers GET/POST/attributes in Symfony).
++    $row_langcode = \Drupal::request()->get('entity_language')
++      ?: \Drupal::request()->query->get('entity_language');
++
++    // Priority 2: the field's own langcode (often matches the row's rendering langcode).
++    if (!$row_langcode && $this->field_name && $this->entity->hasField($this->field_name)) {
++      $row_langcode = $this->entity->get($this->field_name)->getLangcode();
++    }
++
++    // Priority 3: inspect each translation for the revision flag.
++    if (!$row_langcode) {
++      foreach ($entity->getTranslationLanguages() as $lc => $language) {
++        if ($entity->hasTranslation($lc)) {
++          $t = $entity->getTranslation($lc);
++          if ($t->hasField('revision_translation_affected')) {
++            $flag = (string) $t->get('revision_translation_affected')->value;
++            if ($flag === '1' || $flag === 'true') { $row_langcode = $lc; break; }
++          }
++        }
++      }
++    }
++
++    // Translate freshly loaded entity to the resolved row language.
++    $entity = \Drupal::service('entity.repository')->getTranslationFromContext($entity, $row_langcode);
++
+     $wrapper = str_replace('_', '-', $this->getFormId()) . '-wrapper';
+-    $fallback = $this->settings['fallback_edit'];
++    $fallback = !empty($this->settings['fallback_edit']);
+     $form['#prefix'] = "<div id=\"$wrapper\">";
+     $form['#suffix'] = '</div>';
+ 
+-    // Set entity language as a hidden field.
++    // Persist the language for AJAX round-trips.
+     $form['entity_language'] = [
+       '#type' => 'hidden',
+-      '#value' => $this->entity->language()
+-        ? $this->entity->language()->getId()
+-        : NULL,
++      '#value' => $row_langcode,
+     ];
+ 
+     $operation = $form_state->get('operation');
+@@ -354,6 +380,28 @@
+         $entity = $this->entityTypeManager
+           ->getStorage($params['entity_type'])
+           ->load($params['entity_id']);
++
++        // Resolve language for AJAX response.
++        // Priority 1: hidden form value set in buildForm().
++        $ajax_langcode = $form_state->getValue('entity_language');
++        // Priority 2: query param (fxasesores_ef_lang behavior injects it on click).
++        if (!$ajax_langcode) {
++          $ajax_langcode = \Drupal::request()->query->get('entity_language');
++        }
++        // Priority 3: translation flagged in this revision.
++        if (!$ajax_langcode) {
++          foreach ($entity->getTranslationLanguages() as $lc => $language) {
++            if ($entity->hasTranslation($lc)) {
++              $t = $entity->getTranslation($lc);
++              if ($t->hasField('revision_translation_affected')) {
++                $flag = (string) $t->get('revision_translation_affected')->value;
++                if ($flag === '1' || $flag === 'true') { $ajax_langcode = $lc; break; }
++              }
++            }
++          }
++        }
++        // Translate entity to the intended language before rendering.
++        $entity = \Drupal::service('entity.repository')->getTranslationFromContext($entity, $ajax_langcode);
+ 
+         if ($entity) {
+           $wrapper = $this->editablefieldsHelper->prepareWrapperElement();

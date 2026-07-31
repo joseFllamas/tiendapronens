@@ -3,6 +3,8 @@ display:
     display_title: Mestre
     display_options:
       fields:
+        commerce_store_bulk_form:
+          action_title: 'Amb la selecció'
         is_default:
           label: 'Per defecte'
           separator: ', '
@@ -19,6 +21,11 @@ display:
           label: Operacions
       pager:
         options:
+          tags:
+            next: 'següent ›'
+            previous: '‹ anterior'
+            first: '« primer'
+            last: 'últim »'
           expose:
             items_per_page_label: 'Elements per pàgina'
             items_per_page_options_all_label: '- Tot -'
