@@ -1,0 +1,97 @@
+pronens_correos_express.settings:
+  type: config_object
+  label: 'Ajustes de la integración con Correos Express'
+  mapping:
+    entorno:
+      type: string
+      label: 'Entorno de la API: PRE o PRO'
+    remitente:
+      type: mapping
+      label: 'Datos del remitente que no están en la tienda'
+      mapping:
+        nombre:
+          type: label
+          label: 'Nombre o razón social'
+        nif:
+          type: string
+          label: 'NIF o CIF'
+        contacto:
+          type: label
+          label: 'Persona de contacto'
+        telefono:
+          type: string
+          label: 'Teléfono'
+        correo:
+          type: email
+          label: 'Correo electrónico'
+    etiqueta:
+      type: mapping
+      label: 'Formato de la etiqueta'
+      mapping:
+        tipo:
+          type: integer
+          label: 'Tipo de etiqueta'
+        posicion:
+          type: integer
+          label: 'Posición de la etiqueta en la hoja'
+        ocultar_remitente:
+          type: boolean
+          label: 'Ocultar el remitente en la etiqueta'
+        texto_remitente_alternativo:
+          type: label
+          label: 'Texto de remitente alternativo'
+        logo_base64:
+          type: string
+          label: 'Logotipo del cliente en base64'
+    peso:
+      type: mapping
+      label: 'Pesos estimados'
+      mapping:
+        por_defecto_gramos:
+          type: integer
+          label: 'Peso por unidad por defecto, en gramos'
+        minimo_envio_gramos:
+          type: integer
+          label: 'Peso mínimo del envío, en gramos'
+        por_categoria:
+          type: sequence
+          label: 'Peso por unidad de cada tipo de producto, en gramos'
+          sequence:
+            type: integer
+            label: 'Gramos por unidad'
+    seguimiento:
+      type: mapping
+      label: 'Sincronización del seguimiento'
+      mapping:
+        activo:
+          type: boolean
+          label: 'Sincronizar el seguimiento por cron'
+        intervalo_horas:
+          type: integer
+          label: 'Horas mínimas entre sincronizaciones'
+        envios_por_ejecucion:
+          type: integer
+          label: 'Envíos consultados en cada ejecución'
+    registro_detallado:
+      type: boolean
+      label: 'Registrar el payload completo en el log'
+
+# Configuración del plugin de método de envío. Sin este esquema, phpstan a nivel
+# 8 con configGetUnknownKeyRule falla, y la entidad no se puede traducir.
+commerce_shipping.commerce_shipping_method.plugin.correos_express:
+  type: commerce_shipping_method_configuration
+  label: 'Configuración del método de envío de Correos Express'
+  mapping:
+    etiqueta_publica:
+      type: label
+      label: 'Nombre que ve el cliente en el checkout'
+    descripcion:
+      type: label
+      label: 'Detalle que ve el cliente bajo el nombre'
+    # Tarifa plana, igual que flat_rate. No hay modo por peso porque Correos
+    # Express no tiene consulta de tarifas: cualquier tramo lo teclearía el
+    # comerciante, y eso no se construye hasta que haya pesos reales que lo
+    # justifiquen.
+    importe:
+      type: field.value.commerce_price
+      label: 'Importe del envío'

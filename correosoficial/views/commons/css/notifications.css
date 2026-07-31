@@ -1,0 +1,97 @@
+.correosNotificationsContent {
+    display: flex;
+    height: 70vh;
+    overflow: hidden;
+    margin-top: 1rem;
+}
+
+.correosNotificationsLeft {
+    flex: 1 1;
+    overflow-y: auto;
+    margin-bottom: 1rem;
+    margin-right: 1rem;
+}
+
+.correosNotificationsRight {
+    flex: 2 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 1rem;
+    margin-right: 1rem;
+    padding: 2rem;
+    font-family: Cartero Light, sans-serif;
+    font-size: 14px;
+    line-height: 20px;
+    font-weight: 500;
+    color: #949494;
+}
+
+h2.correosNotificationsTitle {
+    color: var(--co_blue);
+    padding: 10px;
+    font-size: 30px;
+    text-align: center;
+    font-family: CarteroBold, sans-serif;
+}
+
+.correosNotificationItem {
+    border-radius: 8px;
+    color: #949494;
+    padding: 1rem;
+    margin: 1rem;
+    font-size: 12px;
+    border: 1px solid #F3F2F2;
+    height: 85px;
+    width: 90%;
+    cursor: pointer;
+    box-shadow: 0 4px 2px #CBCBCB;
+}
+
+.correosNotificationItem.inView {
+    background-color: #A6BCBE;
+    color: rgba(0,0,0,.5);
+}
+
+.correosNotificationItem p {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.notificationCheck {
+    margin-top: 2rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 12px;
+    color: #000000;
+}
+
+.notificationsSendForm {
+    width: 15px;
+    height: 15px;
+    border: none;
+    background-color: #D9D9D9;
+    margin-right: 1rem;
+    cursor: pointer;
+}
+
+.notificationsSendForm.clicked {
+    background-color: var(--co_blue);
+}
+
+.notificationLoader {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    top: 0;
+    z-index: 999;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0,0,0,.7);
+}

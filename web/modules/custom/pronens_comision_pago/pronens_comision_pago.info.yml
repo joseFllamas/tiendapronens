@@ -1,0 +1,11 @@
+name: 'Pronens: comisión por medio de pago'
+type: module
+description: 'Suma al total del pedido un porcentaje de comisión cuando el cliente elige una pasarela que la cobra (PayPal). El TPV del banco y la transferencia no llevan recargo.'
+package: Pronens
+core_version_requirement: ^11
+dependencies:
+  - commerce:commerce_order
+  - commerce:commerce_price
+  - commerce:commerce_payment
+  - commerce:commerce_checkout
+configure: pronens_comision_pago.settings

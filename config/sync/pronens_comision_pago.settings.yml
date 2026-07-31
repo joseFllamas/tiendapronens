@@ -1,0 +1,5 @@
+_core:
+  default_config_hash: R_mqD1hDu3TqKUswrUeAIpc0NKd1phbcX8p3XbSDohA
+porcentaje: '1.5'
+pasarelas:
+  - paypal

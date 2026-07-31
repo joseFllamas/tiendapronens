@@ -1,0 +1,56 @@
+{#
+/**
+ * @file
+ * Una línea de la página de la cesta.
+ *
+ * - linea: foto, nombre, opciones, bordado, cantidad e importe con recargos.
+ *   La monta CarritoHooks con el mismo trait que el flyout y que el resumen del
+ *   checkout, así que las tres pantallas no pueden divergir.
+ * - fields: los campos de la view. edit_quantity y remove_button son campos de
+ *   FORMULARIO de Views, así que hay que imprimirlos tal cual: Views envuelve la
+ *   view en un formulario y por eso cambiar cantidades y quitar líneas funciona
+ *   sin JavaScript.
+ *
+ * El importe de línea sale de "linea" y no de fields.total_price__number porque
+ * el total de línea de Commerce no incluye los ajustes, y entonces las líneas no
+ * sumarían el pie.
+ */
+#}
+<div class="pro-cline">
+  <div class="pro-cline__thumb">
+    {% if linea.foto %}
+      {% if linea.url %}<a href="{{ linea.url }}">{{ linea.foto }}</a>{% else %}{{ linea.foto }}{% endif %}
+    {% endif %}
+  </div>
+
+  <div class="pro-cline__info">
+    <p class="pro-cline__name">
+      {% if linea.url %}<a href="{{ linea.url }}">{{ linea.nombre }}</a>{% else %}{{ linea.nombre }}{% endif %}
+    </p>
+    {% if linea.opciones %}<p class="pro-cline__opts">{{ linea.opciones }}</p>{% endif %}
+    {% if linea.bordado %}
+      <p class="pro-cline__emb">{{ 'Embroidery'|t }}: <strong>{{ linea.bordado }}</strong></p>
+    {% endif %}
+    {% if linea.tiene_ajustes %}
+      <ul class="pro-cline__fees">
+        {% for ajuste in linea.ajustes %}
+          <li>{{ ajuste.etiqueta }} <span class="pro-cline__fee-amount">+{{ ajuste.importe }}</span></li>
+        {% endfor %}
+      </ul>
+    {% endif %}
+    <p class="pro-cline__unit">
+      <span class="pro-cline__label">{{ 'Unit price'|t }}:</span> {{ fields.unit_price__number.content }}
+    </p>
+  </div>
+
+  <div class="pro-cline__qty">{{ fields.edit_quantity.content }}</div>
+
+  {# El importe de línea es el de Commerce, SIN los recargos: así cuadra con el
+     subtotal del panel, que también los deja fuera y los enseña como línea
+     propia. Los recargos se ven arriba, en el detalle de la línea. #}
+  <div class="pro-cline__total">
+    <span class="pro-cline__label">{{ 'Total'|t }}:</span> {{ fields.total_price__number.content }}
+  </div>
+
+  <div class="pro-cline__remove">{{ fields.remove_button.content }}</div>
+</div>

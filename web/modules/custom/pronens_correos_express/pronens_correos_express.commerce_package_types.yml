@@ -1,0 +1,57 @@
+# Tipos de paquete reales de Pronens.
+#
+# Existen por dos motivos. El primero es que el único tipo que trae contrib,
+# custom_box, mide 1x1x1 milímetros, y el mínimo que acepta Correos Express es
+# 15x10x1 centímetros: con custom_box el payload iría con medidas imposibles.
+# El segundo es la tara: Shipment::recalculateWeight() suma el peso del tipo de
+# paquete al de los artículos, así que declararla aquí es lo que evita tener que
+# estimar el peso del embalaje en ningún otro sitio.
+#
+# Las medidas y las taras son de partida y hay que confirmarlas con el taller.
+pronens_bolsa:
+  remote_id: custom
+  label: 'Bolsa Pronens (25x18x3 cm)'
+  dimensions:
+    length: 25
+    width: 18
+    height: 3
+    unit: cm
+  weight:
+    number: 20
+    unit: g
+
+pronens_caja_pequena:
+  remote_id: custom
+  label: 'Caja Pronens pequeña (25x18x10 cm)'
+  dimensions:
+    length: 25
+    width: 18
+    height: 10
+    unit: cm
+  weight:
+    number: 120
+    unit: g
+
+pronens_caja_estandar:
+  remote_id: custom
+  label: 'Caja Pronens estándar (35x25x15 cm)'
+  dimensions:
+    length: 35
+    width: 25
+    height: 15
+    unit: cm
+  weight:
+    number: 220
+    unit: g
+
+pronens_caja_grande:
+  remote_id: custom
+  label: 'Caja Pronens grande (50x35x25 cm)'
+  dimensions:
+    length: 50
+    width: 35
+    height: 25
+    unit: cm
+  weight:
+    number: 400
+    unit: g

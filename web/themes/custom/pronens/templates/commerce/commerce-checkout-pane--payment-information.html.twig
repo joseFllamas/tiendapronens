@@ -1,0 +1,37 @@
+{#
+/**
+ * @file
+ * Sección "Pago": forma de pago y dirección de facturación.
+ *
+ * - elements: payment_method, add_payment_method, billing_information.
+ *
+ * La facturación se recoge AQUÍ y en un solo sitio. El pane billing_information
+ * ya no existe: commerce_payment lo borra del registro de plugins ("the
+ * payment_information pane replaces the billing_information one"), y este pane
+ * monta el perfil de facturación porque la pasarela tiene
+ * collect_billing_information activado.
+ *
+ * Dentro de billing_information aparece solo el checkbox "Mi información de
+ * facturación es la misma que la de envío", marcado por defecto, que pone
+ * commerce_shipping\ProfileFieldCopy vía hook_commerce_inline_form_customer_
+ * profile_alter. Funciona porque el pane de envío tiene menos peso que este y
+ * por tanto se valida antes: la copia lee el perfil de envío recién validado.
+ */
+#}
+<section class="pro-co__section pro-co__section--payment">
+  <h2 class="pro-co__section-title">{{ 'Payment'|t }}</h2>
+  <p class="pro-co__section-note">{{ 'All transactions are secure and encrypted.'|t }}</p>
+
+  {{ elements.payment_method }}
+  {{ elements.add_payment_method }}
+
+  {% if elements.billing_information %}
+    <div class="pro-co__billing">
+      <h3 class="pro-co__subsection-title">{{ 'Billing address'|t }}</h3>
+      {{ elements.billing_information }}
+    </div>
+  {% endif %}
+
+  {# Red de seguridad para lo que añada un módulo en el futuro. #}
+  {{ elements|without('payment_method', 'add_payment_method', 'billing_information') }}
+</section>

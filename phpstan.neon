@@ -34,7 +34,11 @@ parameters:
     # Fricción conocida entre los arrays de formulario sin tipar de Drupal y el
     # nivel 8: si se anota el $form por referencia, PHPStan exige que el tipo
     # coincida exactamente con el del padre, que no lo declara. Anotarlo y no
-    # anotarlo dan error, así que se silencia solo para métodos de formulario.
+    # anotarlo dan error, y @param-out tampoco lo resuelve, así que se silencia
+    # solo donde Drupal impone la firma: formularios y plugins con formulario de
+    # configuración.
     -
       identifier: parameterByRef.type
-      path: web/modules/custom/*/src/Form/*.php
+      paths:
+        - web/modules/custom/*/src/Form/*.php
+        - web/modules/custom/*/src/Plugin/Commerce/ShippingMethod/*.php

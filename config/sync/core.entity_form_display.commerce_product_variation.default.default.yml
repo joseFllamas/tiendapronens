@@ -65,7 +65,7 @@ content:
     weight: 90
     region: content
     settings:
-      default_unit: ''
+      default_unit: cm
       allow_unit_change: true
       available_units: {  }
     third_party_settings: {  }
@@ -108,7 +108,7 @@ content:
     weight: 91
     region: content
     settings:
-      default_unit: ''
+      default_unit: g
       allow_unit_change: true
       available_units: {  }
     third_party_settings: {  }

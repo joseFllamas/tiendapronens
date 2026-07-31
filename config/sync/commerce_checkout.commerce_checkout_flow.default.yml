@@ -1,61 +1,104 @@
 uuid: 7b67b68c-2dc9-40e2-9b79-83c1f8b3344f
 langcode: es
 status: true
-dependencies: {  }
+dependencies:
+  module:
+    - commerce_payment
+    - commerce_paypal
+    - commerce_promotion
+    - commerce_shipping
 _core:
   default_config_hash: 50QUbDL5hfMj6JF3n2JcOsPZtzq8PyU9UR0iXIpVThA
 label: 'Por defecto'
 id: default
 plugin: multistep_default
 configuration:
-  display_checkout_progress: true
+  display_checkout_progress: false
   display_checkout_progress_breadcrumb_links: false
   display_sidebar_checkout_complete: true
   guest_order_assign: false
   guest_new_account: false
   guest_new_account_notify: false
   panes:
-    login:
-      step: login
-      weight: 0
-      allow_guest_checkout: true
-      allow_registration: false
     contact_information:
+      display_label: null
       step: order_information
       weight: 1
-      double_entry: true
-    billing_information:
+      wrapper_element: container
+      double_entry: false
+      always_display: false
+    shipping_information:
+      display_label: null
       step: order_information
       weight: 2
-    review:
-      step: review
-      weight: 7
+      wrapper_element: container
+      auto_recalculate: true
+      require_shipping_profile: true
+    payment_information:
+      display_label: null
+      step: order_information
+      weight: 3
+      wrapper_element: container
+      always_display: true
+      require_payment_method: true
+    coupon_redemption:
+      display_label: null
+      step: _sidebar
+      weight: 4
+      wrapper_element: container
+      allow_multiple: false
+    order_summary:
+      display_label: null
+      step: _sidebar
+      weight: 5
+      wrapper_element: container
+      view: ''
+    payment_process:
+      display_label: null
+      step: payment
+      weight: 6
+      wrapper_element: container
+      capture: true
     completion_message:
+      display_label: null
       step: complete
-      weight: 8
+      weight: 7
+      wrapper_element: null
       message:
         value: "Tu número de pedido es [commerce_order:order_number].\r\nPuedes consultarlo en tu cuenta cuando inicies sesión."
         format: plain_text
       display_pane_summaries: true
-    order_summary:
-      step: _sidebar
+    login:
+      display_label: null
+      step: _disabled
+      weight: 8
+      wrapper_element: container
+      allow_guest_checkout: true
+      allow_registration: false
+      registration_form_mode: register
+    customer_comments:
+      display_label: null
+      step: _disabled
       weight: 9
-      view: commerce_checkout_order_summary
-    shipping_information:
-      step: order_information
-      weight: 3
-      auto_recalculate: true
-      require_shipping_profile: true
-    coupon_redemption:
-      step: order_information
-      weight: 4
-      allow_multiple: false
-    payment_information:
-      step: order_information
-      weight: 5
-      always_display: true
-      require_payment_method: true
-    payment_process:
-      step: payment
-      weight: 6
+      wrapper_element: fieldset
+    review:
+      display_label: null
+      step: _disabled
+      weight: 10
+      wrapper_element: null
+    paypal_checkout_payment_process:
+      display_label: null
+      step: _disabled
+      weight: 12
+      wrapper_element: container
       capture: true
+    paypal_fastlane_contact_information:
+      display_label: null
+      step: _disabled
+      weight: 13
+      wrapper_element: fieldset
+    completion_register:
+      display_label: null
+      step: _disabled
+      weight: 11
+      wrapper_element: null

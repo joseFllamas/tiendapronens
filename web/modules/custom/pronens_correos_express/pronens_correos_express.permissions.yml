@@ -1,0 +1,8 @@
+'administrar correos express pronens':
+  title: 'Administrar la integración con Correos Express'
+  description: 'Permite cambiar las credenciales, el entorno, los datos del remitente y los pesos estimados.'
+  restrict access: true
+
+'generar expediciones correos express':
+  title: 'Generar expediciones de Correos Express'
+  description: 'Permite dar de alta expediciones, imprimir etiquetas y consultar el seguimiento. No incluye cambiar las credenciales.'

@@ -1,0 +1,14 @@
+{#
+/**
+ * @file
+ * Cesta vacía.
+ *
+ * Mismo tono que el estado vacío del flyout, para que las dos pantallas digan
+ * lo mismo.
+ */
+#}
+<div class="pro-cart-empty">
+  <p class="pro-cart-empty__msg">{{ 'Your basket is empty.'|t }}</p>
+  <p class="pro-cart-empty__sub">{{ 'Have a look at our personalised pieces!'|t }}</p>
+  <a class="pro-btn pro-btn--cta pro-cart-empty__cta" href="{{ path('<front>') }}">{{ 'Keep shopping'|t }}</a>
+</div>

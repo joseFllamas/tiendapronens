@@ -1,0 +1,5 @@
+pronens_comision_pago.settings:
+  title: 'Comisión por medio de pago'
+  description: 'Porcentaje que se suma al total cuando se paga con PayPal.'
+  route_name: pronens_comision_pago.settings
+  parent: commerce.configuration

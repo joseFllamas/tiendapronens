@@ -1,0 +1,141 @@
+/**
+ * This program is free software: you can redistribute it and/or modify it under the
+ * terms of the GNU General Public License as published by the Free Software Foundation,
+ * either version 3 of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
+ * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * See the GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License along with this program.
+ * If not, see https://www.gnu.org/licenses/.
+ */
+/* Utilities */
+#correos_oficial #GestionMasivaPedidosSearchButton,
+#correos_oficial #EtiquetasSearchButton,
+#correos_oficial #SummarySearchButton,
+#correos_oficial #PickupsSearchButton,
+#correos_oficial #DocAduaneraSearchButton {
+    margin: 0 auto;
+}
+
+#correos_oficial .nav > li > button {
+    color: var(--co_gray_dark);
+}
+
+#correos_oficial .nav > li > button:hover {
+    color: var(--co_yellow);
+}
+
+#correos_oficial .nav-tabs {
+    margin-bottom: -16px;
+    border-bottom: none;
+}
+
+#correos_oficial #myTab {
+    font-weight: bold;
+}
+
+#correos_oficial tfoot input {
+    width: 100%;
+}
+
+#correos_oficial tfoot .inputHide input {
+    display: none;
+}
+
+#correos_oficial tbody {
+    font-size: 13px;
+}
+
+#correos_oficial .dataTables_wrapper .dataTables_length select {
+    appearance: none !important;
+}
+
+#correos_oficial .input-group-addon.input-group-checkbox-custom .form-check-input {
+    margin-left: 13px !important;
+    margin-top: 10px !important;
+}
+
+#correos_oficial .input-group {
+    flex-wrap: nowrap !important;
+}
+
+#correos_oficial #ImprimirDocAcuaneraForm .input-group {
+    justify-content: center;
+}
+
+#correos_oficial #utilities-container .custom-select {
+    width: 100%;
+    height: 37px;
+}
+
+#correos_oficial .card {
+    padding: 0px;
+}
+
+#correos_oficial .input-group .card {
+    margin-top: 0px;
+}
+
+#correos_oficial .tab-content > .tab-pane {
+    padding: 20px 10px;
+}
+
+#correos_oficial #generacionEnviosForm,
+#correos_oficial #reimprimirEtiquetasForm,
+#correos_oficial #ImprimirResumenForm,
+#correos_oficial #PickupsForm {
+    display: flex;
+}
+
+#correos_oficial #generacionEnviosForm .card,
+#correos_oficial #reimprimirEtiquetasForm .card,
+#correos_oficial #ImprimirResumenForm .card {
+    width: 100%;
+}
+
+#correos_oficial .align-content-center {
+    align-items: center;
+}
+
+#correos_oficial #generateOrdersButton,
+#correos_oficial #ReimprimirEtiquetasButton, 
+#correos_oficial #generatePickupsButton {
+    float: right;
+}
+
+#correos_oficial #ImprimirResumenButton {
+    display: block;
+    margin-right: auto;
+    margin-left: auto;
+}
+
+#correos_oficial .input-group-text {
+    width: 100%;
+}
+
+#correos_oficial .mycheckbox {
+    margin-top: 0px !important;
+}
+
+#correos_oficial #reg_orders_errors_container {
+    width: 95%;
+}
+
+#correos_oficial .card-table-utilities a {
+    text-decoration: none;
+}
+
+#correos_oficial .card-table-utilities {
+    max-width: 100%;
+}
+
+#correos_oficial #inputTamLabelPickups {
+    max-width: 55%;
+}
+
+#correos_oficial .form-check-input:checked {
+    background-color: var(--co_brandeis_blue);
+    border-color: var(--co_brandeis_blue);
+}

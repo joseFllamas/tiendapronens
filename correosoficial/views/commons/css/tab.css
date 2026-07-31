@@ -1,0 +1,57 @@
+.mi-ico {
+    height: 16px;  /*height of icon */
+    width:  16px;  /*width of icon */
+    background: url(../img/logos/correos_logo_white.svg) no-repeat 0px 0px;
+}
+
+.correos-content-gdpr {
+    background-color: #fff;
+    border-radius: 3px;
+    padding: 1rem 2rem;
+}
+
+.correos-form-gdpr {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.correos-content-gdpr h4.correos-title-gdpr {
+    color: var(--co_blue);
+    padding: 10px;
+    padding-top: 10px;
+    font-size: 30px;
+    text-align: center;
+    font-family: CarteroBold, sans-serif;
+}
+
+.correos-content-gdpr label.correos-text-gdpr {
+    color: var(--co_gray_dark);
+    width: 94%;
+    margin: .5rem 0;
+    font-weight: normal;
+    font-family: "Open Sans",helvetica,arial,sans-serif;
+    font-size: .875rem;
+    line-height: 1.5;
+}
+
+.correos-content-gdpr div.correos-check-gdpr {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.correos-input-gdpr {
+    width: 5%;
+    border-radius: 1px !important;
+}
+
+.correos-content-gdpr button.correos-button-gdpr {
+    background-color: var(--co_yellow);
+    margin: 1rem 0 .5rem;
+}
+
+.correos-content-gdpr button.correos-button-gdpr:hover {
+    color: var(--co_white);
+    background-color: var(--co_blue)
+}

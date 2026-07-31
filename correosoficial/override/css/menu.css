@@ -1,0 +1,82 @@
+/**
+ * This program is free software: you can redistribute it and/or modify it under the
+ * terms of the GNU General Public License as published by the Free Software Foundation,
+ * either version 3 of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
+ * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * See the GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License along with this program.
+ * If not, see https://www.gnu.org/licenses/.
+ */
+/* Oculta el primer elemento del menú repetido */
+#adminmenu li#toplevel_page_correosoficial li.wp-first-item {
+    display: none !important;
+}
+
+#toplevel_page_correosoficial .wp-menu-image img {
+    width: 25px;
+    margin-top: 6px !important;
+}
+
+.notificationContent, .correosNotificationsError {
+    border-radius: 8px;
+    border-left: solid #d2a63c 3px;
+    color: #d2a63c;
+    background-color: #fff3d7;
+    display: flex;
+    align-items: center;
+    padding: 1rem 1rem;
+    font-family: var(--bs-font-sans-serif);
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.5;
+    margin: 1rem 0;
+    margin-left: 0px;
+    margin-right: 20px;
+}
+
+.woocommerce-embed-page #wpbody-content .notificationContent, .woocommerce-embed-page #wpbody-content .correosNotificationsError {
+    margin-left: 20px;
+}
+
+.notificationContent > div {
+    margin: 0 1rem;
+}
+
+.notificationsMsgs {
+    width: 100%;
+}
+
+.notificationsButton {
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.notificationsButton button.btn.btn-primary.co_primary_button {
+    color: #ffffff;
+    background-color: #002e6d;
+    border: 1px solid #002e6d;
+    border-radius: 3px;
+    padding: 10px 10px;
+    font-family: CarteroBold, sans-serif;
+    text-decoration: none;
+}
+
+.notificationsButton button.btn.btn-primary.co_primary_button:hover {
+    color: #ffcd00;
+    background-color: #002453;
+}
+
+span.notificationsCount {
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    color: #ffcd00;
+    background-color: #002453;
+    font-weight: bold;
+    text-align: center;
+    display: inline-block;
+}

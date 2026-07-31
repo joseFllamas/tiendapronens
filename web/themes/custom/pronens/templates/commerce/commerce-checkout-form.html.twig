@@ -1,0 +1,25 @@
+{#
+/**
+ * @file
+ * Checkout sin sidebar: solo el paso "payment".
+ *
+ * No es un paso del checkout, es la redirección al banco. PaymentProcess monta
+ * un formulario POST autoenviado (PaymentOffsiteForm::buildRedirectForm() con
+ * REDIRECT_POST) y esconde las acciones, así que aquí solo hace falta centrar
+ * el aviso para que el segundo que dura no parezca un error.
+ *
+ * Ese paso no se puede colapsar en la pantalla única: buildReturnUrl() y
+ * buildCancelUrl() de PaymentProcess fijan 'step' => 'payment' a fuego.
+ *
+ * - form: el formulario.
+ * - paso, titulo: los pone CheckoutHooks.
+ */
+#}
+<div class="pro-co pro-co--{{ paso|clean_class }} pro-co--solo">
+  <div class="pro-co__wait">
+    <h1 class="pro-co__title">{{ titulo }}</h1>
+    <p class="pro-co__wait-msg">{{ 'Do not close this window: we are taking you to the payment page.'|t }}</p>
+    <span class="pro-co__spinner" aria-hidden="true"></span>
+    {{ form }}
+  </div>
+</div>

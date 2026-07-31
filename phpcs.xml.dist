@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Configuración de PHP CodeSniffer del proyecto, limitada al código propio.
+
+  Sin este fichero phpcs cae en PSR-12, que pide llaves en línea nueva, cuatro
+  espacios de indentación y "true" en minúscula, es decir lo contrario del
+  estándar de Drupal. Así que fallaba en todo el código del proyecto y no servía
+  de nada.
+
+  Se ejecuta desde la raíz, dentro de DDEV:
+
+    ddev exec vendor/bin/phpcs
+    ddev exec vendor/bin/phpcbf   (corrige lo corregible)
+
+  Copia a phpcs.xml para ajustarlo en local (phpcs.xml está en .gitignore).
+-->
+<ruleset name="pronens">
+  <description>Estándar de Drupal para los módulos y temas propios.</description>
+
+  <arg name="extensions" value="php,module,inc,install,test,profile,theme,yml"/>
+  <arg name="colors"/>
+  <arg value="sp"/>
+
+  <file>web/modules/custom</file>
+  <file>web/themes/custom</file>
+
+  <!-- Nada de esto es código propio. -->
+  <exclude-pattern>*/node_modules/*</exclude-pattern>
+  <exclude-pattern>*/vendor/*</exclude-pattern>
+  <exclude-pattern>*/dist/*</exclude-pattern>
+
+  <rule ref="Drupal"/>
+  <rule ref="DrupalPractice"/>
+
+  <!--
+    Los nombres de los tests de este proyecto son frases en español, y las
+    preposiciones de una letra producen dos mayúsculas seguidas sin querer
+    ("testEnvioAPortugal", "testLimitesDePesoYBultos"). Renombrarlas para
+    contentar al sniff daría nombres peores, así que el sniff no se aplica a los
+    tests. En el código de producción sigue activo.
+  -->
+  <rule ref="Drupal.NamingConventions.ValidFunctionName.ScopeNotCamelCaps">
+    <exclude-pattern>*/tests/*</exclude-pattern>
+  </rule>
+
+  <!--
+    Un método que se llama testUn401NoSeReintenta no necesita un docblock que
+    repita su nombre, y los proveedores de datos describen los casos en las
+    claves del array. Core hace lo mismo acotando estos sniffs en sus propias
+    pruebas.
+  -->
+  <rule ref="Drupal.Commenting.FunctionComment.Missing">
+    <exclude-pattern>*/tests/*</exclude-pattern>
+  </rule>
+  <rule ref="Drupal.Commenting.DocComment.MissingShort">
+    <exclude-pattern>*/tests/*</exclude-pattern>
+  </rule>
+</ruleset>

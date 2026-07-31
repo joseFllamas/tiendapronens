@@ -1,0 +1,9 @@
+pronens_correos_express.ajustes:
+  title: 'Ajustes'
+  route_name: pronens_correos_express.ajustes
+  base_route: pronens_correos_express.ajustes
+
+pronens_correos_express.credenciales:
+  title: 'Credenciales'
+  route_name: pronens_correos_express.credenciales
+  base_route: pronens_correos_express.ajustes

@@ -1,0 +1,346 @@
+/* Variables propias del plugin (no se exponen en :root global para no contaminar el tema) */
+.correos_oficial{
+  --co-accent: #0d6efd;
+  --co-muted: #6c757d;
+  --co-bg: #ffffff;
+  --co-text: #222222;
+  --co-radius: 8px;
+  --co-container-max: 1200px;
+  --co-content-padding: 16px;
+}
+
+/* Reset interno del bloque del plugin (NO aplicar globalmente) */
+.correos_oficial,
+.correos_oficial *{ box-sizing: border-box; }
+.correos_oficial img{ max-width:100%; height:auto; display:block; }
+.correos_oficial a{ color: var(--co-accent); text-decoration: none; }
+.correos_oficial a:hover{ text-decoration: underline; }
+
+/* Form inputs dentro del bloque del plugin */
+.correos_oficial input[type="text"],
+.correos_oficial input[type="email"],
+.correos_oficial textarea,
+.correos_oficial select{
+  width:100%;
+  max-width:100%;
+  min-width:0;
+  padding:0.55rem 0.75rem;
+  border:1px solid #e6e6e6;
+  border-radius:6px;
+  background:#fff;
+  color:var(--co-text);
+  font-size: clamp(0.875rem, 0.9rem + 0.2vw, 1rem);
+  line-height:1.4;
+  box-sizing:border-box;
+}
+
+/* Adaptación responsiva al contenedor padre (td[data-title="Envío"], Elementor, WooCommerce) */
+/* Hace que el bloque ocupe el 100% del contenedor y los elementos internos se reorganicen */
+td[data-title="Envío"] .correos_oficial,
+.correos_oficial {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+/* Lista de métodos de envío: cada opción se adapta y la etiqueta usa flex para alinear precio/texto.
+   Scopeado a .correos_oficial para NO afectar a otros listados de envío del checkout. */
+.correos_oficial .woocommerce-shipping-methods li {
+  display: block;
+  margin-bottom: 0.5rem;
+  width: 100%;
+}
+.correos_oficial .woocommerce-shipping-methods label {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  width: 100%;
+  cursor: pointer;
+}
+.correos_oficial .woocommerce-shipping-methods input[type="radio"] {
+  flex: 0 0 auto;
+  margin: 0;
+}
+
+/* Contenedor extra interno */
+.correos_oficial .extra-container {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 0.5rem 0;
+}
+
+/* Búsqueda CityPaq: fila flexible que pasa a columna en pantallas pequeñas (scoped) */
+.correos_oficial .search-paq-section {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  flex-wrap: wrap;
+  width: 100%;
+}
+.correos_oficial .section-SearchCityPaqByCPInput {
+  flex: 1 1 160px;
+  min-width: 120px;
+}
+.correos_oficial .section-SearchCityPaqByCp {
+  flex: 0 0 auto;
+}
+.correos_oficial .section-frontOptionSelector {
+  flex: 1 1 200px;
+  min-width: 140px;
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+/* Inputs y select dentro del bloque */
+.correos_oficial input[type="text"],
+.correos_oficial input[type="email"],
+.correos_oficial textarea,
+.correos_oficial select,
+.correos_oficial .form-control {
+  font-size: 0.95rem;
+  padding: 0.40rem 0.55rem;
+  min-height: 38px;
+  box-sizing: border-box;
+}
+
+/* Mínimos para input / select / botón de búsqueda dentro de correos_oficial */
+.correos_oficial .section-SearchPudoCEXByCPInput input,
+.correos_oficial .section-SearchCityPaqByCPInput input,
+.correos_oficial .section-frontOptionSelector select,
+.correos_oficial .pudocexSelector,
+.correos_oficial .citypaqSelector,
+.correos_oficial .section-SearchPudoCEXByCp button,
+.correos_oficial .section-SearchCityPaqByCp button,
+.correos_oficial .SearchPudoCEXByCp,
+.correos_oficial .SearchCityPaqByCp {
+  min-width: 110px;
+  min-height: 38px;
+  padding: 0.38rem 0.5rem;
+  font-size: 0.95rem;
+}
+
+/* Botones de búsqueda dentro del bloque: variante compacta, accesible */
+.correos_oficial .section-SearchPudoCEXByCp button,
+.correos_oficial .section-SearchCityPaqByCp button,
+.correos_oficial .SearchPudoCEXByCp,
+.correos_oficial .SearchCityPaqByCp {
+  padding: 0.38rem 0.6rem;
+  font-size: 0.95rem;
+  min-height: 36px;
+  white-space: normal; /* permitir ajuste en bloques muy pequeños */
+}
+
+/* No tocar .btn global: solo override dentro de correos_oficial */
+.correos_oficial .btn,
+.correos_oficial .btn-outline {
+  padding: 0.38rem 0.6rem;
+  font-size: 0.95rem;
+  line-height: 1;
+}
+
+/* Si el espacio es muy reducido, bajamos ligeramente el mínimo para evitar desbordes */
+@media (max-width: 420px) {
+  .correos_oficial .section-SearchPudoCEXByCPInput input,
+  .correos_oficial .section-SearchCityPaqByCPInput input,
+  .correos_oficial .section-frontOptionSelector select,
+  .correos_oficial .pudocexSelector,
+  .correos_oficial .citypaqSelector,
+  .correos_oficial .section-SearchPudoCEXByCp button,
+  .correos_oficial .section-SearchCityPaqByCp button {
+    min-width: 100px;
+    min-height: 40px;
+    padding: 0.36rem 0.48rem;
+    font-size: 0.92rem;
+  }
+
+  .correos_oficial .section-SearchPudoCEXByCPInput,
+  .correos_oficial .section-SearchCityPaqByCPInput,
+  .correos_oficial .section-frontOptionSelector {
+    flex-basis: 100%;
+    min-width: 0;
+  }
+}
+
+/* Avisos y textos informativos ocupan 100% (scoped) */
+.correos_oficial .checkout-paq-advice,
+.correos_oficial .customs-advice-doc {
+  width: 100%;
+  box-sizing: border-box;
+  margin-top: 0.5rem;
+}
+
+/* Schedule y mapa: layout flexible y adaptativo (scoped) */
+.correos_oficial .schedule-and-map {
+  width: 100%;
+  box-sizing: border-box;
+  margin-top: 0.5rem;
+}
+.correos_oficial .city-paq-schedule-and-map {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+.correos_oficial .city-paq-schedule-and-map-left,
+.correos_oficial .city-paq-schedule-and-map-right {
+  flex: 1 1 220px;
+  min-width: 200px;
+  box-sizing: border-box;
+}
+
+/* Mapa responsivo (scoped) */
+.correos_oficial .map-section,
+.correos_oficial [id^="GoogleMapCorreos_"] {
+  width: 100% !important;
+  max-width: 100% !important;
+  height: 300px;
+  min-height: 200px;
+  box-sizing: border-box;
+}
+@media (max-width: 768px) {
+  .correos_oficial [id^="GoogleMapCorreos_"] { height: 220px; }
+  .correos_oficial .section-SearchCityPaqByCPInput,
+  .correos_oficial .section-frontOptionSelector { flex-basis: 100%; min-width: 0; }
+  .correos_oficial .city-paq-schedule-and-map-left,
+  .correos_oficial .city-paq-schedule-and-map-right { flex-basis: 100%; min-width: 0; }
+}
+
+/* Asegura que no se desborden elementos dentro de Elementor */
+.elementor-widget .correos_oficial,
+.elementor-widget td[data-title="Envío"] .correos_oficial {
+  width: 100%;
+  padding: 0;
+}
+
+/* Pudo / CEX - adaptación y responsividad (scoped a .correos_oficial) */
+.correos_oficial .search-pudo-section,
+.correos_oficial .search-paq-section {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  flex-wrap: wrap;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.correos_oficial .section-SearchPudoCEXByCPInput,
+.correos_oficial .section-SearchCityPaqByCPInput {
+  flex: 1 1 160px;
+  min-width: 120px;
+}
+
+.correos_oficial .section-SearchPudoCEXByCp,
+.correos_oficial .section-SearchCityPaqByCp {
+  flex: 0 0 auto;
+}
+
+.correos_oficial .section-frontOptionSelector,
+.correos_oficial .section-frontOptionSelector {
+  flex: 1 1 200px;
+  min-width: 140px;
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+/* Inputs y select para Pudo/CEX */
+.correos_oficial .pudocexSelector,
+.correos_oficial .citypaqSelector,
+.correos_oficial .search-pudocex-by-cp-input,
+.correos_oficial .search-citypaq-by-cp-input,
+.correos_oficial .form-control {
+  width: 100%;
+  box-sizing: border-box;
+  max-width: 100%;
+}
+
+/* Avisos y textos informativos */
+.correos_oficial .checkout-paq-advice,
+.correos_oficial .customs-advice-doc {
+  width: 100%;
+  box-sizing: border-box;
+  margin-top: 0.5rem;
+}
+
+/* Office schedule & map layout (Pudo/CEX) */
+.correos_oficial .office-schedule-and-map,
+.correos_oficial .city-paq-schedule-and-map {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.correos_oficial .office-schedule-and-map-left,
+.correos_oficial .office-schedule-and-map-right,
+.correos_oficial .city-paq-schedule-and-map-left,
+.correos_oficial .city-paq-schedule-and-map-right {
+  flex: 1 1 220px;
+  min-width: 200px;
+  box-sizing: border-box;
+}
+
+/* Terminal / address blocks */
+.correos_oficial .office-terminal-info,
+.correos_oficial .office-address-info,
+.correos_oficial .citypaq-terminal-info,
+.correos_oficial .citypaq-address-info {
+  width: 100%;
+  box-sizing: border-box;
+}
+.correos_oficial .office-terminal-info p,
+.correos_oficial .office-address-info p,
+.correos_oficial .citypaq-address-info p {
+  margin: 0 0 0.5rem 0;
+}
+
+/* Map responsivo (selector genérico y por id dinámico) */
+.correos_oficial .map-section,
+.correos_oficial .map,
+.correos_oficial [id^="GoogleMapCorreos_"] {
+  width: 100% !important;
+  max-width: 100% !important;
+  height: 300px;
+  min-height: 200px;
+  box-sizing: border-box;
+}
+
+/* Evita desbordes indeseados dentro del widget/td en elementos propensos a anchos fijos
+   (imágenes, iframes y mapas). Se evita el comodín `* { max-width:100% }` para no romper
+   widgets de Elementor anidados con anchos legítimos. */
+.correos_oficial img,
+.correos_oficial iframe,
+.correos_oficial .map-section,
+.correos_oficial [id^="GoogleMapCorreos_"] {
+  max-width: 100%;
+}
+
+/* Ajustes móviles */
+@media (max-width: 768px) {
+  .correos_oficial [id^="GoogleMapCorreos_"] { height: 220px; }
+  .correos_oficial .section-SearchPudoCEXByCPInput,
+  .correos_oficial .section-SearchCityPaqByCPInput,
+  .correos_oficial .section-frontOptionSelector {
+    flex-basis: 100%;
+    min-width: 0;
+  }
+  .correos_oficial .office-schedule-and-map-left,
+  .correos_oficial .office-schedule-and-map-right,
+  .correos_oficial .city-paq-schedule-and-map-left,
+  .correos_oficial .city-paq-schedule-and-map-right {
+    flex-basis: 100%;
+    min-width: 0;
+  }
+}
+
+/* Pequeñas mejoras visuales para botones/selector dentro del bloque Pudo/CEX */
+.correos_oficial .SearchPudoCEXByCp,
+.correos_oficial .SearchCityPaqByCp,
+.correos_oficial .btn,
+.correos_oficial .btn-outline {
+  white-space: nowrap;
+  flex: 0 0 auto;
+}

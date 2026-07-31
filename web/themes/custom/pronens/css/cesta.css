@@ -1,0 +1,353 @@
+/**
+ * @file
+ * Página de la cesta (/cart): líneas, totales y CTA.
+ *
+ * Comparte lenguaje con el flyout y con el resumen del checkout, que pintan la
+ * misma línea de pedido con el mismo trait de PHP. Sin JavaScript: cambiar
+ * cantidades y quitar líneas son submits del formulario de la view.
+ *
+ * Las dos columnas se hacen con un grid sobre el <form>, porque las filas, el
+ * bloque de totales y las acciones son hermanos dentro de él. Reordenarlos en
+ * el render array rompería los #parents de los campos de cantidad.
+ */
+
+.pro-cart-page {
+  max-width: 1180px;
+  margin: 0 auto;
+}
+
+/* --- Barra de envío gratuito. --- */
+.pro-cart-page__ship {
+  margin: 0 0 28px;
+  max-width: 520px;
+}
+
+.pro-cart-page__ship-msg {
+  font-family: var(--pro-font-ui);
+  font-size: 14px;
+  color: var(--pro-text-2);
+  margin: 0 0 6px;
+}
+
+.pro-cart-page__ship.is-done .pro-cart-page__ship-msg {
+  color: var(--pro-teal-ink);
+  font-weight: 700;
+}
+
+.pro-cart-page__bar {
+  height: 6px;
+  border-radius: 999px;
+  background: var(--pro-border-cream);
+  overflow: hidden;
+}
+
+.pro-cart-page__bar-fill {
+  display: block;
+  height: 100%;
+  width: var(--pro-ship-progress, 0%);
+  background: var(--pro-teal);
+  border-radius: inherit;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .pro-cart-page__bar-fill {
+    transition: width 320ms var(--pro-ease-panel);
+  }
+}
+
+/* --- Dos columnas. --- */
+@media (min-width: 900px) {
+  .pro-cart-page__content form {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 320px;
+    column-gap: 48px;
+    align-items: start;
+  }
+
+  .pro-cart-page__row {
+    grid-column: 1;
+  }
+
+  .pro-cart-page__content [data-drupal-selector="order-total-summary"] {
+    grid-column: 2;
+    grid-row: 1;
+  }
+
+  .pro-cart-page__content .form-actions {
+    grid-column: 2;
+    grid-row: 2;
+  }
+}
+
+/* --- Una línea. --- */
+.pro-cline {
+  display: grid;
+  grid-template-columns: 84px minmax(0, 1fr);
+  grid-template-areas:
+    "thumb info"
+    "thumb qty"
+    "thumb total"
+    "thumb remove";
+  gap: 4px 16px;
+  padding: 18px 0;
+  border-bottom: 1px solid var(--pro-border);
+}
+
+@media (min-width: 620px) {
+  .pro-cline {
+    grid-template-columns: 84px minmax(0, 1fr) auto auto auto;
+    grid-template-areas: "thumb info qty total remove";
+    align-items: center;
+    gap: 0 20px;
+  }
+}
+
+.pro-cline__thumb {
+  grid-area: thumb;
+  width: 84px;
+  aspect-ratio: 3 / 4;
+  border-radius: 10px;
+  overflow: hidden;
+  background: var(--pro-img-bg);
+}
+
+.pro-cline__thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.pro-cline__info {
+  grid-area: info;
+  min-width: 0;
+}
+
+.pro-cline__name {
+  font-family: var(--pro-font-ui);
+  font-weight: 700;
+  font-size: 16px;
+  line-height: 1.3;
+  margin: 0;
+  color: var(--pro-ink-2);
+}
+
+.pro-cline__name a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.pro-cline__name a:hover,
+.pro-cline__name a:focus-visible {
+  text-decoration: underline;
+}
+
+.pro-cline__opts,
+.pro-cline__emb,
+.pro-cline__unit {
+  font-family: var(--pro-font-ui);
+  font-size: 13px;
+  line-height: 1.4;
+  color: var(--pro-text-2);
+  margin: 3px 0 0;
+}
+
+.pro-cline__emb strong {
+  color: var(--pro-ink-2);
+}
+
+.pro-cline__fees {
+  list-style: none;
+  margin: 3px 0 0;
+  padding: 0;
+  font-family: var(--pro-font-ui);
+  font-size: 13px;
+  line-height: 1.4;
+  color: var(--pro-text-2);
+}
+
+.pro-cline__fee-amount {
+  color: var(--pro-ink-2);
+  white-space: nowrap;
+}
+
+.pro-cline__qty {
+  grid-area: qty;
+}
+
+.pro-cline__qty .form-item {
+  margin: 0;
+}
+
+.pro-cline__qty label {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.pro-cline__qty input {
+  width: 72px;
+  box-sizing: border-box;
+  font-family: var(--pro-font-ui);
+  font-size: 16px;
+  text-align: center;
+  color: var(--pro-ink);
+  background: #fff;
+  border: 1px solid var(--pro-border-2);
+  border-radius: 10px;
+  padding: 10px 6px;
+}
+
+.pro-cline__qty input:focus-visible {
+  outline: 2px solid var(--pro-teal);
+  outline-offset: 1px;
+}
+
+.pro-cline__total {
+  grid-area: total;
+  font-family: var(--pro-font-ui);
+  font-weight: 700;
+  font-size: 16px;
+  color: var(--pro-ink-2);
+  white-space: nowrap;
+}
+
+.pro-cline__label {
+  font-weight: 400;
+  font-size: 13px;
+  color: var(--pro-text-2);
+}
+
+@media (min-width: 620px) {
+  /* En escritorio el importe se lee solo por su posición; la etiqueta hace
+     falta en móvil, donde la línea se apila. */
+  .pro-cline__total .pro-cline__label {
+    display: none;
+  }
+}
+
+.pro-cline__remove {
+  grid-area: remove;
+}
+
+.pro-cline__remove-btn {
+  font-family: var(--pro-font-ui);
+  font-size: 13px;
+  color: var(--pro-text-2);
+  background: none;
+  border: 0;
+  border-bottom: 1px solid currentColor;
+  padding: 0;
+  cursor: pointer;
+}
+
+.pro-cline__remove-btn:hover,
+.pro-cline__remove-btn:focus-visible {
+  color: var(--pro-orange-ink);
+}
+
+/* --- Totales. --- */
+.pro-cart-page__content [data-drupal-selector="order-total-summary"] {
+  margin-top: 24px;
+  padding: 20px;
+  background: var(--pro-cream-2);
+  border: 1px solid var(--pro-border-cream);
+  border-radius: var(--pro-radius-size);
+}
+
+.pro-cart-page__content .order-total-line {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px;
+  font-family: var(--pro-font-ui);
+  font-size: 15px;
+  color: var(--pro-ink-2);
+  margin-bottom: 8px;
+}
+
+.pro-cart-page__content .order-total-line__total {
+  padding-top: 12px;
+  margin-top: 4px;
+  margin-bottom: 0;
+  border-top: 1px solid var(--pro-border-cream);
+  font-family: var(--pro-font-display);
+  font-weight: 700;
+  font-size: 20px;
+  color: var(--pro-ink);
+}
+
+/* --- Acciones. --- */
+.pro-cart-page__content .form-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 16px;
+}
+
+.pro-cart-page__content .pro-cart-page__checkout {
+  /* El CTA va primero aunque en el formulario venga después de "Actualizar". */
+  order: -1;
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
+  text-align: center;
+  font-family: var(--pro-font-ui);
+  font-weight: 700;
+  font-size: 17px;
+  color: #fff;
+  background: var(--pro-orange-cta);
+  border: 0;
+  border-radius: var(--pro-radius-pill);
+  padding: 16px 24px;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.pro-cart-page__content .pro-cart-page__checkout:hover,
+.pro-cart-page__content .pro-cart-page__checkout:focus-visible {
+  background: var(--pro-ink-2);
+}
+
+.pro-cart-page__content .pro-cart-page__update {
+  font-family: var(--pro-font-ui);
+  font-size: 15px;
+  color: var(--pro-ink-2);
+  background: #fff;
+  border: 1px solid var(--pro-border-2);
+  border-radius: var(--pro-radius-pill);
+  padding: 12px 20px;
+  cursor: pointer;
+}
+
+.pro-cart-page__content .pro-cart-page__update:hover {
+  border-color: var(--pro-ink-2);
+}
+
+/* --- Cesta vacía. --- */
+.pro-cart-empty {
+  text-align: center;
+  padding: 48px 0 64px;
+}
+
+.pro-cart-empty__msg {
+  font-family: var(--pro-font-display);
+  font-weight: 700;
+  font-size: 22px;
+  color: var(--pro-ink-2);
+  margin: 0 0 6px;
+}
+
+.pro-cart-empty__sub {
+  font-family: var(--pro-font-ui);
+  font-size: 16px;
+  color: var(--pro-text-2);
+  margin: 0 0 24px;
+}
+
+.pro-cart-empty__cta {
+  display: inline-block;
+}

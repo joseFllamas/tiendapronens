@@ -1,0 +1,84 @@
+
+:root {
+	--co_blue: #002e6d;
+	--co_blue_dark: #0a0a49;
+	--co_blue_hover: #002453;
+	--co_brandeis_blue: #0d6efd;
+	--co_cyan: #25b9d7;
+	--co_cyan_hover: #1e94ab;
+	--co_bluish_grey: #c7d6db;
+	--co_very_pallid_blue: #cce5ff;
+	--co_pallid_blue: #b8daff;
+	--co_greyish_blue: #acb3b6;
+	--co_very_light_greyish_blue: #f3f6f8;
+	--co_light_greyish_blue: #ced4da;
+	--co_yellow: #ffcd00;
+	--co_yellow_hover: #b38f00;
+	--co_very_pallid_yellow: #fff3cd;
+	--co_pallid_yellow: #ffeeba;
+	--co_white: #ffffff;
+	--co_gray: #cbcbcb;
+	--co_platinum: #e2e3e5;
+	--co_soft_grey_bliss: #f8f8f8;
+	--co_gray_dark: #777;
+	--co_red: #e4082c;
+	--co_red_light: #e08f95;
+	--co_red_hover: #d5676f;
+	--co_very_dark_red: #721c24;
+	--co_very_pallid_red: #f8d7da;
+	--co_pallid_red: #f5c6cb;
+	--co_green: #155724;
+	--co_very_pallid_green: #cbf2d4;
+	--co_pallid_green: #70b580;
+	--co_dark_orange: #856404;
+
+	/* Messages */
+	--co_red_error: #e6615c;
+	--co_pallid_red: #fbc6c3;
+	--co_yellow_notice: #fff3cd;
+}
+
+
+/* Estilo del modal */
+.modal {
+	display: none;
+	position: fixed;
+	z-index: 9999;
+	left: 0;
+	top: 0;
+	width: 100%;
+	height: 100%;
+	overflow: auto;  
+	background-color: rgba(0,0,0,0.4);
+	}
+  
+/* Estilo del contenido del modal */
+.modal-content {
+	position: fixed;
+	background: #fff;
+	z-index: 9999;
+	left: 50%;
+	top: 50%;
+	transform: translate(-50%, -50%);
+	width: 50%;
+	max-width: 100%;
+	min-width: 600px;
+	margin: 0;
+	padding: 20px;
+	overflow: auto;
+	}
+  
+/* Estilo del botón de cerrar */
+.close {
+	color: #aaa;
+	float: right;
+	font-size: 28px;
+	font-weight: bold;
+	}
+  
+.close:hover,
+.close:focus {
+	color: black;
+	text-decoration: none;
+	cursor: pointer;
+	}

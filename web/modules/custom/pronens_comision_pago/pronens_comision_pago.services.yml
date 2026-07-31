@@ -1,0 +1,23 @@
+services:
+  Drupal\pronens_comision_pago\ComisionCalculator:
+    class: Drupal\pronens_comision_pago\ComisionCalculator
+
+  Drupal\pronens_comision_pago\OrderProcessor\ComisionOrderProcessor:
+    class: Drupal\pronens_comision_pago\OrderProcessor\ComisionOrderProcessor
+    arguments:
+      - '@config.factory'
+      - '@Drupal\pronens_comision_pago\ComisionCalculator'
+      - '@commerce_price.rounder'
+      - '@string_translation'
+    tags:
+      # Prioridad -200: el último de la cola. La comisión es un porcentaje del
+      # total, así que tiene que entrar cuando ya están dentro el bordado (150),
+      # los extras (149), la promoción (100), el IVA (50) y el envío (-100), que
+      # es el más tardío de Commerce. Ir antes calcularía el porcentaje sobre una
+      # base menor que la que la pasarela va a cobrar.
+      #
+      # Consecuencia buscada: la comisión NO lleva IVA desglosado, porque entra
+      # después del procesador de impuestos. Es la interpretación conservadora
+      # mientras la gestoría no diga lo contrario; si decide que debe llevarlo,
+      # basta subir esta prioridad a 60 y añadir el envío a la base a mano.
+      - { name: commerce_order.order_processor, priority: -200 }

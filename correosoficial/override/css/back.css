@@ -1,0 +1,131 @@
+/**
+ * This program is free software: you can redistribute it and/or modify it under the
+ * terms of the GNU General Public License as published by the Free Software Foundation,
+ * either version 3 of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
+ * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * See the GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License along with this program.
+ * If not, see https://www.gnu.org/licenses/.
+ */
+/* Sobreescribimos propiedades css específicas para Woordpress */
+#co_header img {
+    margin: 25px auto;
+}
+
+/* Workaround */
+.card {
+    min-width: 100%;
+}
+
+/* Ajusta el select de home */
+#correos_oficial #co_home select {
+    max-width: none;
+}
+
+/* ── Protección del acordeón frente a estilos del theme ───────────────────
+   Los themes de WordPress aplican reglas genéricas sobre button {}, h2 {},
+   button:hover {}, etc. que pueden romper visualmente el acordeón de ajustes.
+   Este bloque restablece las propiedades críticas con máxima especificidad
+   para que ningún theme las sobrescriba.
+   ───────────────────────────────────────────────────────────────────────── */
+
+/* Contenedor del item: neutralizar bordes/fondos del theme */
+#correos_oficial .accordion-item {
+    background-color: #fff !important;
+    border: 1px solid rgba(0, 0, 0, 0.125) !important;
+    border-radius: 0 !important;
+}
+
+/* Cabecera h2: algunos themes añaden margin, border-bottom o transform */
+#correos_oficial .accordion-header {
+    margin: 0 !important;
+    padding: 0 !important;
+    border: none !important;
+    background: none !important;
+}
+
+#correos_oficial .accordion-header::before,
+#correos_oficial .accordion-header::after {
+    display: none !important;
+}
+
+/* Botón del acordeón: proteger layout, tamaño y aspecto base */
+#correos_oficial .accordion-button {
+    display: flex !important;
+    align-items: center !important;
+    width: 100% !important;
+    padding: 1rem 1.25rem !important;
+    text-align: left !important;
+    border: 0 !important;
+    border-radius: 0 !important;
+    overflow-anchor: none !important;
+    transition: color 0.15s ease-in-out,
+                background-color 0.15s ease-in-out,
+                border-color 0.15s ease-in-out,
+                box-shadow 0.15s ease-in-out,
+                border-radius 0.15s ease !important;
+    /* Neutralizar estilos genéricos de button del theme */
+    box-shadow: none !important;
+    outline: none !important;
+    text-decoration: none !important;
+    letter-spacing: normal !important;
+    text-transform: none !important;
+    line-height: 1.5 !important;
+    vertical-align: middle !important;
+}
+
+/* Estado colapsado */
+#correos_oficial .accordion-button.collapsed {
+    background-color: #fff !important;
+    color: var(--co_blue) !important;
+    box-shadow: none !important;
+}
+
+/* Estado expandido */
+#correos_oficial .accordion-button:not(.collapsed) {
+    background-color: #fff !important;
+    color: var(--co_blue) !important;
+    box-shadow: inset 0 -1px 0 rgba(0, 0, 0, 0.125) !important;
+}
+
+/* Hover: evitar que el theme coloree el botón */
+#correos_oficial .accordion-button:hover,
+#correos_oficial .accordion-button:focus {
+    background-color: #f8f9fa !important;
+    color: var(--co_blue) !important;
+    box-shadow: none !important;
+    outline: none !important;
+    z-index: 3;
+}
+
+/* Icono chevron: restaurar el SVG de Bootstrap por si el theme lo elimina o reemplaza */
+#correos_oficial .accordion-button::after {
+    flex-shrink: 0 !important;
+    width: 1.25rem !important;
+    height: 1.25rem !important;
+    margin-left: auto !important;
+    content: '' !important;
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23002e6d'%3e%3cpath fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/%3e%3c/svg%3e") !important;
+    background-repeat: no-repeat !important;
+    background-size: 1.25rem !important;
+    transition: transform 0.2s ease-in-out !important;
+    transform: rotate(-180deg) !important;
+}
+
+/* Chevron girado cuando está colapsado */
+#correos_oficial .accordion-button.collapsed::after {
+    transform: rotate(0deg) !important;
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23002e6d'%3e%3cpath fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/%3e%3c/svg%3e") !important;
+}
+
+/* Sección expandida: asegurar padding y transición correctos */
+#correos_oficial .accordion-collapse {
+    padding-top: 0 !important;
+}
+
+#correos_oficial .accordion-body {
+    padding: 1rem 1.25rem !important;
+}

@@ -2,7 +2,6 @@
 
 namespace Drupal\pronens\Hook;
 
-use CommerceGuys\Intl\Formatter\CurrencyFormatterInterface;
 use Drupal\commerce_product\Entity\ProductInterface;
 use Drupal\commerce_product\Entity\ProductVariationInterface;
 use Drupal\Core\Cache\Cache;
@@ -18,6 +17,7 @@ use Drupal\Core\Render\Markup;
 use Drupal\Core\Render\RendererInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\pronens\CamposTrait;
+use Drupal\pronens\PrecioTrait;
 
 /**
  * Hooks de la ficha de producto.
@@ -30,6 +30,7 @@ use Drupal\pronens\CamposTrait;
 class FichaHooks {
 
   use CamposTrait;
+  use PrecioTrait;
   use StringTranslationTrait;
 
   /**
@@ -52,7 +53,6 @@ class FichaHooks {
 
   public function __construct(
     protected EntityTypeManagerInterface $entityTypeManager,
-    protected CurrencyFormatterInterface $currencyFormatter,
     protected ConfigFactoryInterface $configFactory,
     protected RendererInterface $renderer,
   ) {
@@ -77,16 +77,14 @@ class FichaHooks {
       'eyebrow' => $this->eyebrow($producto),
       'titulo' => $producto->label(),
       'fotos' => $this->fotos($variables, $producto),
-      'precio' => $precio !== NULL
-        ? $this->currencyFormatter->format($precio->getNumber(), $precio->getCurrencyCode())
-        : NULL,
+      'precio' => $precio !== NULL ? $this->precio($precio) : NULL,
       // El desglose "14,52 € + 5,00 € bordado" del prototipo: el precio
       // unitario no cambia, el bordado es un ajuste aparte.
       'precio_base' => $precio !== NULL ? (float) $precio->getNumber() : NULL,
       'moneda' => $precio?->getCurrencyCode() ?? 'EUR',
       'recargo' => $recargo,
       'recargo_texto' => $recargo > 0
-        ? $this->currencyFormatter->format((string) $recargo, $precio?->getCurrencyCode() ?? 'EUR')
+        ? $this->precioSuelto((string) $recargo, $precio?->getCurrencyCode() ?? 'EUR')
         : NULL,
       'personalizable' => $this->esPersonalizable($producto),
       // Dónde y de qué tamaño va la inicial sobre la foto, en porcentaje: la
@@ -98,7 +96,12 @@ class FichaHooks {
       'relacionados' => $this->relacionados($variables, $producto),
     ];
     $variables['#attached']['library'][] = 'pronens/ficha';
-    $variables['#attached']['library'][] = 'pronens/caveat';
+    // Dos tipografías para dos cosas distintas, y solo la que toca: la cursiva
+    // Caveat es el nombre bordado del modo texto, y Graduate la letra de parche
+    // de la rejilla A-Z y su vista previa en el modo inicial.
+    $variables['#attached']['library'][] = $this->esModoInicial($producto)
+      ? 'pronens/graduate'
+      : 'pronens/caveat';
     $variables['#attached']['drupalSettings']['pronens']['ficha'] = [
       'precioBase' => $variables['ficha']['precio_base'],
       'recargo' => $recargo,
@@ -141,8 +144,7 @@ class FichaHooks {
     $variacion = $this->variacionElegida($form_state, $producto);
     if ($variacion !== NULL && ($precio = $variacion->getPrice()) !== NULL) {
       $form['#attributes']['data-pro-precio'] = $precio->getNumber();
-      $form['#attributes']['data-pro-precio-texto'] = $this->currencyFormatter
-        ->format($precio->getNumber(), $precio->getCurrencyCode());
+      $form['#attributes']['data-pro-precio-texto'] = $this->precio($precio);
     }
 
     // Atributos (talla, medida…): pastillas.
@@ -174,7 +176,7 @@ class FichaHooks {
         $titulo = (string) $form['pro_perso']['personalizacion_activa']['#title'];
         $form['pro_perso']['personalizacion_activa']['#title'] = Markup::create(
           $titulo . ' <span class="pro-perso__fee">+'
-          . $this->currencyFormatter->format((string) $recargo, 'EUR') . '</span>'
+          . $this->precioSuelto((string) $recargo) . '</span>'
         );
       }
       if (isset($form['pro_perso']['field_texto_bordado']['widget'][0]['value'])) {
@@ -510,8 +512,17 @@ class FichaHooks {
     // Fuera la opción vacía: el diseño no ofrece "N/D" y el módulo ya vacía el
     // bordado entero cuando la casilla está desmarcada.
     unset($elemento['widget']['#options']['_none']);
-    if (($elemento['widget']['#default_value'] ?? NULL) === NULL || $elemento['widget']['#default_value'] === ['_none']) {
-      $elemento['widget']['#default_value'] = [array_key_first($elemento['widget']['#options'])];
+    // El formato viene elegido de entrada, y es el nº 1 de la foto guía
+    // ("perfil negro interior blanco" mientras sea el primero por peso del
+    // vocabulario): el campo no es obligatorio, así que sin esto se podía
+    // pedir una inicial sin decir de qué color. Ojo: en un campo de un solo
+    // valor, options_buttons espera el tid **suelto**; con un array dentro no
+    // marcaba ningún radio y la ficha se cargaba sin formato.
+    $actual = $elemento['widget']['#default_value'] ?? NULL;
+    if (in_array($actual, [NULL, '', '_none', [], ['_none']], TRUE)) {
+      $primero = array_key_first($elemento['widget']['#options']);
+      $multiple = ($elemento['widget']['#type'] ?? '') === 'checkboxes';
+      $elemento['widget']['#default_value'] = $multiple ? [$primero] : $primero;
     }
     // Nota de desarrollo, no texto de tienda.
     $elemento['widget']['#description'] = NULL;

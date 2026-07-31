@@ -1,0 +1,13 @@
+pronens_comision_pago.settings:
+  type: config_object
+  label: 'Ajustes de la comisión por medio de pago'
+  mapping:
+    porcentaje:
+      type: string
+      label: 'Porcentaje de comisión sobre el total del pedido'
+    pasarelas:
+      type: sequence
+      label: 'Pasarelas de pago que cobran comisión'
+      sequence:
+        type: string
+        label: 'Identificador de la pasarela'

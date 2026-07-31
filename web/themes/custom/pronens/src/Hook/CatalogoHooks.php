@@ -46,6 +46,7 @@ class CatalogoHooks {
     protected EntityRepositoryInterface $entityRepository,
     protected RouteMatchInterface $routeMatch,
     protected RequestStack $requestStack,
+    protected CarritoHooks $carritoHooks,
   ) {
   }
 
@@ -70,13 +71,25 @@ class CatalogoHooks {
    * ejecutada, y por eso la cabecera se pinta en la plantilla de la view y no
    * en la de página.
    *
+   * Es la ÚNICA implementación de este preprocess en el tema, así que reparte:
+   * un tema no puede implementarlo dos veces (ThemeManager lanza "should not
+   * implement preprocess_views_view more than once"). La cesta la monta
+   * CarritoHooks::buildCesta(), igual que PronensHooks delega la ficha.
+   *
    * @param array<string, mixed> $variables
    *   Variables del template de la view.
    */
   #[Hook('preprocess_views_view')]
   public function preprocessViewsView(array &$variables): void {
     $view = $variables['view'] ?? NULL;
-    if (!$view instanceof ViewExecutable || $view->id() !== self::VIEW_ID) {
+    if (!$view instanceof ViewExecutable) {
+      return;
+    }
+    if ($view->id() === 'commerce_cart_form') {
+      $this->carritoHooks->buildCesta($variables);
+      return;
+    }
+    if ($view->id() !== self::VIEW_ID) {
       return;
     }
 

@@ -1,0 +1,26 @@
+{
+  "producto": "63",
+  "estadoEnvios": [
+    {
+      "codigoEstado": 1,
+      "codEstado": "SR",
+      "descEstado": "SIN RECEPCION",
+      "fechaEstado": "29072026",
+      "horaEstado": "101500"
+    },
+    {
+      "codigoEstado": 3,
+      "codEstado": "TR",
+      "descEstado": "EN TRANSITO",
+      "fechaEstado": "30072026",
+      "horaEstado": "73000"
+    }
+  ],
+  "bultoSeguimiento": [
+    {
+      "codUnico": "080800012345678901",
+      "descEstado": "EN TRANSITO",
+      "fechaEstado": "30072026"
+    }
+  ]
+}

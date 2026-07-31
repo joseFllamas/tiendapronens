@@ -1,0 +1,3661 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Correos Oficial\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2023-10-10 15:00+0000\n"
+"PO-Revision-Date: 2026-03-03 12:06+0000\n"
+"Last-Translator: \n"
+"Language-Team: Portuguese (Portugal)\n"
+"Language: pt_PT\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Loco https://localise.biz/\n"
+"X-Loco-Version: 2.6.6; wp-6.4.1\n"
+"X-Domain: correosoficial"
+
+#: correosoficial.php:499
+#, php-format
+msgid " <span class=\"count\">(%s)</span>"
+msgid_plural " <span class=\"count\">(%s)</span>"
+msgstr[0] ""
+msgstr[1] ""
+
+#: langs/settingsLang.php:17 langs/settingsLang.php:335
+msgid " CRON"
+msgstr ""
+
+#: langs/settingsLang.php:14 langs/settingsLang.php:332
+msgid " CUSTOMER DATA"
+msgstr ""
+
+#: langs/settingsLang.php:20 langs/settingsLang.php:338
+msgid " CUSTOMS PROCESSING"
+msgstr ""
+
+#: langs/settingsLang.php:240 langs/settingsLang.php:331
+msgid " Data protection policy."
+msgstr "Política de proteção de dados"
+
+#: langs/settingsLang.php:340
+msgid " FULFILLMENT SERVICE"
+msgstr ""
+
+#: langs/settingsLang.php:484
+msgid " MARKETPLACE"
+msgstr ""
+
+#: correosoficial.php:1215 langs/settingsLang.php:243
+msgid " notifications without read in the Correosoficial module"
+msgstr "notificações não lidas no Correos Ecommerce"
+
+#: langs/homeLang.php:43 langs/homeLang.php:92 langs/settingsLang.php:166
+msgid " privacy policy"
+msgstr ""
+
+#: langs/settingsLang.php:18 langs/settingsLang.php:336
+msgid " PRODUCTS"
+msgstr ""
+
+#: langs/settingsLang.php:63 langs/settingsLang.php:425
+msgid " SENDER LIST"
+msgstr ""
+
+#: langs/settingsLang.php:15 langs/settingsLang.php:333
+msgid " SENDERS"
+msgstr ""
+
+#: classes/CorreosOficialSGA.php:522
+msgid " Status: 400. The information sent to the API WAREHOUSE is not correct"
+msgstr ""
+
+#: classes/CorreosOficialSGA.php:194
+msgid ""
+" Status: 406. The order does not contain physical items to be sent to the "
+"warehouse."
+msgstr ""
+
+#: langs/settingsLang.php:239 langs/settingsLang.php:330
+msgid " Terms and conditions"
+msgstr "Termos e condições de uso"
+
+#: langs/settingsLang.php:16 langs/settingsLang.php:334
+msgid " USER CONFIGURATION"
+msgstr ""
+
+#: langs/settingsLang.php:19 langs/settingsLang.php:337
+msgid " ZONES AND CARRIERS"
+msgstr ""
+
+#: classes/CorreosOficialAdminOrderHook.php:1292
+msgid "\"Address: \""
+msgstr ""
+
+#: classes/CorreosOficialAdminOrderHook.php:1302
+msgid "\"Atention\""
+msgstr ""
+
+#: classes/CorreosOficialAdminOrderHook.php:1304
+msgid "\"Cancel Order\""
+msgstr ""
+
+#: classes/CorreosOficialAdminOrderHook.php:1305
+msgid "\"Cancel\""
+msgstr ""
+
+#: classes/CorreosOficialAdminOrderHook.php:1293
+msgid "\"City: \""
+msgstr ""
+
+#: classes/CorreosOficialAdminOrderHook.php:1294
+msgid "\"CP: \""
+msgstr ""
+
+#: classes/CorreosOficialAdminOrderHook.php:1303
+msgid "\"The selected format is only available for CEX \""
+msgstr ""
+
+#: langs/orderLang.php:185 langs/orderLang.php:270
+msgid ""
+", you must change the sender, or configure a sender with a valid contract"
+msgstr ""
+
+#: langs/settingsLang.php:470
+msgid "-- Select attribute --"
+msgstr ""
+
+#: classes/CorreosOficialAdminOrderHook.php:1107
+#: controllers/admin/AdminCorreosOficialUtilitiesController.php:88
+msgid "3/3A (Only CEX)"
+msgstr ""
+
+#: controllers/admin/AdminCorreosOficialUtilitiesProcessController.php:407
+msgid ": No sender has been configured"
+msgstr ""
+
+#: controllers/admin/AdminCorreosOficialUtilitiesProcessController.php:415
+msgid ": No shipping product has been selected"
+msgstr ""
+
+#: correosoficial-wc-extend-store-endpoint.php:62
+msgid "A Correos products list data."
+msgstr ""
+
+#: correosoficial-wc-extend-store-endpoint.php:58
+msgid "A list of Correos Pick UP Locations."
+msgstr ""
+
+#: langs/homeLang.php:60 langs/settingsLang.php:130 langs/settingsLang.php:440
+#: langs/utilitysLang.php:98 langs/utilitysLang.php:234
+msgid "Accept"
+msgstr ""
+
+#: langs/orderLang.php:257
+msgid "Acción"
+msgstr ""
+
+#: langs/settingsLang.php:222 langs/settingsLang.php:288
+msgid "Account Password"
+msgstr ""
+
+#: langs/settingsLang.php:228 langs/settingsLang.php:306
+msgid "Account Password must be 8 alphanumeric characters, e.g.: Qs7(Gn8%)"
+msgstr ""
+
+#: langs/homeLang.php:56 langs/settingsLang.php:129 langs/settingsLang.php:439
+#: langs/utilitysLang.php:94 langs/utilitysLang.php:230
+msgid "Action"
+msgstr ""
+
+#: langs/settingsLang.php:246 langs/settingsLang.php:295
+msgid ""
+"Action not allowed. The account you want to delete has an associated sender"
+msgstr ""
+
+#: langs/settingsLang.php:113 langs/settingsLang.php:452
+msgid "Activate all carriers"
+msgstr ""
+
+#: langs/settingsLang.php:195 langs/settingsLang.php:380
+msgid "Activate automatic tracking"
+msgstr ""
+
+#: langs/settingsLang.php:255 langs/settingsLang.php:372
+msgid "Activate default dimensions"
+msgstr ""
+
+#: langs/settingsLang.php:88 langs/settingsLang.php:369
+msgid "Activate default weight"
+msgstr ""
+
+#: langs/settingsLang.php:196
+msgid "Activate order status change"
+msgstr ""
+
+#: langs/settingsLang.php:175
+msgid "Activate order status change after recording"
+msgstr ""
+
+#: langs/settingsLang.php:134 langs/settingsLang.php:379
+msgid "Activate SSL Certificate"
+msgstr ""
+
+#: langs/settingsLang.php:84 langs/settingsLang.php:365
+msgid "Activate tracking link in the customer purchase history"
+msgstr ""
+
+#: langs/settingsLang.php:31 langs/settingsLang.php:271
+msgid "ACTIVE CUSTOMERS"
+msgstr ""
+
+#: langs/settingsLang.php:60 langs/settingsLang.php:423
+msgid "ADD"
+msgstr ""
+
+#: langs/homeLang.php:57 langs/settingsLang.php:30 langs/settingsLang.php:290
+#: langs/utilitysLang.php:95 langs/utilitysLang.php:231
+msgid "Add"
+msgstr ""
+
+#: langs/orderLang.php:157 langs/orderLang.php:246
+msgid "Add and save"
+msgstr ""
+
+#: classes/CorreosOficialCommonShippingMethods.php:395
+msgid "Add rule"
+msgstr ""
+
+#: langs/settingsLang.php:230 langs/settingsLang.php:392
+msgid "Add VAT Number field at checkout"
+msgstr ""
+
+#: langs/orderLang.php:81 langs/orderLang.php:291
+msgid "Added value of the shipment"
+msgstr ""
+
+#: langs/settingsLang.php:50 langs/settingsLang.php:407 langs/orderLang.php:28
+#: langs/orderLang.php:207 langs/checkoutLang.php:23 langs/checkoutLang.php:54
+msgid "Address"
+msgstr ""
+
+#: langs/utilitysLang.php:84 langs/utilitysLang.php:274
+msgid "Address of addressee"
+msgstr ""
+
+#: classes/CorreosOficialAdminOrderHook.php:1096
+#: controllers/admin/AdminCorreosOficialSettingsController.php:126
+#: controllers/admin/AdminCorreosOficialUtilitiesController.php:79
+msgid "Adhesive"
+msgstr ""
+
+#: langs/utilitysLang.php:159 langs/utilitysLang.php:245
+msgid "All"
+msgstr ""
+
+#: classes/CorreosOficialCommonShippingMethods.php:546
+msgid "All Products"
+msgstr ""
+
+#: langs/orderLang.php:68 langs/orderLang.php:230
+msgid "All similar packages"
+msgstr ""
+
+#: langs/settingsLang.php:103 langs/settingsLang.php:402
+msgid "Allowable value between 1 and 30 kg"
+msgstr ""
+
+#: shipping-methods/Correos/CorreosOficialPaqPremiumOficinaElegida.php:74
+#: shipping-methods/Correos/CorreosOficialPaqLigero.php:74
+#: shipping-methods/Correos/CorreosOficialDistribucionInternacionalLight.php:74
+#: shipping-methods/Correos/CorreosOficialPaqPremiumCityPaq.php:74
+#: shipping-methods/Correos/CorreosOficialPaqEstandarOficinaElegida.php:74
+#: shipping-methods/Correos/CorreosOficialPaqEstandarInternacional.php:74
+#: shipping-methods/Correos/CorreosOficialPaqLightInternacional.php:74
+#: shipping-methods/Correos/CorreosOficialPaquetePostalEconomicoInternacional.php:74
+#: shipping-methods/Correos/CorreosOficialPaqPremiumInternacional.php:74
+#: shipping-methods/Correos/CorreosOficialCartaCertificadaInternacional.php:74
+#: shipping-methods/Correos/CorreosOficialPaqEstandarCityPaq.php:74
+#: shipping-methods/Correos/CorreosOficialPaqEstandarDomicilio.php:74
+#: shipping-methods/Correos/CorreosOficialPaqPremiumDomicilio.php:74
+#: shipping-methods/Cex/CorreosOficialIslasDocumentacion.php:74
+#: shipping-methods/Cex/CorreosOficialPaqEmpresaCatorce.php:74
+#: shipping-methods/Cex/CorreosOficialPaqueteriaOptica.php:74
+#: shipping-methods/Cex/CorreosOficialPaqCatorce.php:74
+#: shipping-methods/Cex/CorreosOficialPaqEcommerce.php:74
+#: shipping-methods/Cex/CorreosOficialPaqVeinticuatroOficinaElegida.php:74
+#: shipping-methods/Cex/CorreosOficialIslasMaritimo.php:74
+#: shipping-methods/Cex/CorreosOficialInternacionalEstandar.php:74
+#: shipping-methods/Cex/CorreosOficialPaqVeinticuatro.php:74
+#: shipping-methods/Cex/CorreosOficialPaqPunto.php:74
+#: shipping-methods/Cex/CorreosOficialePaqVeinticuatro.php:74
+#: shipping-methods/Cex/CorreosOficialPaqDiez.php:74
+#: shipping-methods/Cex/CorreosOficialCampaniaCex.php:74
+#: shipping-methods/Cex/CorreosoficialIslasExpress.php:74
+#: shipping-methods/Cex/CorreosOficialEntregaPlus.php:74
+#: shipping-methods/Cex/CorreosOficialInternacionalExpress.php:74
+#: shipping-methods/Cex/CorreosOficialPortugalOptica.php:74
+msgid "Allows you to configure a fixed fee, max. weight and cost rules"
+msgstr ""
+
+#: langs/settingsLang.php:87 langs/settingsLang.php:368
+msgid "Alternative label text"
+msgstr ""
+
+#: langs/settingsLang.php:86 langs/settingsLang.php:367
+msgid "Alternative text for sender"
+msgstr ""
+
+#: controllers/front/CorreosOficialAdminOrderModuleFrontController.php:347
+msgid "An email was sended to the customer with details of the return"
+msgstr ""
+
+#: langs/homeLang.php:62 langs/settingsLang.php:132 langs/settingsLang.php:442
+#: langs/utilitysLang.php:100 langs/utilitysLang.php:236
+msgid "An error has occurred"
+msgstr ""
+
+#: classes/CorreosOficialReturnsMail.php:101
+msgid ""
+"and provide it at your nearest post office or contact us to arrange "
+"collection. If in this email you receive the"
+msgstr ""
+
+#: langs/settingsLang.php:56 langs/settingsLang.php:413 langs/orderLang.php:35
+msgid "Andorra"
+msgstr ""
+
+#: langs/settingsLang.php:198
+msgid "Annulled status"
+msgstr ""
+
+#: langs/settingsLang.php:373
+msgid ""
+"Applies to Paq Ligero, Citypaq delivery (Correos) or Paq Punto, PaqEcommerce "
+"(CEX). If your shipments have the same dimensions, you can set them as "
+"default. They will remain editable in shipping data to handle exceptions."
+msgstr ""
+
+#: classes/CorreosOficialReturnsMail.php:113
+msgid "at"
+msgstr ""
+
+#: langs/utilitysLang.php:52 langs/utilitysLang.php:178
+msgid "AT Code"
+msgstr ""
+
+#: langs/orderLang.php:64 langs/orderLang.php:226
+msgid "AT code"
+msgstr ""
+
+#: langs/utilitysLang.php:35
+msgid "AT Code required. Please, enter no more than 30 characters"
+msgstr ""
+
+#: langs/settingsLang.php:254 langs/settingsLang.php:422
+msgid "At the moment I am not going to use an CEX account."
+msgstr ""
+
+#: langs/settingsLang.php:253 langs/settingsLang.php:420
+msgid "At the moment I am not going to use an Correos account."
+msgstr ""
+
+#: classes/CorreosOficialReturnsMail.php:100
+msgid ""
+"Attached is a label that you can print out and attach to the package. If you "
+"prefer, you can write down the package code"
+msgstr ""
+
+#: controllers/admin/AdminCorreosOficialUtilitiesProcessController.php:647
+msgid ""
+"Authentication error with Correos API. Please verify the configured "
+"credentials."
+msgstr ""
+
+#: langs/settingsLang.php:261 langs/settingsLang.php:453
+msgid "Automatic product assignment - Carrier relationship"
+msgstr ""
+
+#: langs/settingsLang.php:182
+msgid "Awaiting payment by bank transfer"
+msgstr ""
+
+#: langs/settingsLang.php:181
+msgid "Awaiting payment by check"
+msgstr ""
+
+#: langs/orderLang.php:366
+msgid "Awaiting tracking number from Marketplace."
+msgstr "Aguardando número de rastreamento do Marketplace."
+
+#: langs/settingsLang.php:191
+msgid "Backordered due to lack of stock (not paid)"
+msgstr ""
+
+#: langs/settingsLang.php:192
+msgid "Backordered due to lack of stock (paid)"
+msgstr ""
+
+#: langs/settingsLang.php:81 langs/settingsLang.php:362 langs/orderLang.php:84
+#: langs/orderLang.php:294
+msgid "Bank account number _ IBAN"
+msgstr ""
+
+#: langs/settingsLang.php:494
+msgid "Base URL"
+msgstr "URL Base"
+
+#: header.php:54
+msgid ""
+"Before adding shipping methods, please add regions to the zone and save the "
+"changes"
+msgstr ""
+
+#: langs/homeLang.php:15 langs/homeLang.php:64
+msgid "Best carriers solutions to your online customers"
+msgstr ""
+
+#: langs/orderLang.php:173 langs/orderLang.php:311 langs/utilitysLang.php:60
+#: langs/utilitysLang.php:198
+msgid "Big (box 80x80x80cm)"
+msgstr ""
+
+#: langs/orderLang.php:56 langs/orderLang.php:193
+msgid "Billing customer code"
+msgstr ""
+
+#: block.json:1
+msgctxt "block title"
+msgid "Correos Ecommerce"
+msgstr ""
+
+#: langs/checkoutLang.php:40 langs/checkoutLang.php:77
+msgid "Can not connect with the CityPaq service"
+msgstr ""
+
+#: langs/checkoutLang.php:38 langs/checkoutLang.php:70
+msgid "Can not connect with the Office service"
+msgstr ""
+
+#: langs/checkoutLang.php:60
+msgid "Can not connect with the PudoCEX service"
+msgstr ""
+
+#: langs/checkoutLang.php:41 langs/checkoutLang.php:78
+msgid "Can not find CityPaqs for postal code"
+msgstr ""
+
+#: langs/checkoutLang.php:39 langs/checkoutLang.php:71
+msgid "Can not find Office for postal code"
+msgstr ""
+
+#: langs/checkoutLang.php:61
+msgid "Can not find PudoCEXs for postal code"
+msgstr ""
+
+#: controllers/front/CorreosOficialAdminOrderModuleFrontController.php:351
+msgid ""
+"Can not send returns email to your customer. Please, print the label and "
+"CN23 documents and send an email to your customer"
+msgstr ""
+
+#: langs/settingsLang.php:62 langs/settingsLang.php:291
+msgid "CANCEL"
+msgstr ""
+
+#: langs/homeLang.php:55 langs/settingsLang.php:128 langs/settingsLang.php:438
+#: langs/utilitysLang.php:93 langs/utilitysLang.php:229
+msgid "Cancel"
+msgstr ""
+
+#: langs/orderLang.php:112 langs/orderLang.php:329
+msgid "Cancel pickup"
+msgstr ""
+
+#: langs/orderLang.php:138 langs/orderLang.php:354
+msgid "Cancel return"
+msgstr ""
+
+#: langs/orderLang.php:91 langs/orderLang.php:301
+msgid "Cancel shipping"
+msgstr ""
+
+#: langs/settingsLang.php:178
+msgid "Cancelled"
+msgstr ""
+
+#: langs/orderLang.php:364
+msgid "Cargando logs..."
+msgstr ""
+
+#: langs/orderLang.php:59 langs/orderLang.php:196 langs/utilitysLang.php:43
+#: langs/utilitysLang.php:169
+msgid "Carrier"
+msgstr ""
+
+#: langs/orderLang.php:57 langs/orderLang.php:194
+msgid "Carriers"
+msgstr ""
+
+#: langs/settingsLang.php:111 langs/settingsLang.php:450
+msgid "Carriers with ** are carriers that are not active"
+msgstr ""
+
+#: langs/orderLang.php:82 langs/orderLang.php:292
+msgid "Cash on delivery"
+msgstr ""
+
+#: langs/orderLang.php:83 langs/orderLang.php:293
+msgid "Cash on delivery value"
+msgstr ""
+
+#: classes/CorreosOficialReturnsShippingMethods.php:59
+msgid "CEX 63 + Recogida"
+msgstr ""
+
+#: langs/settingsLang.php:250 langs/settingsLang.php:421
+msgid "CEX Account"
+msgstr ""
+
+#: langs/settingsLang.php:177
+msgid "CEX annulled"
+msgstr ""
+
+#: langs/orderLang.php:49 langs/orderLang.php:210
+msgid "Change CityPAQ"
+msgstr ""
+
+#: langs/settingsLang.php:97 langs/settingsLang.php:377
+msgid "Change logo on labels"
+msgstr ""
+
+#: langs/orderLang.php:43 langs/orderLang.php:199
+msgid "Change office"
+msgstr ""
+
+#: langs/utilitysLang.php:49 langs/utilitysLang.php:176
+msgid "Change product"
+msgstr ""
+
+#: langs/orderLang.php:217
+msgid "Change PUDO"
+msgstr ""
+
+#: langs/orderLang.php:187 langs/orderLang.php:272
+msgid "Change Sender"
+msgstr ""
+
+#: langs/homeLang.php:51 langs/homeLang.php:100 langs/settingsLang.php:42
+#: langs/settingsLang.php:300 langs/orderLang.php:22 langs/orderLang.php:266
+msgid "characters"
+msgstr ""
+
+#: correosoficial-wc-extend-store-endpoint.php:66
+msgid "Checkout User Config."
+msgstr ""
+
+#: langs/utilitysLang.php:114 langs/utilitysLang.php:268
+msgid "Choose a package size for pickup"
+msgstr ""
+
+#: langs/orderLang.php:51 langs/orderLang.php:212
+msgid "Choose CityPAQ"
+msgstr ""
+
+#: langs/orderLang.php:46 langs/orderLang.php:203
+msgid "Choose office"
+msgstr ""
+
+#: langs/orderLang.php:219
+msgid "Choose PUDO"
+msgstr ""
+
+#: langs/homeLang.php:27 langs/homeLang.php:76 langs/settingsLang.php:154
+msgid "Choose the deadline that best suits your type of shipments"
+msgstr ""
+
+#: langs/settingsLang.php:51 langs/settingsLang.php:408 langs/orderLang.php:29
+#: langs/orderLang.php:208 langs/checkoutLang.php:24 langs/checkoutLang.php:55
+msgid "City"
+msgstr ""
+
+#: langs/orderLang.php:132 langs/orderLang.php:213
+msgid "Citypaq error"
+msgstr ""
+
+#: langs/orderLang.php:50 langs/orderLang.php:211
+msgid "CityPAQ found"
+msgstr ""
+
+#: langs/orderLang.php:52 langs/orderLang.php:215
+msgid "CityPAQ information"
+msgstr ""
+
+#: langs/orderLang.php:48 langs/orderLang.php:209
+msgid "CityPAQ SELECTED"
+msgstr ""
+
+#: langs/orderLang.php:177 langs/utilitysLang.php:133
+#: langs/notificationsLang.php:4 langs/notificationsLang.php:6
+msgid "Click on any notification to see it in this space in more detail"
+msgstr "Clique em qualquer notificação para visualizá-la em detalhes"
+
+#: langs/utilitysLang.php:116
+msgid "Click on each item in the list to show_hide columns of the table"
+msgstr ""
+
+#: langs/settingsLang.php:269 langs/settingsLang.php:282
+msgid "Client ID"
+msgstr ""
+
+#: langs/checkoutLang.php:30 langs/checkoutLang.php:69
+msgid "Closed"
+msgstr ""
+
+#: classes/CorreosOficialReturnsMail.php:99
+msgid "CN23/CP71 Documentation"
+msgstr ""
+
+#: langs/orderLang.php:108
+msgid "Collection data"
+msgstr ""
+
+#: langs/checkoutLang.php:46
+msgid "Collection point not found"
+msgstr ""
+
+#: langs/utilitysLang.php:77
+msgid "Collections of shipments already admitted will not be recorded"
+msgstr ""
+
+#: langs/settingsLang.php:33 langs/settingsLang.php:275 langs/orderLang.php:41
+#: langs/orderLang.php:284
+msgid "Company"
+msgstr ""
+
+#: langs/homeLang.php:32 langs/homeLang.php:81 langs/settingsLang.php:157
+msgid "Company name"
+msgstr ""
+
+#: shipping-methods/Correos/CorreosOficialPaqPremiumOficinaElegida.php:257
+#: shipping-methods/Correos/CorreosOficialPaqLigero.php:257
+#: shipping-methods/Correos/CorreosOficialDistribucionInternacionalLight.php:257
+#: shipping-methods/Correos/CorreosOficialPaqPremiumCityPaq.php:257
+#: shipping-methods/Correos/CorreosOficialPaqEstandarOficinaElegida.php:257
+#: shipping-methods/Correos/CorreosOficialPaqEstandarInternacional.php:257
+#: shipping-methods/Correos/CorreosOficialPaqLightInternacional.php:257
+#: shipping-methods/Correos/CorreosOficialPaquetePostalEconomicoInternacional.php:257
+#: shipping-methods/Correos/CorreosOficialPaqPremiumInternacional.php:257
+#: shipping-methods/Correos/CorreosOficialCartaCertificadaInternacional.php:257
+#: shipping-methods/Correos/CorreosOficialPaqEstandarCityPaq.php:257
+#: shipping-methods/Correos/CorreosOficialPaqEstandarDomicilio.php:257
+#: shipping-methods/Correos/CorreosOficialPaqPremiumDomicilio.php:257
+#: shipping-methods/Cex/CorreosOficialIslasDocumentacion.php:257
+#: shipping-methods/Cex/CorreosOficialPaqEmpresaCatorce.php:257
+#: shipping-methods/Cex/CorreosOficialPaqueteriaOptica.php:257
+#: shipping-methods/Cex/CorreosOficialPaqCatorce.php:257
+#: shipping-methods/Cex/CorreosOficialPaqEcommerce.php:257
+#: shipping-methods/Cex/CorreosOficialPaqVeinticuatroOficinaElegida.php:257
+#: shipping-methods/Cex/CorreosOficialIslasMaritimo.php:257
+#: shipping-methods/Cex/CorreosOficialInternacionalEstandar.php:257
+#: shipping-methods/Cex/CorreosOficialPaqVeinticuatro.php:257
+#: shipping-methods/Cex/CorreosOficialPaqPunto.php:257
+#: shipping-methods/Cex/CorreosOficialePaqVeinticuatro.php:257
+#: shipping-methods/Cex/CorreosOficialPaqDiez.php:257
+#: shipping-methods/Cex/CorreosOficialCampaniaCex.php:257
+#: shipping-methods/Cex/CorreosoficialIslasExpress.php:257
+#: shipping-methods/Cex/CorreosOficialEntregaPlus.php:257
+#: shipping-methods/Cex/CorreosOficialInternacionalExpress.php:257
+#: shipping-methods/Cex/CorreosOficialPortugalOptica.php:257
+msgid "Conditions"
+msgstr ""
+
+#: langs/homeLang.php:54 langs/settingsLang.php:127 langs/settingsLang.php:301
+#: langs/utilitysLang.php:92 langs/utilitysLang.php:228
+msgid "Confirmation?"
+msgstr ""
+
+#: langs/settingsLang.php:22 langs/settingsLang.php:279
+msgid "Connected"
+msgstr ""
+
+#: langs/settingsLang.php:490
+msgid "Consumer Key"
+msgstr "Chave de Consumidor"
+
+#: langs/settingsLang.php:492
+msgid "Consumer Secret"
+msgstr "Segredo de Consumidor"
+
+#: langs/settingsLang.php:67 langs/settingsLang.php:429
+msgid "Contact"
+msgstr ""
+
+#: langs/homeLang.php:34 langs/homeLang.php:83 langs/settingsLang.php:159
+msgid "Contact name"
+msgstr ""
+
+#: langs/settingsLang.php:49 langs/settingsLang.php:406 langs/orderLang.php:27
+#: langs/orderLang.php:285
+msgid "Contact person"
+msgstr ""
+
+#: classes/CorreosOficialAdminOrderHook.php:1291
+msgid "Content copied to clipboard"
+msgstr ""
+
+#: langs/settingsLang.php:26
+msgid "Contract Code"
+msgstr ""
+
+#: langs/settingsLang.php:219 langs/settingsLang.php:284
+msgid "Contract number"
+msgstr ""
+
+#: langs/settingsLang.php:491
+msgid "Copy"
+msgstr "Copiar"
+
+#: langs/settingsLang.php:135 langs/settingsLang.php:444
+msgid "Correos"
+msgstr ""
+
+#: langs/settingsLang.php:249 langs/settingsLang.php:419
+msgid "Correos Account"
+msgstr ""
+
+#. Description of the plugin
+msgid ""
+"Correos and Correos Express Spain plugin for shipment management. It "
+"integrates national and international parcel services, making the management "
+"of your orders a quick and easy task."
+msgstr ""
+
+#. Name of the plugin
+msgid "Correos Ecommerce"
+msgstr ""
+
+#: langs/settingsLang.php:136 langs/settingsLang.php:445
+msgid "Correos Express"
+msgstr ""
+
+#: classes/CorreosOficialReturnsMail.php:110
+msgid "Correos Express will proceed to carry out a collection requested by"
+msgstr ""
+
+#: classes/CorreosOficialReturnsShippingMethods.php:49
+msgid "Correos Internacional S0159 SIN Recogida"
+msgstr ""
+
+#: langs/settingsLang.php:28 langs/settingsLang.php:286
+msgid "Correos Key"
+msgstr ""
+
+#: classes/CorreosOficialReturnsShippingMethods.php:39
+msgid "Correos Nacional S0148 + Recogida"
+msgstr ""
+
+#: langs/orderDetailLang.php:15
+msgid "Correos Oficial"
+msgstr ""
+
+#: langs/orderDetailLang.php:18
+msgid "Correos Oficial Tracking Order"
+msgstr ""
+
+#: controllers/admin/AdminCorreosOficialUtilitiesProcessController.php:640
+msgid "Correos service is temporarily unavailable. Please try again later."
+msgstr ""
+
+#: classes/CorreosOficialCommonShippingMethods.php:552
+#: shipping-methods/Correos/CorreosOficialPaqPremiumOficinaElegida.php:260
+#: shipping-methods/Correos/CorreosOficialPaqLigero.php:260
+#: shipping-methods/Correos/CorreosOficialDistribucionInternacionalLight.php:260
+#: shipping-methods/Correos/CorreosOficialPaqPremiumCityPaq.php:260
+#: shipping-methods/Correos/CorreosOficialPaqEstandarOficinaElegida.php:260
+#: shipping-methods/Correos/CorreosOficialPaqEstandarInternacional.php:260
+#: shipping-methods/Correos/CorreosOficialPaqLightInternacional.php:260
+#: shipping-methods/Correos/CorreosOficialPaquetePostalEconomicoInternacional.php:260
+#: shipping-methods/Correos/CorreosOficialPaqPremiumInternacional.php:260
+#: shipping-methods/Correos/CorreosOficialCartaCertificadaInternacional.php:260
+#: shipping-methods/Correos/CorreosOficialPaqEstandarCityPaq.php:260
+#: shipping-methods/Correos/CorreosOficialPaqEstandarDomicilio.php:260
+#: shipping-methods/Correos/CorreosOficialPaqPremiumDomicilio.php:260
+#: shipping-methods/Cex/CorreosOficialIslasDocumentacion.php:260
+#: shipping-methods/Cex/CorreosOficialPaqEmpresaCatorce.php:260
+#: shipping-methods/Cex/CorreosOficialPaqueteriaOptica.php:260
+#: shipping-methods/Cex/CorreosOficialPaqCatorce.php:260
+#: shipping-methods/Cex/CorreosOficialPaqEcommerce.php:260
+#: shipping-methods/Cex/CorreosOficialPaqVeinticuatroOficinaElegida.php:260
+#: shipping-methods/Cex/CorreosOficialIslasMaritimo.php:260
+#: shipping-methods/Cex/CorreosOficialInternacionalEstandar.php:260
+#: shipping-methods/Cex/CorreosOficialPaqVeinticuatro.php:260
+#: shipping-methods/Cex/CorreosOficialPaqPunto.php:260
+#: shipping-methods/Cex/CorreosOficialePaqVeinticuatro.php:260
+#: shipping-methods/Cex/CorreosOficialPaqDiez.php:260
+#: shipping-methods/Cex/CorreosOficialCampaniaCex.php:260
+#: shipping-methods/Cex/CorreosoficialIslasExpress.php:260
+#: shipping-methods/Cex/CorreosOficialEntregaPlus.php:260
+#: shipping-methods/Cex/CorreosOficialInternacionalExpress.php:260
+#: shipping-methods/Cex/CorreosOficialPortugalOptica.php:260
+msgid "Cost"
+msgstr ""
+
+#: controllers/admin/AdminCorreosOficialUserConfigurationProcessController.php:185
+msgid ""
+"Could not upload logo. Check permissions of the wordpress upload directory"
+msgstr ""
+
+#: langs/settingsLang.php:53 langs/settingsLang.php:410 langs/orderLang.php:31
+#: langs/orderLang.php:286
+msgid "Country"
+msgstr ""
+
+#: langs/utilitysLang.php:85 langs/utilitysLang.php:275
+msgid "Country of addressee"
+msgstr ""
+
+#: correosoficial.php:1900
+msgid "Country of Origin"
+msgstr ""
+
+#: langs/settingsLang.php:479
+msgid "Country origin"
+msgstr ""
+
+#: langs/settingsLang.php:316 langs/orderLang.php:248
+msgid "Country origin of the goods"
+msgstr "País de origem dos bens"
+
+#: langs/utilitysLang.php:157 langs/utilitysLang.php:250
+msgid "CP"
+msgstr ""
+
+#: langs/settingsLang.php:482
+msgid ""
+"Create the HS Code and Country of origin features from the Correos module"
+msgstr ""
+
+#: langs/settingsLang.php:208
+msgid "Cron successfully saved"
+msgstr ""
+
+#: langs/settingsLang.php:197
+msgid "Current status"
+msgstr ""
+
+#: langs/settingsLang.php:343 langs/utilitysLang.php:45
+#: langs/utilitysLang.php:171
+msgid "Customer"
+msgstr ""
+
+#: langs/settingsLang.php:27 langs/settingsLang.php:274
+msgid "Customer Code"
+msgstr ""
+
+#: langs/utilitysLang.php:153 langs/utilitysLang.php:254
+msgid "Customer code"
+msgstr ""
+
+#: langs/settingsLang.php:357
+msgid "Customer is required"
+msgstr ""
+
+#: langs/settingsLang.php:220 langs/settingsLang.php:285
+msgid "Customer number"
+msgstr ""
+
+#: langs/settingsLang.php:216 langs/settingsLang.php:322 langs/orderLang.php:78
+#: langs/orderLang.php:239
+msgid "Customs default description"
+msgstr ""
+
+#: langs/utilitysLang.php:78 langs/utilitysLang.php:269
+msgid "Customs Documentation"
+msgstr ""
+
+#: langs/checkoutLang.php:47
+msgid "Customs Notice"
+msgstr ""
+
+#: langs/settingsLang.php:126 langs/settingsLang.php:328
+#: langs/utilitysLang.php:19 langs/utilitysLang.php:211
+msgid "Customs Processing successfully saved"
+msgstr ""
+
+#: langs/orderLang.php:129 langs/orderLang.php:225
+msgid "Customs reference of consignor"
+msgstr ""
+
+#: langs/orderLang.php:76 langs/orderLang.php:238
+msgid "Customs related data"
+msgstr ""
+
+#: correosoficial.php:1891
+msgid "Código del Sistema Armonizado para aduanas"
+msgstr ""
+
+#: langs/settingsLang.php:237 langs/orderLang.php:182
+#: langs/utilitysLang.php:138
+msgid "data protection policy."
+msgstr "a política de proteção de dados"
+
+#: langs/settingsLang.php:92
+msgid "Data to display on the label"
+msgstr ""
+
+#: langs/orderLang.php:127 langs/orderLang.php:253
+msgid "Date"
+msgstr ""
+
+#: langs/utilitysLang.php:86 langs/utilitysLang.php:276
+msgid "Date of creation"
+msgstr ""
+
+#: langs/utilitysLang.php:27 langs/utilitysLang.php:219
+msgid "Date «to» is minor than date «from»"
+msgstr ""
+
+#: langs/utilitysLang.php:46
+msgid "Date/Hour"
+msgstr ""
+
+#: langs/utilitysLang.php:110
+msgid "Date/Hour recording"
+msgstr ""
+
+#: langs/utilitysLang.php:67
+msgid "Date/Hour recording "
+msgstr ""
+
+#: langs/utilitysLang.php:144 langs/utilitysLang.php:172
+msgid "Date_Hour"
+msgstr ""
+
+#: langs/utilitysLang.php:142 langs/utilitysLang.php:240
+msgid "Date_Hour recording"
+msgstr ""
+
+#: langs/utilitysLang.php:143 langs/utilitysLang.php:259
+msgid "Date_Hour recording "
+msgstr ""
+
+#: controllers/admin/AdminHomeSendMailController.php:60
+msgid ""
+"Dear Customer, we have receive your request from module CorreosOficial for "
+msgstr ""
+
+#: langs/settingsLang.php:251
+msgid "Default"
+msgstr ""
+
+#: langs/settingsLang.php:122 langs/settingsLang.php:324
+msgid "Default customs description"
+msgstr ""
+
+#: langs/settingsLang.php:256
+msgid "Default dimensions (Kg)"
+msgstr ""
+
+#: langs/settingsLang.php:460
+msgid "Default HS Code"
+msgstr ""
+
+#: langs/settingsLang.php:78 langs/settingsLang.php:360
+msgid "Default label type"
+msgstr ""
+
+#: langs/settingsLang.php:77 langs/settingsLang.php:359
+msgid "Default packages"
+msgstr ""
+
+#: langs/settingsLang.php:71 langs/settingsLang.php:433 langs/orderLang.php:24
+#: langs/orderLang.php:277 langs/utilitysLang.php:108
+#: langs/utilitysLang.php:202
+msgid "Default sender"
+msgstr ""
+
+#: langs/settingsLang.php:89 langs/settingsLang.php:370
+msgid "Default weight (Kg)"
+msgstr ""
+
+#: langs/homeLang.php:59 langs/settingsLang.php:35 langs/settingsLang.php:277
+#: langs/orderLang.php:158 langs/orderLang.php:247 langs/utilitysLang.php:97
+#: langs/utilitysLang.php:233
+msgid "Delete"
+msgstr ""
+
+#: classes/CorreosOficialCommonShippingMethods.php:396
+msgid "Delete rule"
+msgstr ""
+
+#: langs/settingsLang.php:184
+msgid "Delivered"
+msgstr ""
+
+#: langs/settingsLang.php:185
+msgid "Delivered CEX"
+msgstr ""
+
+#: langs/settingsLang.php:199
+msgid "Delivered status"
+msgstr ""
+
+#: classes/CorreosOficialApiRouter.php:584
+msgid ""
+"Delivery address reverted to original pickup point address, reload the page "
+"to see the changes"
+msgstr ""
+
+#: langs/homeLang.php:16 langs/homeLang.php:65 langs/settingsLang.php:143
+msgid "DELIVERY IN CORREOS OFFICE"
+msgstr ""
+
+#: langs/orderLang.php:75 langs/orderLang.php:237
+msgid "Delivery remarks"
+msgstr ""
+
+#: langs/settingsLang.php:124 langs/settingsLang.php:326 langs/orderLang.php:80
+#: langs/orderLang.php:242
+msgid "Description"
+msgstr ""
+
+#: langs/orderLang.php:62
+msgid "Description reference (1)"
+msgstr ""
+
+#: langs/orderLang.php:63
+msgid "Description reference (2)"
+msgstr ""
+
+#: correosoficial-wc-extend-store-endpoint.php:70
+msgid "Dimensions and weights of the products in the cart."
+msgstr ""
+
+#: langs/orderDetailLang.php:16
+msgid "Do click in the link below to tracking your order"
+msgstr ""
+
+#: langs/settingsLang.php:36 langs/settingsLang.php:294
+msgid "Do you want to delete this customer?"
+msgstr ""
+
+#: langs/orderLang.php:184 langs/orderLang.php:269
+msgid "does not have a contract assigned for"
+msgstr ""
+
+#: langs/orderLang.php:124 langs/orderLang.php:341
+msgid "Done operation"
+msgstr ""
+
+#: langs/settingsLang.php:206 langs/settingsLang.php:391
+msgid "Download last request"
+msgstr ""
+
+#: langs/settingsLang.php:204 langs/settingsLang.php:389
+msgid "Download log"
+msgstr ""
+
+#: langs/settingsLang.php:205 langs/settingsLang.php:390
+msgid "Download update errors"
+msgstr ""
+
+#: langs/homeLang.php:58 langs/settingsLang.php:34 langs/settingsLang.php:276
+#: langs/orderLang.php:361 langs/utilitysLang.php:96 langs/utilitysLang.php:232
+msgid "Edit"
+msgstr ""
+
+#: langs/orderLang.php:150 langs/orderLang.php:280
+msgid "Edit Sender"
+msgstr ""
+
+#: langs/homeLang.php:22 langs/homeLang.php:71 langs/settingsLang.php:149
+msgid "ELIMINATES UNCERTAINTY"
+msgstr ""
+
+#: langs/homeLang.php:37 langs/homeLang.php:86 langs/settingsLang.php:58
+#: langs/settingsLang.php:415 langs/orderLang.php:37 langs/orderLang.php:289
+#: langs/checkoutLang.php:28
+msgid "Email"
+msgstr ""
+
+#: langs/settingsLang.php:96
+msgid "EMPTY"
+msgstr ""
+
+#: langs/settingsLang.php:485
+msgid "Enable Marketplace Sales"
+msgstr "Ativar vendas Marketplace"
+
+#: langs/settingsLang.php:478
+msgid "Enable to use module features for HS codes instead of attributes"
+msgstr ""
+
+#: langs/settingsLang.php:497
+msgid "Endpoint"
+msgstr "Endpoint"
+
+#: langs/settingsLang.php:317
+msgid "Enter 2-letter ISO of the country (ISO 3166-1 alfa-2)"
+msgstr ""
+
+#: classes/CorreosOficialCommonShippingMethods.php:352
+msgid "Enter max weight"
+msgstr ""
+
+#: langs/checkoutLang.php:44
+msgid "Enter the Postcode to locate a collection point"
+msgstr ""
+
+#: langs/checkoutLang.php:74
+msgid "Enter the Postcode to locate CityPaq"
+msgstr ""
+
+#: langs/checkoutLang.php:65
+msgid "Enter the Postcode to locate Office"
+msgstr ""
+
+#: langs/checkoutLang.php:32
+msgid "Enter the Postcode to search for CityPaq"
+msgstr ""
+
+#: langs/checkoutLang.php:14
+msgid "Enter the Postcode to search for Office"
+msgstr ""
+
+#: langs/orderLang.php:101 langs/orderLang.php:308 langs/utilitysLang.php:115
+#: langs/utilitysLang.php:195
+msgid "Envelopes"
+msgstr ""
+
+#: langs/utilitysLang.php:118 langs/utilitysLang.php:241
+msgid "Error"
+msgstr ""
+
+#: controllers/admin/AdminCorreosOficialSettingsController.php:375
+msgid "ERROR 12010: Allowed formats: png, jpg, jpeg"
+msgstr ""
+
+#: langs/settingsLang.php:268 langs/settingsLang.php:314
+msgid ""
+"ERROR 12050: To use webservice credentials, you must have the SOAP feature "
+"installed. Please contact your hosting for more information"
+msgstr ""
+
+#: correosoficial.php:190
+msgid ""
+"ERROR 12050: To use webservice credentials, you must have the SOAP feature "
+"installed. Please contact your hosting for more information."
+msgstr ""
+
+#: classes/Apis/CorreosOficialRest.php:588
+msgid "Error cancelling shipment, please try again later"
+msgstr ""
+
+#: controllers/admin/AdminCorreosOficialSGAProcessController.php:45
+msgid ""
+"Error connecting to SGA. Please check the Owner, Customer and Store codes."
+msgstr ""
+
+#: controllers/admin/AdminCorreosOficialMarketplaceProcessController.php:78
+msgid "Error creating Marketplace API key."
+msgstr "Erro ao criar a chave de API do Marketplace."
+
+#: classes/Apis/CorreosOficialRest.php:637
+#: classes/Apis/CorreosOficialRest.php:765
+#: classes/Apis/CorreosOficialRest.php:1055
+#: classes/Apis/CorreosOficialRest.php:1164
+msgid "Error generating shipment, please try again later"
+msgstr ""
+
+#: classes/Apis/CorreosOficialRest.php:1122
+msgid "Error obtaining the label, please try again later"
+msgstr ""
+
+#: langs/orderLang.php:123 langs/orderLang.php:340
+msgid "Error operation"
+msgstr ""
+
+#: controllers/admin/AdminCorreosOficialMarketplaceProcessController.php:70
+#: controllers/admin/AdminCorreosOficialMarketplaceProcessController.php:90
+msgid "Error saving Marketplace configuration."
+msgstr ""
+
+#: langs/homeLang.php:53 langs/homeLang.php:102 langs/settingsLang.php:170
+#: langs/orderLang.php:268
+msgid ""
+"Error submitting the form. Please try again later. If the error persists, "
+"please contact Correos Technical Support."
+msgstr ""
+
+#: langs/orderLang.php:141 langs/orderLang.php:355
+msgid "Error while registering"
+msgstr ""
+
+#: correosoficial.php:320
+msgid "Error:"
+msgstr ""
+
+#: langs/utilitysLang.php:185
+msgid "Errors"
+msgstr ""
+
+#: langs/utilitysLang.php:88 langs/utilitysLang.php:278
+msgid "ERRORS IN GENERATION OF CUSTOMS DOCUMENTATION"
+msgstr ""
+
+#: langs/utilitysLang.php:53
+msgid "ERRORS IN ORDERS GENERATION"
+msgstr ""
+
+#: langs/utilitysLang.php:76 langs/utilitysLang.php:265
+msgid "ERRORS IN PICKUP ORDERS"
+msgstr ""
+
+#: langs/utilitysLang.php:158 langs/utilitysLang.php:227
+msgid "ERRORS IN PRINT LABEL GENERATION"
+msgstr ""
+
+#: langs/settingsLang.php:495
+msgid "Exposed Endpoints"
+msgstr "Endpoints expostos"
+
+#: langs/settingsLang.php:45 langs/settingsLang.php:310
+msgid "Failed to validate credentials."
+msgstr ""
+
+#: classes/CorreosOficialCommonShippingMethods.php:345
+msgid "Fixed Fee"
+msgstr ""
+
+#: shipping-methods/Correos/CorreosOficialPaqPremiumOficinaElegida.php:285
+#: shipping-methods/Correos/CorreosOficialPaqLigero.php:285
+#: shipping-methods/Correos/CorreosOficialDistribucionInternacionalLight.php:285
+#: shipping-methods/Correos/CorreosOficialPaqPremiumCityPaq.php:285
+#: shipping-methods/Correos/CorreosOficialPaqEstandarOficinaElegida.php:285
+#: shipping-methods/Correos/CorreosOficialPaqEstandarInternacional.php:285
+#: shipping-methods/Correos/CorreosOficialPaqLightInternacional.php:285
+#: shipping-methods/Correos/CorreosOficialPaquetePostalEconomicoInternacional.php:285
+#: shipping-methods/Correos/CorreosOficialPaqPremiumInternacional.php:285
+#: shipping-methods/Correos/CorreosOficialCartaCertificadaInternacional.php:285
+#: shipping-methods/Correos/CorreosOficialPaqEstandarCityPaq.php:285
+#: shipping-methods/Correos/CorreosOficialPaqEstandarDomicilio.php:285
+#: shipping-methods/Correos/CorreosOficialPaqPremiumDomicilio.php:285
+#: shipping-methods/Cex/CorreosOficialIslasDocumentacion.php:285
+#: shipping-methods/Cex/CorreosOficialPaqEmpresaCatorce.php:285
+#: shipping-methods/Cex/CorreosOficialPaqueteriaOptica.php:285
+#: shipping-methods/Cex/CorreosOficialPaqCatorce.php:285
+#: shipping-methods/Cex/CorreosOficialPaqEcommerce.php:286
+#: shipping-methods/Cex/CorreosOficialPaqVeinticuatroOficinaElegida.php:285
+#: shipping-methods/Cex/CorreosOficialIslasMaritimo.php:285
+#: shipping-methods/Cex/CorreosOficialInternacionalEstandar.php:285
+#: shipping-methods/Cex/CorreosOficialPaqVeinticuatro.php:285
+#: shipping-methods/Cex/CorreosOficialPaqPunto.php:286
+#: shipping-methods/Cex/CorreosOficialePaqVeinticuatro.php:285
+#: shipping-methods/Cex/CorreosOficialPaqDiez.php:285
+#: shipping-methods/Cex/CorreosOficialCampaniaCex.php:285
+#: shipping-methods/Cex/CorreosoficialIslasExpress.php:285
+#: shipping-methods/Cex/CorreosOficialEntregaPlus.php:285
+#: shipping-methods/Cex/CorreosOficialInternacionalExpress.php:285
+#: shipping-methods/Cex/CorreosOficialPortugalOptica.php:285
+msgid "Free"
+msgstr ""
+
+#: langs/settingsLang.php:69 langs/settingsLang.php:431 langs/orderLang.php:95
+#: langs/orderLang.php:316 langs/utilitysLang.php:37 langs/utilitysLang.php:161
+msgid "From"
+msgstr ""
+
+#: shipping-methods/Correos/CorreosOficialPaqPremiumOficinaElegida.php:258
+#: shipping-methods/Correos/CorreosOficialPaqLigero.php:258
+#: shipping-methods/Correos/CorreosOficialDistribucionInternacionalLight.php:258
+#: shipping-methods/Correos/CorreosOficialPaqPremiumCityPaq.php:258
+#: shipping-methods/Correos/CorreosOficialPaqEstandarOficinaElegida.php:258
+#: shipping-methods/Correos/CorreosOficialPaqEstandarInternacional.php:258
+#: shipping-methods/Correos/CorreosOficialPaqLightInternacional.php:258
+#: shipping-methods/Correos/CorreosOficialPaquetePostalEconomicoInternacional.php:258
+#: shipping-methods/Correos/CorreosOficialPaqPremiumInternacional.php:258
+#: shipping-methods/Correos/CorreosOficialCartaCertificadaInternacional.php:258
+#: shipping-methods/Correos/CorreosOficialPaqEstandarCityPaq.php:258
+#: shipping-methods/Correos/CorreosOficialPaqEstandarDomicilio.php:258
+#: shipping-methods/Correos/CorreosOficialPaqPremiumDomicilio.php:258
+#: shipping-methods/Cex/CorreosOficialIslasDocumentacion.php:258
+#: shipping-methods/Cex/CorreosOficialPaqEmpresaCatorce.php:258
+#: shipping-methods/Cex/CorreosOficialPaqueteriaOptica.php:258
+#: shipping-methods/Cex/CorreosOficialPaqCatorce.php:258
+#: shipping-methods/Cex/CorreosOficialPaqEcommerce.php:258
+#: shipping-methods/Cex/CorreosOficialPaqVeinticuatroOficinaElegida.php:258
+#: shipping-methods/Cex/CorreosOficialIslasMaritimo.php:258
+#: shipping-methods/Cex/CorreosOficialInternacionalEstandar.php:258
+#: shipping-methods/Cex/CorreosOficialPaqVeinticuatro.php:258
+#: shipping-methods/Cex/CorreosOficialPaqPunto.php:258
+#: shipping-methods/Cex/CorreosOficialePaqVeinticuatro.php:258
+#: shipping-methods/Cex/CorreosOficialPaqDiez.php:258
+#: shipping-methods/Cex/CorreosOficialCampaniaCex.php:258
+#: shipping-methods/Cex/CorreosoficialIslasExpress.php:258
+#: shipping-methods/Cex/CorreosOficialEntregaPlus.php:258
+#: shipping-methods/Cex/CorreosOficialInternacionalExpress.php:258
+#: shipping-methods/Cex/CorreosOficialPortugalOptica.php:258
+msgid "From (min) >="
+msgstr ""
+
+#: langs/settingsLang.php:173 langs/settingsLang.php:417
+#: langs/orderLang.php:167 langs/orderLang.php:304 langs/utilitysLang.php:121
+#: langs/utilitysLang.php:190
+msgid "From hour"
+msgstr ""
+
+#: classes/CorreosOficialReturnsMail.php:109
+msgid "from the"
+msgstr ""
+
+#: langs/orderLang.php:93 langs/orderLang.php:315
+msgid "Generate pickup"
+msgstr ""
+
+#: langs/utilitysLang.php:126 langs/utilitysLang.php:266
+msgid "Generate pickups"
+msgstr ""
+
+#: langs/orderLang.php:137 langs/orderLang.php:353
+msgid "Generate return"
+msgstr ""
+
+#: langs/orderLang.php:143 langs/orderLang.php:352
+msgid "Generate return pickup"
+msgstr ""
+
+#: langs/orderLang.php:92 langs/orderLang.php:314
+msgid "Generate shipping"
+msgstr ""
+
+#: langs/utilitysLang.php:125 langs/utilitysLang.php:205
+msgid "Generate shippings"
+msgstr ""
+
+#: langs/utilitysLang.php:80 langs/utilitysLang.php:271
+msgid "GENERATION OF CUSTOMS DOCUMENTATION"
+msgstr ""
+
+#: langs/utilitysLang.php:18 langs/utilitysLang.php:210
+msgid "Generation of Customs Documentation"
+msgstr ""
+
+#: langs/homeLang.php:24 langs/homeLang.php:73 langs/settingsLang.php:151
+msgid "GIVE THEM PEACE OF MIND"
+msgstr ""
+
+#: correosoficial.php:1216 langs/settingsLang.php:244
+msgid "Go to notifications"
+msgstr "Ir para notificações"
+
+#: langs/settingsLang.php:83 langs/settingsLang.php:364
+msgid "Google Maps API Key"
+msgstr ""
+
+#. Author of the plugin
+msgid "Grupo Correos"
+msgstr ""
+
+#: langs/checkoutLang.php:37 langs/checkoutLang.php:79
+msgid "Han error has ocurred calling the CityPaq locator service"
+msgstr ""
+
+#: langs/checkoutLang.php:31 langs/checkoutLang.php:72
+msgid "Han error has ocurred calling the Office locator service"
+msgstr ""
+
+#: langs/checkoutLang.php:63
+msgid "Han error has ocurred calling the PudoCEX locator service"
+msgstr ""
+
+#: classes/CorreosOficialReturnsMail.php:118
+msgid "Have prepared any documentation accompanying the goods"
+msgstr ""
+
+#: langs/orderLang.php:160 langs/orderLang.php:351
+msgid "Height"
+msgstr ""
+
+#: langs/settingsLang.php:257 langs/settingsLang.php:374
+msgid "Height (cm)"
+msgstr ""
+
+#: classes/CorreosOficialReturnsMail.php:90
+msgid "Hello"
+msgstr ""
+
+#: langs/homeLang.php:28 langs/homeLang.php:77 langs/settingsLang.php:140
+msgid "Hello, are you a Correos customer?"
+msgstr ""
+
+#: langs/orderLang.php:74 langs/orderLang.php:236
+msgid "High"
+msgstr ""
+
+#: langs/checkoutLang.php:21 langs/checkoutLang.php:52
+msgid "Holidays"
+msgstr ""
+
+#: langs/orderLang.php:147 langs/orderLang.php:254
+msgid "Hour"
+msgstr ""
+
+#: langs/settingsLang.php:202 langs/settingsLang.php:353
+msgid "hours"
+msgstr ""
+
+# HS Code
+#: correosoficial.php:1888 langs/settingsLang.php:480 langs/orderLang.php:358
+msgid "HS Code"
+msgstr "Código HS"
+
+#: langs/settingsLang.php:463
+msgid "HS Tariff code"
+msgstr ""
+
+#. Author URI of the plugin
+msgid "http://correos.es"
+msgstr ""
+
+#. URI of the plugin
+msgid "https://es.wordpress.org/plugins/correos-ecommerce/"
+msgstr ""
+
+#: langs/settingsLang.php:238 langs/orderLang.php:183
+#: langs/utilitysLang.php:139
+msgid "I ACCEPT"
+msgstr "ENVIAR"
+
+#: langs/settingsLang.php:90
+msgid "I agree to alter product references in shipments"
+msgstr ""
+
+#: langs/homeLang.php:30 langs/homeLang.php:79 langs/settingsLang.php:155
+msgid "I AM NEW, CALL ME"
+msgstr ""
+
+#: langs/settingsLang.php:235 langs/orderLang.php:180
+#: langs/utilitysLang.php:136
+msgid "I have read and accept the "
+msgstr "Li e aceito"
+
+#: langs/homeLang.php:42 langs/homeLang.php:91 langs/settingsLang.php:165
+msgid "I have read the "
+msgstr ""
+
+#: langs/settingsLang.php:241 langs/settingsLang.php:396
+msgid "I would like to receive versions with new features before publication"
+msgstr ""
+
+#: langs/settingsLang.php:93
+msgid "ID"
+msgstr ""
+
+#: langs/settingsLang.php:32 langs/settingsLang.php:272
+msgid "id"
+msgstr ""
+
+#: langs/homeLang.php:33 langs/homeLang.php:82 langs/settingsLang.php:158
+msgid "ID number"
+msgstr ""
+
+#: langs/settingsLang.php:109 langs/settingsLang.php:448
+msgid "If you already has a Customer Code, please go to CUSTOMER DATA"
+msgstr ""
+
+#: langs/settingsLang.php:500
+msgid ""
+"If you save, the current API access will be revoked. When re-enabling "
+"Marketplace a new key will be generated."
+msgstr ""
+"Se guardar, o acesso atual à API será revogado. Ao reativar o Marketplace "
+"será gerada uma nova chave."
+
+#: controllers/admin/AdminCorreosOficialUserConfigurationProcessController.php:63
+msgid "Image too big"
+msgstr ""
+
+#: classes/CorreosOficialReturnsMail.php:117
+msgid ""
+"In order to ensure that the service is performed correctly and that your "
+"shipments are not delayed, we recommend that you"
+msgstr ""
+
+#: langs/settingsLang.php:180
+msgid "In progress CEX"
+msgstr ""
+
+#: langs/utilitysLang.php:129 langs/utilitysLang.php:256
+msgid "In this tab only show the Correos orders, anywhere show CEX orders"
+msgstr ""
+
+#: langs/homeLang.php:47 langs/homeLang.php:96 langs/settingsLang.php:76
+#: langs/settingsLang.php:435 langs/orderLang.php:19 langs/orderLang.php:260
+msgid "Incorrect DNI_CIF number, please correct it before continuing"
+msgstr ""
+
+#: langs/homeLang.php:21 langs/homeLang.php:70 langs/settingsLang.php:148
+msgid ""
+"Increase your sales and count on the confidence of the Correos Group for "
+"your shipments"
+msgstr ""
+
+#: langs/orderLang.php:259
+msgid "Info"
+msgstr ""
+
+#: langs/homeLang.php:61 langs/settingsLang.php:131 langs/settingsLang.php:441
+#: langs/utilitysLang.php:99 langs/utilitysLang.php:235
+msgid "Information"
+msgstr ""
+
+#: langs/orderLang.php:164 langs/orderLang.php:261
+msgid "Input a valid number without symbols or blank spaces"
+msgstr ""
+
+#: langs/settingsLang.php:139 langs/settingsLang.php:329
+msgid "Input data must be 6, 8 or 10 characters long"
+msgstr ""
+
+#: langs/settingsLang.php:281
+msgid "INSTRUCTIONS"
+msgstr ""
+
+#: langs/orderLang.php:85 langs/orderLang.php:295
+msgid "Insurance"
+msgstr ""
+
+#: langs/orderLang.php:86 langs/orderLang.php:296
+msgid "Insured value"
+msgstr ""
+
+#: classes/Apis/CorreosOficialRest.php:1319
+msgid "Is not possible to get the current shipment status"
+msgstr ""
+
+#: langs/utilitysLang.php:30 langs/utilitysLang.php:222
+msgid "It is not possible to request collection for dates after 30 days"
+msgstr ""
+
+#: langs/utilitysLang.php:31 langs/utilitysLang.php:223
+msgid "It is not possible to request collection for past dates"
+msgstr ""
+
+#: langs/utilitysLang.php:29 langs/utilitysLang.php:221
+msgid ""
+"It is not possible to request collection for the same day in Correos "
+"shipments"
+msgstr ""
+
+#: langs/settingsLang.php:112 langs/settingsLang.php:451
+msgid "It is recommended to configure them for backward compatibility"
+msgstr ""
+
+#: langs/homeLang.php:23 langs/homeLang.php:72 langs/settingsLang.php:150
+msgid ""
+"Know the status of your shipments at all times and offer transparency to "
+"your customer"
+msgstr ""
+
+#: langs/orderLang.php:165 langs/orderLang.php:334 langs/utilitysLang.php:127
+#: langs/utilitysLang.php:206
+msgid "Label Format"
+msgstr ""
+
+#: langs/orderLang.php:121 langs/orderLang.php:335
+msgid "Label position"
+msgstr ""
+
+#: langs/utilitysLang.php:64 langs/utilitysLang.php:237
+msgid "LABEL REPRINT"
+msgstr ""
+
+#: langs/utilitysLang.php:15 langs/utilitysLang.php:207
+msgid "Label Reprint"
+msgstr ""
+
+#: langs/orderLang.php:120 langs/orderLang.php:333 langs/utilitysLang.php:123
+#: langs/utilitysLang.php:242
+msgid "Label type"
+msgstr ""
+
+#: langs/utilitysLang.php:151 langs/utilitysLang.php:251
+msgid "Labeling date"
+msgstr ""
+
+#: langs/settingsLang.php:188
+msgid "Labelled Correos"
+msgstr ""
+
+#: langs/orderLang.php:104 langs/orderLang.php:324
+msgid "Large (box 80x80x80cm)"
+msgstr ""
+
+#: langs/settingsLang.php:259 langs/settingsLang.php:376
+msgid "Large (cm)"
+msgstr ""
+
+#: langs/homeLang.php:31 langs/homeLang.php:80 langs/settingsLang.php:156
+msgid "Leave us your details, and we contact you soon"
+msgstr ""
+
+#: langs/homeLang.php:40 langs/homeLang.php:89 langs/settingsLang.php:163
+msgid "Less than 20 shippings_month"
+msgstr ""
+
+#: langs/checkoutLang.php:22 langs/checkoutLang.php:53
+msgid "Location"
+msgstr ""
+
+#: langs/orderLang.php:72 langs/orderLang.php:234
+msgid "Long"
+msgstr ""
+
+#: langs/settingsLang.php:209
+msgid "Mandatory field for Correos cash-on-delivery shipments"
+msgstr ""
+
+#: langs/utilitysLang.php:156
+msgid "Manifest date"
+msgstr ""
+
+#: langs/utilitysLang.php:155 langs/utilitysLang.php:253
+msgid "Manifest_date"
+msgstr ""
+
+#: langs/utilitysLang.php:154 langs/utilitysLang.php:252
+msgid "Manifested"
+msgstr ""
+
+#: correosoficial.php:1469
+#: controllers/admin/AdminCorreosOficialNotificationsController.php:78
+msgid "Mark as ready and discart"
+msgstr "Marcar como lido"
+
+#: langs/settingsLang.php:499
+msgid ""
+"Marketplace API key not yet generated. Save the configuration to create it."
+msgstr ""
+"A chave de API do Marketplace ainda não foi gerada. Guarde a configuração "
+"para criá-la."
+
+#: langs/settingsLang.php:487
+msgid "Marketplace data successfully saved"
+msgstr "Dados de Marketplace guardados com sucesso"
+
+#: controllers/admin/AdminCorreosOficialMarketplaceProcessController.php:104
+msgid "Marketplace data successfully saved."
+msgstr ""
+
+#: langs/utilitysLang.php:101 langs/utilitysLang.php:160
+msgid "Mass Orders Management"
+msgstr ""
+
+#: langs/utilitysLang.php:102 langs/utilitysLang.php:164
+msgid "MASS ORDERS MANAGMENT"
+msgstr ""
+
+#: langs/utilitysLang.php:14
+msgid "Mass Product Management"
+msgstr ""
+
+#: langs/utilitysLang.php:40
+msgid "MASS PRODUCT MANAGMENT"
+msgstr ""
+
+#: classes/CorreosOficialCommonShippingMethods.php:351
+msgid "Max weight"
+msgstr ""
+
+#: langs/orderLang.php:156 langs/orderLang.php:245
+msgid "Max. 5 Descriptions"
+msgstr ""
+
+#: langs/orderLang.php:360
+msgid "Max. 5 descriptions"
+msgstr ""
+
+#: langs/utilitysLang.php:57
+msgid "Medium"
+msgstr ""
+
+#: langs/orderLang.php:103 langs/orderLang.php:323
+msgid "Medium (Folio box)"
+msgstr ""
+
+#: langs/orderLang.php:172 langs/orderLang.php:310 langs/utilitysLang.php:59
+#: langs/utilitysLang.php:197
+msgid "Medium (Sheet Box)"
+msgstr ""
+
+#: langs/orderLang.php:258
+msgid "Mensaje"
+msgstr ""
+
+#: langs/settingsLang.php:119 langs/settingsLang.php:319
+msgid "Message to warn the buyer"
+msgstr ""
+
+#: langs/settingsLang.php:118 langs/settingsLang.php:318
+msgid ""
+"Message to warn the buyer about customs formalities (max. 100 characters)"
+msgstr ""
+
+#: langs/orderLang.php:176 langs/utilitysLang.php:132
+#: langs/notificationsLang.php:3 langs/notificationsLang.php:5
+msgid "Messages center"
+msgstr "Centro de mensagens"
+
+#: langs/settingsLang.php:79
+msgid "Method of payment cash on delivery"
+msgstr ""
+
+#: langs/settingsLang.php:498
+msgid "Methods"
+msgstr "Métodos"
+
+#: langs/homeLang.php:20 langs/homeLang.php:69 langs/settingsLang.php:147
+msgid "MINIMIZES INCIDENTS"
+msgstr ""
+
+#: classes/CorreosOficialCommonShippingMethods.php:346
+msgid "Minimum fee to be paid in any case"
+msgstr ""
+
+#: langs/homeLang.php:35 langs/homeLang.php:84 langs/settingsLang.php:160
+msgid "Mobile Phone"
+msgstr ""
+
+#: langs/checkoutLang.php:19 langs/checkoutLang.php:50
+msgid "Monday to Friday"
+msgstr ""
+
+#: langs/homeLang.php:39 langs/homeLang.php:88 langs/settingsLang.php:162
+msgid "More than 20 shippings_month"
+msgstr ""
+
+#: classes/CorreosOficialReturnsMail.php:102
+msgid "must accompany the shipment printed and signed by you"
+msgstr ""
+
+#: langs/utilitysLang.php:28 langs/utilitysLang.php:220
+msgid "Must select a package size"
+msgstr ""
+
+#: langs/utilitysLang.php:26 langs/utilitysLang.php:218
+msgid "Must select at least one record of the table"
+msgstr ""
+
+#: langs/settingsLang.php:223 langs/settingsLang.php:289
+msgid "My Office User"
+msgstr ""
+
+#: langs/settingsLang.php:94
+msgid "NAME"
+msgstr ""
+
+#: langs/settingsLang.php:64 langs/settingsLang.php:426 langs/orderLang.php:26
+#: langs/orderLang.php:282
+msgid "Name"
+msgstr ""
+
+#: langs/utilitysLang.php:83 langs/utilitysLang.php:273
+msgid "Name of addressee"
+msgstr ""
+
+#: langs/orderLang.php:77 langs/orderLang.php:243
+msgid "Net value"
+msgstr ""
+
+#: langs/settingsLang.php:248 langs/settingsLang.php:278
+msgid "New contract"
+msgstr ""
+
+#: langs/settingsLang.php:247
+msgid "New count"
+msgstr ""
+
+#: controllers/admin/AdminHomeSendMailController.php:90
+msgid "New lead from CorreosOficial E-COMMERCE: "
+msgstr ""
+
+#: langs/settingsLang.php:66 langs/settingsLang.php:428
+msgid "NIF"
+msgstr ""
+
+#: langs/settingsLang.php:59 langs/settingsLang.php:416 langs/orderLang.php:38
+#: langs/orderLang.php:290
+msgid "NIF_CIF"
+msgstr ""
+
+#: langs/orderLang.php:133 langs/orderLang.php:214
+msgid "No citypaqs found"
+msgstr ""
+
+#: classes/Apis/CorreosOficialCEXRest.php:913
+msgid "No Collection point found"
+msgstr ""
+
+#: langs/settingsLang.php:25 langs/settingsLang.php:313
+msgid "No connected"
+msgstr ""
+
+#: langs/settingsLang.php:107 langs/settingsLang.php:447
+msgid "No Customers Active"
+msgstr ""
+
+#: classes/CorreosOficialAdminOrderHook.php:741
+#: classes/CorreosOficialAdminOrderHook.php:752
+msgid "No information"
+msgstr ""
+
+#: classes/Apis/CorreosOficialRest.php:1211
+msgid "No Office or CityPaq found"
+msgstr ""
+
+#: langs/orderLang.php:131 langs/orderLang.php:205 langs/checkoutLang.php:66
+msgid "No offices found"
+msgstr ""
+
+#: langs/orderLang.php:221
+msgid "No PUDOs found"
+msgstr ""
+
+#: controllers/admin/AdminCorreosOficialSettingsController.php:131
+msgid "None"
+msgstr ""
+
+#: langs/orderLang.php:99 langs/orderLang.php:320
+msgid "Not available for shipments with more than 5 packages"
+msgstr ""
+
+#: correosoficial.php:1381
+msgid "Notifications"
+msgstr "Notificações"
+
+#: langs/orderLang.php:67 langs/orderLang.php:229
+msgid "Number of packages"
+msgstr ""
+
+#: langs/orderLang.php:136 langs/orderLang.php:344
+msgid "Number of packages return"
+msgstr ""
+
+#: langs/utilitysLang.php:183
+msgid "of"
+msgstr ""
+
+#: langs/utilitysLang.php:47 langs/utilitysLang.php:173
+#: langs/checkoutLang.php:17 langs/checkoutLang.php:67
+msgid "Office"
+msgstr ""
+
+#: langs/orderLang.php:130 langs/orderLang.php:204
+msgid "Office error"
+msgstr ""
+
+#: langs/checkoutLang.php:16 langs/checkoutLang.php:75
+msgid "Office found"
+msgstr ""
+
+#: langs/orderLang.php:47 langs/orderLang.php:206
+msgid "Office information"
+msgstr ""
+
+#: langs/orderLang.php:45 langs/orderLang.php:202
+msgid "Offices found"
+msgstr ""
+
+#: classes/CorreosOficialReturnsMail.php:120
+msgid ""
+"On the outside of the box, in a visible place, attach the label included in "
+"this mailing"
+msgstr ""
+
+#: classes/CorreosOficialReturnsMail.php:112
+msgid "Once the shipment is made, you can track it using the following code:"
+msgstr ""
+
+#: langs/utilitysLang.php:34 langs/utilitysLang.php:180
+msgid "Only apply to CEX products and Portugal Shippings"
+msgstr ""
+
+#: langs/settingsLang.php:98 langs/settingsLang.php:378
+msgid "Only CEX shippings"
+msgstr ""
+
+#: langs/settingsLang.php:91
+msgid "Only Correos Express Shippings"
+msgstr ""
+
+#: langs/utilitysLang.php:107 langs/utilitysLang.php:193
+msgid ""
+"Only Correos shipments. Click if Correos must have the labels printed on "
+"pickup"
+msgstr ""
+
+#: langs/orderLang.php:98 langs/utilitysLang.php:103
+msgid ""
+"Only Correos shipments. Click if Correos must have the labels printed on the "
+"collection"
+msgstr ""
+
+#: langs/orderLang.php:107 langs/utilitysLang.php:104
+#: langs/utilitysLang.php:201
+msgid "Only Correos shipments. Select package size for pickup."
+msgstr ""
+
+#: langs/settingsLang.php:82
+msgid "Only for Correos cash on delivery shippings"
+msgstr ""
+
+#: langs/settingsLang.php:21 langs/settingsLang.php:339
+msgid "Only for Correos shippings"
+msgstr ""
+
+#: langs/utilitysLang.php:63
+msgid "Only send Correos"
+msgstr ""
+
+#: langs/checkoutLang.php:29 langs/checkoutLang.php:68
+msgid "Open"
+msgstr ""
+
+#: langs/checkoutLang.php:36 langs/checkoutLang.php:59
+msgid "Open 24 hours"
+msgstr ""
+
+#: langs/checkoutLang.php:35 langs/checkoutLang.php:58
+msgid "Opening hours"
+msgstr ""
+
+#: langs/utilitysLang.php:113 langs/utilitysLang.php:267
+msgid "ORDER"
+msgstr ""
+
+#: controllers/admin/AdminCorreosOficialUtilitiesProcessController.php:651
+msgid ""
+"Order configuration error. Please verify that all required fields are "
+"complete."
+msgstr ""
+
+#: langs/orderLang.php:53
+msgid "ORDER DATA"
+msgstr ""
+
+#: langs/settingsLang.php:350
+msgid "Order extracted from the warehouse"
+msgstr ""
+
+#: langs/orderLang.php:255
+msgid "Order Logs"
+msgstr ""
+
+#: langs/settingsLang.php:85 langs/settingsLang.php:366
+msgid "Order remarks to the label  (max. 80 characters)"
+msgstr ""
+
+#: langs/settingsLang.php:352
+msgid "Order status tracking update time:"
+msgstr ""
+
+#: langs/utilitysLang.php:68 langs/utilitysLang.php:246
+msgid "ORDER SUMMARY"
+msgstr ""
+
+#: langs/utilitysLang.php:16 langs/utilitysLang.php:208
+msgid "Order Summary"
+msgstr ""
+
+#: langs/orderLang.php:191 langs/orderLang.php:249
+msgid "Order tracking"
+msgstr ""
+
+#: langs/orderLang.php:365
+msgid "Order tracking (Marketplace)"
+msgstr "Rastreamento do pedido (Marketplace)"
+
+#: langs/settingsLang.php:351
+msgid "Order with an error"
+msgstr ""
+
+#: classes/CorreosOficialReturnsMail.php:50
+msgid "Order: "
+msgstr ""
+
+# Origin of the goods
+#: langs/settingsLang.php:481
+msgid "Origin of the goods"
+msgstr "País de origem"
+
+#: langs/settingsLang.php:29
+msgid "OV2 User"
+msgstr ""
+
+#: langs/settingsLang.php:342
+msgid "Owner"
+msgstr ""
+
+#: langs/settingsLang.php:356
+msgid "Owner is required"
+msgstr ""
+
+#: langs/orderLang.php:69 langs/orderLang.php:231
+msgid "Package"
+msgstr ""
+
+#: langs/utilitysLang.php:152 langs/utilitysLang.php:247
+msgid "Package code"
+msgstr ""
+
+#: langs/orderLang.php:65 langs/orderLang.php:227
+msgid "Package error: The selected carrier only allows a single package"
+msgstr ""
+
+#: langs/orderLang.php:142 langs/orderLang.php:350
+msgid "Package return"
+msgstr ""
+
+#: langs/orderLang.php:170 langs/orderLang.php:307 langs/utilitysLang.php:56
+#: langs/utilitysLang.php:194
+msgid "Package Size"
+msgstr ""
+
+#: langs/orderLang.php:100 langs/orderLang.php:321
+msgid "Package size"
+msgstr ""
+
+#: langs/orderLang.php:66 langs/orderLang.php:228 langs/utilitysLang.php:50
+#: langs/utilitysLang.php:177
+msgid "Packages"
+msgstr ""
+
+#: langs/orderLang.php:106 langs/orderLang.php:326
+msgid "Pallet"
+msgstr ""
+
+#: langs/orderLang.php:175 langs/orderLang.php:313 langs/utilitysLang.php:62
+#: langs/utilitysLang.php:200
+msgid "Pallete"
+msgstr ""
+
+#: langs/orderLang.php:87 langs/orderLang.php:297
+msgid "Partial delivery"
+msgstr ""
+
+#: langs/settingsLang.php:24 langs/settingsLang.php:293
+msgid "Password"
+msgstr ""
+
+#: langs/settingsLang.php:189
+msgid "Payment accepted"
+msgstr ""
+
+#: langs/settingsLang.php:187
+msgid "Payment error"
+msgstr ""
+
+#: langs/settingsLang.php:266 langs/settingsLang.php:361
+msgid "Payment method for COD orders"
+msgstr ""
+
+#: correosoficial.php:1903
+msgid "País de origen del producto (código ISO 2 letras, ej: ES, FR)"
+msgstr ""
+
+#: langs/utilitysLang.php:186
+msgid "Pending"
+msgstr ""
+
+#: langs/settingsLang.php:349
+msgid "Pending order in warehouse"
+msgstr ""
+
+#: langs/settingsLang.php:183
+msgid "Pending validation by cash on delivery"
+msgstr ""
+
+#: langs/homeLang.php:36 langs/homeLang.php:85 langs/settingsLang.php:68
+#: langs/settingsLang.php:430 langs/orderLang.php:54 langs/checkoutLang.php:26
+#: langs/checkoutLang.php:57
+msgid "Phone"
+msgstr ""
+
+#: langs/settingsLang.php:57 langs/settingsLang.php:414 langs/orderLang.php:36
+#: langs/orderLang.php:288
+msgid "Phone number"
+msgstr ""
+
+#: langs/settingsLang.php:171
+msgid "Pick up time from"
+msgstr ""
+
+#: langs/settingsLang.php:172
+msgid "Pick up time to"
+msgstr ""
+
+#: langs/orderLang.php:109
+msgid "Pick-up code"
+msgstr ""
+
+#: langs/orderLang.php:146 langs/orderLang.php:328
+msgid "Pickup code"
+msgstr ""
+
+#: langs/orderLang.php:111 langs/orderLang.php:327
+msgid "Pickup data"
+msgstr ""
+
+#: langs/orderLang.php:94 langs/orderLang.php:303 langs/utilitysLang.php:120
+#: langs/utilitysLang.php:189
+msgid "Pickup date"
+msgstr ""
+
+#: langs/utilitysLang.php:74 langs/utilitysLang.php:261
+msgid "Pickup label"
+msgstr ""
+
+#: langs/utilitysLang.php:75 langs/utilitysLang.php:262
+msgid "Pickup recorded"
+msgstr ""
+
+#: langs/utilitysLang.php:72
+msgid "Pickup recorded "
+msgstr ""
+
+#: langs/utilitysLang.php:69 langs/utilitysLang.php:255
+msgid "PICKUPS"
+msgstr ""
+
+#: langs/utilitysLang.php:17 langs/utilitysLang.php:209
+msgid "Pickups"
+msgstr ""
+
+#: langs/checkoutLang.php:27
+msgid ""
+"Please confirm your email address so that we can inform you of your shipment"
+msgstr ""
+
+#: langs/homeLang.php:52 langs/homeLang.php:101 langs/settingsLang.php:39
+#: langs/settingsLang.php:436 langs/orderLang.php:17 langs/orderLang.php:267
+msgid "Please enter a valid email address"
+msgstr ""
+
+#: langs/orderLang.php:18
+msgid "Please enter a valid number"
+msgstr ""
+
+#: langs/settingsLang.php:101 langs/settingsLang.php:400
+msgid "Please enter a value greater than or equal to 1"
+msgstr ""
+
+#: langs/settingsLang.php:102 langs/settingsLang.php:401
+msgid "Please enter a value less than or equal to 10"
+msgstr ""
+
+#: langs/homeLang.php:49 langs/homeLang.php:98 langs/settingsLang.php:40
+#: langs/settingsLang.php:298 langs/orderLang.php:20 langs/orderLang.php:264
+msgid "Please enter at least"
+msgstr ""
+
+#: langs/homeLang.php:50 langs/homeLang.php:99 langs/settingsLang.php:41
+#: langs/settingsLang.php:299 langs/orderLang.php:21 langs/orderLang.php:265
+msgid "Please enter no more than"
+msgstr ""
+
+#: langs/checkoutLang.php:42 langs/checkoutLang.php:64
+msgid "Please search and select a terminal before completing the order"
+msgstr ""
+
+#: langs/checkoutLang.php:43 langs/checkoutLang.php:73
+msgid "Please search and select an office before completing the order"
+msgstr ""
+
+#: langs/settingsLang.php:133
+msgid "Please specify a valid Bank Account number-IBAN"
+msgstr ""
+
+#: langs/settingsLang.php:104 langs/settingsLang.php:404 langs/orderLang.php:16
+#: langs/orderLang.php:263
+msgid "Please specify a valid Bank Account number_IBAN"
+msgstr ""
+
+#: langs/utilitysLang.php:33 langs/utilitysLang.php:225
+msgid ""
+"Please, cancel first the preregister in orders managment to do a new "
+"collection request"
+msgstr ""
+
+#: langs/utilitysLang.php:32 langs/utilitysLang.php:224
+msgid ""
+"Please, cancel first the preregister in orders managment to do a new "
+"preregistration request"
+msgstr ""
+
+#: langs/homeLang.php:45 langs/homeLang.php:94 langs/settingsLang.php:168
+msgid "Please, check errors before send the form."
+msgstr ""
+
+#: classes/CorreosOficialErrorManager.php:42
+msgid ""
+"Please, check your credentials in module Correos Oficial, in Settings "
+"Customer Data."
+msgstr ""
+
+#: langs/utilitysLang.php:105 langs/utilitysLang.php:226
+msgid "Please, go to order and specify packages measurements and weight"
+msgstr ""
+
+#: langs/settingsLang.php:44 langs/settingsLang.php:309
+msgid "Please, save your username and password in a safe way."
+msgstr ""
+
+#: langs/checkoutLang.php:48
+msgid "Point"
+msgstr ""
+
+#: langs/settingsLang.php:55 langs/settingsLang.php:412 langs/orderLang.php:34
+msgid "Portugal"
+msgstr ""
+
+#: langs/utilitysLang.php:36
+msgid "Portugal Shippings require the AT Code"
+msgstr ""
+
+#: langs/utilitysLang.php:55
+msgid ""
+"Postage only. Click if Correos must carry the printed labels in the "
+"collection"
+msgstr ""
+
+#: langs/orderLang.php:30 langs/orderLang.php:200
+msgid "Postal code"
+msgstr ""
+
+#: langs/settingsLang.php:193
+msgid "Preparation in progress"
+msgstr ""
+
+#: langs/orderLang.php:117 langs/orderLang.php:337 langs/utilitysLang.php:89
+#: langs/utilitysLang.php:279
+msgid "Print CN23"
+msgstr ""
+
+#: langs/orderLang.php:152 langs/orderLang.php:338 langs/utilitysLang.php:90
+#: langs/utilitysLang.php:280
+msgid "Print DCAF"
+msgstr ""
+
+#: langs/orderLang.php:119 langs/orderLang.php:339 langs/utilitysLang.php:91
+#: langs/utilitysLang.php:281
+msgid "Print DDP"
+msgstr ""
+
+#: langs/orderLang.php:118
+msgid "Print DUA"
+msgstr ""
+
+#: langs/orderLang.php:134 langs/orderLang.php:319
+msgid "Print Label"
+msgstr ""
+
+#: langs/orderLang.php:122 langs/orderLang.php:336
+msgid "Print label"
+msgstr ""
+
+#: langs/orderLang.php:169 langs/orderLang.php:306 langs/utilitysLang.php:54
+#: langs/utilitysLang.php:192
+msgid "Print label at pickup"
+msgstr ""
+
+#: langs/orderLang.php:97
+msgid "Print Post Label"
+msgstr ""
+
+#: langs/settingsLang.php:345
+msgid "Process orders automatically in this status"
+msgstr ""
+
+#: langs/settingsLang.php:267 langs/settingsLang.php:397 langs/orderLang.php:90
+#: langs/orderLang.php:300 langs/utilitysLang.php:124
+#: langs/utilitysLang.php:204
+msgid "Processing"
+msgstr ""
+
+#: langs/utilitysLang.php:182
+msgid "Processing order"
+msgstr ""
+
+#: langs/utilitysLang.php:181
+msgid "PROCESSING ORDERS"
+msgstr ""
+
+#: langs/orderLang.php:357
+msgid "Product"
+msgstr ""
+
+#: langs/settingsLang.php:471
+msgid "Product attribute for country of origin"
+msgstr ""
+
+#: langs/settingsLang.php:468
+msgid "Product attribute for HS Code"
+msgstr ""
+
+#: langs/orderLang.php:356
+msgid "Product customs data (from attributes_metadata):"
+msgstr ""
+
+# Product Hs Code
+#: langs/settingsLang.php:461
+#, fuzzy
+#| msgid "Product Hs Code"
+msgid "Product HS Code"
+msgstr "Código HS do produto"
+
+#: langs/orderLang.php:163 langs/orderLang.php:343
+msgid "Product Return"
+msgstr ""
+
+#: langs/settingsLang.php:264 langs/settingsLang.php:456
+msgid "Product to assign"
+msgstr ""
+
+#: langs/utilitysLang.php:128 langs/utilitysLang.php:167
+msgid "Products"
+msgstr ""
+
+#: controllers/admin/AdminCorreosOficialProductsProcessController.php:44
+msgid "Products created as carriers in your shop"
+msgstr ""
+
+#: controllers/admin/AdminCorreosOficialProductsProcessController.php:45
+msgid ""
+"Products created as carriers in your shop.\n"
+"        You have selected products that were already in your store.\n"
+"        Have been activated"
+msgstr ""
+
+#: langs/settingsLang.php:110 langs/settingsLang.php:449
+msgid "Products successfully saved"
+msgstr ""
+
+#: classes/CorreosOficialCommonShippingMethods.php:545
+msgid "Products without class"
+msgstr ""
+
+#: langs/homeLang.php:26 langs/homeLang.php:75 langs/settingsLang.php:153
+msgid "PROMPT DELIVERY"
+msgstr ""
+
+#: correosTrackings.php:120
+msgid "Provider"
+msgstr ""
+
+#: langs/orderLang.php:220
+msgid "PUDO error"
+msgstr ""
+
+#: langs/orderLang.php:222
+msgid "PUDO information"
+msgstr ""
+
+#: langs/orderLang.php:218
+msgid "PUDOs found"
+msgstr ""
+
+#: langs/orderLang.php:359
+msgid "Qty"
+msgstr ""
+
+#: langs/utilitysLang.php:111 langs/utilitysLang.php:257
+msgid "Receiver"
+msgstr ""
+
+#: langs/utilitysLang.php:70 langs/utilitysLang.php:263
+msgid "Receiver "
+msgstr ""
+
+#: langs/utilitysLang.php:66 langs/utilitysLang.php:239
+msgid "Receiver address"
+msgstr ""
+
+#: langs/utilitysLang.php:65 langs/utilitysLang.php:238
+msgid "Receiver name"
+msgstr ""
+
+#: langs/orderLang.php:39 langs/orderLang.php:281
+msgid "Recipient Data"
+msgstr ""
+
+#: langs/utilitysLang.php:148 langs/utilitysLang.php:248
+msgid "Recipient name"
+msgstr ""
+
+#: classes/CorreosOficialReturnsMail.php:116
+msgid "RECOMMENDATIONS"
+msgstr ""
+
+#: langs/orderLang.php:70 langs/orderLang.php:232 langs/utilitysLang.php:41
+#: langs/utilitysLang.php:166
+msgid "Reference"
+msgstr ""
+
+#: langs/orderLang.php:110
+msgid "reference"
+msgstr ""
+
+#: langs/settingsLang.php:117 langs/settingsLang.php:315
+msgid "Reference of customs consignor"
+msgstr ""
+
+#: langs/settingsLang.php:194
+msgid "Refunded"
+msgstr ""
+
+#: langs/settingsLang.php:280
+msgid "Register in Correos ID"
+msgstr ""
+
+#: langs/orderLang.php:89 langs/orderLang.php:299
+msgid "Register shipment"
+msgstr ""
+
+#: langs/orderLang.php:114 langs/orderLang.php:331
+msgid "Registered shipping data"
+msgstr ""
+
+#: langs/orderLang.php:14 langs/orderLang.php:274
+msgid "REGISTRATION ORDER"
+msgstr ""
+
+#: langs/settingsLang.php:190
+msgid "Remote payment accepted"
+msgstr ""
+
+#: langs/orderLang.php:161 langs/orderLang.php:318
+msgid "Request labelling from Correos"
+msgstr ""
+
+#: langs/homeLang.php:48 langs/homeLang.php:97 langs/settingsLang.php:38
+#: langs/settingsLang.php:297 langs/orderLang.php:15 langs/orderLang.php:262
+msgid "Required field"
+msgstr ""
+
+#: langs/settingsLang.php:218 langs/settingsLang.php:363
+msgid ""
+"Required for COD shipments with Correos. Input IBAN without blank spaces"
+msgstr ""
+
+#: langs/settingsLang.php:496
+msgid "Resource"
+msgstr "Recurso"
+
+#: langs/utilitysLang.php:187
+msgid "Result"
+msgstr ""
+
+#: langs/orderLang.php:140 langs/orderLang.php:346
+msgid "Return codes"
+msgstr ""
+
+#: langs/orderLang.php:139 langs/orderLang.php:345
+msgid "Return data"
+msgstr ""
+
+#: classes/CorreosOficialReturnsMail.php:49
+msgid "Return package information"
+msgstr ""
+
+#: langs/orderLang.php:145 langs/orderLang.php:349
+msgid "Return pickup code"
+msgstr ""
+
+#: langs/orderLang.php:144 langs/orderLang.php:348
+msgid "Return pickup data"
+msgstr ""
+
+#: langs/settingsLang.php:179
+msgid "Returned CEX"
+msgstr ""
+
+#: langs/settingsLang.php:200
+msgid "Returned status"
+msgstr ""
+
+#: langs/orderLang.php:135 langs/orderLang.php:342
+msgid "Returns"
+msgstr ""
+
+#: shipping-methods/Correos/CorreosOficialPaqPremiumOficinaElegida.php:241
+#: shipping-methods/Correos/CorreosOficialPaqLigero.php:241
+#: shipping-methods/Correos/CorreosOficialDistribucionInternacionalLight.php:241
+#: shipping-methods/Correos/CorreosOficialPaqPremiumCityPaq.php:241
+#: shipping-methods/Correos/CorreosOficialPaqEstandarOficinaElegida.php:241
+#: shipping-methods/Correos/CorreosOficialPaqEstandarInternacional.php:241
+#: shipping-methods/Correos/CorreosOficialPaqLightInternacional.php:241
+#: shipping-methods/Correos/CorreosOficialPaquetePostalEconomicoInternacional.php:241
+#: shipping-methods/Correos/CorreosOficialPaqPremiumInternacional.php:241
+#: shipping-methods/Correos/CorreosOficialCartaCertificadaInternacional.php:241
+#: shipping-methods/Correos/CorreosOficialPaqEstandarCityPaq.php:241
+#: shipping-methods/Correos/CorreosOficialPaqEstandarDomicilio.php:241
+#: shipping-methods/Correos/CorreosOficialPaqPremiumDomicilio.php:241
+#: shipping-methods/Cex/CorreosOficialIslasDocumentacion.php:241
+#: shipping-methods/Cex/CorreosOficialPaqEmpresaCatorce.php:241
+#: shipping-methods/Cex/CorreosOficialPaqueteriaOptica.php:241
+#: shipping-methods/Cex/CorreosOficialPaqCatorce.php:241
+#: shipping-methods/Cex/CorreosOficialPaqEcommerce.php:241
+#: shipping-methods/Cex/CorreosOficialPaqVeinticuatroOficinaElegida.php:241
+#: shipping-methods/Cex/CorreosOficialIslasMaritimo.php:241
+#: shipping-methods/Cex/CorreosOficialInternacionalEstandar.php:241
+#: shipping-methods/Cex/CorreosOficialPaqVeinticuatro.php:241
+#: shipping-methods/Cex/CorreosOficialPaqPunto.php:241
+#: shipping-methods/Cex/CorreosOficialePaqVeinticuatro.php:241
+#: shipping-methods/Cex/CorreosOficialPaqDiez.php:241
+#: shipping-methods/Cex/CorreosOficialCampaniaCex.php:241
+#: shipping-methods/Cex/CorreosoficialIslasExpress.php:241
+#: shipping-methods/Cex/CorreosOficialEntregaPlus.php:241
+#: shipping-methods/Cex/CorreosOficialInternacionalExpress.php:241
+#: shipping-methods/Cex/CorreosOficialPortugalOptica.php:241
+msgid "Rules by cost have priority over rules by weight"
+msgstr ""
+
+#: shipping-methods/Correos/CorreosOficialPaqPremiumOficinaElegida.php:125
+#: shipping-methods/Correos/CorreosOficialPaqLigero.php:125
+#: shipping-methods/Correos/CorreosOficialDistribucionInternacionalLight.php:125
+#: shipping-methods/Correos/CorreosOficialPaqPremiumCityPaq.php:125
+#: shipping-methods/Correos/CorreosOficialPaqEstandarOficinaElegida.php:125
+#: shipping-methods/Correos/CorreosOficialPaqEstandarInternacional.php:125
+#: shipping-methods/Correos/CorreosOficialPaqLightInternacional.php:125
+#: shipping-methods/Correos/CorreosOficialPaquetePostalEconomicoInternacional.php:125
+#: shipping-methods/Correos/CorreosOficialPaqPremiumInternacional.php:125
+#: shipping-methods/Correos/CorreosOficialCartaCertificadaInternacional.php:125
+#: shipping-methods/Correos/CorreosOficialPaqEstandarCityPaq.php:125
+#: shipping-methods/Correos/CorreosOficialPaqEstandarDomicilio.php:125
+#: shipping-methods/Correos/CorreosOficialPaqPremiumDomicilio.php:125
+#: shipping-methods/Cex/CorreosOficialIslasDocumentacion.php:125
+#: shipping-methods/Cex/CorreosOficialPaqEmpresaCatorce.php:125
+#: shipping-methods/Cex/CorreosOficialPaqueteriaOptica.php:125
+#: shipping-methods/Cex/CorreosOficialPaqCatorce.php:125
+#: shipping-methods/Cex/CorreosOficialPaqEcommerce.php:125
+#: shipping-methods/Cex/CorreosOficialPaqVeinticuatroOficinaElegida.php:125
+#: shipping-methods/Cex/CorreosOficialIslasMaritimo.php:125
+#: shipping-methods/Cex/CorreosOficialInternacionalEstandar.php:125
+#: shipping-methods/Cex/CorreosOficialPaqVeinticuatro.php:125
+#: shipping-methods/Cex/CorreosOficialPaqPunto.php:125
+#: shipping-methods/Cex/CorreosOficialePaqVeinticuatro.php:125
+#: shipping-methods/Cex/CorreosOficialPaqDiez.php:125
+#: shipping-methods/Cex/CorreosOficialCampaniaCex.php:125
+#: shipping-methods/Cex/CorreosoficialIslasExpress.php:125
+#: shipping-methods/Cex/CorreosOficialEntregaPlus.php:125
+#: shipping-methods/Cex/CorreosOficialInternacionalExpress.php:125
+#: shipping-methods/Cex/CorreosOficialPortugalOptica.php:125
+msgid "Rules table"
+msgstr ""
+
+#: langs/checkoutLang.php:20 langs/checkoutLang.php:51
+msgid "Saturday"
+msgstr ""
+
+#: langs/orderLang.php:88 langs/orderLang.php:298
+msgid "Saturday pick up"
+msgstr ""
+
+#: langs/settingsLang.php:61 langs/settingsLang.php:424
+msgid "SAVE"
+msgstr ""
+
+#: langs/settingsLang.php:207
+msgid "SAVE CRON CONFIGURATION"
+msgstr ""
+
+#: langs/settingsLang.php:125 langs/settingsLang.php:327
+msgid "SAVE CUSTOMS PROCESSING"
+msgstr ""
+
+#: langs/settingsLang.php:354
+msgid "SAVE FULFILLMENT DATA"
+msgstr ""
+
+#: langs/settingsLang.php:486
+msgid "SAVE MARKETPLACE DATA"
+msgstr "GUARDAR DADOS DE MARKETPLACE"
+
+#: langs/orderLang.php:166 langs/orderLang.php:302 langs/utilitysLang.php:119
+#: langs/utilitysLang.php:188
+msgid "Save pickup"
+msgstr ""
+
+#: langs/settingsLang.php:106 langs/settingsLang.php:446
+msgid "SAVE PRODUCTS"
+msgstr ""
+
+#: langs/settingsLang.php:74
+msgid "SAVE SENDER BY DEFAULT"
+msgstr ""
+
+#: langs/homeLang.php:18 langs/homeLang.php:67 langs/settingsLang.php:145
+msgid "SAVE THEM WAITING WITH FLEXIBLE DELIVERY"
+msgstr ""
+
+#: correosTrackings.php:141
+msgid "Save tracking"
+msgstr ""
+
+#: langs/settingsLang.php:99 langs/settingsLang.php:398
+msgid "SAVE USER DATA"
+msgstr ""
+
+#: langs/settingsLang.php:115 langs/settingsLang.php:458
+msgid "SAVE ZONES AND CARRIERS"
+msgstr ""
+
+#: langs/orderLang.php:44 langs/orderLang.php:201 langs/checkoutLang.php:15
+#: langs/checkoutLang.php:45
+msgid "Search"
+msgstr ""
+
+#: langs/utilitysLang.php:145 langs/utilitysLang.php:243
+msgid "Search by labeling date"
+msgstr ""
+
+#: langs/utilitysLang.php:39 langs/utilitysLang.php:163
+msgid "Search orders"
+msgstr ""
+
+#: langs/utilitysLang.php:79 langs/utilitysLang.php:270
+msgid "Search shipments"
+msgstr ""
+
+#: langs/settingsLang.php:263 langs/settingsLang.php:455
+msgid ""
+"Search the carrier name in the following text to capture the automatic "
+"change."
+msgstr ""
+
+#: langs/settingsLang.php:270 langs/settingsLang.php:283
+msgid "Secret ID"
+msgstr ""
+
+#: langs/orderLang.php:32 langs/orderLang.php:287
+msgid "Select a country"
+msgstr ""
+
+#: langs/settingsLang.php:73
+msgid "Select a default sender"
+msgstr ""
+
+#: langs/settingsLang.php:114 langs/orderLang.php:149 langs/orderLang.php:197
+#: controllers/admin/AdminCorreosOficialUtilitiesProcessController.php:733
+msgid "Select a product"
+msgstr ""
+
+#: langs/settingsLang.php:176
+msgid "Select a status"
+msgstr ""
+
+#: correosTrackings.php:122
+msgid "Select an option"
+msgstr ""
+
+#: langs/settingsLang.php:121 langs/settingsLang.php:321
+msgid "Select Customs Description or Default Tariff Number"
+msgstr ""
+
+#: langs/settingsLang.php:265 langs/settingsLang.php:457
+msgid "Select Product"
+msgstr ""
+
+#: langs/settingsLang.php:475
+msgid "Select product attributes to map to HS code and country of origin"
+msgstr ""
+
+#: langs/settingsLang.php:467
+msgid ""
+"Select product attributes to map to HS code and country of origin. These "
+"will be used in shipments with customs clearance."
+msgstr ""
+
+#: langs/homeLang.php:38 langs/homeLang.php:87 langs/settingsLang.php:161
+msgid "Select products category"
+msgstr ""
+
+#: langs/settingsLang.php:80
+msgid "Select the cash on delivery module active in the store"
+msgstr ""
+
+#: langs/homeLang.php:19 langs/homeLang.php:68 langs/settingsLang.php:146
+msgid "Select the Correos or Correos Express products that best suit you"
+msgstr ""
+
+#: langs/settingsLang.php:105 langs/settingsLang.php:443
+msgid "Select the products to be displayed in the checkout"
+msgstr ""
+
+# Select the source of the customs information
+#: langs/settingsLang.php:483
+#, fuzzy
+#| msgid "Select the source of the customs information"
+msgid "Select the source of the customs data"
+msgstr "Selecione a fonte das informações aduaneiras"
+
+#: langs/settingsLang.php:472
+msgid "Select which product attribute contains the 2-letter ISO country code"
+msgstr ""
+
+#: langs/settingsLang.php:477
+msgid "Select which product attribute contains the country code"
+msgstr ""
+
+#: langs/settingsLang.php:476
+msgid "Select which product attribute contains the HS tariff code"
+msgstr ""
+
+#: langs/settingsLang.php:469
+msgid ""
+"Select which product attribute contains the HS tariff code (6, 8 or 10 "
+"digits)"
+msgstr ""
+
+#: langs/orderLang.php:42 langs/orderLang.php:198
+msgid "SELECTED OFFICE"
+msgstr ""
+
+#: langs/utilitysLang.php:48 langs/utilitysLang.php:174
+msgid "Selected Product"
+msgstr ""
+
+#: langs/orderLang.php:216
+msgid "SELECTED PUDO"
+msgstr ""
+
+#: langs/utilitysLang.php:141 langs/utilitysLang.php:175
+msgid "Selected Sender"
+msgstr ""
+
+#: langs/homeLang.php:44 langs/homeLang.php:93 langs/settingsLang.php:167
+msgid "Send"
+msgstr ""
+
+#: langs/orderLang.php:159 langs/orderLang.php:347
+msgid "Send Documentation by email"
+msgstr ""
+
+#: langs/orderLang.php:148 langs/orderLang.php:279 langs/utilitysLang.php:150
+msgid "Sender"
+msgstr ""
+
+#: langs/utilitysLang.php:112 langs/utilitysLang.php:258
+msgid "Sender Address"
+msgstr ""
+
+#: langs/utilitysLang.php:71 langs/utilitysLang.php:264
+msgid "Sender Address "
+msgstr ""
+
+#: langs/settingsLang.php:72
+msgid "Sender by default"
+msgstr ""
+
+#: langs/orderLang.php:23 langs/orderLang.php:276
+msgid "Sender Data"
+msgstr ""
+
+#: langs/settingsLang.php:48 langs/settingsLang.php:405
+msgid "Sender name"
+msgstr ""
+
+#: langs/settingsLang.php:75 langs/settingsLang.php:434
+msgid "Sender successfully saved"
+msgstr ""
+
+#: langs/utilitysLang.php:146 langs/utilitysLang.php:244
+msgid "Senders"
+msgstr ""
+
+#: langs/settingsLang.php:186
+msgid "Sent"
+msgstr ""
+
+#: classes/CorreosOficialMarketplace.php:237
+#: classes/CorreosOficialMarketplace.php:259
+msgid "Sent to Marketplace"
+msgstr "Enviado ao Marketplace"
+
+#: langs/settingsLang.php:47 langs/settingsLang.php:312
+msgid "Service Temporaly unavailable. Please, try again later."
+msgstr ""
+
+#: langs/orderLang.php:188 langs/orderLang.php:273
+msgid "Set a Sender"
+msgstr ""
+
+#: correosoficial.php:1380
+msgid "Settings"
+msgstr ""
+
+#: langs/settingsLang.php:355
+msgid "SGA data successfully saved"
+msgstr ""
+
+#: classes/CorreosOficialApiRouter.php:2051
+msgid "SGA service error occurred."
+msgstr ""
+
+#: langs/settingsLang.php:214 langs/settingsLang.php:383
+msgid "Shipment Canceled"
+msgstr ""
+
+#: correosoficial.php:1095
+msgid "Shipment cancelled  Correos - CEX"
+msgstr ""
+
+#: correosoficial.php:1044
+msgid "Shipment cancelled Correos - CEX"
+msgstr ""
+
+#: langs/settingsLang.php:213 langs/settingsLang.php:385
+msgid "Shipment delivered"
+msgstr ""
+
+#: correosoficial.php:1068 correosoficial.php:1094
+msgid "Shipment delivered Correos - CEX"
+msgstr ""
+
+#: langs/settingsLang.php:212 langs/settingsLang.php:384
+msgid "Shipment in progress"
+msgstr ""
+
+#: correosoficial.php:1080 correosoficial.php:1093
+msgid "Shipment in progress Correos - CEX"
+msgstr ""
+
+#: langs/settingsLang.php:211 langs/settingsLang.php:382
+msgid "Shipment pre-registered"
+msgstr ""
+
+#: correosoficial.php:1032 correosoficial.php:1092
+msgid "Shipment prepared for Correos - CEX"
+msgstr ""
+
+#: langs/settingsLang.php:215 langs/settingsLang.php:386
+msgid "Shipment returned"
+msgstr ""
+
+#: correosoficial.php:1056 correosoficial.php:1096
+msgid "Shipment returned Correos - CEX"
+msgstr ""
+
+#: correosTrackings.php:43
+msgid "Shipment Tracking"
+msgstr ""
+
+#: langs/orderLang.php:128
+msgid "Shipper s customs reference"
+msgstr ""
+
+#: langs/orderLang.php:60
+msgid "Shipper\\s customs reference"
+msgstr ""
+
+#: langs/orderLang.php:154
+msgid "Shipping"
+msgstr ""
+
+#: langs/utilitysLang.php:149 langs/utilitysLang.php:249
+msgid "Shipping address"
+msgstr ""
+
+#: shipping-methods/Correos/CorreosOficialPaqPremiumOficinaElegida.php:256
+#: shipping-methods/Correos/CorreosOficialPaqLigero.php:256
+#: shipping-methods/Correos/CorreosOficialDistribucionInternacionalLight.php:256
+#: shipping-methods/Correos/CorreosOficialPaqPremiumCityPaq.php:256
+#: shipping-methods/Correos/CorreosOficialPaqEstandarOficinaElegida.php:256
+#: shipping-methods/Correos/CorreosOficialPaqEstandarInternacional.php:256
+#: shipping-methods/Correos/CorreosOficialPaqLightInternacional.php:256
+#: shipping-methods/Correos/CorreosOficialPaquetePostalEconomicoInternacional.php:256
+#: shipping-methods/Correos/CorreosOficialPaqPremiumInternacional.php:256
+#: shipping-methods/Correos/CorreosOficialCartaCertificadaInternacional.php:256
+#: shipping-methods/Correos/CorreosOficialPaqEstandarCityPaq.php:256
+#: shipping-methods/Correos/CorreosOficialPaqEstandarDomicilio.php:256
+#: shipping-methods/Correos/CorreosOficialPaqPremiumDomicilio.php:256
+#: shipping-methods/Cex/CorreosOficialIslasDocumentacion.php:256
+#: shipping-methods/Cex/CorreosOficialPaqEmpresaCatorce.php:256
+#: shipping-methods/Cex/CorreosOficialPaqueteriaOptica.php:256
+#: shipping-methods/Cex/CorreosOficialPaqCatorce.php:256
+#: shipping-methods/Cex/CorreosOficialPaqEcommerce.php:256
+#: shipping-methods/Cex/CorreosOficialPaqVeinticuatroOficinaElegida.php:256
+#: shipping-methods/Cex/CorreosOficialIslasMaritimo.php:256
+#: shipping-methods/Cex/CorreosOficialInternacionalEstandar.php:256
+#: shipping-methods/Cex/CorreosOficialPaqVeinticuatro.php:256
+#: shipping-methods/Cex/CorreosOficialPaqPunto.php:256
+#: shipping-methods/Cex/CorreosOficialePaqVeinticuatro.php:256
+#: shipping-methods/Cex/CorreosOficialPaqDiez.php:256
+#: shipping-methods/Cex/CorreosOficialCampaniaCex.php:256
+#: shipping-methods/Cex/CorreosoficialIslasExpress.php:256
+#: shipping-methods/Cex/CorreosOficialEntregaPlus.php:256
+#: shipping-methods/Cex/CorreosOficialInternacionalExpress.php:256
+#: shipping-methods/Cex/CorreosOficialPortugalOptica.php:256
+msgid "Shipping Classes"
+msgstr ""
+
+#: langs/utilitysLang.php:82 langs/utilitysLang.php:168
+msgid "Shipping Code"
+msgstr ""
+
+#: langs/orderLang.php:115 langs/orderLang.php:251
+msgid "Shipping code"
+msgstr ""
+
+#: langs/orderLang.php:116 langs/orderLang.php:332
+msgid "Shipping codes"
+msgstr ""
+
+#: langs/orderLang.php:55 langs/orderLang.php:192
+msgid "Shipping data"
+msgstr ""
+
+#: langs/utilitysLang.php:51
+msgid "Shipping Number"
+msgstr ""
+
+#: langs/utilitysLang.php:42
+msgid "Shipping Number "
+msgstr ""
+
+#: langs/utilitysLang.php:22 langs/utilitysLang.php:214
+msgid "Shipping number:"
+msgstr ""
+
+#: langs/utilitysLang.php:87 langs/utilitysLang.php:277
+msgid "Shipping Ref"
+msgstr ""
+
+#: langs/utilitysLang.php:81 langs/utilitysLang.php:272
+msgid "Shipping Ref."
+msgstr ""
+
+#: langs/orderLang.php:61 langs/orderLang.php:223
+msgid "Shipping reference"
+msgstr ""
+
+#: langs/orderLang.php:125 langs/orderLang.php:250
+msgid "Shipping status"
+msgstr ""
+
+#: langs/settingsLang.php:465
+msgid "Short description of the tariff code"
+msgstr ""
+
+#: langs/settingsLang.php:493
+#, fuzzy
+#| msgid "Show / Hide"
+msgid "Show _ Hide"
+msgstr "Mostrar / Ocultar"
+
+#: langs/settingsLang.php:348
+msgid "Show order status progress"
+msgstr ""
+
+#: langs/settingsLang.php:210 langs/settingsLang.php:381
+msgid "Show shipment status progress in shop"
+msgstr ""
+
+#: langs/utilitysLang.php:117
+msgid "Show/Hide columns"
+msgstr ""
+
+#: langs/utilitysLang.php:140 langs/utilitysLang.php:165
+msgid "Show_Hide columns"
+msgstr ""
+
+#: controllers/admin/AdminHomeSendMailController.php:84
+msgid "Sign up in CorreosOficial: You will receive an answer soon"
+msgstr ""
+
+#: classes/CorreosOficialReturnsMail.php:92
+msgid "Sincerely"
+msgstr ""
+
+#: langs/utilitysLang.php:73 langs/utilitysLang.php:260
+msgid "Size"
+msgstr ""
+
+#: langs/settingsLang.php:95
+msgid "SKU"
+msgstr ""
+
+#: langs/orderLang.php:102 langs/orderLang.php:322
+msgid "Small (shoebox)"
+msgstr ""
+
+#: langs/orderLang.php:171 langs/orderLang.php:309 langs/utilitysLang.php:58
+#: langs/utilitysLang.php:196
+msgid "Small (Shoes Box)"
+msgstr ""
+
+#: langs/settingsLang.php:54 langs/settingsLang.php:411 langs/orderLang.php:33
+msgid "Spain"
+msgstr ""
+
+#: classes/CorreosOficialAdminOrderHook.php:1106
+#: controllers/admin/AdminCorreosOficialUtilitiesController.php:87
+msgid "Standar"
+msgstr ""
+
+#: langs/settingsLang.php:245 langs/settingsLang.php:273
+#: langs/orderLang.php:126 langs/orderLang.php:252 langs/utilitysLang.php:106
+#: langs/utilitysLang.php:170
+msgid "Status"
+msgstr ""
+
+#: langs/orderLang.php:113 langs/orderLang.php:330
+msgid "status"
+msgstr ""
+
+#: langs/utilitysLang.php:44 langs/utilitysLang.php:179
+msgid "Status "
+msgstr ""
+
+#: langs/settingsLang.php:201 langs/settingsLang.php:387
+msgid "Status update time"
+msgstr ""
+
+#: langs/utilitysLang.php:184
+msgid "Successful"
+msgstr ""
+
+#: langs/orderLang.php:40 langs/orderLang.php:283
+msgid "Surnames"
+msgstr ""
+
+#: langs/settingsLang.php:347
+msgid "Synchronize stock after a sales order"
+msgstr ""
+
+#: langs/settingsLang.php:221 langs/settingsLang.php:287
+msgid "Systems Customer Account"
+msgstr ""
+
+#: langs/settingsLang.php:123 langs/orderLang.php:79 langs/orderLang.php:241
+msgid "Tariff"
+msgstr ""
+
+#: langs/settingsLang.php:217 langs/settingsLang.php:323
+#: langs/orderLang.php:162 langs/orderLang.php:240
+msgid "Tariff Code"
+msgstr ""
+
+#: langs/settingsLang.php:138 langs/settingsLang.php:325
+msgid "Tariff code"
+msgstr ""
+
+#: langs/settingsLang.php:137
+msgid "Tariff number"
+msgstr ""
+
+#: langs/checkoutLang.php:34 langs/checkoutLang.php:76
+msgid "Terminal"
+msgstr ""
+
+#: langs/checkoutLang.php:33
+msgid "Terminal found"
+msgstr ""
+
+#: langs/settingsLang.php:236 langs/orderLang.php:181
+#: langs/utilitysLang.php:137
+msgid "terms and conditions"
+msgstr "os Termos e condições de uso"
+
+#: classes/CorreosOficialReturnsMail.php:91
+msgid "Thank you"
+msgstr ""
+
+#: langs/homeLang.php:46 langs/homeLang.php:95 langs/settingsLang.php:169
+msgid "Thank you. We contact you soon"
+msgstr ""
+
+#: langs/settingsLang.php:142
+msgid "The best transport solutions for your customers online"
+msgstr ""
+
+#: langs/settingsLang.php:227 langs/settingsLang.php:305
+msgid "The Client Account Systems must have format w87654321 or W876543211A4H"
+msgstr ""
+
+#: langs/settingsLang.php:224 langs/settingsLang.php:302
+msgid "The contract number must have 8 numbers, for example 12345678"
+msgstr ""
+
+#: correosoficial.php:320
+msgid ""
+"The current installed version of WooCommerce is not compatible with this "
+"Correos Oficial version."
+msgstr ""
+
+#: controllers/admin/AdminCorreosOficialCustomerDataProcessController.php:225
+msgid "The customer code you are triying to save, is already in use"
+msgstr ""
+
+#: langs/settingsLang.php:225 langs/settingsLang.php:303
+msgid "The Customer Number must have 8 numbers, e.g. 87654321"
+msgstr ""
+
+#: langs/homeLang.php:41 langs/homeLang.php:90 langs/settingsLang.php:164
+msgid "The fields with * are required."
+msgstr ""
+
+#: classes/CorreosOficialReturnsMail.php:119
+msgid ""
+"The goods must be perfectly closed and sealed before the indicated "
+"collection time"
+msgstr ""
+
+#: classes/Apis/CorreosOficialRest.php:1139
+msgid "The label could not be obtained"
+msgstr ""
+
+#: langs/settingsLang.php:226 langs/settingsLang.php:304
+msgid ""
+"The labelling code must be 4 characters, letters and_or numbers, e.g. 1A4H"
+msgstr ""
+
+#: langs/orderLang.php:151
+msgid "The locator service is temporarily unavailable. Please, try again later"
+msgstr ""
+
+#: langs/utilitysLang.php:21 langs/utilitysLang.php:213
+msgid "The maximum number of packages for this product is"
+msgstr ""
+
+#: langs/settingsLang.php:260 langs/settingsLang.php:403
+#: langs/orderLang.php:189 langs/orderLang.php:275
+msgid "The minimum dimensions of a shipment are 15 x 10 x 1 cm."
+msgstr ""
+
+#: langs/settingsLang.php:229 langs/settingsLang.php:307
+msgid "The My Office User must be an email address"
+msgstr ""
+
+#: correosoficial.php:778
+msgid "The order could not be completed, check the shipping method."
+msgstr ""
+
+#: langs/utilitysLang.php:20 langs/utilitysLang.php:212
+msgid "The selected carrier does not allow shipments of multiple packages"
+msgstr ""
+
+#: langs/orderLang.php:367
+msgid "The status table will appear once the shipment is registered."
+msgstr "A tabela de estados aparecerá quando o envio estiver registado."
+
+#: langs/settingsLang.php:203 langs/settingsLang.php:388
+msgid "The time selected determines how often order statuses are updated."
+msgstr ""
+
+#: langs/settingsLang.php:262 langs/settingsLang.php:454
+msgid "The title contains"
+msgstr ""
+
+#: langs/settingsLang.php:46 langs/settingsLang.php:311
+msgid "The username and password are not correct."
+msgstr ""
+
+#: classes/CorreosOficialErrorManager.php:47
+msgid "The waiting time has expired"
+msgstr ""
+
+#: controllers/admin/AdminCorreosOficialProductsProcessController.php:54
+msgid "There aren't active products as carriers in your shop."
+msgstr ""
+
+#: langs/settingsLang.php:37 langs/settingsLang.php:296
+msgid "There is no customers actives."
+msgstr ""
+
+#: classes/CorreosOficialApiRouter.php:1823
+#: classes/CorreosOficialApiRouter.php:2034
+msgid "There was an error in the request"
+msgstr ""
+
+#: classes/CorreosOficialAdminOrderHook.php:1095
+#: controllers/admin/AdminCorreosOficialSettingsController.php:126
+#: controllers/admin/AdminCorreosOficialUtilitiesController.php:78
+msgid "Thermic"
+msgstr "Térmica"
+
+#: langs/settingsLang.php:488
+msgid "This section is managed by Marketplace"
+msgstr "Esta secção é gerida pelo Marketplace"
+
+#: langs/settingsLang.php:120 langs/settingsLang.php:320
+msgid ""
+"This shipment is subject to customs clearance. The price of the shipment may "
+"be increased"
+msgstr ""
+
+#: langs/orderLang.php:256
+msgid "Timestamp"
+msgstr ""
+
+#: langs/checkoutLang.php:18 langs/checkoutLang.php:49
+msgid "Timetable"
+msgstr ""
+
+#: classes/CorreosOficialCommonShippingMethods.php:329
+msgid "Title"
+msgstr ""
+
+#: classes/CorreosOficialCommonShippingMethods.php:330
+msgid "Title to be displayed on site"
+msgstr ""
+
+#: langs/settingsLang.php:70 langs/settingsLang.php:432 langs/orderLang.php:96
+#: langs/orderLang.php:317
+msgid "To"
+msgstr ""
+
+#: shipping-methods/Correos/CorreosOficialPaqPremiumOficinaElegida.php:259
+#: shipping-methods/Correos/CorreosOficialPaqLigero.php:259
+#: shipping-methods/Correos/CorreosOficialDistribucionInternacionalLight.php:259
+#: shipping-methods/Correos/CorreosOficialPaqPremiumCityPaq.php:259
+#: shipping-methods/Correos/CorreosOficialPaqEstandarOficinaElegida.php:259
+#: shipping-methods/Correos/CorreosOficialPaqEstandarInternacional.php:259
+#: shipping-methods/Correos/CorreosOficialPaqLightInternacional.php:259
+#: shipping-methods/Correos/CorreosOficialPaquetePostalEconomicoInternacional.php:259
+#: shipping-methods/Correos/CorreosOficialPaqPremiumInternacional.php:259
+#: shipping-methods/Correos/CorreosOficialCartaCertificadaInternacional.php:259
+#: shipping-methods/Correos/CorreosOficialPaqEstandarCityPaq.php:259
+#: shipping-methods/Correos/CorreosOficialPaqEstandarDomicilio.php:259
+#: shipping-methods/Correos/CorreosOficialPaqPremiumDomicilio.php:259
+#: shipping-methods/Cex/CorreosOficialIslasDocumentacion.php:259
+#: shipping-methods/Cex/CorreosOficialPaqEmpresaCatorce.php:259
+#: shipping-methods/Cex/CorreosOficialPaqueteriaOptica.php:259
+#: shipping-methods/Cex/CorreosOficialPaqCatorce.php:259
+#: shipping-methods/Cex/CorreosOficialPaqEcommerce.php:259
+#: shipping-methods/Cex/CorreosOficialPaqVeinticuatroOficinaElegida.php:259
+#: shipping-methods/Cex/CorreosOficialIslasMaritimo.php:259
+#: shipping-methods/Cex/CorreosOficialInternacionalEstandar.php:259
+#: shipping-methods/Cex/CorreosOficialPaqVeinticuatro.php:259
+#: shipping-methods/Cex/CorreosOficialPaqPunto.php:259
+#: shipping-methods/Cex/CorreosOficialePaqVeinticuatro.php:259
+#: shipping-methods/Cex/CorreosOficialPaqDiez.php:259
+#: shipping-methods/Cex/CorreosOficialCampaniaCex.php:259
+#: shipping-methods/Cex/CorreosoficialIslasExpress.php:259
+#: shipping-methods/Cex/CorreosOficialEntregaPlus.php:259
+#: shipping-methods/Cex/CorreosOficialInternacionalExpress.php:259
+#: shipping-methods/Cex/CorreosOficialPortugalOptica.php:259
+msgid "To (max) <"
+msgstr ""
+
+#: langs/settingsLang.php:174 langs/settingsLang.php:418
+#: langs/orderLang.php:168 langs/orderLang.php:305 langs/utilitysLang.php:122
+#: langs/utilitysLang.php:191
+msgid "To hour"
+msgstr ""
+
+#: langs/settingsLang.php:234 langs/orderLang.php:179
+#: langs/utilitysLang.php:135
+msgid "To use our module you must accept our conditions."
+msgstr ""
+"Você deve aceitar previamente as condições de uso e a política de proteção "
+"de dados para utilizar Correos Ecommerce"
+
+#: langs/utilitysLang.php:147
+msgid "Todos"
+msgstr ""
+
+#: langs/orderLang.php:224
+msgid "Total Weight"
+msgstr ""
+
+#: wc-email-templates/emails/customer-completed-order.php:75
+#: wc-email-templates/emails/customer-completed-order.php:87
+msgid "Track your order in any moment with this link:"
+msgstr ""
+
+#: classes/CorreosOficialReturnsMail.php:114
+msgid "Track your shipping - correosexpress.com"
+msgstr ""
+
+#: correosTrackings.php:136
+msgid "Tracking date"
+msgstr ""
+
+#: correosTrackings.php:132
+msgid "Tracking link"
+msgstr ""
+
+#: correosTrackings.php:128
+msgid "Tracking number"
+msgstr ""
+
+#: langs/orderLang.php:190
+msgid "TRACKING ORDER"
+msgstr ""
+
+#: langs/orderDetailLang.php:17
+msgid "Tracking your order"
+msgstr ""
+
+#: langs/orderLang.php:155 langs/orderLang.php:244
+msgid "Units"
+msgstr ""
+
+#: classes/Apis/CorreosOficialSoap.php:217
+msgid "Unknown error cancelling shipping"
+msgstr ""
+
+#: classes/Apis/CorreosOficialSoap.php:255
+#: classes/Apis/CorreosOficialSoap.php:297
+msgid "Unknown error generating package/s pickup"
+msgstr ""
+
+#: langs/utilitysLang.php:38 langs/utilitysLang.php:162
+msgid "Untill"
+msgstr ""
+
+#: langs/settingsLang.php:346
+msgid "Update stock with the logistics platform"
+msgstr ""
+
+#: langs/orderLang.php:363
+msgid "URL"
+msgstr ""
+
+#: langs/settingsLang.php:341
+msgid "Use Correos fulfillment service"
+msgstr ""
+
+# Use module features instead of product attributes
+#: langs/settingsLang.php:473
+msgid "Use module features instead of product attributes"
+msgstr ""
+"Criar as características HS code e País de origem da mercadoria desde o "
+"módulo de Correos"
+
+#: langs/settingsLang.php:462
+msgid ""
+"Use this field if all (or most of your shipments) fit a single description. "
+"It will be used by default in your customs shipments but you can modify it "
+"when necessary during shipment management."
+msgstr ""
+
+#: langs/settingsLang.php:464
+msgid ""
+"Use this field if all (or most of your shipments) fit a single tariff code. "
+"It will be used by default in your customs shipments but you can modify it "
+"when necessary during shipment management. Tariff must be 6, 8 or 10 "
+"characters long."
+msgstr ""
+
+#: langs/settingsLang.php:466
+msgid "Use WooCommerce product attributes for HS code and country of origin"
+msgstr ""
+
+#: langs/settingsLang.php:23 langs/settingsLang.php:292
+msgid "User"
+msgstr ""
+
+#: controllers/admin/AdminCorreosOficialCustomerDataProcessController.php:120
+msgid ""
+"User authentication failed. Please check your Client ID and Secret and try "
+"again."
+msgstr ""
+
+#: controllers/admin/AdminCorreosOficialCustomerDataProcessController.php:174
+msgid ""
+"User authentication failed. Please check your username and password and try "
+"again."
+msgstr ""
+
+#: langs/settingsLang.php:100 langs/settingsLang.php:399
+msgid "User data successfully saved"
+msgstr ""
+
+#: correosoficial.php:1389
+msgid "Utilities"
+msgstr ""
+
+#: classes/CorreosOficialNifNumberForCheckout.php:38
+msgid "VAT Number"
+msgstr ""
+
+#: langs/settingsLang.php:232 langs/settingsLang.php:394
+msgid "VAT Number Obligatory"
+msgstr ""
+
+#: langs/settingsLang.php:231 langs/settingsLang.php:393
+msgid "VAT Number Optional"
+msgstr ""
+
+#: langs/settingsLang.php:233 langs/settingsLang.php:395
+msgid "VAT Number Personalized"
+msgstr ""
+
+#: langs/orderLang.php:174 langs/orderLang.php:312 langs/utilitysLang.php:61
+#: langs/utilitysLang.php:199
+msgid "Very Big (greather than box 80x80x80cm)"
+msgstr ""
+
+#: langs/orderLang.php:105 langs/orderLang.php:325
+msgid "Very large (larger than box 80x80x80cm)"
+msgstr ""
+
+#: langs/orderLang.php:153
+msgid "Volumetric weight"
+msgstr ""
+
+#: langs/settingsLang.php:344
+msgid "Warehouse"
+msgstr ""
+
+#: langs/settingsLang.php:358
+msgid "Warehouse is required"
+msgstr ""
+
+#: classes/CorreosOficialReturnsMail.php:111
+msgid ""
+"we kindly ask you, in order to avoid any unnecessary delays please have the "
+"shipment ready before the driver picks it up. Please find enclosed the label "
+"to be printed and attached to the package"
+msgstr ""
+
+#: controllers/admin/AdminHomeSendMailController.php:61
+msgid "We will contact you as soon as possible."
+msgstr ""
+
+#: classes/CorreosOficialReturnsMail.php:108
+msgid "We would like to inform you that the"
+msgstr ""
+
+#: langs/orderLang.php:71 langs/orderLang.php:233
+#: classes/CorreosOficialCommonShippingMethods.php:551
+msgid "Weight"
+msgstr ""
+
+#: langs/settingsLang.php:371
+msgid "Weight that is used for shipping in case there is no specified weight."
+msgstr ""
+
+#: correosoficial-wc-blocks-integration.php:115
+msgid "What should we do if you are not at home?"
+msgstr ""
+
+#: langs/settingsLang.php:474
+msgid ""
+"When enabled, the module will use its own internal features for HS codes and "
+"country of origin instead of WooCommerce product attributes"
+msgstr ""
+
+#: langs/orderLang.php:73 langs/orderLang.php:235
+msgid "Width"
+msgstr ""
+
+#: langs/settingsLang.php:258 langs/settingsLang.php:375
+msgid "Width (cm)"
+msgstr ""
+
+#: langs/settingsLang.php:489
+#: controllers/admin/AdminCorreosOficialMarketplaceProcessController.php:61
+msgid ""
+"WooCommerce is required to activate the Marketplace integration. Please "
+"install and activate WooCommerce first."
+msgstr ""
+"O WooCommerce é necessário para ativar a integração com o Marketplace. Por "
+"favor, instale e ative o WooCommerce primeiro."
+
+#: langs/homeLang.php:29 langs/homeLang.php:78 langs/settingsLang.php:141
+msgid "YES, CONFIGURE MY MODULE"
+msgstr ""
+
+#: correosoficial.php:1214
+msgid "Yo have"
+msgstr "Você tem"
+
+#: langs/settingsLang.php:242
+msgid "Yo have "
+msgstr ""
+
+#: langs/utilitysLang.php:24 langs/utilitysLang.php:216
+msgid "You cannot change from a CityPaq delivery method to Office"
+msgstr ""
+
+#: langs/utilitysLang.php:23 langs/utilitysLang.php:215
+msgid "You cannot change from a Home delivery method to CityPaq or Office"
+msgstr ""
+
+#: langs/utilitysLang.php:25 langs/utilitysLang.php:217
+msgid "You cannot change from a Office delivery method to CityPaq"
+msgstr ""
+
+#: langs/orderLang.php:362
+msgid ""
+"You cannot change the Office, CityPaq, Pudo because the postal code belongs "
+"to a different province."
+msgstr ""
+
+#: langs/orderLang.php:186 langs/orderLang.php:271
+msgid "You currently do not have any sender configured"
+msgstr ""
+
+#: langs/orderLang.php:178 langs/utilitysLang.php:134
+msgid "You don\t have any notification"
+msgstr ""
+
+#: controllers/admin/AdminCorreosOficialNotificationsController.php:89
+msgid "You don't have any notification"
+msgstr "Nenhuma notificação"
+
+#: langs/homeLang.php:17 langs/homeLang.php:66 langs/settingsLang.php:144
+msgid ""
+"You have more than 2,300 collection points for your shipments with our "
+"network of offices"
+msgstr ""
+
+#: langs/orderLang.php:58 langs/orderLang.php:195
+msgid "You have not configured any carrier"
+msgstr ""
+
+#: langs/orderLang.php:25 langs/orderLang.php:278 langs/utilitysLang.php:109
+#: langs/utilitysLang.php:203
+msgid "You have not configured any default sender"
+msgstr ""
+
+#: controllers/admin/AdminCorreosOficialProductsProcessController.php:50
+msgid ""
+"You have selected products that were already in your store.\n"
+"                              Have been activated"
+msgstr ""
+
+#: langs/checkoutLang.php:62
+msgid ""
+"You must choose a pickup point in the same province as the shipping address"
+msgstr ""
+
+#: shipping-methods/Correos/CorreosOficialPaqPremiumOficinaElegida.php:238
+#: shipping-methods/Correos/CorreosOficialPaqLigero.php:238
+#: shipping-methods/Correos/CorreosOficialDistribucionInternacionalLight.php:238
+#: shipping-methods/Correos/CorreosOficialPaqPremiumCityPaq.php:238
+#: shipping-methods/Correos/CorreosOficialPaqEstandarOficinaElegida.php:238
+#: shipping-methods/Correos/CorreosOficialPaqEstandarInternacional.php:238
+#: shipping-methods/Correos/CorreosOficialPaqLightInternacional.php:238
+#: shipping-methods/Correos/CorreosOficialPaquetePostalEconomicoInternacional.php:238
+#: shipping-methods/Correos/CorreosOficialPaqPremiumInternacional.php:238
+#: shipping-methods/Correos/CorreosOficialCartaCertificadaInternacional.php:238
+#: shipping-methods/Correos/CorreosOficialPaqEstandarCityPaq.php:238
+#: shipping-methods/Correos/CorreosOficialPaqEstandarDomicilio.php:238
+#: shipping-methods/Correos/CorreosOficialPaqPremiumDomicilio.php:238
+#: shipping-methods/Cex/CorreosOficialIslasDocumentacion.php:238
+#: shipping-methods/Cex/CorreosOficialPaqEmpresaCatorce.php:238
+#: shipping-methods/Cex/CorreosOficialPaqueteriaOptica.php:238
+#: shipping-methods/Cex/CorreosOficialPaqCatorce.php:238
+#: shipping-methods/Cex/CorreosOficialPaqEcommerce.php:238
+#: shipping-methods/Cex/CorreosOficialPaqVeinticuatroOficinaElegida.php:238
+#: shipping-methods/Cex/CorreosOficialIslasMaritimo.php:238
+#: shipping-methods/Cex/CorreosOficialInternacionalEstandar.php:238
+#: shipping-methods/Cex/CorreosOficialPaqVeinticuatro.php:238
+#: shipping-methods/Cex/CorreosOficialPaqPunto.php:238
+#: shipping-methods/Cex/CorreosOficialePaqVeinticuatro.php:238
+#: shipping-methods/Cex/CorreosOficialPaqDiez.php:238
+#: shipping-methods/Cex/CorreosOficialCampaniaCex.php:238
+#: shipping-methods/Cex/CorreosoficialIslasExpress.php:238
+#: shipping-methods/Cex/CorreosOficialEntregaPlus.php:238
+#: shipping-methods/Cex/CorreosOficialInternacionalExpress.php:238
+#: shipping-methods/Cex/CorreosOficialPortugalOptica.php:238
+msgid "You must leave at least one rule"
+msgstr ""
+
+#: shipping-methods/Correos/CorreosOficialPaqPremiumOficinaElegida.php:251
+#: shipping-methods/Correos/CorreosOficialPaqLigero.php:251
+#: shipping-methods/Correos/CorreosOficialDistribucionInternacionalLight.php:251
+#: shipping-methods/Correos/CorreosOficialPaqPremiumCityPaq.php:251
+#: shipping-methods/Correos/CorreosOficialPaqEstandarOficinaElegida.php:251
+#: shipping-methods/Correos/CorreosOficialPaqEstandarInternacional.php:251
+#: shipping-methods/Correos/CorreosOficialPaqLightInternacional.php:251
+#: shipping-methods/Correos/CorreosOficialPaquetePostalEconomicoInternacional.php:251
+#: shipping-methods/Correos/CorreosOficialPaqPremiumInternacional.php:251
+#: shipping-methods/Correos/CorreosOficialCartaCertificadaInternacional.php:251
+#: shipping-methods/Correos/CorreosOficialPaqEstandarCityPaq.php:251
+#: shipping-methods/Correos/CorreosOficialPaqEstandarDomicilio.php:251
+#: shipping-methods/Correos/CorreosOficialPaqPremiumDomicilio.php:251
+#: shipping-methods/Cex/CorreosOficialIslasDocumentacion.php:251
+#: shipping-methods/Cex/CorreosOficialPaqEmpresaCatorce.php:251
+#: shipping-methods/Cex/CorreosOficialPaqueteriaOptica.php:251
+#: shipping-methods/Cex/CorreosOficialPaqCatorce.php:251
+#: shipping-methods/Cex/CorreosOficialPaqEcommerce.php:251
+#: shipping-methods/Cex/CorreosOficialPaqVeinticuatroOficinaElegida.php:251
+#: shipping-methods/Cex/CorreosOficialIslasMaritimo.php:251
+#: shipping-methods/Cex/CorreosOficialInternacionalEstandar.php:251
+#: shipping-methods/Cex/CorreosOficialPaqVeinticuatro.php:251
+#: shipping-methods/Cex/CorreosOficialPaqPunto.php:251
+#: shipping-methods/Cex/CorreosOficialePaqVeinticuatro.php:251
+#: shipping-methods/Cex/CorreosOficialPaqDiez.php:251
+#: shipping-methods/Cex/CorreosOficialCampaniaCex.php:251
+#: shipping-methods/Cex/CorreosoficialIslasExpress.php:251
+#: shipping-methods/Cex/CorreosOficialEntregaPlus.php:251
+#: shipping-methods/Cex/CorreosOficialInternacionalExpress.php:251
+#: shipping-methods/Cex/CorreosOficialPortugalOptica.php:251
+msgid "You must select a record from the table"
+msgstr ""
+
+#: langs/settingsLang.php:252 langs/settingsLang.php:437
+msgid "You must select at least one Correos Account or Cex Account"
+msgstr ""
+
+#: langs/settingsLang.php:108
+msgid "You need first to signup as Customer to see your available products"
+msgstr ""
+
+#: langs/settingsLang.php:43 langs/settingsLang.php:308
+msgid "Your credentials are correct."
+msgstr ""
+
+#: langs/homeLang.php:25 langs/homeLang.php:74 langs/settingsLang.php:152
+msgid "Your customer will also have the possibility to track his order live"
+msgstr ""
+
+#: classes/CorreosOficialApiRouter.php:586
+msgid "Your shipping request has been canceled"
+msgstr ""
+
+#: classes/CorreosOficialNifNumberForCheckout.php:40
+msgid "Your VAT Number"
+msgstr ""
+
+#: langs/checkoutLang.php:25 langs/checkoutLang.php:56
+msgid "Zip Code"
+msgstr ""
+
+#: langs/settingsLang.php:52 langs/settingsLang.php:409
+msgid "Zip code"
+msgstr ""
+
+#: langs/settingsLang.php:116 langs/settingsLang.php:459
+msgid "Zones and carriers successfully saved"
+msgstr ""
+
+#: langs/settingsLang.php:65 langs/settingsLang.php:427
+msgid "ZP"
+msgstr ""
+
+#: views/templates/admin/settings-user-configuration.tpl
+msgid "Allow modifications (Correos Modify)"
+msgstr "Permitir modificações (Correos Modify)"
+
+#: views/templates/admin/settings-user-configuration.tpl
+msgid "Correos Modify allows the recipient of your shipments to make eventual modifications to the delivery (address, delivery point, authorized third party…)"
+msgstr "O Correos Modify permite ao destinatário dos seus envios fazer modificações eventuais na entrega (endereço, ponto de entrega, terceiro autorizado…)"
+
+#: controllers/admin/AdminCorreosOficialUserConfigurationProcessController.php
+msgid "Sí"
+msgstr "Sim"
+
+#: controllers/admin/AdminCorreosOficialUserConfigurationProcessController.php
+msgid "No"
+msgstr "Não"
+
+#: views/templates/admin/settings-user-configuration.tpl
+msgid "Ver condiciones de Correos Modify"
+msgstr "Ver condições de Correos Modify"

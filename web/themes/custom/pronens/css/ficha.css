@@ -75,8 +75,10 @@
    cursiva: mismo dibujo que la rejilla para que lo que se elige y lo que se ve
    sean lo mismo. */
 .pro-ficha__preview[style*='--pro-letra-interior'] .pro-ficha__preview-text {
-  font-family: var(--pro-font-display);
-  font-weight: 800;
+  font-family: var(--pro-font-letra);
+  /* Graduate solo tiene el peso 400: forzar bold lo sintetizaría y el contorno
+     saldría sucio. */
+  font-weight: 400;
   /* La letra ocupa la caja del parche: así crece y decrece con la foto. */
   font-size: min(100cqw, 100cqh);
   line-height: 1;
@@ -675,8 +677,10 @@
   border: 1px solid var(--pro-border-2);
   border-radius: 6px;
   background: #fff;
-  font-family: var(--pro-font-display);
-  font-weight: 800;
+  font-family: var(--pro-font-letra);
+  /* Explícito: los labels del tema van en semibold y Graduate, con un solo
+     peso, saldría emborronado por el bold sintético. */
+  font-weight: 400;
   font-size: 20px;
   line-height: 1;
   cursor: pointer;

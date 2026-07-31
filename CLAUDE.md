@@ -147,6 +147,32 @@ Donde este documento y la realidad del repo discrepan, manda esta lista (decidid
   del chip es un círculo de dos tonos: con uno solo, "perfil negro interior blanco" y "todo blanco" se
   confundían. El alfabeto entero está en `FichaHooks::LETRAS`; si el taller no tiene parche de alguna
   letra, se quita de ahí.
+- **La letra va en Graduate (2026-07-30, cliente)**, la collegiate de Google Fonts, self-hosted como
+  las demás (`fonts/graduate-v19-latin-regular.woff2`, 6 KB, subset latin) con su propia library
+  `pronens/graduate`, igual que Caveat. Es la tipografía del bordado real: las fotos de tienda llevan
+  una letra varsity con contorno y Archivo con `text-stroke` solo la imitaba de lejos. Vale para
+  **todos** los productos de modo inicial, presentes y futuros: es el token `--pro-font-letra`, que usan
+  la rejilla A–Z, la vista previa de la ficha y la marca arrastrable del backoffice (por eso
+  `MontajeHooks` adjunta la library del tema: si el widget usara otra tipografía, la marca que se
+  arrastra tendría otro ancho que el bordado que se acaba viendo). **Un solo peso, el 400**: Graduate no
+  tiene bold y el sintético emborrona el contorno, así que los tres sitios lo declaran explícitamente.
+  Las dos tipografías del bordado son excluyentes y se cargan por modo: `pronens/graduate` en modo
+  inicial y `pronens/caveat` (la cursiva del nombre) en modo texto, no las dos siempre.
+- **El formato viene elegido de entrada (2026-07-30, cliente)**: el nº 1 de la foto guía, que hoy es
+  "perfil negro interior blanco". No está escrito a mano: es el **primero por peso** del vocabulario
+  `color_letra`, así que para cambiar el que sale marcado basta reordenarlo en
+  `/admin/structure/taxonomy/manage/color_letra/overview`. La intención ya estaba en el tema, pero no
+  funcionaba: `options_buttons` en un campo de **un solo valor** espera el tid suelto en
+  `#default_value` y se le pasaba dentro de un array, así que no marcaba ningún radio y se podía pedir
+  una inicial sin formato (el campo no es obligatorio). Con la casilla ya marcada, además, la rejilla
+  A–Z sale pintada con los colores del formato desde el primer render, sin tocar nada.
+- **La casilla "Bordar su inicial" viene marcada (2026-07-30, cliente)**: la inicial es el reclamo con
+  el que se vende el producto y no cuesta nada, así que obligar a activarla no tenía sentido; quien
+  quiera la prenda lisa la desmarca. Consecuencia: como ya no es un acto deliberado, sin letra elegida
+  el pedido saldría liso sin que nadie lo haya decidido, así que `validarPersonalizacion()` **pide la
+  letra en servidor** ("Elige la inicial que quieres bordar, o desmarca…") cuando la casilla sigue
+  marcada. En modo `texto` la casilla sigue **apagada** por defecto, porque marcarla cuesta 5 € y eso no
+  se activa por nosotros.
 - **El selector de color enseña la foto del producto en ese color y nada más**: con la foto, el punto
   de color y el nombre sobran a la vista, así que el nombre se queda solo para lectores de pantalla y
   para el carrito y el pedido. Los colores sin foto (el resto del catálogo) siguen mostrando el punto.
@@ -189,9 +215,36 @@ Donde este documento y la realidad del repo discrepan, manda esta lista (decidid
   Las fotos de cada color siguen usándose en la muestra del selector y en la línea del carrito.
 - El `field_posicion_bordado` del modelo (`lateral` / `centro`) **no sirve para esto**: es una lista de
   dos valores en la línea de pedido, no una coordenada.
-- **Los 289 productos personalizables siguen en modo `texto`**: el selector de formato y su guía solo
-  se ven en el de inicial. Para activarlos en otro producto basta cambiar "Modo de personalización" a
-  *inicial* en su formulario de edición.
+- **Los 281 productos personalizables que quedan siguen en modo `texto`**: el selector de formato y su
+  guía solo se ven en el de inicial. Para activarlos en otro producto basta cambiar "Modo de
+  personalización" a *inicial* en su formulario de edición.
+- **Las 8 sudaderas "con iniciales" (232-239) están en modo `inicial` (2026-07-30)**, las primeras del
+  catálogo migrado, y con ellas **la inicial ya no se cobra** (30,25 € con el bordado incluido).
+  Lo que hubo que arreglar de los datos del D7, y que probablemente afecte a la siguiente tanda:
+  - **La foto principal de las 8 ya llevaba una letra bordada** (una R, una M, una C…), así que la vista
+    previa habría pintado una segunda letra encima. Ahora la principal es la foto de la prenda **lisa
+    de frente** del catálogo JHK, que ya estaba en la galería de cada una (medias 1179, 1157, 1170,
+    1166, 1161, 1175, 1163 y 1200), y la de modelo pasó a primera de galería. Cada color traía tres
+    fotos de catálogo (frente, espalda y lateral) y hay que coger la del **frente**: se distingue por
+    el hueco del cuello. La marino es la excepción, su única foto lisa es de **597×750** y la ficha
+    sirve a 800×1066, así que se ve blanda: **pedir al taller la foto buena**.
+  - **Colocación 64,33 / 32,70 / 17**, la calibración que el cliente hizo a mano sobre la rosa. Las 8
+    fotos comparten encuadre, así que vale para todas; se afina por producto arrastrando la letra.
+  - **Tallas**: solo la negra y la marino tenían la serie de adulto casi completa. Se han creado las que
+    faltaban hasta las seis (16/XS, 18/S, 20/M, 22/L, 24/XL, 26/XXL) clonando la variación existente,
+    con **400 uds de stock** cada una: sin transacción de stock una variación nueva sale "Agotado".
+    Las **tallas de niño de la celeste, la negra y la marino se han dejado**, así que esas tres ofrecen
+    niño y adulto. La roja tenía una variación **sin talla** (imposible de elegir en la tienda) y se le
+    puso la 16/XS, que es lo que ya decía su SKU. SKUs nuevos = prefijo del producto + código de talla.
+  - **El precio de la lila era 388,41 €** (error de datos del D7, ya documentado): corregido a 30,25 €
+    en su talla existente y en las cinco nuevas.
+  - **Los alias de la blanca y la rosa están cruzados**: `/…/sudadera-blanca-con-iniciales` sirve el 236,
+    que es la **rosa**, y `/…/sudadera-rosa-con-iniciales` el 232, la blanca. Igual que el SKU
+    `SIROSA-XS`, que está en la **blanca**. Son datos del D7 y no se han tocado (los alias tienen coste
+    de SEO). Ojo con esto al revisar fichas por URL.
+  - **Las descripciones migradas contradicen la ficha**: dicen "Opción 2 iniciales… seguidas, sin punto"
+    y el modo inicial admite **una sola letra**. O se corrige el copy o se decide si la rejilla admite
+    dos. Copia previa de todo esto: snapshot `pre-sudaderas-inicial`.
 - **El nombre de los extras y de los formatos no está traducido** en CA/FR/EN porque son términos de
   taxonomía y los vocabularios no son traducibles: en este sitio **el contenido es solo español** (0
   traducciones de producto), así que es coherente con el resto. La interfaz sí está en los 4 idiomas.
@@ -224,6 +277,38 @@ Donde este documento y la realidad del repo discrepan, manda esta lista (decidid
 - **El panel del carrito se mueve al `body` por JS**: el bloque vive en el header sticky, que crea
   contexto de apilamiento, y ahí el overlay se comía los clics del panel. Es el mismo problema que
   ya apareció con el off-canvas del menú.
+- **Comisión por medio de pago (2026-07-30)**: módulo `pronens_comision_pago`, un porcentaje del
+  **total** del pedido cuando se paga con PayPal, configurable en
+  `/admin/commerce/config/comision-pago` (1,5% y solo `paypal` por defecto). Avisos que hay que
+  tener presentes antes de ponerlo en producción: las condiciones de uso de PayPal **prohíben el
+  recargo** salvo que la ley lo permita, y el artículo 60 ter del texto refundido de consumidores
+  impide cobrar más de lo que cuesta el medio de pago, así que el porcentaje tiene que ser el real
+  de la pasarela. Con **tarjeta (Redsys) no se puede** cobrar recargo, lo prohíbe la PSD2. La
+  alternativa limpia, si el cliente la acepta, es el descuento por transferencia: mismo efecto en
+  caja sin ninguno de los dos problemas.
+  - **Prioridad -200**, el último de la cola, detrás del envío tardío (-100): la base tiene que ser
+    lo que la pasarela va a cobrar de verdad, con bordado, extras, cupón, IVA y envío dentro. Como
+    entra después del IVA, la comisión **no lleva el impuesto desglosado**; si la gestoría dice que
+    debe llevarlo, se sube a 60 y hay que sumar el envío a la base a mano.
+  - **El procesador solo no basta**: Commerce **bloquea el pedido** al saltar al paso de pago
+    (`CheckoutFlowBase::onStepChange`) y un pedido bloqueado ya no se refresca, así que el ajuste
+    nunca llegaría a entrar. `ComisionHooks::refrescarTrasElegirPago` se encola en el botón de
+    continuar y llama a `order_refresh->refresh()`, que **no mira el bloqueo**, al revés que
+    `shouldRefresh()`. Sin eso el recargo no aparece en ningún pedido.
+  - **El importe se anuncia en el propio radio** ("PayPal (+1,5% de comisión: 0,58 €)") porque el
+    resumen lateral no se recalcula hasta continuar y el paso de pago no lo enseña: el cliente tiene
+    que ver el sobrecoste cuando decide. Se etiqueta recorriendo `#payment_options`, no las claves
+    de `#options`: la opción de PayPal se llama `new--paypal_checkout--paypal`, no `paypal`.
+  - `commerce_paypal` ya manda los ajustes de tipo `fee` a la API como una línea más y los suma al
+    `item_total` (`SdkBase::prepareOrderRequest`), así que el desglose cuadra y PayPal no rechaza la
+    orden. Si algún día se activa `enable_on_cart`, hay que revisarlo: el botón exprés del carrito
+    fija la pasarela fuera del panel de pago y se salta este camino.
+- **PayPal no se podía elegir en la compra (2026-07-30)**: su pasarela tenía guardado
+  `payment_method_types: [credit_card]`, pero el plugin `paypal_checkout` solo admite el tipo
+  `paypal_checkout`, así que `getPaymentMethodTypes()` devolvía vacío y Commerce no pintaba la
+  opción. Corregido en la config de la pasarela. **Las tres pasarelas siguen en modo test**: Redsys
+  tiene las credenciales reales del D7 (PRONENS, comercio 329583926, terminal 001), PayPal está sin
+  `client_id` ni `secret`, y la transferencia está desactivada y sin IBAN.
 
 ## Orden de trabajo
 1. **Tema `pronens`**: tokens CSS (custom properties con los colores/tipos del README), fuentes

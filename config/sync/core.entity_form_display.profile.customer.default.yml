@@ -4,6 +4,7 @@ status: true
 dependencies:
   config:
     - field.field.profile.customer.address
+    - field.field.profile.customer.field_telefono
     - field.field.profile.customer.tax_number
     - profile.type.customer
   module:
@@ -25,5 +26,7 @@ content:
     settings: {  }
     third_party_settings: {  }
 hidden:
+  field_telefono: true
   is_default: true
   tax_number: true
+

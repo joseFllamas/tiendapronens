@@ -1,0 +1,43 @@
+# Preproducción por defecto a propósito: una instalación nueva no debe poder
+# crear una expedición real y facturable por accidente. El paso a PRO es una
+# decisión explícita en /admin/commerce/config/correos-express.
+entorno: PRE
+
+# Datos del remitente que la tienda no tiene en ninguna parte. commerce_store
+# guarda nombre, dirección y correo, pero no teléfono ni CIF, y Correos Express
+# los pide en el alta.
+remitente:
+  nombre: ''
+  nif: ''
+  contacto: ''
+  telefono: ''
+  correo: ''
+
+etiqueta:
+  # 1 = térmica o adhesiva estándar, 3 = hoja A4 con 3 etiquetas. La "térmica"
+  # es un PDF del tamaño de la etiqueta: la API no devuelve ZPL.
+  tipo: 1
+  # 1 a 4, base 1 en la interfaz porque es lo que ve el operario. Con tipo 3 la
+  # API exige posición 0 y el cliente HTTP la fuerza.
+  posicion: 1
+  ocultar_remitente: false
+  texto_remitente_alternativo: ''
+  logo_base64: ''
+
+peso:
+  # Peso por unidad cuando la variación no lo tiene y su categoría tampoco.
+  por_defecto_gramos: 300
+  # Mínimo del envío completo. Correos Express rechaza kilos a cero.
+  minimo_envio_gramos: 100
+  # Estimación por término de tipo_de_producto, en gramos por unidad. La rellena
+  # el formulario de ajustes; las claves son ids de término.
+  por_categoria: {}
+
+seguimiento:
+  activo: true
+  intervalo_horas: 6
+  envios_por_ejecucion: 25
+
+# Registra el payload completo en el canal de log, con teléfono, correo y
+# dirección redactados. Solo para depurar un error de la API.
+registro_detallado: false

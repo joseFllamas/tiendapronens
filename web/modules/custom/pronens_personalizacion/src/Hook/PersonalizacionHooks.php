@@ -97,7 +97,11 @@ final class PersonalizacionHooks {
       '#title' => $modo === 'inicial'
         ? $this->t('Bordar su inicial')
         : $this->t('Bordar su nombre'),
-      '#default_value' => FALSE,
+      // En modo inicial viene marcada: la inicial es el reclamo con el que se
+      // vende el producto y no cuesta nada, así que obligar a activarla sobra;
+      // quien quiera la prenda lisa la desmarca. En modo texto sigue apagada
+      // porque marcarla cuesta 5 € y eso no se activa por nosotros.
+      '#default_value' => $modo === 'inicial',
       '#weight' => 1,
     ];
 
@@ -181,8 +185,20 @@ final class PersonalizacionHooks {
     $valores = $form_state->getValue($campo);
     $texto = trim((string) ($valores[0]['value'] ?? ''));
 
+    $producto = $form_state->get('product');
+    $inicial = $producto instanceof ProductInterface
+      && !$producto->get('field_modo_personalizacion')->isEmpty()
+      && $producto->get('field_modo_personalizacion')->value === 'inicial';
+
     $activa = (bool) $form_state->getValue('personalizacion_activa');
     if (!$activa || $texto === '') {
+      // La casilla del modo inicial viene marcada, así que aquí no se puede
+      // pasar de largo: sin letra elegida el pedido saldría con la prenda lisa
+      // sin que nadie lo haya decidido. Se pide la letra o que se desmarque.
+      if ($activa && $inicial) {
+        $form_state->setErrorByName($campo, new TranslatableMarkup('Elige la inicial que quieres bordar, o desmarca «Bordar su inicial».'));
+        return;
+      }
       // Sin casilla o sin texto no hay bordado: se vacía todo para que ni el
       // recargo ni el taller reciban restos.
       $form_state->setValue($campo, []);
@@ -190,11 +206,7 @@ final class PersonalizacionHooks {
       return;
     }
 
-    $producto = $form_state->get('product');
-    if ($producto instanceof ProductInterface
-      && !$producto->get('field_modo_personalizacion')->isEmpty()
-      && $producto->get('field_modo_personalizacion')->value === 'inicial'
-      && mb_strlen($texto) > 1) {
+    if ($inicial && mb_strlen($texto) > 1) {
       $form_state->setErrorByName($campo, new TranslatableMarkup('Este producto se personaliza con una sola inicial.'));
       return;
     }

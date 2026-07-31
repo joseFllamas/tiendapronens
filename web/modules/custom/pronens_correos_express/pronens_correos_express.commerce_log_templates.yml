@@ -1,0 +1,17 @@
+# Rastro de auditoría en la pestaña de actividad del pedido. Es el mecanismo
+# nativo de Commerce y cuesta unas líneas de YAML, así que no hace falta
+# inventarse un registro propio para saber quién dio de alta qué y cuándo.
+pronens_cex_expedicion_creada:
+  category: commerce_order
+  label: 'Expedición de Correos Express creada'
+  template: '<p>Expedición de Correos Express <strong>{{ expedicion }}</strong> creada con el producto {{ servicio }}: {{ bultos }} bulto(s), {{ kilos }} kg.{% if entorno != "PRO" %} <em>Entorno de preproducción: no es un envío real.</em>{% endif %}</p>'
+
+pronens_cex_expedicion_fallida:
+  category: commerce_order
+  label: 'Alta de expedición rechazada por Correos Express'
+  template: '<p>Correos Express rechazó el alta de la expedición: <em>{{ mensaje }}</em> (código {{ codigo }}).</p>'
+
+pronens_cex_estado_actualizado:
+  category: commerce_order
+  label: 'Estado del envío actualizado desde Correos Express'
+  template: '<p>La expedición {{ expedicion }} está ahora en <strong>{{ situacion }}</strong>: {{ descripcion }}.</p>'

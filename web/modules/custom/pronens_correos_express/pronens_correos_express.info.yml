@@ -1,0 +1,17 @@
+name: 'Pronens: Correos Express'
+type: module
+description: 'Da de alta expediciones en Correos Express desde el pedido, imprime la etiqueta y sincroniza el seguimiento.'
+package: Pronens
+core_version_requirement: ^11
+dependencies:
+  - commerce:commerce_order
+  - commerce:commerce_price
+  # Las plantillas de .commerce_log_templates.yml necesitan este módulo, que no
+  # es dependencia de commerce_order: sin declararlo, desinstalarlo dejaría el
+  # alta de expediciones sin rastro de auditoría.
+  - commerce:commerce_log
+  - commerce_shipping:commerce_shipping
+  - physical:physical
+  # El teléfono del destinatario, que Correos Express usa para el aviso por SMS.
+  - drupal:telephone
+configure: pronens_correos_express.ajustes

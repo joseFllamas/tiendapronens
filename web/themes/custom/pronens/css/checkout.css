@@ -1,0 +1,668 @@
+/**
+ * @file
+ * Checkout de una pantalla: dos columnas y resumen sticky.
+ *
+ * Sin JavaScript a propósito: el AJAX del envío reemplaza el <form> entero
+ * varias veces mientras el cliente teclea la dirección, así que el sticky es
+ * position:sticky y el plegado móvil es un <details> nativo. Los dos sobreviven
+ * al reemplazo sin reengancharse.
+ *
+ * Contraste: los CTA naranjas con texto blanco usan --pro-orange-cta (4,6:1);
+ * el --pro-orange del prototipo se queda en 2,5:1 y el botón es texto de 17px.
+ */
+
+/* --- Marco. --- */
+.pro-co {
+  max-width: 1180px;
+  margin: 0 auto;
+}
+
+.pro-co__head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px 24px;
+  margin-bottom: 28px;
+}
+
+.pro-co__title {
+  font-family: var(--pro-font-display);
+  font-weight: 700;
+  font-size: clamp(26px, 4vw, 38px);
+  line-height: 1.1;
+  margin: 0;
+  color: var(--pro-ink);
+}
+
+.pro-co__back {
+  font-family: var(--pro-font-ui);
+  font-size: 15px;
+  color: var(--pro-teal-ink);
+  text-decoration: none;
+  border-bottom: 1px solid currentColor;
+}
+
+.pro-co__back::before {
+  content: "← ";
+}
+
+.pro-co__back:hover,
+.pro-co__back:focus-visible {
+  color: var(--pro-ink);
+}
+
+/* --- Dos columnas. El resumen va primero en móvil. --- */
+.pro-co__cols {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 32px;
+}
+
+.pro-co__side {
+  order: -1;
+}
+
+@media (min-width: 900px) {
+  .pro-co__cols {
+    grid-template-columns: minmax(0, 1fr) 380px;
+    gap: 56px;
+    align-items: start;
+  }
+
+  .pro-co__side {
+    order: 0;
+    position: sticky;
+    /* El header es sticky: sin este desplazamiento el resumen se le mete
+       debajo al hacer scroll. */
+    top: calc(var(--pro-header-height) + 24px);
+  }
+}
+
+/* --- Secciones del formulario. --- */
+.pro-co__section {
+  padding: 0 0 28px;
+  border-bottom: 1px solid var(--pro-border);
+  margin-bottom: 28px;
+}
+
+.pro-co__section:last-of-type {
+  border-bottom: 0;
+}
+
+.pro-co__section-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 4px 16px;
+}
+
+.pro-co__section-title {
+  font-family: var(--pro-font-display);
+  font-weight: 700;
+  font-size: 20px;
+  line-height: 1.2;
+  margin: 0 0 4px;
+  color: var(--pro-ink-2);
+}
+
+.pro-co__subsection-title {
+  font-family: var(--pro-font-ui);
+  font-weight: 700;
+  font-size: 16px;
+  margin: 20px 0 10px;
+  color: var(--pro-ink-2);
+}
+
+.pro-co__section-note,
+.pro-co__legal {
+  font-family: var(--pro-font-ui);
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--pro-text-2);
+  margin: 0 0 16px;
+}
+
+.pro-co__login {
+  font-family: var(--pro-font-ui);
+  font-size: 15px;
+  color: var(--pro-teal-ink);
+}
+
+/* Los panes ya no son <fieldset> (wrapper_element: container en la config del
+   flow), pero Commerce sigue envolviendo los grupos de radios en uno. */
+.pro-co__form fieldset {
+  border: 0;
+  padding: 0;
+  margin: 0;
+  min-width: 0;
+}
+
+.pro-co__form legend {
+  padding: 0;
+  font-family: var(--pro-font-ui);
+  font-weight: 700;
+  font-size: 15px;
+  color: var(--pro-ink-2);
+}
+
+/* --- Campos. --- */
+.pro-co__form .form-item {
+  margin: 0 0 14px;
+}
+
+.pro-co__form label {
+  display: block;
+  font-family: var(--pro-font-ui);
+  font-size: 14px;
+  color: var(--pro-text-2);
+  margin-bottom: 5px;
+}
+
+.pro-co__form input[type="text"],
+.pro-co__form input[type="email"],
+.pro-co__form input[type="tel"],
+.pro-co__form input[type="password"],
+.pro-co__form select,
+.pro-co__form textarea {
+  width: 100%;
+  box-sizing: border-box;
+  font-family: var(--pro-font-ui);
+  font-size: 16px;
+  color: var(--pro-ink);
+  background: #fff;
+  border: 1px solid var(--pro-border-2);
+  border-radius: 10px;
+  padding: 12px 14px;
+}
+
+.pro-co__form input:focus-visible,
+.pro-co__form select:focus-visible,
+.pro-co__form textarea:focus-visible {
+  outline: 2px solid var(--pro-teal);
+  outline-offset: 1px;
+  border-color: var(--pro-teal);
+}
+
+/* La dirección viene en un <fieldset> del módulo address; en escritorio sus
+   campos se reparten en dos columnas como en la referencia. */
+@media (min-width: 620px) {
+  .pro-co__section--delivery .address-container-inline,
+  .pro-co__billing .address-container-inline {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0 14px;
+  }
+}
+
+/* --- Radios de envío y de pago, como tarjetas. --- */
+.pro-co__form .form-type-radio {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0;
+  padding: 13px 15px;
+  border: 1px solid var(--pro-border-2);
+  background: #fff;
+}
+
+.pro-co__form .form-type-radio + .form-type-radio {
+  border-top: 0;
+}
+
+.pro-co__form .form-type-radio:first-of-type {
+  border-radius: 10px 10px 0 0;
+}
+
+.pro-co__form .form-type-radio:last-of-type {
+  border-radius: 0 0 10px 10px;
+}
+
+.pro-co__form .form-type-radio:only-of-type {
+  border-radius: 10px;
+}
+
+.pro-co__form .form-type-radio label {
+  margin: 0;
+  font-size: 15px;
+  color: var(--pro-ink-2);
+  cursor: pointer;
+  flex: 1;
+}
+
+.pro-co__form .form-type-radio input {
+  accent-color: var(--pro-teal-ink);
+  width: 18px;
+  height: 18px;
+  flex: none;
+}
+
+.pro-co__form .form-type-radio:has(input:checked) {
+  border-color: var(--pro-teal);
+  background: var(--pro-teal-bg);
+}
+
+/* --- Casilla "la facturación es la misma que el envío". --- */
+.pro-co__billing .form-type-checkbox {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.pro-co__billing .form-type-checkbox label {
+  margin: 0;
+  font-size: 15px;
+  color: var(--pro-ink-2);
+  cursor: pointer;
+}
+
+/* --- CTA y aviso legal. --- */
+.pro-co__actions {
+  margin-top: 8px;
+}
+
+.pro-co__form .pro-co__submit,
+.pro-co__actions input[type="submit"] {
+  width: 100%;
+  font-family: var(--pro-font-ui);
+  font-weight: 700;
+  font-size: 17px;
+  color: #fff;
+  background: var(--pro-orange-cta);
+  border: 0;
+  border-radius: var(--pro-radius-pill);
+  padding: 16px 24px;
+  cursor: pointer;
+}
+
+.pro-co__form .pro-co__submit:hover,
+.pro-co__actions input[type="submit"]:hover {
+  background: var(--pro-ink-2);
+}
+
+.pro-co__legal {
+  margin: 14px 0 0;
+  text-align: center;
+}
+
+.pro-co__legal a {
+  color: var(--pro-teal-ink);
+}
+
+/* --- Panel del resumen: acordeón en móvil, abierto en escritorio. --- */
+.pro-co__panel {
+  background: var(--pro-cream-2);
+  border: 1px solid var(--pro-border-cream);
+  border-radius: var(--pro-radius-size);
+}
+
+.pro-co__panel-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 16px 20px;
+  font-family: var(--pro-font-display);
+  font-weight: 700;
+  font-size: 17px;
+  color: var(--pro-ink-2);
+  cursor: pointer;
+}
+
+.pro-co__panel-toggle::after {
+  content: "▾";
+  font-size: 13px;
+  color: var(--pro-text-2);
+}
+
+.pro-co__panel[open] > .pro-co__panel-toggle::after {
+  content: "▴";
+}
+
+.pro-co__panel-toggle:focus-visible {
+  outline: 2px solid var(--pro-teal);
+  outline-offset: -2px;
+}
+
+.pro-co__panel-body {
+  padding: 0 20px 20px;
+}
+
+@media (min-width: 900px) {
+  .pro-co__panel-toggle {
+    display: none;
+  }
+
+  /* El <details> viene abierto del template, así que aquí solo hay que quitar
+     el mando de plegar: en escritorio el resumen está siempre a la vista. */
+  .pro-co__panel-body {
+    padding-top: 20px;
+  }
+}
+
+.pro-co__side-title {
+  font-family: var(--pro-font-ui);
+  font-weight: 700;
+  font-size: 14px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--pro-text-2);
+  margin: 0 0 8px;
+}
+
+/* --- Cupón. --- */
+.pro-co__coupon {
+  margin-top: 20px;
+  padding-top: 18px;
+  border-top: 1px solid var(--pro-border-cream);
+}
+
+.pro-co__coupon .form--inline,
+.pro-co__coupon .container-inline {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.pro-co__coupon .form-item {
+  flex: 1 1 140px;
+  margin: 0;
+}
+
+.pro-co__coupon label {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.pro-co__coupon input[type="text"] {
+  width: 100%;
+  box-sizing: border-box;
+  font-family: var(--pro-font-ui);
+  font-size: 15px;
+  border: 1px solid var(--pro-border-2);
+  border-radius: 10px;
+  padding: 11px 13px;
+  background: #fff;
+}
+
+.pro-co__coupon input[type="submit"] {
+  font-family: var(--pro-font-ui);
+  font-weight: 700;
+  font-size: 15px;
+  color: var(--pro-ink-2);
+  background: #fff;
+  border: 1px solid var(--pro-border-2);
+  border-radius: 10px;
+  padding: 11px 18px;
+  cursor: pointer;
+}
+
+.pro-co__coupon input[type="submit"]:hover {
+  border-color: var(--pro-ink-2);
+}
+
+/* --- Líneas del resumen. --- */
+.pro-sum__items {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.pro-sum__item {
+  display: grid;
+  grid-template-columns: 64px minmax(0, 1fr) auto;
+  gap: 14px;
+  padding: 14px 0;
+  border-bottom: 1px solid var(--pro-border-cream);
+}
+
+.pro-sum__thumb {
+  position: relative;
+  width: 64px;
+  aspect-ratio: 3 / 4;
+  border-radius: 8px;
+  overflow: hidden;
+  background: var(--pro-img-bg);
+}
+
+.pro-sum__thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.pro-sum__qty {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  min-width: 20px;
+  height: 20px;
+  display: grid;
+  place-items: center;
+  border-radius: 999px;
+  background: var(--pro-ink-2);
+  color: #fff;
+  font-family: var(--pro-font-ui);
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.pro-sum__info {
+  min-width: 0;
+}
+
+.pro-sum__name {
+  font-family: var(--pro-font-ui);
+  font-weight: 700;
+  font-size: 15px;
+  line-height: 1.3;
+  margin: 0;
+  color: var(--pro-ink-2);
+}
+
+.pro-sum__name a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.pro-sum__name a:hover,
+.pro-sum__name a:focus-visible {
+  text-decoration: underline;
+}
+
+.pro-sum__opts,
+.pro-sum__emb,
+.pro-sum__qty-text {
+  font-family: var(--pro-font-ui);
+  font-size: 13px;
+  line-height: 1.4;
+  color: var(--pro-text-2);
+  margin: 3px 0 0;
+}
+
+.pro-sum__emb strong {
+  color: var(--pro-ink-2);
+}
+
+.pro-sum__price {
+  font-family: var(--pro-font-ui);
+  font-weight: 700;
+  font-size: 15px;
+  color: var(--pro-ink-2);
+  text-align: right;
+  white-space: nowrap;
+}
+
+.pro-sum__fees {
+  list-style: none;
+  margin: 4px 0 0;
+  padding: 0;
+  font-family: var(--pro-font-ui);
+  font-size: 12px;
+  line-height: 1.4;
+  color: var(--pro-text-2);
+}
+
+.pro-sum__fee-amount {
+  color: var(--pro-ink-2);
+  white-space: nowrap;
+}
+
+/* --- Barra de envío gratuito. Mismo markup validado que el flyout. --- */
+.pro-sum__ship {
+  margin-top: 16px;
+}
+
+.pro-sum__ship-msg {
+  font-family: var(--pro-font-ui);
+  font-size: 13px;
+  color: var(--pro-text-2);
+  margin: 0 0 6px;
+}
+
+.pro-sum__ship.is-done .pro-sum__ship-msg {
+  color: var(--pro-teal-ink);
+  font-weight: 700;
+}
+
+.pro-sum__bar {
+  height: 6px;
+  border-radius: 999px;
+  background: var(--pro-border-cream);
+  overflow: hidden;
+}
+
+.pro-sum__bar-fill {
+  display: block;
+  height: 100%;
+  width: var(--pro-ship-progress, 0%);
+  background: var(--pro-teal);
+  border-radius: inherit;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .pro-sum__bar-fill {
+    transition: width 320ms var(--pro-ease-panel);
+  }
+}
+
+/* --- Totales. --- */
+.pro-sum__totals {
+  margin: 16px 0 0;
+  padding-top: 14px;
+  border-top: 1px solid var(--pro-border-cream);
+}
+
+.pro-sum__row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px;
+  font-family: var(--pro-font-ui);
+  font-size: 15px;
+  color: var(--pro-ink-2);
+  margin: 0 0 8px;
+}
+
+.pro-sum__row dt,
+.pro-sum__row dd {
+  margin: 0;
+}
+
+.pro-sum__row--info {
+  font-size: 13px;
+  color: var(--pro-text-2);
+}
+
+.pro-sum__incl {
+  font-size: 12px;
+}
+
+.pro-sum__row--total {
+  padding-top: 12px;
+  border-top: 1px solid var(--pro-border-cream);
+  font-family: var(--pro-font-display);
+  font-weight: 700;
+  font-size: 20px;
+  color: var(--pro-ink);
+  margin-bottom: 0;
+}
+
+/* --- Paso de redirección al banco. --- */
+.pro-co--solo {
+  max-width: 560px;
+}
+
+.pro-co__wait {
+  text-align: center;
+  padding: 48px 0;
+}
+
+.pro-co__wait-msg {
+  font-family: var(--pro-font-ui);
+  font-size: 16px;
+  color: var(--pro-text-2);
+  margin: 8px 0 24px;
+}
+
+.pro-co__spinner {
+  display: inline-block;
+  width: 32px;
+  height: 32px;
+  border: 3px solid var(--pro-border-2);
+  border-top-color: var(--pro-teal);
+  border-radius: 50%;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .pro-co__spinner {
+    animation: pro-co-spin 900ms linear infinite;
+  }
+}
+
+@keyframes pro-co-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* --- Pantalla de gracias. --- */
+.pro-co__done {
+  text-align: center;
+  font-family: var(--pro-font-ui);
+  font-size: 16px;
+  line-height: 1.6;
+  color: var(--pro-ink-2);
+}
+
+.pro-co__done-icon {
+  width: 56px;
+  height: 56px;
+  margin: 0 auto 16px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--pro-teal-bg);
+  color: var(--pro-teal-ink);
+  font-size: 28px;
+  line-height: 1;
+}
+
+.pro-co__done-pay {
+  text-align: left;
+  margin: 24px 0;
+  padding: 18px 20px;
+  background: var(--pro-cream-2);
+  border-radius: var(--pro-radius-size);
+}
+
+.pro-co__done-note {
+  font-size: 14px;
+  color: var(--pro-text-2);
+}

@@ -38,6 +38,11 @@
 }
 
 .pro-montaje__marca b {
+  /* La misma letra que la tienda dibuja sobre la foto: si el backoffice usara
+     otra tipografía, la marca que se arrastra tendría un ancho distinto del
+     bordado que se acaba viendo. La carga la library del tema. */
+  font-family: "Graduate", sans-serif;
+  font-weight: 400;
   font-size: min(90cqw, 90cqh);
   line-height: 1;
   color: #fff;

@@ -1,0 +1,28 @@
+{#
+/**
+ * @file
+ * Pantalla de gracias.
+ *
+ * - order_entity: el pedido.
+ * - message: el mensaje configurable del pane (con el número de pedido).
+ * - payment_instructions: instrucciones de pago, si la pasarela las da (es el
+ *   caso de la transferencia bancaria, hoy desactivada).
+ *
+ * El formulario de crear cuenta ya no sale aquí: el pane completion_register
+ * está desactivado en el flow. Se mostraba al invitado aunque el registro esté
+ * en "solo administradores", porque su isVisible() no consulta esa opción.
+ */
+#}
+<div class="pro-co__done">
+  <p class="pro-co__done-icon" aria-hidden="true">✓</p>
+  <div class="pro-co__done-msg">{{ message }}</div>
+
+  {% if payment_instructions %}
+    <div class="pro-co__done-pay">
+      <h2 class="pro-co__subsection-title">{{ 'Payment instructions'|t }}</h2>
+      {{ payment_instructions }}
+    </div>
+  {% endif %}
+
+  <p class="pro-co__done-note">{{ 'We will email you the confirmation and the tracking number as soon as your order ships.'|t }}</p>
+</div>

@@ -1,0 +1,83 @@
+{#
+/**
+ * @file
+ * Resumen del pedido de la columna derecha.
+ *
+ * - lineas: foto, nombre, opciones, bordado, cantidad, importe y desglose de
+ *   los ajustes de cada línea. Las monta CheckoutHooks con el mismo trait que
+ *   el flyout, así que carrito y checkout no pueden divergir.
+ * - subtotal, ajustes, total, envio: también de CheckoutHooks.
+ * - totals y rendered_totals: los trae Commerce; no se usan tal cual porque
+ *   getSubtotalPrice() deja fuera los ajustes de línea y el pie no cuadraría
+ *   con la suma de lo que se ve arriba.
+ *
+ * Aritmética: cada línea enseña su importe CON sus recargos, el subtotal los
+ * suma y por eso los ajustes de tipo fee se quitan de la lista de totales. El
+ * total no cambia (total = subtotal + ajustes): pasar los recargos de un lado
+ * al otro de la ecuación da el mismo número.
+ */
+#}
+<div class="pro-sum">
+  <ul class="pro-sum__items">
+    {% for linea in lineas %}
+      <li class="pro-sum__item">
+        <div class="pro-sum__thumb">
+          {% if linea.foto %}{{ linea.foto }}{% endif %}
+          <span class="pro-sum__qty" aria-hidden="true">{{ linea.cantidad }}</span>
+        </div>
+        <div class="pro-sum__info">
+          <p class="pro-sum__name">
+            {% if linea.url %}<a href="{{ linea.url }}">{{ linea.nombre }}</a>{% else %}{{ linea.nombre }}{% endif %}
+          </p>
+          {% if linea.opciones %}<p class="pro-sum__opts">{{ linea.opciones }}</p>{% endif %}
+          {% if linea.bordado %}
+            <p class="pro-sum__emb">{{ 'Embroidery'|t }}: <strong>{{ linea.bordado }}</strong></p>
+          {% endif %}
+          <p class="pro-sum__qty-text">{{ 'Quantity'|t }}: {{ linea.cantidad }}</p>
+          {# Los recargos van en esta columna y no junto al importe: son textos
+             largos ("Bordado personalizado +5,00 €") y ahí ensanchaban la
+             columna del precio hasta partir el nombre del producto en tres
+             líneas. #}
+          {% if linea.tiene_ajustes %}
+            <ul class="pro-sum__fees">
+              {% for ajuste in linea.ajustes %}
+                <li>{{ ajuste.etiqueta }} <span class="pro-sum__fee-amount">+{{ ajuste.importe }}</span></li>
+              {% endfor %}
+            </ul>
+          {% endif %}
+        </div>
+        <div class="pro-sum__price">{{ linea.importe }}</div>
+      </li>
+    {% endfor %}
+  </ul>
+
+  {% if envio %}
+    <div class="pro-sum__ship{{ envio.conseguido ? ' is-done' }}">
+      <p class="pro-sum__ship-msg">{{ envio.mensaje }}</p>
+      <div class="pro-sum__bar" role="progressbar"
+           aria-valuenow="{{ envio.porcentaje }}" aria-valuemin="0" aria-valuemax="100"
+           aria-label="{{ 'Progress towards free shipping'|t }}">
+        <span class="pro-sum__bar-fill" style="--pro-ship-progress:{{ envio.porcentaje }}%"></span>
+      </div>
+    </div>
+  {% endif %}
+
+  <dl class="pro-sum__totals">
+    <div class="pro-sum__row">
+      <dt>{{ 'Subtotal'|t }}</dt>
+      <dd>{{ subtotal }}</dd>
+    </div>
+    {% for ajuste in ajustes %}
+      <div class="pro-sum__row{{ ajuste.incluido ? ' pro-sum__row--info' }}">
+        {# La etiqueta del ajuste ya trae su propio paréntesis ("IVA (21%)"), así
+           que "incluido" va sin más paréntesis. #}
+        <dt>{{ ajuste.etiqueta }}{% if ajuste.incluido %} <span class="pro-sum__incl">{{ 'included'|t }}</span>{% endif %}</dt>
+        <dd>{{ ajuste.importe }}</dd>
+      </div>
+    {% endfor %}
+    <div class="pro-sum__row pro-sum__row--total">
+      <dt>{{ 'Total'|t }}</dt>
+      <dd>{{ total }}</dd>
+    </div>
+  </dl>
+</div>

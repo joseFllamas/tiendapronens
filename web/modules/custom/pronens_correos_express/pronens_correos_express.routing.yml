@@ -1,0 +1,62 @@
+pronens_correos_express.ajustes:
+  path: '/admin/commerce/config/correos-express'
+  defaults:
+    _form: '\Drupal\pronens_correos_express\Form\AjustesForm'
+    _title: 'Correos Express'
+  requirements:
+    _permission: 'administrar correos express pronens'
+
+# Las credenciales van aparte del resto de ajustes porque no se guardan en
+# configuración sino en State: mezclarlas en el mismo ConfigFormBase invitaría a
+# exportarlas.
+pronens_correos_express.credenciales:
+  path: '/admin/commerce/config/correos-express/credenciales'
+  defaults:
+    _form: '\Drupal\pronens_correos_express\Form\CredencialesForm'
+    _title: 'Credenciales de Correos Express'
+  requirements:
+    _permission: 'administrar correos express pronens'
+
+# Las rutas de expedición cuelgan del árbol del envío para heredar su contexto y
+# sus migas de pan.
+pronens_correos_express.generar:
+  path: '/admin/commerce/orders/{commerce_order}/shipments/{commerce_shipment}/correos-express'
+  defaults:
+    _form: '\Drupal\pronens_correos_express\Form\GenerarExpedicionForm'
+    _title: 'Generar expedición de Correos Express'
+  requirements:
+    _permission: 'generar expediciones correos express'
+    _entity_access: 'commerce_shipment.update'
+  options:
+    _admin_route: TRUE
+    parameters:
+      commerce_order:
+        type: 'entity:commerce_order'
+      commerce_shipment:
+        type: 'entity:commerce_shipment'
+
+pronens_correos_express.generar_multiple:
+  path: '/admin/commerce/orders/correos-express/generar'
+  defaults:
+    _form: '\Drupal\pronens_correos_express\Form\GenerarExpedicionesMultipleForm'
+    _title: 'Generar expediciones de Correos Express'
+  requirements:
+    _permission: 'generar expediciones correos express'
+  options:
+    _admin_route: TRUE
+
+pronens_correos_express.etiqueta:
+  path: '/admin/commerce/orders/{commerce_order}/shipments/{commerce_shipment}/correos-express/etiqueta'
+  defaults:
+    _controller: '\Drupal\pronens_correos_express\Controller\EtiquetaController::descargar'
+    _title: 'Etiqueta de Correos Express'
+  requirements:
+    _permission: 'generar expediciones correos express'
+    _entity_access: 'commerce_shipment.view'
+  options:
+    _admin_route: TRUE
+    parameters:
+      commerce_order:
+        type: 'entity:commerce_order'
+      commerce_shipment:
+        type: 'entity:commerce_shipment'

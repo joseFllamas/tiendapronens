@@ -1,0 +1,35 @@
+{
+  "apiVersion": 2,
+  "name": "correosoficial/correosoficial-wc",
+  "version": "2.0.0",
+  "title": "Correos Oficial",
+  "category": "woocommerce",
+  "description": "Bloque para mostrar información referente a los métodos de envío de Correos.",
+  "supports": {
+    "html": false,
+    "align": false,
+    "multiple": false,
+    "reusable": false
+  },
+  "parent": [
+    "woocommerce/checkout-shipping-methods-block"
+  ],
+  "attributes": {
+    "lock": {
+      "type": "object",
+      "default": {
+        "remove": true,
+        "move": true
+      }
+    },
+    "text": {
+      "type": "string",
+      "source": "html",
+      "selector": ".wp-block-correosoficial-wc",
+      "default": ""
+    }
+  },
+  "textdomain": "correosoficial",
+  "editorStyle": "file:../../../build/style-correosoficial-wc-block.css",
+  "style": "file:../../../build/style-index.css"
+}

@@ -40,6 +40,9 @@
   --pro-font-display: "Archivo", system-ui, sans-serif;
   --pro-font-ui: "Nunito Sans", system-ui, sans-serif;
   --pro-font-script: "Caveat", cursive;
+  /* La letra del parche bordado: collegiate, un solo peso. Solo se carga en la
+     ficha de modo inicial (library pronens/graduate). */
+  --pro-font-letra: "Graduate", var(--pro-font-display);
 
   /* Radios. */
   --pro-radius-pill: 999px;

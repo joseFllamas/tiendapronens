@@ -1,0 +1,19 @@
+{
+  "producto": "63",
+  "estadoEnvios": [
+    {
+      "codigoEstado": 3,
+      "codEstado": "TR",
+      "descEstado": "EN TRANSITO",
+      "fechaEstado": "30072026",
+      "horaEstado": "073000"
+    },
+    {
+      "codigoEstado": 12,
+      "codEstado": "EN",
+      "descEstado": "ENTREGADO",
+      "fechaEstado": "30072026",
+      "horaEstado": "131245"
+    }
+  ]
+}

@@ -1,0 +1,361 @@
+/* SETTINGS */
+#correos_oficial #settings-container {
+    height: auto;
+    width: auto;
+    background-color: var(--co_white);
+}
+
+#correos_oficial .settings-accordion {
+    margin-top: 20px !important;
+}
+
+#correos_oficial #settings-container .col-correos {
+    background-color: var(--co_yellow);
+    border-radius: 5px 0px 0px 5px;
+    border-top: 7px solid var(--co_blue);
+    border-right: none !important;
+}
+
+#correos_oficial #settings-container .col-cex {
+    background-color: var(--co_blue);
+    border-radius: 0px 5px 5px 0px;
+    border-top: 7px solid var(--co_yellow);
+    border-left: none !important;
+}
+
+/** CustomerData **/
+#correos-oficial #customer-data, .correos-logo, .correos-express-logo {
+    margin: 8px 10px 10px 12px;
+}
+
+#correos_oficial #customer-data #connected-correos, #connected-cex{
+    font-size: 0.8em;
+    font-family: CarteroBold !important;
+    display: inline;
+    border-radius: 5px;
+    padding: 3px 10px;
+    float: right;
+    margin-top: 23px;
+    margin-right: 16px;
+}
+
+#correos_oficial #customer-data #connected-correos {
+    color: var(--co_white);
+}
+
+#correos_oficial #customer-data #connected-cex{
+    color: var(--co_blue);
+}
+
+#correos_oficial #customer-data #connected-correos {
+    background-color: var(--co_blue);
+}
+
+#correos_oficial #customer-data #connected-cex {
+    background-color: var(--co_yellow);
+}
+
+#correos-oficial #customer-data, .noconnected {
+    font-size: 0.8em;
+    font-family: CarteroBold !important;
+    color: var(--co_white);
+    background-color: var(--co_gray_dark);
+    display: inline;
+    border-radius: 5px;
+    padding: 3px 10px;
+    float: right;
+    margin-top: 23px;
+    margin-right: 16px;
+}
+
+#correos_oficial #customer-data, #CustomerDataDataTable {
+    width: 100% !important;
+    text-align: center;
+}
+
+#CustomerDataDataTable thead,
+#CustomerDataDataTable th {
+    text-align: center;
+    color: var(--co_blue);
+}
+
+.table-users {
+    margin-top: 20px !important;
+    padding: 0 !important;
+}
+
+/* Cron */
+#correos_oficial .CronButtons {
+    height: 12.2em;
+}
+
+#correos_oficial .CronInterval_TEXT {
+    margin-top: 23% !important;
+    float: left;
+    margin-left: 2%;
+}
+
+/* Zones and Carriers */
+#correos_oficial .ZonesAndCarriers .ProductsAndCarriersList {
+    padding-top: 2em;
+}
+
+#correos_oficial .zone-name {
+    height: 50px;
+    background: var(--co_platinum);
+    padding: 12px 0 12px 24px;
+    color: var(--co_gray_dark);
+    margin-bottom: 12px;
+    margin-left: -23px;
+    line-height: 28px;
+}
+
+/* Products */
+#correos_oficial .products_container_general {
+    padding: 10px !important;
+    margin-bottom: 20px;
+}
+
+#correos_oficial .products_container {
+    padding: 30px !important;
+    border: 4px solid var(--co_platinum);
+    border-radius: 3px;
+}
+
+#correos_oficial .products_container h3 {
+    border-bottom: 4px solid var(--co_platinum) !important;
+    margin-bottom: 20px !important;
+    color: var(--co_blue);
+}
+
+#correos_oficial .advice h4 {
+    background: var(--co_platinum);
+    margin-bottom: 20px !important;
+    padding: 10px;
+    border-radius: 5px;
+    color: var(--co_blue);
+    font-size: 1.2em;
+}
+
+#correos_oficial .notice-small {
+    font-size: 10px !important;
+    position: absolute;
+    color: var(--co_brandeis_blue);
+    display: flex;
+    margin: 60px 0 0 -10px !important;
+}
+
+#correos_oficial .ShowIban {
+    border: 1px solid var(--co_gray) !important;
+    color: var(--co_blue) !important;
+}
+
+#correos_oficial label[id$='-error'] {
+    margin: 41px 0 0 0px !important;
+    left: 0px;
+}
+
+#correos_oficial .hidden-block {
+    display: none !important;
+}
+
+/* CRON */
+
+.cron-button {
+    color: var(--co_blue) !important;
+    background-color: var(--co_white);
+    border: 1px solid var(--co_blue);
+    border-radius: 3px;
+    padding: 0.5em;
+    float: right;
+    margin-bottom: 10px;
+}
+
+.cron-button:hover {
+    text-decoration: none !important;
+    background-color: #e9ecef;
+}
+
+#correos_oficial .CronButtons a {
+    text-decoration: none;
+}
+
+/**
+ * Tabs de documentación aduanera
+ */
+ #correos_oficial .nav-pills {
+    border: 0;
+ }
+
+ #correos_oficial .nav-pills>li+li {
+    margin-left: 0px; 
+ }
+
+#correos_oficial .tabs_customs_doc {
+    margin: 0;
+}
+
+#correos_oficial .tabs_customs_doc li.nav-item a {
+    margin: 0;
+    background-color: #ffff;
+    color: #152E6D;
+    padding: 6px 15px;
+    border: 1px solid #152E6D;
+}
+
+#correos_oficial .tabs_customs_doc li.nav-item a.customs_desc {
+    border-radius: 5px 0 0 5px;
+}
+
+#correos_oficial .tabs_customs_doc li.nav-item a.customs_code {
+    border-radius: 0 5px 5px 0px;
+}
+
+#correos_oficial .tabs_customs_doc li.nav-item a.active{
+    background-color: #152E6D;
+    color: white !important;
+}
+
+#correos_oficial .content-tab {
+    padding: 2% 3%; 
+}
+
+#correos_oficial .add_description, #correos_oficial .del_description {
+    background-color: none;
+    border: 0;
+    color: #152E6D;
+}
+#correos_oficial .text-inputs-customs-info {
+    margin-top: 4%;
+    margin-bottom: 2%;
+    font-size:  1.2em;
+}
+
+#correos_oficial .chip-row {
+    display: flex !important;
+    width: 100% !important;
+    box-sizing: border-box;
+    vertical-align: top;
+    gap: 8px;
+    margin-bottom: 10px;
+    justify-content: space-between;
+    align-items: center;
+}
+
+#correos_oficial .chip {
+    border: 0;
+    background-color: #DBB000;
+    color: #152E6D;
+    border-radius: 6px;
+    margin-bottom: 0;
+    padding: 8px 14px;
+    min-height: 36px;
+    font-size: 14px;
+    font-weight: 600;
+    box-sizing: border-box;
+    flex: 1 1 auto;
+    min-width: 0;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis; /* truncar contenido si no cabe */
+}
+
+#correos_oficial .chip-actions button{
+    background: transparent;
+    border: none;
+    padding: 4px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+
+#correos_oficial .chip-actions svg{
+    width: 16px;
+    height: 16px;
+}
+
+#correos_oficial .chip-actions {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex: 0 0 auto;
+    margin-left: 6px;
+}
+
+#correos_oficial .chip-actions {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex: 0 0 auto;
+    margin-left: 6px;
+}
+
+#correos_oficial .container-bulto button {
+    border-radius: 5px;
+    margin-right: 2%;
+    padding: 2%;
+    margin-top: 2%;
+    cursor:  pointer;
+}
+
+#correos_oficial .container-bulto button:hover {
+    background-color: #152E6D;
+    color: #DBB000;
+}
+
+#correos_oficial #DescriptionRadio, #correos_oficial #TariffRadio {
+   display: none;
+}
+
+#correos_oficial .noconnected-status {
+    font-size: 0.8em;
+    font-family: CarteroBold !important;
+    color: var(--co_white);
+    background-color: var(--co_gray_dark);
+    display: inline;
+    border-radius: 5px;
+    padding: 3px 10px;
+}
+
+#correos_oficial .connected-status{
+    font-size: 0.8em;
+    font-family: CarteroBold !important;
+    color: var(--co_blue);
+    background-color: var(--co_yellow);
+    display: inline;
+    border-radius: 5px;
+    padding: 3px 10px;
+}
+
+#correos_oficial .add-new-contract-container {
+    display: flex;
+    justify-content: end;
+}
+
+#correos_oficial #add-new-contract {
+    background-color: var(--co_yellow);
+    color: var(--co_blue);;
+    font-weight: bold;
+    border: none;
+}
+
+.password-toggle-icon {
+    position: absolute;
+    top: 50%;
+    right: 10px;
+    transform: translateY(-50%);
+    cursor: pointer;
+    width: 20px;
+    height: 20px;
+    pointer-events: auto;
+}
+
+/* ── Marketplace: accordion buttons locked ────────────────────────────── */
+#correos_oficial .accordion-button-custom.co-accordion-locked,
+#correos_oficial .accordion-button-custom.co-accordion-locked:hover {
+    background-color: #e0e0e0 !important;
+    color: #333333 !important;
+    cursor: not-allowed !important;
+    opacity: 0.7;
+}

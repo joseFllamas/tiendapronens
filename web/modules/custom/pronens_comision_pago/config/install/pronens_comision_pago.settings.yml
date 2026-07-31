@@ -1,0 +1,8 @@
+# Porcentaje que se suma al total del pedido. Se guarda como cadena para que lo
+# calcule bcmath sin pasar por un float, igual que hace Commerce con los precios.
+# A cero el módulo no hace nada: ni ajuste ni aviso en el selector.
+porcentaje: '1.5'
+# Pasarelas que cobran comisión al comercio y por tanto la repercuten. El TPV
+# del banco (redsys) no puede llevar recargo: la PSD2 lo prohíbe para tarjeta.
+pasarelas:
+  - paypal

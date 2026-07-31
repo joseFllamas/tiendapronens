@@ -1,0 +1,175 @@
+/**
+ * This program is free software: you can redistribute it and/or modify it under the
+ * terms of the GNU General Public License as published by the Free Software Foundation,
+ * either version 3 of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
+ * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * See the GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License along with this program.
+ * If not, see https://www.gnu.org/licenses/.
+ */
+/* Overrides css del settings */
+#correos_oficial #CorreosProductsForm .form-check-input,
+#correos_oficial #CorreosZonesCarriersForm .form-check-input {
+    margin-top: .37rem !important;
+    margin-left: .7rem !important;
+}
+
+#correos_oficial #UserConfigurationDataForm .form-check-input,
+#correos_oficial #CustomProcessingForm .form-check-input {
+    margin-top: .6rem !important;
+    margin-left: .7rem !important;
+}
+
+#correos_oficial #SGAConfigurationDataForm .form-check-input,
+#correos_oficial #CustomProcessingForm .form-check-input {
+    margin-top: .6rem !important;
+    margin-left: .7rem !important;
+}
+
+#correos_oficial #CorreosSendersForm .col-sm-1,
+#correos_oficial #CorreosSendersForm .col-sm-2,
+#correos_oficial #CorreosSendersForm .col-sm-3,
+#correos_oficial #CorreosSendersForm .col-sm-4,
+#correos_oficial #CorreosSendersForm .col-sm-5,
+#correos_oficial #CorreosSendersForm .col-sm-6,
+#correos_oficial #CorreosSendersForm .col-sm-7,
+#correos_oficial #CorreosSendersForm .col-sm-8,
+#correos_oficial #CorreosSendersForm .col-sm-9,
+#correos_oficial #CorreosSendersForm .col-sm-10,
+#correos_oficial #CorreosSendersForm .col-sm-11,
+#correos_oficial #CorreosSendersForm .col-sm-12 {
+    float: left;
+    padding: 5px;
+}
+
+#correos_oficial #CustomProcessingForm .col-sm-1,
+#correos_oficial #CustomProcessingForm .col-sm-2,
+#correos_oficial #CustomProcessingForm .col-sm-3,
+#correos_oficial #CustomProcessingForm .col-sm-4,
+#correos_oficial #CustomProcessingForm .col-sm-5,
+#correos_oficial #CustomProcessingForm .col-sm-6,
+#correos_oficial #CustomProcessingForm .col-sm-7,
+#correos_oficial #CustomProcessingForm .col-sm-8,
+#correos_oficial #CustomProcessingForm .col-sm-9,
+#correos_oficial #CustomProcessingForm .col-sm-10,
+#correos_oficial #CustomProcessingForm .col-sm-11,
+#correos_oficial #CustomProcessingForm .col-sm-12 {
+    float: left;
+}
+
+#correos_oficial #CorreosSendersForm .row {
+    --bs-gutter-y: -5px;
+    --bs-gutter-x: 5px;
+}
+
+#correos_oficial #CorreosSendersForm #SendersSaveButton,
+#correos_oficial #CorreosSendersForm #SendersEditButton {
+    background-color: var(--co_cyan);
+    border: var(--co_cyan);
+}
+
+#correos_oficial #CorreosSendersForm #SendersSaveButton:hover,
+#correos_oficial #CorreosSendersForm #SendersEditButton:hover {
+    background-color: var(--co_cyan_hover);
+    border: var(--co_cyan_hover);
+}
+
+#correos_oficial #CorreosSendersForm #SendersCleanButton {
+    padding: 0px 10px !important;
+    background-color: var(--co_red_light);
+}
+
+#correos_oficial #CorreosSendersForm #SendersCleanButton:hover {
+    color: var(--co_white);
+    background-color: var(--co_red_hover);
+}
+
+#correos_oficial #SendersDataTable .btn-danger.remove {
+    background-color: var(--co_red_light);
+    border: var(--co_red_light);
+}
+
+#correos_oficial #SendersDataTable .btn-danger.remove:hover {
+    background-color: var(--co_red_hover);
+    border: var(--co_red_hover);
+}
+
+#correos_oficial #SendersDataTable .btn-primary.edit {
+    background-color: var(--co_cyan);
+    border: var(--co_cyan);
+}
+
+#correos_oficial #SendersDataTable .btn-primary.edit:hover {
+    background-color: var(--co_cyan_hover);
+    border: var(--co_cyan_hover);
+}
+
+#correos_oficial #UserConfigurationDataForm .input-group,
+#correos_oficial #CustomProcessingForm .input-group {
+    flex-wrap: nowrap;
+}
+
+#correos_oficial .input-group-text,
+#correos_oficial #UploadLogoLabelsBlock {
+    width: 100%;
+    height: 100%;
+}
+
+#correos_oficial #ShippingStatusProcess #ShipmentPreregistered,
+#correos_oficial #ShippingStatusProcess #ShipmentCanceled,
+#correos_oficial #ShippingStatusProcess #ShipmentReturned,
+#correos_oficial #ShippingStatusProcess #ShipmentDelivered,
+#correos_oficial #ShippingStatusProcess #ShipmentInProgress {
+    max-width: 100%;
+    width: 100%;
+}
+
+#correos_oficial .ZonesAndCarriers input[type=checkbox], input[type=radio] {
+    background-repeat: no-repeat;
+}
+
+#correos_oficial .ZonesAndCarriers input[type=checkbox]:checked::before {
+    content: none
+}
+
+#correos_oficial #CorreosSendersForm .card {
+    max-width: 100%;
+}
+
+#correos_oficial .form-check-input:checked {
+    background-color: var(--co_brandeis_blue);
+    border-color: var(--co_brandeis_blue);
+}
+
+#correos_oficial .form-switch .form-check-input:checked {
+    background-color: var(--co_brandeis_blue);
+}
+
+#correos_oficial .CronIntervalBlock {
+    display: flex;
+    flex-wrap: wrap;
+}
+#correos_oficial .CronIntervalBlock .StatusUpdateTime {
+    width: 50%;
+    height: 25%;
+}
+
+#correos_oficial .CronIntervalBlock .CronIntervalText {
+    height: 70%;
+}
+#correos_oficial #CronInterval  {
+    width: 90%;
+}
+
+#correos_oficial .clean-upload {
+    width: 50px; /* Ajusta el ancho según sea necesario */
+    height: fit-content;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: 2rem;
+}
+

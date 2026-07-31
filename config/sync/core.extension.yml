@@ -71,6 +71,8 @@ module:
   phpass: 0
   physical: 0
   profile: 0
+  pronens_comision_pago: 0
+  pronens_correos_express: 0
   pronens_migrate: 0
   pronens_personalizacion: 0
   recipe_tracker: 0
@@ -80,6 +82,7 @@ module:
   state_machine: 0
   system: 0
   taxonomy: 0
+  telephone: 0
   text: 0
   token: 0
   update: 0

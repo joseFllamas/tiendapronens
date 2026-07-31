@@ -1,0 +1,22 @@
+uuid: 9d300e4c-a4b4-4875-b58f-e2ded3d1b652
+langcode: es
+status: true
+dependencies:
+  config:
+    - field.storage.profile.field_telefono
+    - profile.type.customer
+  module:
+    - telephone
+id: profile.customer.field_telefono
+field_name: field_telefono
+entity_type: profile
+bundle: customer
+label: 'Teléfono de contacto'
+description: 'Lo usa el transportista para avisarte por SMS y para llamarte si no encuentra el domicilio.'
+required: true
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: telephone
+

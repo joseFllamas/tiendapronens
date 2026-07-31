@@ -1,0 +1,7 @@
+pronens_comision_pago.settings:
+  path: '/admin/commerce/config/comision-pago'
+  defaults:
+    _form: '\Drupal\pronens_comision_pago\Form\SettingsForm'
+    _title: 'Comisión por medio de pago'
+  requirements:
+    _permission: 'administrar comision de pago pronens'

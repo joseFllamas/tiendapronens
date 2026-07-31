@@ -1,0 +1,21 @@
+{#
+/**
+ * @file
+ * Sección "Contacto": el correo y el enlace para entrar con cuenta.
+ *
+ * - elements: email (y email_confirm si volviera a activarse double_entry).
+ * - login_url: lo pone CheckoutHooks, con destination de vuelta al checkout.
+ *
+ * El enlace de registro no se ofrece a propósito: user.settings register está
+ * en admin_only, así que aquí solo cabe iniciar sesión o comprar como invitado.
+ */
+#}
+<section class="pro-co__section pro-co__section--contact">
+  <div class="pro-co__section-head">
+    <h2 class="pro-co__section-title">{{ 'Contact'|t }}</h2>
+    {% if login_url %}
+      <a class="pro-co__login" href="{{ login_url }}">{{ 'Log in'|t }}</a>
+    {% endif %}
+  </div>
+  {{ elements }}
+</section>

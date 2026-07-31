@@ -1,0 +1,39 @@
+@font-face {
+    font-family: 'Cartero';
+    src: url('Cartero-Bold.eot');
+    src: url('Cartero-Bold.eot?#iefix') format('embedded-opentype'),
+        url('Cartero-Bold.woff2') format('woff2'),
+        url('Cartero-Bold.woff') format('woff'),
+        url('Cartero-Bold.ttf') format('truetype'),
+        url('Cartero-Bold.svg#Cartero-Bold') format('svg');
+    font-weight: bold;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'CarteroLight';
+    src: url('Cartero-Light.eot');
+    src: url('Cartero-Light.eot?#iefix') format('embedded-opentype'),
+        url('Cartero-Light.woff2') format('woff2'),
+        url('Cartero-Light.woff') format('woff'),
+        url('Cartero-Light.ttf') format('truetype'),
+        url('Cartero-Light.svg#Cartero-Light') format('svg');
+    font-weight: 300;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'CarteroBold';
+    src: url('Cartero-Regular.eot');
+    src: url('Cartero-Regular.eot?#iefix') format('embedded-opentype'),
+        url('Cartero-Regular.woff2') format('woff2'),
+        url('Cartero-Regular.woff') format('woff'),
+        url('Cartero-Regular.ttf') format('truetype'),
+        url('Cartero-Regular.svg#Cartero-Regular') format('svg');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+

@@ -1,0 +1,16 @@
+{#
+/**
+ * @file
+ * Sección genérica del checkout. Fallback de los panes sin plantilla propia.
+ *
+ * - elements: los elementos del formulario del pane.
+ * - pane_id: lo pone CheckoutHooks.
+ *
+ * El título no se imprime aquí: los panes llevan wrapper_element "container"
+ * (ver la config del flow), así que el <fieldset> con leyenda ya no existe y
+ * cada plantilla concreta pone su propio h2 traducible por interfaz.
+ */
+#}
+<section class="pro-co__section pro-co__section--{{ pane_id|clean_class }}">
+  {{ elements }}
+</section>

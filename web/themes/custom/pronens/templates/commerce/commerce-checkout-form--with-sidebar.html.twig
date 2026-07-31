@@ -1,0 +1,77 @@
+{#
+/**
+ * @file
+ * Checkout de una pantalla: formulario a la izquierda, resumen sticky a la
+ * derecha.
+ *
+ * Se usa en los pasos order_information y complete (los que tienen sidebar).
+ *
+ * - form: el formulario de checkout.
+ * - paso, titulo, cart_url: los pone CheckoutHooks.
+ *
+ * El resumen sale del pane order_summary, dentro del propio formulario, porque
+ * el tema no tiene región de barra lateral. Ojo: los panes del sidebar NO
+ * reciben #theme commerce_checkout_pane ni conservan su #title (compárese
+ * CheckoutFlowWithPanesBase::buildForm() línea 556 con la 581), así que los
+ * encabezados de esta columna se ponen aquí a mano.
+ *
+ * El plegado es un <details> nativo, sin JavaScript: el AJAX del envío
+ * reemplaza el formulario entero varias veces mientras se teclea la dirección,
+ * y un <details> sobrevive a eso. En escritorio el CSS lo fuerza abierto.
+ */
+#}
+<div class="pro-co pro-co--{{ paso|clean_class }}">
+  <div class="pro-co__head">
+    <h1 class="pro-co__title">{{ titulo }}</h1>
+    {% if paso == 'order_information' %}
+      <a class="pro-co__back" href="{{ cart_url }}">{{ 'Back to basket'|t }}</a>
+    {% endif %}
+  </div>
+
+  <div class="pro-co__cols">
+    <div class="pro-co__main">
+      {{ form|without('sidebar', 'actions') }}
+
+      {% if form.actions %}
+        <div class="pro-co__actions">
+          {{ form.actions }}
+          {# Al no haber paso de revisión, este aviso es la confirmación
+             informada que exige la venta a distancia. Los enlaces salen del
+             menú del pie (ver CheckoutHooks::enlacesLegales). #}
+          {% if legal %}
+            <p class="pro-co__legal">
+              {{ 'By clicking Pay now you accept our terms:'|t }}
+              {% for enlace in legal %}
+                <a href="{{ enlace.url }}">{{ enlace.titulo }}</a>{{ not loop.last ? ',' }}
+              {% endfor %}
+            </p>
+          {% endif %}
+        </div>
+      {% endif %}
+    </div>
+
+    <aside class="pro-co__side" aria-label="{{ 'Order summary'|t }}">
+      {# Se renderiza ABIERTO a propósito, y en escritorio el CSS esconde el
+         <summary> para que no se pueda plegar. Lo contrario (cerrado y forzado
+         a abrirse por CSS en escritorio) no funciona: Chrome oculta el
+         contenido de un <details> cerrado con el pseudoelemento
+         ::details-content, así que ni display ni content-visibility en el hijo
+         lo revierten, y la columna derecha se quedaba en blanco. #}
+      <details class="pro-co__panel" open>
+        <summary class="pro-co__panel-toggle">{{ 'Order summary'|t }}</summary>
+        <div class="pro-co__panel-body">
+          {{ form.sidebar.order_summary }}
+          {% if form.sidebar.coupon_redemption %}
+            <div class="pro-co__coupon">
+              <h2 class="pro-co__side-title">{{ 'Discount code'|t }}</h2>
+              {{ form.sidebar.coupon_redemption }}
+            </div>
+          {% endif %}
+          {# Red de seguridad: si algún día se activa otro pane de sidebar, que
+             no desaparezca en silencio. #}
+          {{ form.sidebar|without('order_summary', 'coupon_redemption') }}
+        </div>
+      </details>
+    </aside>
+  </div>
+</div>

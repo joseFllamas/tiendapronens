@@ -400,32 +400,15 @@ display:
           target_entity_type_id: commerce_order
       filters: {  }
       style:
-        type: table
+        type: default
         options:
           grouping: {  }
-          row_class: ''
+          row_class: pro-cart-page__row
           default_row_class: true
-          columns:
-            order_number: order_number
-          default: '-1'
-          info:
-            order_number:
-              sortable: false
-              default_sort_order: asc
-              align: ''
-              separator: ''
-              empty_column: false
-              responsive: ''
-          override: true
-          sticky: false
-          summary: ''
-          empty_table: false
-          caption: ''
-          description: ''
       row:
         type: fields
         options:
-          default_field_elements: true
+          default_field_elements: false
           inline: {  }
           separator: ''
           hide_empty: false

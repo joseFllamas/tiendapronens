@@ -1,0 +1,64 @@
+/* Estilos checkout */
+/* NO SE SABE SI AFECTA REALMENTE A ALGUN ESTILO VISUAL QUE NO SEA CHECKOUT */
+/*
+.correos_oficial .extra-container {
+    font-family: CarteroLight;
+    color: var(--co_blue);
+    margin-bottom: 25px;
+    display: grid;
+    justify-items: stretch;
+}
+
+.correos_oficial .extra-container .customs-advice-doc {
+    font-size: 12px;
+}
+
+.correos_oficial .extra-container .co_primary_button {
+    color: var(--co_white) !important;
+    background-color: var(--co_blue) !important;
+    border: 1px solid var(--co_blue) !important;
+    border-radius: 3px !important;
+    padding: 0.5em !important;
+}
+
+.correos_oficial .extra-container .co_primary_button:hover {
+    background: linear-gradient(to bottom, var(--co_blue_hover) 5%, var(--co_blue_hover) 100%) !important;
+    background-color: var(--co_blue) !important;
+}
+
+.correos_oficial .extra-container .office-schedule-and-map {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-gap: 10px;
+    grid-auto-rows: minmax(100px, auto);
+}
+
+.correos_oficial .extra-container .city-paq-schedule-and-map {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-gap: 10px;
+    grid-auto-rows: minmax(100px, auto);
+}
+
+.correos_oficial .extra-container .map-section {
+    grid-column-start: 1;
+    grid-column-end: 3;
+    grid-row-start: 2;
+    grid-row-end: 3;
+}
+
+.correos_oficial .extra-container .city-paq-schedule-and-map, .correos_oficial .extra-container .office-schedule-and-map {
+    text-align: center;
+}
+
+.correos_oficial .extra-container input[type=text] {
+    width: 100%;
+}
+
+.correos_oficial .woocommerce-page table.shop_table_responsive tbody td a.button, .woocommerce-page table.shop_table_responsive tbody td button {
+    margin-bottom: 0 !important;
+}
+
+.correos_oficial .frontOptionSelector {
+    max-width: 20em;
+}*/

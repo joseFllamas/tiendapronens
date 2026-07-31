@@ -1,0 +1,38 @@
+/* 
+* CSS ORDER DETAIL
+* DESARROLLADO POR FMR A824727
+*/
+
+@import url('../fonts/font.css');
+
+.card-header {
+  background-color: #fff;
+}
+
+.detail-order-container {
+  /* font-family: Cartero; */
+  margin-bottom: 20px !important;
+  background-color: #ffffff;
+}
+
+.detail-order-container h2, 
+.detail-order-container h3 {
+  /* font-family: CarteroBold !important; */
+  color: #002E6D !important;
+}
+
+.detail-order-container .small {
+  /* font-family: Cartero; */
+}
+
+.card-header-blue {
+  background-color: #002E6D !important;
+}
+
+.card-header-blue, .card-header-blue h3 {
+  color: #ffffff !important;
+}
+
+.do-click {
+  margin: 3em;
+}

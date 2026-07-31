@@ -1,0 +1,319 @@
+/* Utilities Styles */
+
+#correos_oficial #utilities-container {
+    border: 1px solid var(--co_gray);
+    border-top-left-radius: 0.25rem;
+    border-top-right-radius: 0.25rem;
+    margin-top: 1.5%;
+}
+
+#correos_oficial #myTab {
+    padding: 10px;
+}
+
+.bootstrap .fade {
+    opacity: 100% !important;
+}
+
+#correos_oficial .tab-content > .tab-pane {
+    border: 1px solid var(--co_gray);
+    margin: 0 10px 0 10px;
+    padding: 20px 20px 20px 20px;
+}
+
+#correos_oficial .tab-content {
+    margin-top: -9px;
+    margin-bottom: 30px;
+}
+
+#correos_oficial .search-container {
+    margin-top: 20px;
+}
+
+#correos_oficial #GestionDataTable thead,
+#correos_oficial #EtiquetasDataTable thead,
+#correos_oficial #ResumenDataTable thead,
+#correos_oficial #PickupDataTable thead,
+#correos_oficial #DocAduaneraDataTable thead {
+    font-size: 12px !important;
+    color: var(--co_blue) !important;
+}
+
+#correos_oficial .select-info {
+    margin-left: 20px;
+}
+
+#correos_oficial .showButtonsContainer,
+#correos_oficial .showButtonsContainer2,
+#correos_oficial .showButtonsContainer3, 
+#correos_oficial .showButtonsContainer4, 
+#correos_oficial .showButtonsContainer5 { 
+    margin: 10px 10px 10px 0px;
+}
+
+#correos_oficial .showButtonsContainer a,
+#correos_oficial .showButtonsContainer2 a,
+#correos_oficial .showButtonsContainer3 a,
+#correos_oficial .showButtonsContainer4 a,
+#correos_oficial .showButtonsContainer5 a {
+    text-decoration: none !important;
+    cursor: pointer;
+}
+
+.hidden-block {
+    display: none !important;
+}
+
+.dataTables_wrapper {
+    margin-top: 10px;
+}
+
+#correos_oficial .tdfield {
+    width: 160px;
+    height: 15px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+#correos_oficial .dt-body-address {
+    font-size: 9px !important;
+}
+
+.bootstrap .pagination > .active > a,
+.bootstrap .pagination > .active > a:focus,
+.bootstrap .pagination > .active > a:hover,
+.bootstrap .pagination > .active > span,
+.bootstrap .pagination > .active > span:focus,
+.bootstrap .pagination > .active > span:hover {
+    background-color: var(--co_blue) !important;
+    border-color: var(--co_blue) !important;
+}
+
+#correos_oficial .nav-tabs .nav-item.show .nav-link,
+#correos_oficial .nav-tabs .nav-link.active {
+    color: var(--co_blue) !important;
+}
+#correos_oficial .nav-tabs .nav-link:hover {
+    color: var(--co_blue) !important;
+}
+
+#correos_oficial .card-header-red {
+    background-color: var(--co_red) !important;
+    color: var(--co_white) !important;
+}
+
+#correos_oficial .buscador-pedidos-h2 {
+    color: var(--co_blue) !important;
+    padding: 10px !important;
+    font-size: 30px !important;
+    text-align: center !important;
+}
+
+.bootstrap .nav > li > button {
+    color: var(--co_gray_dark);
+}
+.bootstrap .nav > li > button:hover {
+    color: var(--co_red);
+}
+
+#correos_oficial .nav-link .active {
+    color: var(--co_yellow) !important;
+}
+
+#correos_oficial .mycheckbox {
+    margin-top: 4px !important;
+}
+
+#correos_oficial .btn-secondary {
+    background-color: var(--co_blue) !important;
+    border-color: var(--co_blue) !important;
+}
+
+#correos_oficial .btn-secondary:hover {
+    color: var(--co_yellow) !important;
+}
+
+#correos_oficial .dataTables_length {
+    margin-top: 10px;
+    color: var(--co_blue) !important;
+}
+
+#correos_oficial .dataTables_info {
+    color: var(--co_blue);
+}
+
+#correos_oficial .card-table-utilities {
+    margin-top: 20px;
+}
+
+#correos_oficial .bottom-utilities-form-row {
+    margin-top: 34px !important;
+}
+
+.bootstrap .table tbody > tr > td {
+    color: var(--co_blue_hover) !important;
+}
+
+#correos_oficial .dataTables_wrapper .dataTables_length select {
+    appearance: auto !important;
+}
+
+#correos_oficial .dataTables_info {
+    margin-left: 20px;
+}
+
+#correos_oficial .page-item .page-link {
+    box-shadow: none;
+}
+
+#correos_oficial .page-item.active .page-link {
+    box-shadow: none;
+}
+
+#correos_oficial #GestionDataTable input[type="number"]{
+    height: 38px;
+    text-align: right;
+}
+
+#correos_oficial #GestionDataTable input[type="text"]{
+    height: 38px;
+    text-align: right;
+}
+
+/* Ocultación de columna 0 (checkbox) de todas las datatables 
+   Producto Seleccionado y Remitente de Gestión masiva 
+   Tamaño y Etiqueta Recogida de Recogidas */
+   #correos_oficial .dataTable tfoot th:nth-child(1) input,
+   #correos_oficial #gestion tfoot th:nth-child(12) input,
+   #correos_oficial #gestion tfoot th:nth-child(13) input,
+   #correos_oficial #collected  tfoot th:nth-child(10) input,
+   #correos_oficial #collected  tfoot th:nth-child(11) input
+   {
+       display: none
+   }
+   
+   .correos_oficial_datatable_footer {
+       visibility: hidden; 
+       height: 0
+   }
+   
+.register-options-advice {
+    color: #002e6d;
+    font-size: 9px !important;
+    width: 100%;
+    padding-top: 4px;
+}
+
+.register-options-advice-red {
+    color: red;
+}
+
+.co_hidden_atcode {
+    display: none;
+}
+
+.toggle-vis, /* gestión masiva */
+.show-cols,
+.toggle-vis2, /* impresión de etiquetas */
+.show-cols2,
+.toggle-vis3,  /* resumen */
+.show-cols3,
+.toggle-vis4,  /* recogidas */
+.show-cols4,
+.toggle-vis5, /* aduanera */
+.show-cols5 {  
+    background: var(--co_blue);
+    padding: 5px 10px;
+    border-radius: 3px;
+    color: var(--co_white) !important;
+    font-size: 11px;
+    font-family: 'CarteroBold';
+}
+
+.toggle-vis:hover,  /* gestión masiva */
+.show-cols:hover,
+.toggle-vis2:hover, /* impresión de etiquetas */
+.show-cols2:hover,
+.toggle-vis3:hover, /* resumen */
+.show-cols3:hover,
+.toggle-vis4:hover, /* recogidas */
+.show-cols4:hover,
+.toggle-vis5:hover, /* aduanera */
+.show-cols5:hover {
+    color: var(--co_yellow) !important;
+    cursor: pointer !important;
+    text-decoration: none !important;
+}
+
+.option-selected {
+    background: var(--co_greyish_blue);
+    color: var(--co_blue) !important;
+}
+
+.option-selected:hover {
+    color: var(--co_blue) !important;
+}
+
+.buttons-html5 {
+    font-weight: normal !important;
+}
+
+.buttons-print {
+    visibility: hidden !important;
+}
+
+div.dataTables_wrapper div.dataTables_info {
+    padding-top: 18px !important;
+}
+
+input[type='button']:disabled {
+    border: 1px solid #c7d6db !important;
+    color: #acb3b6 !important;
+    cursor: not-allowed;
+    background-color: #eaebec !important;
+}
+
+input[type='button']:disabled:hover {
+    border: 1px solid #c7d6db !important;
+    color: #acb3b6 !important;
+    cursor: not-allowed;
+    background-color: #eaebec !important;
+}
+
+.alert-utilities{
+    font-size: 12px !important;
+}
+
+#correos_oficial .dataTables_info .select-info .select-item {
+    display: block;
+}
+
+/* TOOLTIPS */
+.tooltip-inner {
+    background-color: var(--co_brandeis_blue) !important;
+    box-shadow: 0px 0px 4px black;
+    opacity: 1 !important;
+    max-width: 100%;
+    font-size: 12px;
+}
+
+.tooltip.bs-tooltip-top .tooltip-arrow::before {
+    border-top-color: var(--co_brandeis_blue);
+}
+
+.tooltip.bs-tooltip-bottom .tooltip-arrow::before {
+    border-bottom-color: var(--co_brandeis_blue);
+}
+
+.tooltip.bs-tooltip-start .tooltip-arrow::before {
+    border-left-color: var(--co_brandeis_blue);
+}
+
+.tooltip.bs-tooltip-end {
+    margin-left: 6px !important;
+}
+
+.tooltip.bs-tooltip-end .tooltip-arrow::before {
+    border-right-color: var(--co_brandeis_blue);
+}

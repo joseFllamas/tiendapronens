@@ -5,6 +5,7 @@ dependencies:
   config:
     - core.entity_view_mode.profile.admin
     - field.field.profile.customer.address
+    - field.field.profile.customer.field_telefono
     - field.field.profile.customer.tax_number
     - profile.type.customer
   module:
@@ -27,6 +28,13 @@ content:
     third_party_settings: {  }
     weight: 0
     region: content
+  field_telefono:
+    type: basic_string
+    label: inline
+    settings: {  }
+    third_party_settings: {  }
+    weight: 10
+    region: content
   tax_number:
     type: commerce_tax_number_default
     label: above
@@ -35,4 +43,6 @@ content:
     third_party_settings: {  }
     weight: 1
     region: content
-hidden: {  }
+hidden:
+  search_api_excerpt: true
+

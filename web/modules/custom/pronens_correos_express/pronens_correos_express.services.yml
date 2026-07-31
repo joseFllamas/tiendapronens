@@ -1,0 +1,109 @@
+services:
+  logger.channel.pronens_correos_express:
+    parent: logger.channel_base
+    arguments: ['pronens_correos_express']
+
+  # Capa de API.
+  Drupal\pronens_correos_express\Api\RepositorioCredenciales:
+    class: Drupal\pronens_correos_express\Api\RepositorioCredenciales
+    arguments: ['@state']
+
+  Drupal\pronens_correos_express\Api\CorreosExpressClient:
+    class: Drupal\pronens_correos_express\Api\CorreosExpressClient
+    arguments:
+      - '@http_client'
+      - '@config.factory'
+      - '@Drupal\pronens_correos_express\Api\RepositorioCredenciales'
+      - '@logger.channel.pronens_correos_express'
+
+  # Alias por la interfaz: es lo que inyectan los consumidores y lo que se
+  # sustituye por un doble en los tests de kernel, para no llamar a la API real.
+  Drupal\pronens_correos_express\Api\CorreosExpressClientInterface: '@Drupal\pronens_correos_express\Api\CorreosExpressClient'
+
+  # Lógica pura: sin dependencias del contenedor, probada con PHPUnit sin base
+  # de datos. Está aquí solo para poder inyectarla.
+  Drupal\pronens_correos_express\Payload\Normalizador:
+    class: Drupal\pronens_correos_express\Payload\Normalizador
+
+  Drupal\pronens_correos_express\Payload\ConstructorPayloadEnvio:
+    class: Drupal\pronens_correos_express\Payload\ConstructorPayloadEnvio
+    arguments: ['@Drupal\pronens_correos_express\Payload\Normalizador']
+
+  Drupal\pronens_correos_express\Catalogo\MapaEstados:
+    class: Drupal\pronens_correos_express\Catalogo\MapaEstados
+
+  # Pesos. TablaPesos y EstimadorPeso no se declaran como servicios: dependen de
+  # la configuración en el momento de usarlos, así que las construye
+  # ResolutorPesos, que es el único que cruza la frontera con las entidades.
+  Drupal\pronens_correos_express\Peso\ResolutorPesos:
+    class: Drupal\pronens_correos_express\Peso\ResolutorPesos
+    arguments: ['@config.factory']
+
+  Drupal\pronens_correos_express\Peso\RellenadorPesos:
+    class: Drupal\pronens_correos_express\Peso\RellenadorPesos
+    arguments:
+      - '@entity_type.manager'
+      - '@Drupal\pronens_correos_express\Peso\ResolutorPesos'
+      - '@logger.channel.pronens_correos_express'
+
+  Drupal\pronens_correos_express\Packer\PackerConPesoEstimado:
+    class: Drupal\pronens_correos_express\Packer\PackerConPesoEstimado
+    arguments:
+      - '@entity_type.manager'
+      - '@string_translation'
+      - '@Drupal\pronens_correos_express\Peso\ResolutorPesos'
+    tags:
+      # PackerManager::pack() se queda con el primer empaquetador que aplica y
+      # devuelve algo, y los recorre por prioridad descendente. El de Commerce
+      # está en -100 y el de administración en -200, así que con -50 este gana
+      # sin dejar al de administración sin su caso: al heredar de DefaultPacker,
+      # devuelve un array vacío cuando el pedido no tiene líneas enviables y el
+      # bucle sigue.
+      - { name: commerce_shipping.packer, priority: -50 }
+
+  # Expediciones: la frontera con Commerce y el orquestador.
+  Drupal\pronens_correos_express\MapeadorEnvio:
+    class: Drupal\pronens_correos_express\MapeadorEnvio
+    arguments:
+      - '@config.factory'
+      - '@Drupal\pronens_correos_express\Api\RepositorioCredenciales'
+      - '@Drupal\pronens_correos_express\Peso\ResolutorPesos'
+      - '@datetime.time'
+      - '@extension.list.module'
+
+  Drupal\pronens_correos_express\GestorExpediciones:
+    class: Drupal\pronens_correos_express\GestorExpediciones
+    arguments:
+      - '@Drupal\pronens_correos_express\Api\CorreosExpressClientInterface'
+      - '@Drupal\pronens_correos_express\MapeadorEnvio'
+      - '@Drupal\pronens_correos_express\Payload\ConstructorPayloadEnvio'
+      - '@Drupal\pronens_correos_express\Catalogo\MapaEstados'
+      - '@config.factory'
+      - '@entity_type.manager'
+      # El bloqueo evita que dos pestañas o un lote reintentado creen dos
+      # expediciones para el mismo envío, que serían dos envíos facturados.
+      - '@lock'
+      - '@datetime.time'
+      - '@logger.channel.pronens_correos_express'
+
+  Drupal\pronens_correos_express\SincronizadorSeguimiento:
+    class: Drupal\pronens_correos_express\SincronizadorSeguimiento
+    arguments:
+      - '@entity_type.manager'
+      - '@queue'
+      - '@state'
+      - '@config.factory'
+      - '@datetime.time'
+      - '@logger.channel.pronens_correos_express'
+
+  Drupal\pronens_correos_express\Hook\CorreosExpressHooks:
+    class: Drupal\pronens_correos_express\Hook\CorreosExpressHooks
+    arguments:
+      - '@Drupal\pronens_correos_express\GestorExpediciones'
+      - '@Drupal\pronens_correos_express\SincronizadorSeguimiento'
+      - '@Drupal\pronens_correos_express\Api\RepositorioCredenciales'
+      - '@Drupal\pronens_correos_express\Peso\RellenadorPesos'
+      - '@current_user'
+      - '@config.factory'
+    calls:
+      - [setStringTranslation, ['@string_translation']]

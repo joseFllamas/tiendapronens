@@ -1,0 +1,37 @@
+{#
+/**
+ * @file
+ * Página de la cesta.
+ *
+ * - cesta.envio: barra de progreso hacia el envío gratuito, de CarritoHooks.
+ * - rows: el formulario de la view con las líneas, los totales y las acciones.
+ *   Va todo dentro de un <form>, así que las dos columnas se hacen con CSS grid
+ *   sobre él (ver css/cesta.css) y no partiendo el render array: mover los
+ *   elementos del formulario rompería los #parents de los campos de cantidad.
+ *
+ * El h1 lo pone el bloque de título de la página, que aquí sí se deja.
+ */
+#}
+<div{{ attributes.addClass('pro-cart-page') }}>
+  {% if cesta.envio %}
+    <div class="pro-cart-page__ship{{ cesta.envio.conseguido ? ' is-done' }}">
+      <p class="pro-cart-page__ship-msg">{{ cesta.envio.mensaje }}</p>
+      <div class="pro-cart-page__bar" role="progressbar"
+           aria-valuenow="{{ cesta.envio.porcentaje }}" aria-valuemin="0" aria-valuemax="100"
+           aria-label="{{ 'Progress towards free shipping'|t }}">
+        <span class="pro-cart-page__bar-fill" style="--pro-ship-progress:{{ cesta.envio.porcentaje }}%"></span>
+      </div>
+    </div>
+  {% endif %}
+
+  {{ title_prefix }}
+  {{ title_suffix }}
+
+  {% if rows %}
+    <div class="pro-cart-page__content">{{ rows }}</div>
+  {% elseif empty %}
+    <div class="pro-cart-page__empty">{{ empty }}</div>
+  {% endif %}
+
+  {{ footer }}
+</div>

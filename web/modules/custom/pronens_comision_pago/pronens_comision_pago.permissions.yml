@@ -1,0 +1,4 @@
+'administrar comision de pago pronens':
+  title: 'Administrar la comisión por medio de pago'
+  description: 'Permite cambiar el porcentaje de comisión y a qué pasarelas se aplica.'
+  restrict access: true

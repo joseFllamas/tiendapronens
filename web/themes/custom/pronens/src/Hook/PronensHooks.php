@@ -2,7 +2,6 @@
 
 namespace Drupal\pronens\Hook;
 
-use CommerceGuys\Intl\Formatter\CurrencyFormatterInterface;
 use Drupal\commerce_product\Entity\ProductInterface;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Entity\EntityRepositoryInterface;
@@ -16,6 +15,7 @@ use Drupal\file\FileInterface;
 use Drupal\media\MediaInterface;
 use Drupal\paragraphs\ParagraphInterface;
 use Drupal\pronens\CamposTrait;
+use Drupal\pronens\PrecioTrait;
 use Drupal\taxonomy\TermInterface;
 
 /**
@@ -24,6 +24,7 @@ use Drupal\taxonomy\TermInterface;
 class PronensHooks {
 
   use CamposTrait;
+  use PrecioTrait;
   /**
    * @file
    * Functions to support theming.
@@ -32,7 +33,6 @@ class PronensHooks {
   public function __construct(
     protected EntityTypeManagerInterface $entityTypeManager,
     protected LanguageManagerInterface $languageManager,
-    protected CurrencyFormatterInterface $currencyFormatter,
     protected RouteMatchInterface $routeMatch,
     protected FichaHooks $fichaHooks,
     protected EntityRepositoryInterface $entityRepository,
@@ -61,9 +61,14 @@ class PronensHooks {
     // La categoría se reconoce por view_id y no por el nombre de la ruta:
     // Views no crea una ruta nueva cuando su path choca con una existente,
     // sobreescribe entity.taxonomy_term.canonical y le añade view_id.
+    // En el checkout, por lo mismo: el título de la ruta es "Tramitar pedido"
+    // en los tres pasos, y el cliente necesita distinguir si está rellenando
+    // datos, esperando al banco o ya ha comprado. Lo pinta
+    // commerce-checkout-form--with-sidebar.html.twig según el paso.
     $es_catalogo = $this->routeMatch->getParameter('view_id') === 'catalogo';
     $es_ficha = $this->routeMatch->getRouteName() === 'entity.commerce_product.canonical';
-    if ($es_catalogo || $es_ficha) {
+    $es_checkout = str_starts_with((string) $this->routeMatch->getRouteName(), 'commerce_checkout.');
+    if ($es_catalogo || $es_ficha || $es_checkout) {
       foreach (array_keys($variables['page']['content'] ?? []) as $key) {
         $bloque = $variables['page']['content'][$key];
         if (is_array($bloque) && ($bloque['#base_plugin_id'] ?? '') === 'page_title_block') {
@@ -103,6 +108,16 @@ class PronensHooks {
   #[Hook('preprocess_breadcrumb')]
   public function preprocessBreadcrumb(array &$variables): void {
     $ruta = $this->routeMatch->getRouteName();
+
+    // En el checkout no hay migas: la referencia lleva un "volver a la cesta",
+    // que es lo que pinta la plantilla del checkout. Y encima salían
+    // duplicadas ("Inicio / Tramitar pedido / Tramitar pedido"), porque
+    // PathBasedBreadcrumbBuilder genera un tramo por /checkout/N y otro por
+    // /checkout, y las dos rutas se titulan "Checkout".
+    if (str_starts_with((string) $ruta, 'commerce_checkout.')) {
+      $variables['breadcrumb'] = [];
+      return;
+    }
 
     // Categoría: core ya trae los ancestros, falta el término abierto.
     if ($this->routeMatch->getParameter('view_id') === 'catalogo') {
@@ -398,7 +413,7 @@ class PronensHooks {
     }
     $variation = $product->getDefaultVariation();
     if ($variation !== NULL && ($price = $variation->getPrice()) !== NULL) {
-      $card['price'] = $this->currencyFormatter->format($price->getNumber(), $price->getCurrencyCode());
+      $card['price'] = $this->precio($price);
       $variables['#cache']['tags'] = Cache::mergeTags($variables['#cache']['tags'] ?? [], $variation->getCacheTags());
     }
     $card['opciones'] = $this->buildCardOptions($variables, $product);

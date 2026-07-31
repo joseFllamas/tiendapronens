@@ -1,0 +1,36 @@
+uuid: 50127599-209b-43db-b92f-0d41d9a151f9
+langcode: es
+status: true
+dependencies:
+  config:
+    - core.entity_form_mode.profile.shipping
+    - field.field.profile.customer.address
+    - field.field.profile.customer.field_telefono
+    - field.field.profile.customer.tax_number
+    - profile.type.customer
+  module:
+    - address
+    - telephone
+id: profile.customer.shipping
+targetEntityType: profile
+bundle: customer
+mode: shipping
+content:
+  address:
+    type: address_default
+    weight: 0
+    region: content
+    settings:
+      wrapper_type: fieldset
+    third_party_settings: {  }
+  field_telefono:
+    type: telephone_default
+    weight: 1
+    region: content
+    settings:
+      placeholder: ''
+    third_party_settings: {  }
+hidden:
+  is_default: true
+  tax_number: true
+

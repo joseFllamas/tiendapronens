@@ -1,0 +1,15 @@
+{
+  "codigoRetorno": 0,
+  "mensajeRetorno": "Envio grabado correctamente",
+  "datosResultado": "0808000123456789",
+  "listaBultos": [
+    {
+      "orden": 1,
+      "codUnico": "080800012345678901"
+    }
+  ],
+  "numRecogida": "R0099887766",
+  "fechaRecogida": "30072026",
+  "horaRecogidaDesde": "16:00",
+  "horaRecogidaHasta": "19:30"
+}

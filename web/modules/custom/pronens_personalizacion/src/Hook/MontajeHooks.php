@@ -102,6 +102,12 @@ final class MontajeHooks {
         '#weight' => -9,
       ];
       $form['#attached']['library'][] = 'pronens_personalizacion/montaje';
+      // La letra del parche vive en el tema, y aquí hace falta la misma: el
+      // backoffice pinta la marca sobre la misma foto que la tienda, así que
+      // tienen que compartir tipografía para que el ancho coincida. La library
+      // es solo el @font-face; si el tema no estuviera, la marca cae a la
+      // tipografía del administrador y el widget sigue funcionando.
+      $form['#attached']['library'][] = 'pronens/graduate';
     }
     else {
       $form['pro_montaje']['sin_foto'] = [

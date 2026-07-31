@@ -1,0 +1,225 @@
+/* HOME BACKEND */
+#correos_oficial #co_home {
+    height: auto;
+    width: auto;
+    background-color: var(--co_white);
+}
+
+#correos_oficial #co_home h1 {
+    text-align: center;
+}
+
+#correos_oficial #co_home h2 {
+    padding: 0px;
+}
+
+#correos_oficial #co_home h3 {
+    padding: 0px !important;
+    margin-top: 25px !important;
+}
+
+#correos_oficial #co_home h3 a {
+    font-size: 1.05em;
+}
+
+#correos_oficial #co_home #form_register h2 {
+    color: var(--co_white);
+}
+
+#correos_oficial #co_home #form_register h4 {
+    text-align: center;
+    font-size: 1em;
+}
+
+#correos_oficial #co_home .form-control {
+    font-size: 0.8em;
+}
+
+#correos_oficial #co_home label {
+    font-size: 0.75em;
+}
+
+
+#correos_oficial #co_home .form-col-right,
+
+#correos_oficial #co_home .form-col-left {
+    background-color: var(--co_white);
+    background-color: var(--co_soft_grey_bliss);
+    border: 3px solid var(--co_blue);
+}
+
+#correos_oficial #co_home .form-col-center {
+    background-color: var(--co_white);
+    height: auto;
+}
+
+#correos_oficial #co_home .form-col-right h2,
+#correos_oficial #co_home .form-col-left h2 {
+    font-size: 1.5em;
+    margin: auto !important;
+    width: 95% !important;
+    text-align: center;
+    margin-top: 4% !important;
+}
+
+#correos_oficial #co_home .form-col-right h2 a {
+    margin-left: 2%;
+}
+
+#correos_oficial #co_home .form-col-right {
+    background-color: var(--co_blue);
+    color: var(--co_white);
+    padding: 5%;
+}
+
+#correos_oficial #co_home .form-col-left {
+    margin: auto;
+}
+
+#correos_oficial #co_home .form-col-left p {
+    margin-top: 10px;
+    font-size: 0.9em;
+    font-weight: normal;
+}
+
+#correos_oficial #co_home .form-col-left h2 {
+    color: var(--co_red);
+    font-size: 1.45em;
+    max-width: 65% !important;
+    text-align: center;
+}
+
+#correos_oficial #co_home .form-col-left span {
+    color: var(--co_blue);
+}
+
+#correos_oficial #co_home .form-col-center h2 {
+    font-size: 1.5em;
+    margin: auto !important;
+    text-align: center;
+    margin-top: 1% !important;
+}
+
+/** Botones */
+#correos_oficial #co_home .yellowButton {
+    background-color: var(--co_blue);
+    box-shadow: 0px 10px 14px -7px var(--co_blue);
+    border-radius: 3px;
+    border: 1px solid var(--co_blue);
+    display: inline-block;
+    cursor: pointer;
+    color: var(--co_white);
+    font-size: 0.6em;
+    font-weight: bold;
+    text-decoration: none;
+    text-shadow: 0px 1px 0px var(--co_blue);
+    padding: 10px 10px;
+}
+
+#correos_oficial #co_home .yellowButton:hover {
+    background-color: var(--co_yellow);
+    border: 1px solid var(--co_yellow);
+    color: var(--co_blue);
+    text-shadow: 0px 1px 0px var(--co_yellow);
+}
+
+#correos_oficial #co_home .yellowButton {
+    position: relative;
+    margin: 1%;
+}
+
+#correos_oficial #co_home #CustomerSendRequestSubmitButton {
+    background-color: var(--co_white);
+    color: var(--co_blue);
+}
+
+#correos_oficial #co_home #CustomerSendRequestSubmitButton {
+    margin-left: 0px !important;
+}
+
+#correos_oficial #co_home #CustomerSendRequestSubmitButton:hover {
+    background-color: var(--co_gray);
+    border: 1px solid var(--co_blue);
+    color: var(--co_blue);
+    text-shadow: 0px 1px 0px var(--co_blue);
+}
+
+#correos_oficial #co_home .col-logos {
+    text-align: center;
+    padding: 2%;
+    background-color: var(--co_blue);
+    color: var(--co_white);
+    border-bottom: 15px solid var(--co_yellow);
+}
+
+#correos_oficial #co_home .col-logos img {
+    width: '100px';
+}
+
+/* #correos_oficial #co_home .col-nuevo {
+    background-color: var(--co_blue);
+    color: var(--co_white);
+    padding: 5%;
+} */
+
+#correos_oficial #co_home .form-inputs {
+    padding-left: 50px;
+    padding-right: 50px;
+}
+
+#correos_oficial #co_home .form-inputs p {
+    font-size: 0.8em;
+}
+
+#correos_oficial #co_home #emailHelp {
+    font-weight: normal;
+    font-family: Arial, Helvetica, sans-serif;
+    color: var(--co_white) !important;
+    font-size: 0.8em;
+}
+
+#correos_oficial #co_home #CustomerSendRequestSubmitButton {
+    margin: auto;
+    display: block;
+    width: 30%;
+    padding: 10px 10px;
+}
+
+#correos_oficial #co_home #form_registered {
+    padding: 40% 0;
+}
+
+#correos_oficial #co_home #form_registered h1 {
+    color: var(--co_white);
+    font-weight: bold;
+    text-align: center;
+}
+
+#correos_oficial #co_home #emailHelp {
+    margin-top: 5%;
+}
+
+#correos_oficial #correos_oficial #co_home .form-col-left h3 {
+    border: 0px !important;
+    background: none;
+}
+
+#correos_oficial#correos_oficial #co_home .form-col-left .row {
+    margin-left: 20px;
+}
+
+#correos_oficial #co_home h3 span {
+    margin-left: 2% !important;
+}
+
+#correos_oficial #co_home .form-col-left h3 span {
+    font-size: 1.4rem;
+    border: none;
+    border-bottom: 5px solid var(--co_gray);
+    padding: 0px !important;
+    width: 85% !important;
+    display: inline-block;
+    vertical-align: bottom !important;
+    line-height: 1.5em;
+    text-decoration: none;
+}

@@ -1,0 +1,5 @@
+pronens_correos_express.ajustes:
+  title: 'Correos Express'
+  description: 'Entorno, datos del remitente, formato de etiqueta, pesos estimados y seguimiento.'
+  route_name: pronens_correos_express.ajustes
+  parent: commerce.configuration

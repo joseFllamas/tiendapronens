@@ -1,0 +1,18 @@
+/**
+ * @file
+ * Graduate: la letra de parche de la rejilla A-Z y de su vista previa
+ * (library pronens/graduate, attach solo en la ficha de modo inicial).
+ *
+ * Es la collegiate del bordado real: las fotos de tienda llevan una letra
+ * varsity con contorno, y Archivo con text-stroke solo la imitaba de lejos.
+ * Un solo peso, el 400: Graduate no tiene bold y forzarlo emborronaría el
+ * contorno.
+ */
+
+@font-face {
+  font-family: "Graduate";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("../fonts/graduate-v19-latin-regular.woff2") format("woff2");
+}

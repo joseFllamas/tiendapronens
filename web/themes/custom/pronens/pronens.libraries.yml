@@ -14,6 +14,12 @@ caveat:
     base:
       css/caveat.css: {}
 
+graduate:
+  version: VERSION
+  css:
+    base:
+      css/graduate.css: {}
+
 marquee:
   version: VERSION
   css:
@@ -99,6 +105,18 @@ carrito:
   dependencies:
     - core/drupal
     - core/once
+
+checkout:
+  version: VERSION
+  css:
+    component:
+      css/checkout.css: {}
+
+cesta:
+  version: VERSION
+  css:
+    component:
+      css/cesta.css: {}
 
 catalogo:
   version: VERSION

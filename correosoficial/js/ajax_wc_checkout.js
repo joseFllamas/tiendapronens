@@ -1,0 +1,1093 @@
+/**
+ * This program is free software: you can redistribute it and/or modify it under the
+ * terms of the GNU General Public License as published by the Free Software Foundation,
+ * either version 3 of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
+ * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * See the GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License along with this program.
+ * If not, see https://www.gnu.org/licenses/.
+ */
+// Página cargada
+jQuery(document).ready(function (e) {
+    const actionCityPaq = 'SearchCityPaqByPostalCode';
+    const actionOffice = 'SearchOfficeByPostalCode';
+    const actionPudoCEX = 'SearchPudoCEXByPostalCode';
+    const LOCALSTORAGE_KEY = 'correosoficial_pickup_location';
+    const configuredCodMethodId = varsAjax.codMethodId || '';
+    const configuredCodMethodAliases = Array.isArray(varsAjax.codMethodAliases) ? varsAjax.codMethodAliases : [];
+    
+    let googleMap = new Array();
+    let carriersData = new Array();
+    let shouldHideLegacyCod = false;
+
+    // Funciones helper para localStorage
+    function saveToLocalStorage(productType, instanceId, data) {
+        try {
+            const storageData = {
+                productType,
+                instanceId,
+                searchPostalCode: data.searchPostalCode,
+                selectedPickupLocationOption: data.selectedPickupLocationOption,
+                pickupLocation: data.pickupLocation,
+                pickupLocationsOptions: data.pickupLocationsOptions,
+                allPickupLocations: data.allPickupLocations || [],
+                timestamp: new Date().getTime()
+            };
+            localStorage.setItem(LOCALSTORAGE_KEY, JSON.stringify(storageData));
+        } catch (error) {
+            console.error('Error saving to localStorage:', error);
+        }
+    }
+
+    function loadFromLocalStorage(productType, instanceId) {
+        try {
+            const stored = localStorage.getItem(LOCALSTORAGE_KEY);
+            if (stored) {
+                const data = JSON.parse(stored);
+                // Verificar que el productType y el instanceId coincidan y que no hayan pasado más de 24 horas
+                const twentyFourHours = 24 * 60 * 60 * 1000;
+                if (data.productType === productType && 
+                    data.instanceId === instanceId && 
+                    (new Date().getTime() - data.timestamp < twentyFourHours)) {
+                    return data;
+                }
+            }
+        } catch (error) {
+            console.error('Error loading from localStorage:', error);
+        }
+        return null;
+    }
+
+    function clearLocalStorage() {
+        try {
+            localStorage.removeItem(LOCALSTORAGE_KEY);
+        } catch (error) {
+            console.error('Error clearing localStorage:', error);
+        }
+    }
+
+    function getProductTypeFromAction(action) {
+        if (action === actionCityPaq) return 'citypaq';
+        if (action === actionOffice) return 'office';
+        if (action === actionPudoCEX) return 'pudocex';
+        return null;
+    }
+
+    function isOfficePceLocation(selected_location) {
+        if (!selected_location) {
+            return false;
+        }
+
+        const raw = selected_location.raw || selected_location.full || selected_location;
+        const typeCode = ((raw && raw.typeCode) || (raw && raw.data && raw.data.typeCode) || '').toString().toUpperCase();
+        const usePce = (raw && raw.use_PCE) || (raw && raw.use_pce) || (raw && raw.data && (raw.data.use_PCE || raw.data.use_pce));
+
+        return typeCode === 'PCE' || typeCode === 'PCI' || usePce === true || usePce === 1 || ['1', 'true', 'yes', 'on'].includes(String(usePce).toLowerCase());
+    }
+
+    function shouldHideCodForSelection(action, selected_location) {
+        if (action === actionCityPaq || action === actionPudoCEX) {
+            return true;
+        }
+
+        if (action === actionOffice) {
+            return isOfficePceLocation(selected_location);
+        }
+
+        return false;
+    }
+
+    function normalizePaymentMethodId(methodId) {
+        return String(methodId || '')
+            .toLowerCase()
+            .replace(/[^a-z0-9]/g, '');
+    }
+
+    function getCodMethodIds() {
+        const methodIds = configuredCodMethodAliases.length ? configuredCodMethodAliases : (configuredCodMethodId ? ['cod', configuredCodMethodId] : ['cod']);
+        return [...new Set(methodIds.filter(Boolean))];
+    }
+
+    function getCodPaymentNodes() {
+        const uniqueMethodIds = getCodMethodIds();
+        const normalizedMethodIds = uniqueMethodIds.map(normalizePaymentMethodId).filter(Boolean);
+        const matchedNodes = [];
+
+        jQuery('input[name="payment_method"], li.wc_payment_method, .payment_box').each(function() {
+            const node = jQuery(this);
+            const rawCandidates = [
+                node.val(),
+                node.attr('id'),
+                node.attr('for'),
+                node.data('payment_method'),
+                node.attr('class')
+            ].filter(Boolean);
+
+            const normalizedCandidates = rawCandidates.map(normalizePaymentMethodId);
+            const isMatch = normalizedCandidates.some(function(candidate) {
+                return normalizedMethodIds.some(function(methodId) {
+                    return candidate === methodId || candidate.indexOf(methodId) !== -1 || methodId.indexOf(candidate) !== -1;
+                });
+            });
+
+            if (!isMatch) {
+                return;
+            }
+
+            const paymentNode = node.closest('li.wc_payment_method');
+            const matchedNode = paymentNode.length ? paymentNode.get(0) : node.get(0);
+
+            if (matchedNode) {
+                matchedNodes.push(matchedNode);
+            }
+        });
+
+        return [...new Set(matchedNodes)].map(function(node) {
+            return jQuery(node);
+        });
+    }
+
+    function syncLegacyCodVisibility(hideCod) {
+        shouldHideLegacyCod = hideCod;
+
+        const paymentNodes = getCodPaymentNodes();
+
+        if (!paymentNodes.length) {
+            return;
+        }
+
+        paymentNodes.forEach(function(node) {
+            if (hideCod) {
+                node.hide();
+            } else {
+                node.show();
+            }
+        });
+
+        if (hideCod) {
+            const codMethodIds = getCodMethodIds();
+            const checkedHiddenInput = jQuery('input[name="payment_method"]:checked').filter(function() {
+                return codMethodIds.includes(jQuery(this).val());
+            });
+
+            if (checkedHiddenInput.length) {
+                const firstVisiblePayment = jQuery('li.wc_payment_method:visible input[name="payment_method"]').first();
+                if (firstVisiblePayment.length) {
+                    firstVisiblePayment.prop('checked', true).trigger('change');
+                }
+            }
+        }
+    }
+
+    function reapplyLegacyCodVisibility() {
+        syncLegacyCodVisibility(shouldHideLegacyCod);
+    }
+
+    // ACCIONES SEGÚN CONTEXTO
+    switch (varsAjax.whereAmI) {
+        case 'cart':
+            // Cargamos directamente
+            initLoad();
+            // Cargamos al cambiar de método
+            jQuery(document.body).on('updated_shipping_method', function () {
+                initLoad();
+                setTimeout(reapplyLegacyCodVisibility, 0);
+            });
+            break;
+        case 'checkout':
+            // Esperamos carga ajax del checkout por parte de WC
+            jQuery(document.body).on('updated_checkout', function () {
+                initLoad();
+                setTimeout(reapplyLegacyCodVisibility, 0);
+
+                // Para algunos temas que no llegan a tiempo a cargar el código postal
+                if (jQuery('.search-citypaq-by-cp-input').val() == '' || jQuery('.search-office-by-cp-input').val() == '') {
+                    setTimeout(function () {
+                        initLoad();
+                        reapplyLegacyCodVisibility();
+                    }, 3000);
+                }
+            });
+            break;
+    }
+
+    jQuery(document.body).on('updated_wc_div', function () {
+        initLoad();
+        setTimeout(reapplyLegacyCodVisibility, 0);
+    });
+
+    // CARGA INICIAL DE SELECTORES
+    function initLoad() {
+        // EVENTO CAMBIO DE TRANSPORTISTA
+        let carrierSelected = jQuery('input[type="radio"][name^="shipping_method["][name$="]"]:checked');
+        let radioButtonsCarriers = jQuery('input[type="radio"][name^="shipping_method["][name$="]"]');
+        radioButtonsCarriers.on('change', function () {
+            cleanCheckoutMetadata();
+            
+            // Obtenemos el nuevo carrier seleccionado
+            carrierSelected = jQuery(this).val();
+            let newCarrierId = parseInt(carrierSelected.split(':')[1]) || parseInt(carrierSelected);
+            let carrierData = carriersData[newCarrierId];
+            
+            // Verificar si estamos cambiando entre diferentes tipos de pickup o a un método sin selector
+            const storedData = localStorage.getItem(LOCALSTORAGE_KEY);
+            if (storedData) {
+                const parsed = JSON.parse(storedData);
+                // Si el nuevo carrier no coincide con el almacenado, limpiar localStorage y memoria
+                if (parsed.instanceId !== newCarrierId.toString() && parsed.instanceId !== newCarrierId) {
+                    clearLocalStorage();
+                    // Limpiar también los datos en memoria del carrier anterior
+                    if (parsed.instanceId) {
+                        delete carriersData[parseInt(parsed.instanceId)];
+                    }
+                }
+            }
+            
+            if (carrierData != undefined) {
+                if (carrierData.action == actionCityPaq) {
+                    insertCityPaq(carrierData.selected_location, carrierSelected);
+                }
+                if (carrierData.action == actionOffice) {
+                    insertOffice(carrierData.selected_location, carrierSelected);
+                }
+                if (carrierData.action == actionPudoCEX) {
+                    insertPudoCEX(carrierData.selected_location, carrierId);
+                }
+            } else {
+                // Si no es un método que requiere selector, limpiamos localStorage y datos en memoria
+                clearLocalStorage();
+                // Limpiar todos los carriers de tipo pickup de la memoria
+                Object.keys(carriersData).forEach(function(key) {
+                    if (carriersData[key] && 
+                        (carriersData[key].action === actionCityPaq || 
+                         carriersData[key].action === actionOffice || 
+                         carriersData[key].action === actionPudoCEX)) {
+                        delete carriersData[key];
+                    }
+                });
+            }
+        });
+
+        // OBTENEMOS SELECTORES CARGADOS
+        let citypaqCarriers = jQuery('[id^="citypaq_selector_"]');
+        let officeCarriers = jQuery('[id^="office_selector_"]');
+
+        // CITYPAQS
+        citypaqCarriers.each(function (index, element) {
+            // Obtenemos el value del elemento
+            let carrierId = jQuery(element).val();
+
+            // Elementos del DOM
+            let currentReference = jQuery('#citypaq_reference_' + carrierId);
+            let currentPostcode = jQuery('#citypaq_postcode_' + carrierId);
+            let inputSearch = jQuery('#SearchCityPaqByCPInput_' + carrierId);
+            let buttonSearch = jQuery('#SearchCityPaqByCpButton_' + carrierId);
+            let selectCityPaqs = jQuery('#CityPaqSelect_' + carrierId);
+            let scheduleAndMap = jQuery('#scheduleAndMap_' + carrierId);
+
+            // Obtenemos metadata
+            let checkoutMetadata = getCheckoutMetadata();
+
+            // Si tenemos metadata, la cargamos
+            if (checkoutMetadata.CarrierID == carrierId) {
+                currentReference.val(checkoutMetadata.SelectedReference);
+
+                // Si no tenemos currentReference, la buscamos en carriersData
+            } else if (!currentReference.val()) {
+                let carrierData = carriersData[carrierId];
+                if (carrierData != undefined) {
+                    currentReference.val(carrierData.selected_location.reference);
+                }
+            }
+
+            // Ocultamos horario y mapa
+            scheduleAndMap.hide();
+
+            // Añadimos postcode al input de búsqueda
+            inputSearch.val(currentPostcode.val());
+            inputSearch.keydown(function (event) {
+                if (event.key === 'Enter') {
+                    event.preventDefault();
+                    buttonSearch.click();
+                }
+            });
+
+            // Si el valor del inputsearch es igual o mayor a 5, buscamos oficinas
+            if (inputSearch.val().length >= 5) {
+                setLocations(actionCityPaq, currentPostcode.val(), carrierId, selectCityPaqs, currentReference.val());
+            }
+
+            // Añadimos evento click al botón de buscar citipaq
+            buttonSearch.on('click', async function () {
+                // Obtenemos el valor del input
+                let searchPostcode = inputSearch.val();
+
+                let searchPostalCodeSub;
+                let shippingAddressPostalCodeSub;
+                if (searchPostcode) {
+                    searchPostalCodeSub = searchPostcode.substring(0, 2);
+                }
+
+                if (currentPostcode.val()) {
+                    let shippingAddressPostalCode = currentPostcode.val();
+                    shippingAddressPostalCodeSub = shippingAddressPostalCode.substring(0, 2);
+                }
+
+                if (searchPostalCodeSub && shippingAddressPostalCodeSub) {
+                    if (searchPostalCodeSub != shippingAddressPostalCodeSub) {
+                        alert(pickupPointSameProvince);
+                        return false;
+                    }
+                }
+
+                // set de locations
+                try {
+                    let locations = await setLocations(actionCityPaq, searchPostcode, carrierId, selectCityPaqs, null);
+                    let selected_location = locations[0];
+                    insertCityPaq(selected_location, carrierId);
+                    currentReference.val(selected_location.reference); // set current reference
+                    currentPostcode.val(searchPostcode); // set current postcode
+                    
+                    // Guardar en localStorage
+                    saveToLocalStorage('citypaq', carrierId, {
+                        searchPostalCode: searchPostcode,
+                        selectedPickupLocationOption: selected_location.reference,
+                        pickupLocation: selected_location.full,
+                        pickupLocationsOptions: locations.map(loc => ({ label: loc.terminal, value: loc.reference })),
+                        allPickupLocations: locations.map(loc => loc.full)
+                    });
+                } catch (error) {
+                    alert(cityPaqPostCodeNotFound);
+                    inputSearch.val(currentPostcode.val()); // reset search input
+                }
+            });
+
+            // Map
+            if (defined_google_api_key == 1) {
+                // verificar si google está cargado
+                if (typeof google !== 'undefined') {
+                    let newGoogleMaps = new google.maps.Map(document.getElementById('GoogleMapCorreos_' + carrierId), {
+                        center: { lat: 40.234013044698884, lng: -3.768710630003362 },
+                        zoom: 13,
+                    });
+
+                    googleMap[carrierId] = {
+                        map: newGoogleMaps,
+                        markers: [],
+                    };
+                }
+            }
+        });
+
+        // OFICINAS
+        officeCarriers.each(function (index, element) {
+            // Obtenemos el value del elemento
+            let carrierId = jQuery(element).val();
+
+            // Elementos del DOM
+            let currentReference = jQuery('#office_reference_' + carrierId);
+            let currentPostcode = jQuery('#office_postcode_' + carrierId);
+            let inputSearch = jQuery('#SearchOfficeByCPInput_' + carrierId);
+            let buttonSearch = jQuery('#SearchOfficeByCpButton_' + carrierId);
+            let selectOffices = jQuery('#OfficeSelect_' + carrierId);
+            let scheduleAndMap = jQuery('#scheduleAndMap_' + carrierId);
+
+            // Obtenemos metadata
+            let checkoutMetadata = getCheckoutMetadata();
+
+            // Si tenemos metadata, la cargamos
+            if (checkoutMetadata.CarrierID == carrierId) {
+                currentReference.val(checkoutMetadata.SelectedReference);
+
+                // Si no tenemos currentReference, la buscamos en carriersData
+            } else if (!currentReference.val()) {
+                let carrierData = carriersData[carrierId];
+                if (carrierData != undefined) {
+                    currentReference.val(carrierData.selected_location.reference);
+                }
+            }
+
+            // Ocultamos horario y mapa
+            scheduleAndMap.hide();
+
+            // Añadimos postcode al input de búsqueda
+            inputSearch.val(currentPostcode.val());
+            inputSearch.keydown(function (event) {
+                if (event.key === 'Enter') {
+                    event.preventDefault();
+                    buttonSearch.click();
+                }
+            });
+
+            // Si el valor del inputsearch es igual o mayor a 5, buscamos oficinas
+            if (inputSearch.val().length >= 5) {
+                setLocations(actionOffice, currentPostcode.val(), carrierId, selectOffices, currentReference.val());
+            }
+
+            // Añadimos evento click al botón de buscar oficinas
+            buttonSearch.on('click', async function () {
+                // Obtenemos el valor del input
+                let searchPostcode = inputSearch.val();
+
+                let searchPostalCodeSub;
+                let shippingAddressPostalCodeSub;
+                if (searchPostcode) {
+                    searchPostalCodeSub = searchPostcode.substring(0, 2);
+                }
+
+                if (currentPostcode.val()) {
+                    let shippingAddressPostalCode = currentPostcode.val();
+                    shippingAddressPostalCodeSub = shippingAddressPostalCode.substring(0, 2);
+                }
+
+                if (searchPostalCodeSub && shippingAddressPostalCodeSub) {
+                    if (searchPostalCodeSub != shippingAddressPostalCodeSub) {
+                        alert(pickupPointSameProvince);
+                        return false;
+                    }
+                }
+
+                // set de locations
+                try {
+                    let locations = await setLocations(actionOffice, searchPostcode, carrierId, selectOffices, null);
+                    let selected_location = locations[0];
+                    insertOffice(selected_location, carrierId);
+                    currentReference.val(selected_location.reference); // set current reference
+                    currentPostcode.val(searchPostcode); // set current postcode
+                    
+                    // Guardar en localStorage
+                    saveToLocalStorage('office', carrierId, {
+                        searchPostalCode: searchPostcode,
+                        selectedPickupLocationOption: selected_location.reference,
+                        pickupLocation: selected_location.full,
+                        pickupLocationsOptions: locations.map(loc => ({ label: loc.terminal, value: loc.reference })),
+                        allPickupLocations: locations.map(loc => loc.full)
+                    });
+                } catch (error) {
+                    alert(officePostCodeNotFound);
+                    inputSearch.val(currentPostcode.val()); // reset search input
+                }
+            });
+
+            // Map
+            if (defined_google_api_key == 1) {
+                // verificar si google está cargado
+                if (typeof google !== 'undefined') {
+                    let newGoogleMaps = new google.maps.Map(document.getElementById('GoogleMapCorreos_' + carrierId), {
+                        center: { lat: 40.234013044698884, lng: -3.768710630003362 },
+                        zoom: 13,
+                    });
+
+                    googleMap[carrierId] = {
+                        map: newGoogleMaps,
+                        markers: [],
+                    };
+                }
+            }
+        });
+
+        // PUDO CEX
+        let pudocexCarriers = jQuery('[id^="pudocex_selector_"]');
+
+        pudocexCarriers.each(function (index, element) {
+            // Obtenemos el value del elemento
+            let carrierId = jQuery(element).val();
+
+            // Elementos del DOM
+            let currentReference = jQuery('#pudocex_reference_' + carrierId);
+            let currentPostcode = jQuery('#pudocex_postcode_' + carrierId);
+            let inputSearch = jQuery('#SearchPudoCEXByCPInput_' + carrierId);
+            let buttonSearch = jQuery('#SearchPudoCEXByCpButton_' + carrierId);
+            let selectPudoCEX = jQuery('#PudoCEXSelect_' + carrierId);
+            let scheduleAndMap = jQuery('#scheduleAndMap_' + carrierId);
+
+            // Obtenemos metadata
+            let checkoutMetadata = getCheckoutMetadata();
+
+            // Si tenemos metadata, la cargamos
+            if (checkoutMetadata.CarrierID == carrierId) {
+                currentReference.val(checkoutMetadata.SelectedReference);
+            } else if (!currentReference.val()) {
+                let carrierData = carriersData[carrierId];
+                if (carrierData != undefined) {
+                    currentReference.val(carrierData.selected_location.reference);
+                }
+            }
+
+            // Ocultamos horario y mapa
+            scheduleAndMap.hide();
+
+            // Añadimos postcode al input de búsqueda
+            inputSearch.val(currentPostcode.val());
+            inputSearch.keydown(function (event) {
+                if (event.key === 'Enter') {
+                    event.preventDefault();
+                    buttonSearch.click();
+                }
+            });
+
+            // Si el valor del inputsearch es igual o mayor a 5, buscamos puntos pudocex
+            if (inputSearch.val().length >= 5) {
+                setLocations(actionPudoCEX, currentPostcode.val(), carrierId, selectPudoCEX, currentReference.val());
+            }
+
+            // Añadimos evento click al botón de buscar pudocex
+            buttonSearch.on('click', async function () {
+                // Obtenemos el valor del input
+                let searchPostcode = inputSearch.val();
+
+                let searchPostalCodeSub;
+                let shippingAddressPostalCodeSub;
+                if (searchPostcode) {
+                    searchPostalCodeSub = searchPostcode.substring(0, 2);
+                }
+
+                if (currentPostcode.val()) {
+                    let shippingAddressPostalCode = currentPostcode.val();
+                    shippingAddressPostalCodeSub = shippingAddressPostalCode.substring(0, 2);
+                }
+
+                if (searchPostalCodeSub && shippingAddressPostalCodeSub) {
+                    if (searchPostalCodeSub != shippingAddressPostalCodeSub) {
+                        alert(pickupPointSameProvince);
+                        return false;
+                    }
+                }
+
+                // set de locations
+                try {
+                    let locations = await setLocations(actionPudoCEX, searchPostcode, carrierId, selectPudoCEX, null);
+                    let selected_location = locations[0];
+                    insertPudoCEX(selected_location, carrierId);
+                    currentReference.val(selected_location.reference); // set current reference
+                    currentPostcode.val(searchPostcode); // set current postcode
+                    
+                    // Guardar en localStorage
+                    saveToLocalStorage('pudocex', carrierId, {
+                        searchPostalCode: searchPostcode,
+                        selectedPickupLocationOption: selected_location.reference,
+                        pickupLocation: selected_location.full,
+                        pickupLocationsOptions: locations.map(loc => ({ label: loc.terminal, value: loc.reference })),
+                        allPickupLocations: locations.map(loc => loc.full)
+                    });
+                } catch (error) {
+                    alert(pudoCEXPostCodeNotFound);
+                    inputSearch.val(currentPostcode.val()); // reset search input
+                }
+            });
+
+            // Map
+            if (defined_google_api_key == 1) {
+                // verificar si google está cargado
+                if (typeof google !== 'undefined') {
+                    let newGoogleMaps = new google.maps.Map(document.getElementById('GoogleMapCorreos_' + carrierId), {
+                        center: { lat: 40.234013044698884, lng: -3.768710630003362 },
+                        zoom: 13,
+                    });
+
+                    googleMap[carrierId] = {
+                        map: newGoogleMaps,
+                        markers: [],
+                    };
+                }
+            }
+        });
+    }
+
+    // OBTIENE Y CARGA LOCATIONS
+    function setLocations(action, postcode, id_carrier, select, currentReference) {
+        return new Promise(function (resolve, reject) {
+            let results = new Array();
+            let selectedOutput = null;
+            
+            jQuery.ajax({
+                url: varsAjax.ajaxUrl,
+                type: 'POST',
+                data: {
+                    action: 'correosOficialDispacher',
+                    _nonce: varsAjax.nonce,
+                    dispatcher: {
+                        controller: 'CorreosOficialCheckoutModuleFrontController',
+                        action: action,
+                        id_carrier: id_carrier,
+                        postcode: postcode,
+                        shortcode: true,
+                    },
+                },
+                cache: false,
+                processData: true,
+                success: function (parsed_data) {
+                    
+                    // Validar que parsed_data es un array
+                    if (!Array.isArray(parsed_data)) {
+                        console.error('Correos: Invalid response format', parsed_data);
+                        reject(false);
+                        return;
+                    }
+
+                    // Parseamos para CityPaq
+                    if (action == actionCityPaq) {
+                        selectedOutput = jQuery('#citypaq_reference_' + id_carrier);
+
+                        parsed_data.forEach(function (location) {
+                            let data = {
+                                reference: location.reference,
+                                address: location.address,
+                                city: location.city,
+                                cp: location.zipcode,
+                                terminal: location.data.alias,
+                                schedule: location.schedule,
+                                lat: parseFloat(location.lat),
+                                lng: parseFloat(location.long),
+                                raw: location,
+                                full: location
+                            };
+                            results.push(data);
+                        });
+
+                        // Si tenemos resultados
+                        if (results.length > 0) {
+                            fillSelect(id_carrier, action, select, results, currentReference, selectedOutput);
+                            resolve(results);
+                        } else {
+                            cleanCheckoutMetadata();
+                            alert(cityPaqPostCodeNotFound);
+                            reject(false);
+                        }
+                    }
+
+                    // Parseamos para Oficinas
+                    if (action == actionOffice) {
+                        selectedOutput = jQuery('#office_reference_' + id_carrier);
+
+                        parsed_data.forEach(function (location) {
+                            let data = {
+                                reference: location.reference,
+                                address: location.address,
+                                city: location.city,
+                                cp: location.zipcode,
+                                terminal: location.name,
+                                schedule: {
+                                    horarioLV: location.scheduleLV,
+                                    horarioS: location.scheduleS,
+                                    horarioF: location.scheduleF,
+                                },
+                                lat: parseFloat(location.lat),
+                                lng: parseFloat(location.long),
+                                raw: location,
+                                full: location
+                            };
+                            results.push(data);
+                        });
+
+                        // Si tenemos resultados
+                        if (results.length > 0) {
+                            fillSelect(id_carrier, action, select, results, currentReference, selectedOutput);
+                            resolve(results);
+                        } else {
+                            cleanCheckoutMetadata();
+                            alert(officePostCodeNotFound);
+                            reject(false);
+                        }
+                    }
+
+                    // Parseamos para PudoCEX
+                    if (action == actionPudoCEX) {
+                        selectedOutput = jQuery('#pudocex_reference_' + id_carrier);
+
+                        parsed_data.forEach(function (location) {
+                            let data = {
+                                reference: location.reference,
+                                address: location.address,
+                                city: location.city,
+                                cp: location.zipcode,
+                                terminal: location.name,
+                                phone: location.phone,
+                                schedule: {
+                                    horarioLV: location.scheduleLV,
+                                    horarioS: location.scheduleS,
+                                    horarioF: location.scheduleF,
+                                },
+                                lat: parseFloat(location.lat),
+                                lng: parseFloat(location.long),
+                                raw: location,
+                                full: location
+                            };
+                            results.push(data);
+                        });
+
+                        // Si tenemos resultados
+                        if (results.length > 0) {
+                            fillSelect(id_carrier, action, select, results, currentReference, selectedOutput);
+                            resolve(results);
+                        } else {
+                            cleanCheckoutMetadata();
+                            alert(pudoCEXPostCodeNotFound);
+                            reject(false);
+                        }
+                    }
+                },
+                error: function (e) {
+                    reject(false);
+                },
+            });
+        });
+    }
+
+    // CARGA EL SELECT DEL CARRIER PASADO
+    function fillSelect(id_carrier, action, select, locations, currentReference, selectedOutput = null) {
+        let currentLocation;
+        const productType = getProductTypeFromAction(action);
+
+        // Intentar cargar desde localStorage
+        const storedData = loadFromLocalStorage(productType, id_carrier);
+        if (storedData && !currentReference) {
+            currentReference = storedData.selectedPickupLocationOption;
+        }
+
+        // Desactivamos evento change en el select
+        select.off('change');
+
+        // Eliminamos todos los options
+        select.find('option').remove();
+
+        // Si tenemos currentReference, buscamos el location
+        if (currentReference) {
+            currentLocation = locations.find((location) => location.reference == currentReference);
+        }
+
+        // Si no tenemos currentReference, seleccionamos el primero
+        if (!currentReference || currentLocation == undefined) {
+            currentReference = locations[0].reference;
+            currentLocation = locations.find((location) => location.reference == currentReference);
+            if (selectedOutput != null) {
+                selectedOutput.val(currentReference);
+            }
+        }
+
+        // Opción seleccionada para este select
+        option_selected = locations.find((location) => location.reference == currentReference);
+        if (option_selected == undefined && locations.length > 0) {
+            option_selected = locations[0];
+        }
+
+        // Carrier data
+        updateCarrierData(id_carrier, action, option_selected);
+
+        locations.forEach(function (location) {
+
+            // Si tenemos guardado el punto de entrega para el carrito, lo seleccionamos
+            if(location.cart){
+                currentReference = location.reference;
+            }
+
+            if (currentReference == location.reference) {
+                select.append('<option value=' + location.reference + ' selected>' + location.terminal + '</option>');
+
+                let carrierData = carriersData[parseInt(id_carrier)];
+
+                if (carrierData != undefined) {
+                    if (action == actionCityPaq) {
+                        insertCityPaq(location, id_carrier);
+                    }
+                    if (action == actionOffice) {
+                        insertOffice(location, id_carrier);
+                    }
+                    if (action == actionPudoCEX) {
+                        insertPudoCEX(location, id_carrier);
+                    }
+                }
+
+            } else {
+                select.append('<option value=' + location.reference + '>' + location.terminal + '</option>');
+            }
+        });
+
+        // Mostramos horario, direccion y mapa
+        setScheduleAndMap(id_carrier, locations, currentReference, action);
+
+        // Guardar inicialmente en localStorage si no estamos cargando desde allí
+        if (!storedData) {
+            const inputSearch = action === actionCityPaq ? jQuery('#SearchCityPaqByCPInput_' + id_carrier) :
+                               action === actionOffice ? jQuery('#SearchOfficeByCPInput_' + id_carrier) :
+                               jQuery('#SearchPudoCEXByCPInput_' + id_carrier);
+            
+            saveToLocalStorage(productType, id_carrier, {
+                searchPostalCode: inputSearch.val(),
+                selectedPickupLocationOption: currentReference,
+                pickupLocation: currentLocation ? currentLocation.full : locations[0].full,
+                pickupLocationsOptions: locations.map(loc => ({ label: loc.terminal, value: loc.reference })),
+                allPickupLocations: locations.map(loc => loc.full)
+            });
+        }
+
+        // Tras Cargar los options, activamos el evento change
+        select.on('change', function () {
+
+            // obtenemos el valor de la option seleccionada y asignamos al hidden del carrier
+            //if (selectedOutput != null) {
+                // selectedOutput.val(jQuery(this).val());
+
+                // Configuramos horarios
+                setScheduleAndMap(id_carrier, locations, jQuery(this).val(), action);
+
+                let selected_location = locations.find((location) => location.reference == jQuery(this).val());
+
+                // Guardamos en localStorage
+                const productType = getProductTypeFromAction(action);
+                if (productType) {
+                    const inputSearch = action === actionCityPaq ? jQuery('#SearchCityPaqByCPInput_' + id_carrier) :
+                                       action === actionOffice ? jQuery('#SearchOfficeByCPInput_' + id_carrier) :
+                                       jQuery('#SearchPudoCEXByCPInput_' + id_carrier);
+                    
+                    saveToLocalStorage(productType, id_carrier, {
+                        searchPostalCode: inputSearch.val(),
+                        selectedPickupLocationOption: selected_location.reference,
+                        pickupLocation: selected_location.full,
+                        pickupLocationsOptions: locations.map(loc => ({ label: loc.terminal, value: loc.reference })),
+                        allPickupLocations: locations.map(loc => loc.full)
+                    });
+                }
+
+                // Guardamos en BD
+                if (action == actionCityPaq) {
+                    insertCityPaq(selected_location, id_carrier);
+                }
+
+                if (action == actionOffice) {
+                    insertOffice(selected_location, id_carrier);
+                }
+
+                if (action == actionPudoCEX) {
+                    insertPudoCEX(selected_location, id_carrier);
+                }
+            //}
+        });
+    }
+
+    // CONTROL MARCADORES EN MAPA
+    function setGoogleMapsMarkers(carrierId, myLatLng, title) {
+        if (defined_google_api_key == 1) {
+            let carrierMap = googleMap[carrierId];
+            if (carrierMap != undefined) {
+                let map = googleMap[carrierId].map;
+                let markers = googleMap[carrierId].markers;
+
+                // Verificar si hay marcadores existentes para este transportista y eliminamos
+                if (markers.length > 0) {
+                    markers.forEach(function (marker) {
+                        marker.setMap(null);
+                    });
+                }
+                let marker = new google.maps.Marker({
+                    position: myLatLng,
+                    title: title,
+                });
+
+                marker.setMap(map);
+                markers.push(marker);
+
+                map.setCenter(myLatLng);
+                map.setZoom(14);
+            }
+        }
+    }
+
+    // ACIONES HORARIOS Y MAPA
+    function setScheduleAndMap(id_carrier, locations, reference, action) {
+        let scheduleAndMap = jQuery('#scheduleAndMap_' + id_carrier);
+
+        // buscamos en el array de locations el que tenga el reference seleccionado
+        let locationSelected = locations.find((location) => location.reference == reference);
+        if (locationSelected == undefined && locations.length > 0) {
+            locationSelected = locations[0];
+        }
+
+        // Mostramos horario, direccion y mapa
+        scheduleAndMap.show();
+
+        // Actualizamos horario, dirección y mapa del carrier para CityPaq
+        if (action == actionCityPaq && locationSelected != undefined) {
+            scheduleAndMap.find('.citypaq-address-info p.address').text(locationSelected.address);
+            scheduleAndMap.find('.citypaq-address-info p.city').text(locationSelected.city);
+            scheduleAndMap.find('.citypaq-address-info p.cp').text(locationSelected.cp);
+            scheduleAndMap.find('.citypaq-terminal-info p').text(locationSelected.terminal);
+            scheduleAndMap.find('.scheduleInfo p').text(locationSelected.schedule === '1' ? openingInfo : opening24hInfo);
+        }
+
+        // Actualizamos horario, dirección y mapa del carrier para Oficinas o Pudos de Cex
+        if ((action == actionOffice || action == actionPudoCEX) && locationSelected != undefined) {
+            scheduleAndMap.find('.office-address-info p.address').text(locationSelected.address);
+            scheduleAndMap.find('.office-address-info p.city').text(locationSelected.city);
+            scheduleAndMap.find('.office-address-info p.cp').text(locationSelected.cp);
+            scheduleAndMap.find('.office-address-info p.phone').text(locationSelected.phone);
+            scheduleAndMap.find('.office-terminal-info p').text(locationSelected.terminal);
+            scheduleAndMap.find('.scheduleInfo p.timeScheduleLV').text(locationSelected.schedule.horarioLV);
+            scheduleAndMap.find('.scheduleInfo p.timeScheduleS').text(locationSelected.schedule.horarioS);
+            scheduleAndMap.find('.scheduleInfo p.timeScheduleF').text(locationSelected.schedule.horarioF);
+        }
+
+        // map
+        setGoogleMapsMarkers(id_carrier, { lat: locationSelected.lat, lng: locationSelected.lng }, locationSelected.terminal);
+    }
+
+    function updateCarrierData(id_carrier, action, selected_location) {
+        carriersData[id_carrier] = {
+            action: action,
+            selected_location: selected_location,
+        };
+    }
+
+    function insertCityPaq(selected_location, id_carrier) {
+        // Carrier data
+        updateCarrierData(id_carrier, actionCityPaq, selected_location);
+
+        syncLegacyCodVisibility(shouldHideCodForSelection(actionCityPaq, selected_location));
+
+        // Metadata
+        setMetadataCheckout(parseInt(id_carrier), 'CityPaq', selected_location.reference, JSON.stringify(selected_location.raw));
+    }
+
+    function insertOffice(selected_location, id_carrier) {
+        // Carrier data
+        updateCarrierData(id_carrier, actionOffice, selected_location);
+
+        syncLegacyCodVisibility(shouldHideCodForSelection(actionOffice, selected_location));
+
+        // Metadata
+        setMetadataCheckout(parseInt(id_carrier), 'Oficina', selected_location.reference, JSON.stringify(selected_location.raw));
+    }
+
+    function insertPudoCEX(selected_location, id_carrier) {
+        // Carrier data
+        updateCarrierData(id_carrier, actionPudoCEX, selected_location);
+
+        syncLegacyCodVisibility(shouldHideCodForSelection(actionPudoCEX, selected_location));
+
+        setMetadataCheckout(parseInt(id_carrier), 'pudocex', selected_location.reference, JSON.stringify(selected_location.raw));
+    }
+
+    function setMetadataCheckout(CarrierID, ReferenceType, SelectedReference, SelectedReferenceData) {
+        let metadataArray = [
+            { name: 'CarrierID', value: parseInt(CarrierID) },
+            { name: 'ReferenceType', value: ReferenceType },
+            { name: 'SelectedReference', value: SelectedReference },
+            { name: 'SelectedReferenceData', value: SelectedReferenceData },
+        ];
+
+        // Actualizamos cookie
+        let checkoutMetadata = getCheckoutMetadata();
+        metadataArray.forEach(function (metadata) {
+            let inputName = metadata.name;
+            let newValue = metadata.value;
+            checkoutMetadata[inputName] = newValue;
+        });
+        checkoutMetadata = JSON.stringify(checkoutMetadata);
+        checkoutMetadata = btoa(checkoutMetadata);
+        document.cookie = 'correosoficial_checkout=' + checkoutMetadata + '; path=/';
+
+        // Actualizamos formulario
+        let checkoutForm = jQuery('form[name="checkout"]');
+
+        metadataArray.forEach(function (metadata) {
+            let inputName = metadata.name;
+            let newValue = metadata.value;
+            let inputExist = jQuery('[name="' + inputName + '"]');
+
+            if (inputExist.length > 0) {
+                inputExist.val(newValue);
+            } else {
+                // El input no existe, crear uno nuevo y agregarlo al formulario
+                let newInput = jQuery('<input>').attr('type', 'hidden').attr('name', inputName).val(newValue);
+                checkoutForm.append(newInput);
+            }
+        });
+    }
+
+    function cleanCheckoutMetadata() {
+        let metadataArray = ['CarrierID', 'ReferenceType', 'SelectedReference', 'SelectedReferenceData'];
+
+        syncLegacyCodVisibility(false);
+
+        // Limpiamos inputs formulario
+        metadataArray.forEach(function (metadata) {
+            let inputExist = jQuery('[name="' + metadata + '"]');
+            if (inputExist.length > 0) {
+                inputExist.remove();
+            }
+        });
+
+        // Limpiamos cookie
+        let checkoutMetadata = getCheckoutMetadata();
+        metadataArray.forEach(function (metadata) {
+            checkoutMetadata[metadata] = '';
+        });
+
+        checkoutMetadata = JSON.stringify(checkoutMetadata);
+        checkoutMetadata = btoa(checkoutMetadata);
+        document.cookie = 'correosoficial_checkout=' + checkoutMetadata + '; path=/';
+    }
+
+    // Obtenemos metadata del checkout
+    function getCheckoutMetadata() {
+        return false;
+        let checkoutMetadata = getCookie('correosoficial_checkout');
+        checkoutMetadata = atob(checkoutMetadata);
+        checkoutMetadata = JSON.parse(checkoutMetadata);
+        return checkoutMetadata;
+    }
+
+    // Función para obtener el valor de una cookie específica
+    function getCookie(name) {
+        const nameEQ = name + '=';
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            let cookie = cookies[i];
+            while (cookie.charAt(0) === ' ') {
+                cookie = cookie.substring(1);
+            }
+            if (cookie.indexOf(nameEQ) === 0) {
+                return decodeURIComponent(cookie.substring(nameEQ.length));
+            }
+        }
+        return null;
+    }
+
+    // Validar antes de enviar el formulario de checkout
+    jQuery(document.body).on('checkout_place_order', function() {
+        // Verificar si existen campos de referencia para citypaq, office o pudocex
+        let hasCityPaqReference = jQuery('[name^="citypaq_reference"]').length > 0;
+        let hasOfficeReference = jQuery('[name^="office_reference"]').length > 0;
+        let hasPudoCEXReference = jQuery('[name^="pudocex_reference"]').length > 0;
+
+        // Si existe alguno de estos campos, validar que tenga una referencia seleccionada
+        if (hasCityPaqReference) {
+            let selectedRef = jQuery('input[name="SelectedReference"]').val();
+            if (!selectedRef || selectedRef === '') {
+                alert(cityPaqPostCodeNotFound || 'Please select a CityPaq location before placing the order.');
+                return false;
+            }
+        }
+
+        if (hasOfficeReference) {
+            let selectedRef = jQuery('input[name="SelectedReference"]').val();
+            if (!selectedRef || selectedRef === '') {
+                alert(officePostCodeNotFound || 'Please select an office location before placing the order.');
+                return false;
+            }
+        }
+
+        if (hasPudoCEXReference) {
+            let selectedRef = jQuery('input[name="SelectedReference"]').val();
+            if (!selectedRef || selectedRef === '') {
+                alert(pudoCEXPostCodeNotFound || 'Please select a PudoCEX location before placing the order.');
+                return false;
+            }
+        }
+
+        return true;
+    });
+});

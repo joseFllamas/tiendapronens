@@ -1,0 +1,1112 @@
+.correos-oficial .detail-order-container {
+    margin-bottom: 30px !important;
+    font-family: CarteroBold;
+
+}
+
+.correos-oficial .detail-order-container h3 {
+    height: 23px !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border: none !important;
+    text-transform: capitalize !important;
+    font-family: CarteroBold;
+    font-size: 16px !important;
+    line-height: 24px !important;
+    font-weight: normal;
+    color: var(--co_blue);
+}
+
+.correos-oficial .detail-order-container .card-header-oder {
+    background: var(--co_yellow);
+}
+
+.order-logo {
+    float: right;
+}
+
+.correos-oficial .detail-order-container .order-title {
+    font-family: CarteroBold;
+    font-size: 22px !important;
+    line-height: 22px !important;
+        padding: 1% 2%;
+        padding-right: 56px; /* match main .chip */
+    padding: 8px;
+    margin: 0 !important;
+    font-weight: normal !important;
+    color: inherit;
+    border: none !important;
+    box-shadow: none !important;
+}
+
+.correos-oficial .input-group-text {
+    align-items: center;
+    padding: 9px 0.75rem;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 37px;
+    height: 37px;
+    text-align: center;
+    white-space: nowrap;
+    background-color: var(--co_very_light_greyish_blue);
+    border: 1px solid var(--co_light_greyish_blue);
+    border-radius: 0.25rem;
+    color: var(--co_blue);
+}
+
+.correos-oficial .input-group-addon {
+    vertical-align: top;
+    background: none;
+    border: none;
+    padding: 0;
+}
+
+.correos-oficial input[type='password'],
+.correos-oficial input[type='search'],
+.correos-oficial input[type='date'],
+.correos-oficial input[type='time'],
+.correos-oficial input[type='text'] {
+    background-color: var(--co_soft_grey_bliss);
+    background-image: none;
+    border: 1px solid var(--co_bluish_grey);
+    border-radius: 3px;
+    display: block;
+    height: 37px;
+    line-height: 1.42857;
+    padding: 6px 8px;
+    font-size: 13px;
+}
+
+.correos-oficial input[type='password']:disabled,
+.correos-oficial input[type='search']:disabled,
+.correos-oficial input[type='date']:disabled,
+.correos-oficial input[type='time']:disabled,
+.correos-oficial input[type='text']:disabled {
+    color: rgb(170, 170, 170);
+    background-color: var(--co_soft_grey_bliss);
+}
+
+.correos-oficial input[type='checkbox'],
+.correos-oficial input[type='radio'] {
+    margin: 5px 7px 5px 5px !important;
+    position: relative;
+}
+
+.correos-oficial button:disabled {
+    border: 1px solid var(--co_bluish_grey);
+    color: var(--co_greyish_blue);
+}
+
+.correos-oficial button:disabled:hover {
+    color: var(--co_greyish_blue);
+}
+
+.correos-oficial select {
+    background-color: var(--co_soft_grey_bliss);
+    /*background-image: none;*/
+    border: 1px solid var(--co_bluish_grey);
+    border-radius: 3px;
+    display: block;
+    height: 37px;
+    line-height: 1.42857;
+    padding: 6px 8px;
+    width: 60%;
+    color: var(--co_blue);
+}
+
+.correos-oficial #correos-options-pickup-return-container .form-select {
+    flex-wrap: nowrap;
+}
+
+#input_select_carrier{
+    font-weight: 600;
+    font-size: 14px;
+}
+
+.correos-oficial select:disabled {
+    color: rgb(170, 170, 170);
+    background-color: var(--co_soft_grey_bliss);
+}
+
+.correos-oficial .select-label {
+    height: 30px;
+    font-size: 12px;
+    width: 148px;
+}
+
+.correos-oficial .select-label-return {
+    width: 96px;
+}
+
+.correos-oficial .select-label-position {
+    height: 30px;
+    font-size: 12px;
+    width: 127px;
+}
+
+.correos-oficial .select-label-position-return {
+    width: 75px;
+}
+
+.correos-oficial .select-bulto {
+    height: 30px;
+    font-size: 12px;
+    /* width: 283px; */
+}
+
+.correos-oficial .select-bulto-return {
+    max-width: 50%;
+}
+
+.correos-oficial .select-bulto-principal {
+    height: 30px;
+    font-size: 12px;
+    width: 100px !important;
+}
+
+.correos-oficial .select-product-return{
+    height: 30px;
+    font-size: 12px;
+}
+
+.correos-oficial .input-group-radio-custom-bulto {
+    background-color: var(--co_soft_grey_bliss);
+    border: 1px solid var(--co_bluish_grey);
+    border-right: none;
+    border-radius: 3px 0 0 3px;
+    font-size: 12px;
+    font-weight: 400;
+    padding: 2px 1px;
+    height: 30px;
+}
+
+.correos-oficial textarea {
+    background-color: var(--co_soft_grey_bliss);
+    background-image: none;
+    border: 1px solid var(--co_bluish_grey);
+    border-radius: 3px;
+    display: block;
+    line-height: 1.42857;
+    padding: 6px 8px;
+    resize: none;
+    border-radius: 0 3px 3px 0;
+    height: 56px;
+    font-size: 12px;
+}
+
+.bootstrap textarea, .bootstrap textarea.form-control{
+    height: 56px;
+}
+
+.correos-oficial textarea:disabled {
+    color: rgb(170, 170, 170);
+    background-color: var(--co_soft_grey_bliss) !important;
+}
+
+.correos-oficial .input-group-checkbox-custom {
+    background-color: var(--co_soft_grey_bliss);
+    border: 1px solid var(--co_bluish_grey);
+    border-right: none;
+    border-radius: 3px 0 0 3px;
+    font-size: 12px;
+    font-weight: 400;
+    padding: 6px 9px;
+}
+
+.correos-oficial .input-group-checkbox {
+    border-radius: 0 3px 3px 0;
+}
+
+.correos-oficial .input-margin-left {
+    margin-left: 25px;
+}
+
+.correos-oficial .input-group-text-bulto {
+    display: flex;
+    align-items: center;
+    padding: 0.375rem 0.75rem;
+    font-weight: 400;
+    line-height: 1.5;
+    height: 30px;
+    font-size: 12px;
+    text-align: center;
+    white-space: nowrap;
+    background-color: var(--co_very_light_greyish_blue);
+    border: 1px solid var(--co_bluish_grey);
+    border-radius: 0.25rem;
+    color: var(--co_blue);
+}
+
+.correos-oficial .input-bulto {
+    height: 30px !important;
+    min-height: 30px !important;
+    font-size: 12px !important;
+}
+
+.correos-oficial .observaciones-entrega {
+    height: 56px;
+}
+
+.correos-oficial .bultos-iguales {
+    height: 29px;
+    float: right;
+    margin-top: -2px;
+    background: var(--co_blue);
+    color: var(--co_white);
+    padding: 6px;
+    border-radius: 3px;
+    padding: 1px 12px 1px 6px;
+    font-size: 12px;
+}
+
+.correos-oficial .input-group-custom > :not(:first-child):not(.dropdown-menu):not(.valid-tooltip):not(.valid-feedback):not(.invalid-tooltip):not(.invalid-feedback) {
+    margin-left: -3px !important;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    margin-bottom: 20px !important;
+}
+
+.correos-oficial .input-group-custom-bottom > :not(:first-child):not(.dropdown-menu):not(.valid-tooltip):not(.valid-feedback):not(.invalid-tooltip):not(.invalid-feedback) {
+    margin-left: -3px !important;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+}
+
+.correos-oficial .input-group-text-bulto-radio {
+    border-radius: 0;
+}
+
+.correos-oficial .card {
+    position: relative;
+    display: block;
+    margin-bottom: 0.625rem;
+    background-color: #fff;
+    border: 1px solid #dbe6e9;
+    border-radius: 5px;
+    -webkit-box-shadow: 0 0 4px 0 rgb(0 0 0 / 6%);
+    box-shadow: 0 0 4px 0 rgb(0 0 0 / 6%);
+}
+
+.correos-oficial .card-custom {
+    margin: 0 0 20px 0;
+    padding: 0;
+    border: 1px solid var(--co_bluish_grey);
+    border-radius: 5px;
+}
+
+.correos-oficial .card-body {
+    padding: 20px;
+}
+
+.correos-oficial .card-header {
+    font-weight: normal;
+    padding: 10px;
+    line-height: 1.5rem;
+    background-color: #fafbfc;
+    border-bottom: 1px solid #dbe6e9;
+}
+
+.correos-oficial .card-header:first-child {
+    border-radius: 5px 5px 0 0;
+}
+
+.correos-oficial .card-header-date {
+    background-color: var(--co_very_light_greyish_blue);
+    color: var(--co_blue);
+    font-size: 14px;
+}
+
+.correos-oficial .card-header-date[data-loading="true"] {
+    opacity: 0.7;
+    cursor: wait;
+}
+
+.correos-oficial .card-content-loading {
+    background-color: #f9f9f9;
+    border-left: 1px solid #dbe6e9;
+    border-right: 1px solid #dbe6e9;
+}
+
+.correos-oficial .card-content-loading .progress-bar {
+    animation: progressPulse 1.5s ease-in-out infinite;
+}
+
+@keyframes progressPulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.7; }
+}
+
+.customs-labels-container {
+    text-align: center;
+}
+
+.correos-oficial .card-header-blue {
+    background-color: var(--co_blue);
+}
+
+.correos-oficial .card-header-blue,
+.correos-oficial .card-header-blue h3 {
+    color: var(--co_white);
+}
+
+.correos-oficial .card-header-yellow {
+    background-color: var(--co_yellow);
+}
+
+.correos-oficial .card-header-yellow h3 {
+    color: var(--co_blue);
+}
+
+.correos-oficial .container-bulto, .container-bulto-return {
+    margin-bottom: 20px;
+}
+
+.correos-oficial .pull-right {
+    float: right;
+    margin-bottom: 20px;
+}
+
+.correos-oficial .co_primary_button {
+    border-radius: 3px;
+    font-size: 15px;
+    font-weight: normal;
+    padding: 10px 16px;
+    background-color: var(--co_blue);
+    color: white;
+    border: 1px solid var(--co_blue);
+    cursor: pointer;
+    /* width: 100%; */
+}
+
+#searchOfficeButton, #searchCityPaqButton, #selectOfficeButton, #selectCityPaqButton {
+    font-weight: normal !important;
+}
+
+.correos-oficial .change-container-office,
+.correos-oficial .change-container-citypaq,
+.correos-oficial .change-container-pudocex {
+    margin-bottom: 20px;
+    display: none;
+}
+
+.correos-oficial .btn-change {
+    margin-top: -2px;
+    color: var(--co_white);
+    border-color: var(--co_blue);
+    background: var(--co_blue);
+    border-radius: 0.25rem;
+    line-height: 1.4;
+}
+
+.correos-oficial .custom-select {
+    height: 37px;
+}
+
+.correos-oficial .map {
+    width: 100%;
+    height: 200px;
+    background: var(--co_pallid_blue);
+}
+
+.correos-oficial #office-list,
+.correos-oficial #citypaq-list {
+    display: none;
+}
+
+.correos-oficial .map-info-office,
+.correos-oficial .map-info-citypaq {
+    display: none;
+}
+
+.correos-oficial.map-info-office p,
+.correos-oficial .map-info-citypaq p {
+    font-size: 13px;
+    margin-bottom: 0;
+}
+
+.correos-oficial .input-group-prepend .btn, 
+.correos-oficial .input-group-append .btn {
+    height: 37px;
+    border-color: var(--co_blue);
+    background: var(--co_blue);
+    color: var(--co_white);
+    line-height: 16px;
+}
+
+.correos-oficial .order-done-info-text, 
+.correos-oficial .pickup-codSolicitud, 
+.correos-oficial .return-done-info-text {
+    color: var(--co_blue);
+}
+
+.correos-oficial.pickup-data {
+    color: rgb(170, 170, 170);
+}
+
+.correos-oficial .pickup-status, 
+.correos-oficial .return-status {
+    color: var(--co_blue);
+    font-size: 13px;
+    background-color: var(--co_very_pallid_blue);
+    border: none !important;
+    padding: 4px 10px 4px 10px;
+    border-radius: 3px;
+}
+
+.correos-oficial .custom-icon {
+    float: left;
+    position: relative;
+    margin: 2px 8px 0 4px;
+}
+
+.correos-oficial .hidden-block {
+    display: none !important;
+}
+
+.correos-oficial .button-width {
+    width: 100%;
+}
+
+/* .correos-oficial .icon-margin-top {
+    margin-top: 4px;
+} */
+
+.correos-oficial .text-inputs-customs-info {
+    margin: 4px 0 0 0;
+    color: var(--co_blue);
+}
+
+.correos-oficial .package-off {
+    background-color: var(--co_platinum);
+}
+
+.correos-oficial .PrintGestionAduaneraLabels, 
+.correos-oficial .PrintDocByEmail2, 
+.correos-oficial .RePrintReturnLabels2, 
+.correos-oficial .PrintGestionAduaneraLabels2 {
+    font-size: 11px !important;
+    border-radius: 3px !important;
+    padding: 5px 16px !important;
+}
+
+.correos-oficial .alert-more-5-labels {
+    padding-left: 17px;
+    color: var(--co_red_error) !important;
+    background-color: var(--co_pallid_red) !important;
+    border-width: 3px !important;
+    border-color: var(--co_red_error) !important;
+    border-top: none !important;
+    border-bottom: none !important;
+    border-right: none !important;
+    height: 30px;
+    font-size: 11px;
+    line-height: 1px !important;
+}
+
+.correos-oficial .alert-more-5-labels:before {
+    color: var(--co_red_error) !important;
+    background-color: var(--co_pallid_red) !important;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 30px;
+    font-size: 16px !important;
+}
+
+.correos-oficial .alert-max-packages {
+    padding-left: 57px;
+    color: var(--co_dark_orange) !important;
+    background-color: var(--co_very_pallid_yellow) !important;
+    border-width: 3px !important;
+    border-color: var(--co_dark_orange) !important;
+    border-top: none !important;
+    border-bottom: none !important;
+    border-right: none !important;
+}
+
+.correos-oficial .alert-max-packages:before {
+    color: var(--co_dark_orange) !important;
+    background-color: var(--co_very_pallid_yellow) !important;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 49px;
+}
+
+.correos-oficial #error_register, 
+.correos-oficial #error_register_return {
+    color: var(--co_red_error) !important;
+    background-color: var(--co_pallid_red) !important;
+    border-width: 3px !important;
+    border-color: var(--co_red_error) !important;
+    border-top: none !important;
+    border-bottom: none !important;
+    border-right: none !important;
+}
+
+.correos-oficial #error_register:before, 
+.correos-oficial #error_register_return:before {
+    color: var(--co_red_error) !important;
+    background-color: var(--co_pallid_red) !important;
+}
+
+.correos-oficial #success_register, 
+.correos-oficial #success_register_return {
+    padding-left: 57px;
+    color: var(--co_pallid_green) !important;
+    background-color: var(--co_very_pallid_green) !important;
+    border-width: 3px !important;
+    border-color: var(--co_pallid_green) !important;
+    border-top: none !important;
+    border-bottom: none !important;
+    border-right: none !important;
+}
+
+.correos-oficial #success_register:before, 
+.correos-oficial #success_register_return:before {
+    color: var(--co_pallid_green) !important;
+    background-color: var(--co_very_pallid_green) !important;
+}
+
+.correos-oficial .error {
+    border-color: var(--co_red_error);
+    color: var(--co_red_error);
+}
+
+.correos-oficial #success_register button.close {
+    color: var(--co_green);
+}
+
+.correos-oficial #error_register button.close {
+    color: var(--co_red_error);
+}
+
+.correos-oficial #customer_firstname-error,
+.correos-oficial #customer_lastname-error,
+.correos-oficial #customer_company-error,
+.correos-oficial #customer_contact-error,
+.correos-oficial #customer_address-error,
+.correos-oficial #customer_city-error,
+.correos-oficial #customer_cp-error,
+.correos-oficial #customer_phone-error,
+.correos-oficial #customer_email-error,
+.correos-oficial #customer_dni-error,
+.correos-oficial #client_key-error,
+/* DATOS ENVÍO  */
+.correos-oficial #client_key-error,
+.correos-oficial #record_date-error,
+.correos-oficial #order_reference-error,
+.correos-oficial #desc_reference_1-error,
+.correos-oficial #desc_reference_2-error,
+.correos-oficial #code_at-error,
+/* BULTOS */
+.correos-oficial #correos-num-parcels-error,
+.correos-oficial #packageRef_1-error,
+.correos-oficial #packageLarge_1-error,
+.correos-oficial #packageWidth_1-error,
+.correos-oficial #packageHeight_1-error,
+.correos-oficial #deliveryRemarks_1-error,
+.correos-oficial #packageAmount_1-error,
+.correos-oficial #packageCustomDesc_1-error,
+.correos-oficial #packageTariffCode_1-error,
+.correos-oficial #packageTariffDesc_1-error,
+/* VALORES AÑADIDOS */
+.correos-oficial #cash_on_delivery_value-error,
+.correos-oficial #insurance_value-error,
+.correos-oficial #bank_acc_number-error {
+    font-size: 10px;
+    margin: 0;
+    position: absolute;
+    padding-top: 38px;
+}
+
+.correos-oficial #packageWeight_1-error, .correos-oficial #packageWeight_2-error,
+.correos-oficial #packageWeight_3-error, .correos-oficial #packageWeight_4-error,
+.correos-oficial #packageWeight_4-error, .correos-oficial #packageWeight_6-error,
+.correos-oficial #packageWeight_5-error, .correos-oficial #packageWeight_8-error,
+.correos-oficial #packageWeight_6-error, .correos-oficial #packageWeight_10-error {
+    font-size: 10px;
+    margin: 0;
+    position: absolute;
+    padding-top: 29px;
+    left: -25px
+}
+
+.correos-oficial .input-group-custom label[id^=valuesDimensionDefault] {
+    bottom: -17px;
+    position: absolute;
+    margin: 0 !important;
+    padding: 0 !important;
+    width: max-content;
+}
+
+/* PICKUPS */
+.correos-oficial #pickup_date-error, 
+.correos-oficial #return_pickup_date-error {
+    display: none !important;
+}
+
+.correos-oficial .input-group-text > .error {
+    color: var(--co_red);
+}
+
+/* Estados */
+
+.correos-oficial .preregistrado {
+    color: var(--co_blue);
+    background-color: var(--co_very_pallid_blue);
+    border: none !important;
+    padding: 3px;
+    border-radius: 3px;
+}
+
+.correos-oficial .entregado {
+    color: var(--co_green);
+    background-color: var(--co_very_pallid_green); 
+    border: none !important;
+    padding: 3px;
+    border-radius: 3px;
+}
+
+.correos-oficial .en_curso {
+    color: var(--co_dark_orange);
+    background-color: var(--co_very_pallid_yellow);
+    border: none !important;
+    padding: 3px;
+    border-radius: 3px;
+}
+
+.correos-oficial .anulado {
+    color: var(--co_very_dark_red);
+    background-color: var(--co_very_pallid_red);
+    border: none !important;
+    padding: 3px;
+    border-radius: 3px;
+}
+
+.correos-oficial .customs-correos-container {
+    margin-top: -10px;
+}
+
+.correos-oficial .spinner-border {
+    margin-right: 10px;
+}
+
+.bootstrap .fade {
+    opacity: 100% !important;
+}
+
+.mb-3 {
+    margin-bottom: 0.9375rem !important;
+}
+
+table.dataTable thead th, table.dataTable tfoot th {
+    font-weight: 400 !important;
+}
+
+.input-group-append {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+}
+
+.append-button {
+    border-radius: 0 3px 3px 0 !important;
+}
+
+.append-input {
+    border-radius: 3px 0px 0px 3px !important;
+}
+
+/* TOOLTIPS */
+.tooltip-inner {
+    background-color: var(--co_brandeis_blue) !important;
+    box-shadow: 0px 0px 4px black !important;
+    opacity: 1 !important;
+    max-width: 100% !important;
+    font-size: 12px !important;
+    padding: 4px 14px !important;
+}
+
+.tt_settings {
+    margin-left: 6px;
+    padding: 1px;
+}
+
+/**
+ * Tabs de documentación aduanera
+ */
+ .correos-oficial .nav-pills {
+    border: 0;
+ }
+
+.correos-oficial .customs-descriptions-details * {
+   padding-right: 0;
+}
+
+.correos-oficial .customs-descriptions-details div {
+    margin-right: -1px;
+}
+
+.correos-oficial .customs-descriptions-details .input-group-custom > :not(:first-child):not(.dropdown-menu):not(.valid-tooltip):not(.valid-feedback):not(.invalid-tooltip):not(.invalid-feedback){
+    margin-left: 0 !important;
+    padding-left:0;
+} 
+ 
+.correos-oficial .added_customs_description {
+    padding-left: 0px;
+}
+
+.correos-oficial .tabs_customs_doc {
+    margin: 0;
+}
+
+.correos-oficial .tabs_customs_doc li.nav-item a {
+    margin: 0;
+    background-color: var(--co_white);
+    color: var(--co_blue);
+    padding: 6px 15px;
+    border: 1px solid var(--co_blue);
+}
+
+.correos-oficial .tabs_customs_doc li.nav-item a.customs_desc {
+    border-radius: 5px 0 0 5px;
+}
+
+.correos-oficial .tabs_customs_doc li.nav-item a.customs_code {
+    border-radius: 0 5px 5px 0px;
+}
+
+.correos-oficial .tabs_customs_doc li.nav-item a.active{
+    background-color: var(--co_blue);
+    color: var(--co_white);
+}
+
+.correos-oficial .content-tab {
+    padding: 2% 3%; 
+}
+
+.correos-oficial .add_description, .correos-oficial .del_description {
+    background-color: none;
+    border: 0;
+    color: var(--co_blue);
+}
+.correos-oficial .text-inputs-customs-info {
+    margin-top: 4%;
+    margin-bottom: 2%;
+    font-size:  1.2em;
+}
+/* Unificamos el tamaño de todas las chips (manuales y automáticas) */
+.correos-oficial .chip-row {
+    /* Mostrar una descripción por fila (stacked) */
+    display: flex !important;
+    width: 100% !important; /* ocupar toda la línea */
+    box-sizing: border-box;
+    vertical-align: top;
+    gap: 8px;
+    margin-bottom: 10px;
+    justify-content: space-between; /* separar input de los botones */
+    align-items: center;
+}
+
+.correos-oficial .chip {
+    border: 0;
+    background-color: var(--co_yellow);
+    color: var(--co_blue);
+    border-radius: 6px;
+    margin-bottom: 0; /* controlado por .chip-row */
+    padding: 8px 14px; /* más espacio para mostrar texto */
+    margin-left: 0;
+    min-height: 36px; /* más alto para mejor legibilidad */
+    font-size: 14px; /* texto más visible */
+    font-weight: 600;
+    box-sizing: border-box;
+    box-shadow: 0 1px 0 rgba(0,0,0,0.06);
+    /* usar flex para dejar espacio a los botones */
+    flex: 1 1 auto;
+    min-width: 0; /* permitir truncado dentro de flex */
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis; /* truncar si no cabe */
+}
+
+.correos-oficial .chip-actions {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex: 0 0 auto; /* que no ocupe espacio extra */
+    margin-left: 10px;
+}
+
+.correos-oficial .chip-actions svg {
+    width: 16px;
+    height: 16px;
+}
+
+/* Aseguramos que los chips readonly sigan el mismo estilo reducido */
+.correos-oficial .chip[readonly],
+.correos-oficial input.chip[readonly] {
+    background-color: var(--co_yellow) !important;
+    color: var(--co_blue) !important;
+    cursor: default;
+    border: 0;
+    border-radius: 5px;
+    margin-bottom: 0;
+    padding: 4px 8px;
+    margin-left: 0.5%;
+    min-height: 28px;
+    font-size: 12px;
+    width: 100%;
+    box-sizing: border-box;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.correos-oficial .container-bulto button {
+    border-radius: 5px;
+    margin-right: 2%;
+    padding: 2%;
+    margin-top: 2%;
+    cursor:  pointer;
+}
+
+.correos-oficial .container-bulto button:hover {
+    background-color: var(--co_blue);
+    color: var(--co_yellow);
+}
+
+.correos-oficial .add_and_delete_buttons {
+    margin-left: 2%;
+}
+
+#co_header {
+    background-color: var(--co_yellow);
+    display: flex;
+    border-radius: 8px 8px 0 0;
+    justify-content: center;
+    align-items: center;
+}
+
+#co_header .header-logo {
+    flex: 3 1;
+}
+
+#co_header .header-logo img {
+    width: 150px;
+}
+
+#co_header .module_version {
+    flex: 1 1;
+    display: flex;
+    justify-content: flex-end;
+    padding: .25rem 0;
+}
+
+#co_header .module_version span {
+    padding: .25rem .5rem;
+    color: var(--co_blue);
+    background-color: #ffffff;
+    border-radius: 6px;
+}
+
+.correos-content-gdpr {
+    background-color: #fff;
+    border-radius: 3px;
+    padding: 1rem 2rem;
+}
+
+.correos-form-gdpr {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.correos-content-gdpr h4.correos-title-gdpr {
+    color: var(--co_blue);
+    padding: 10px;
+    padding-top: 10px;
+    font-size: 30px;
+    text-align: center;
+    font-family: CarteroBold, sans-serif;
+}
+
+.correos-content-gdpr label.correos-text-gdpr {
+    color: var(--co_gray_dark);
+    width: 94%;
+    margin: .5rem 0;
+    font-weight: normal;
+    font-family: "Open Sans",helvetica,arial,sans-serif;
+    font-size: .875rem;
+    line-height: 1.5;
+}
+
+.correos-content-gdpr div.correos-check-gdpr {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.correos-input-gdpr {
+    width: 5%;
+    border-radius: 0px !important;
+}
+
+.correos-content-gdpr button.correos-button-gdpr {
+    background-color: var(--co_yellow);
+    margin: 1rem 0 .5rem;
+}
+
+.correos-content-gdpr button.correos-button-gdpr:hover {
+    color: var(--co_white);
+    background-color: var(--co_blue)
+}
+
+
+/* Media Queries */
+@media (max-width: 1368px) {
+
+    .correos-oficial .customs-descriptions-details2 .col-sm-4 {
+        width: 97%;
+    }
+    .correos-oficial .customs_code_tab .col-sm-5,  .correos-oficial .customs_code_tab .col-sm-7 {
+        width: 97%;
+    }
+
+    .correos-oficial .customs_code_tab .col-sm-7 {
+        margin-top: 3%;
+    }
+
+    .correos-oficial .container-bulto button {
+        width: 93%;
+        margin-left: 3.5%;
+    }
+
+    .correos-oficial .chip {
+        margin-left: 1.6%;
+    }
+
+}
+
+.correos-oficial .errorSender-screen {
+    position: absolute;
+    top: 55px;
+    bottom: 0px;
+    z-index: 500;
+    width: 100%;
+    background-color: rgba(0,0,0,.4);
+    left: 0px;
+    display: flex;
+    justify-content: center;
+    align-items: baseline;
+    padding-top: 50px;
+}
+
+.correos-oficial .errorSender-container {
+    width: 75%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.correos-oficial .errorSender-body {
+    background: #fff;
+    padding: 2rem;
+    border-radius: 8px;
+}
+
+.correos-oficial .errorSender-text {
+    margin-bottom: 1.5em;
+}
+
+.correos-oficial .errorSender-products {
+    margin-bottom: 20px;
+}
+
+.correos-oficial .errorSender-buttons {
+    display: flex;
+    justify-content: space-evenly;
+}
+
+.correos-oficial .errorSender-buttons button {
+    background-color: var(--co_yellow);
+}
+
+.correos-oficial .errorSender-buttons button a {
+    text-decoration: none;
+    color: inherit;
+}
+
+.correos-oficial .errorSender-buttons button:hover {
+    color: var(--co_white) !important;
+    background-color: var(--co_blue)
+}
+
+
+/* Seguimiento pedido sga */
+
+.correos-oficial .clickable-header {
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.correos-oficial .card-content {
+    overflow: hidden;
+    max-height: 0;
+    transition: max-height 0.3s ease;
+}
+
+.correos-oficial .card-content.open {
+    max-height: 1000px; /* Ajusta según tu contenido */
+}
+
+.correos-oficial .toggle-arrow {
+    transition: transform 0.3s ease;
+}
+
+.correos-oficial .toggle-arrow.open {
+    transform: rotate(180deg);
+}
+
+/* Estilos para chips automáticos de productos (readonly) */
+.correos-oficial .chip[readonly],
+.correos-oficial input.chip[readonly] {
+    background-color: var(--co_yellow) !important;
+    color: var(--co_blue) !important;
+    cursor: default;
+    border: 0;
+    border-radius: 6px;
+    margin-bottom: 0;
+    padding: 8px 14px;
+    margin-left: 0;
+    min-height: 36px;
+    font-size: 14px;
+    font-weight: 600;
+    box-sizing: border-box;
+    box-shadow: 0 1px 0 rgba(0,0,0,0.06);
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+/* Ocultar el botón 'Eliminar' redundante que aparece bajo las descripciones */
+button[id^="del_description_"] {
+    display: none !important;
+}
+
+.correos-oficial .chip-actions button{
+    background: transparent;
+    border: none;
+    padding: 4px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+
+.correos-oficial .chip-actions button:hover svg{
+    opacity: 0.9;
+    transform: scale(1.02);
+}

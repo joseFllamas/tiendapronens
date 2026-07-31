@@ -1,0 +1,41 @@
+{#
+/**
+ * @file
+ * Secciones "Entrega" y "Método de envío", que son un solo pane.
+ *
+ * Partirlo en dos es lo que consigue el orden de la referencia (dirección
+ * primero, tarifas después) sin tocar la estructura del formulario: no se
+ * cambia ningún #parents, solo dónde se pinta cada rama.
+ *
+ * - elements: shipping_profile, shipments, recalculate_shipping,
+ *   removed_shipments.
+ *
+ * Dos cosas que hay que conservar y que van por fuera de esta plantilla:
+ * el #prefix/#suffix del pane con el div shipping-information-wrapper, que es
+ * el ancla del AJAX, y el botón recalculate_shipping con su clase js-hide, que
+ * es el que commerce_shipping/shipping_checkout pulsa solo al completarse la
+ * dirección. Sin JS ese botón se ve y el cliente recalcula a mano.
+ */
+#}
+<section class="pro-co__section pro-co__section--delivery">
+  <h2 class="pro-co__section-title">{{ 'Delivery'|t }}</h2>
+  {{ elements.shipping_profile }}
+</section>
+
+{# hay_tarifas lo calcula CheckoutHooks con Element::getVisibleChildren(): NO se
+   puede usar elements.shipments|render para decidirlo, porque render() marca el
+   elemento como impreso y al volver a imprimirlo saldría vacío. #}
+{% if hay_tarifas %}
+  <section class="pro-co__section pro-co__section--rates">
+    <h2 class="pro-co__section-title">{{ 'Shipping method'|t }}</h2>
+    {{ elements.shipments }}
+    {{ elements.recalculate_shipping }}
+  </section>
+{% else %}
+  {{ elements.shipments }}
+  {{ elements.recalculate_shipping }}
+{% endif %}
+
+{# Todo lo que no se haya pintado explícitamente: removed_shipments y lo que
+   añada un módulo en el futuro. Sin esto desaparecería en silencio. #}
+{{ elements|without('shipping_profile', 'shipments', 'recalculate_shipping') }}
