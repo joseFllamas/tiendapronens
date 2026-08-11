@@ -345,21 +345,115 @@
   display: none;
 }
 
-/* --- Grid. --- */
-.pro-grid {
-  display: grid;
-  row-gap: 36px;
+/* El grid de tarjetas vive en grid.css (library pronens/grid): lo comparte
+   la franja de la ficha. */
+
+/* --- Cargar más: el botón se monta encima del paginador real. ---
+
+   Sin JS este bloque es solo el paginador de siempre. Con JS, .is-js saca el
+   enlace "siguiente" de la fila (order: -1 y ancho completo) y lo convierte en
+   el CTA, con los números debajo en pequeño: el salto directo a una página
+   sigue siendo útil.
+
+   min-height reserva el alto del bloque con botón para que al llegar a la
+   última página, cuando el botón desaparece, el pie no suba. La clase la pone
+   el JS solo si llegó a haber botón, así que aterrizar directamente en la
+   última página (o en una categoría de una sola) no deja hueco muerto. */
+.pro-cargar-mas.is-reservado {
+  /* Medido: el bloque con botón ocupa 165px en móvil y en escritorio, y sin él
+     se queda en 76. */
+  min-height: 165px;
 }
 
-.pro-grid[data-pro-cols='4'] {
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  column-gap: 16px;
+.pro-cargar-mas__estado {
+  margin: 12px 0 0;
+  text-align: center;
+  font-size: 13px;
+  color: var(--pro-text-2);
 }
 
-/* Vista 2: menos separación porque las fotos son mucho más grandes. */
-.pro-grid[data-pro-cols='2'] {
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  column-gap: 4px;
+.pro-catalogo .pro-cargar-mas.is-js .pager__item--next {
+  order: -1;
+  flex-basis: 100%;
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+/* Primera, Anterior y Última sobran junto al CTA: los números que quedan
+   debajo ya llevan a cualquier página, incluidas esas tres. */
+.pro-catalogo .pro-cargar-mas.is-js .pager__item--first,
+.pro-catalogo .pro-cargar-mas.is-js .pager__item--previous,
+.pro-catalogo .pro-cargar-mas.is-js .pager__item--last {
+  display: none;
+}
+
+.pro-catalogo .pro-cargar-mas.is-js .pager__item a.pro-cargar-mas__btn {
+  width: auto;
+  min-width: 240px;
+  height: 48px;
+  padding: 0 32px;
+  border-radius: var(--pro-radius-pill);
+  border: 1px solid var(--pro-orange-cta);
+  background: var(--pro-orange-cta);
+  color: #fff;
+  font-size: 15px;
+  letter-spacing: 0.02em;
+  transition: background-color 150ms ease, border-color 150ms ease;
+}
+
+.pro-catalogo .pro-cargar-mas.is-js .pager__item a.pro-cargar-mas__btn:hover {
+  background: var(--pro-ink);
+  border-color: var(--pro-ink);
+  color: #fff;
+}
+
+/* Con JS los números son navegación secundaria: más pequeños y sin borde. */
+.pro-catalogo .pro-cargar-mas.is-js .pager__items {
+  font-size: 13px;
+}
+
+/* Solo los números se encogen. La página actual conserva su círculo turquesa:
+   quitarle el fondo la dejaría indistinguible del resto. */
+.pro-catalogo .pro-cargar-mas.is-js .pager__item:not(.pager__item--next) a,
+.pro-catalogo .pro-cargar-mas.is-js .pager__item.is-active span {
+  width: 30px;
+  height: 30px;
+}
+
+.pro-catalogo .pro-cargar-mas.is-js .pager__item:not(.pager__item--next, .is-active) a {
+  border-color: transparent;
+  color: var(--pro-text-2);
+}
+
+.pro-cargar-mas.is-cargando .pro-cargar-mas__btn {
+  pointer-events: none;
+  opacity: 0.75;
+}
+
+/* Punto que gira mientras llega el lote. Es el único indicador: no hay
+   spinner de página ni scroll animado. */
+.pro-cargar-mas.is-cargando .pro-cargar-mas__btn::after {
+  content: "";
+  width: 14px;
+  height: 14px;
+  margin-left: 10px;
+  border: 2px solid rgba(255, 255, 255, 0.4);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: pro-cargar-mas-giro 700ms linear infinite;
+}
+
+@keyframes pro-cargar-mas-giro {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pro-cargar-mas.is-cargando .pro-cargar-mas__btn::after {
+    animation: none;
+  }
 }
 
 /* --- Paginador circular. --- */
@@ -427,20 +521,9 @@
     font-size: 30px;
   }
 
-  .pro-grid[data-pro-cols='4'] {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-  }
 }
 
 @media (max-width: 768px) {
-  .pro-grid[data-pro-cols='4'] {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-
-  .pro-grid[data-pro-cols='2'] {
-    grid-template-columns: minmax(0, 1fr);
-  }
-
   .pro-filters__right {
     margin-left: 0;
     width: 100%;

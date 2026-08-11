@@ -118,6 +118,11 @@ cesta:
     component:
       css/cesta.css: {}
 
+grid:
+  css:
+    component:
+      css/grid.css: {}
+
 catalogo:
   version: VERSION
   css:
@@ -125,9 +130,12 @@ catalogo:
       css/catalogo.css: {}
   js:
     js/catalogo.js: {}
+    js/cargar-mas.js: {}
   dependencies:
     - core/drupal
     - core/once
+    - core/drupal.announce
+    - pronens/grid
 
 ficha:
   version: VERSION
@@ -140,6 +148,7 @@ ficha:
     - core/drupal
     - core/once
     - core/drupalSettings
+    - pronens/grid
     - core/drupal.states
 
 historia:

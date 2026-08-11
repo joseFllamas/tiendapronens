@@ -73,6 +73,11 @@
     <div class="pro-catalogo__empty">{{ empty }}</div>
   {% endif %}
 
-  {{ pager }}
+  {# El envoltorio no se reemplaza nunca: es donde cargar-mas.js pone su once y
+     escucha por delegación. Lo que se sustituye en cada carga es el paginador
+     de dentro, cuyo enlace "siguiente" ES el botón "Cargar más". #}
+  <div class="pro-cargar-mas" data-pro-cargar-mas data-pro-total="{{ catalogo.total }}">
+    {{ pager }}
+  </div>
   {{ feed_icons }}
 </div>
