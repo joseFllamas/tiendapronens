@@ -24,6 +24,7 @@ trait LineaPedidoTrait {
 
   use CamposTrait;
   use PrecioTrait;
+  use TraduccionTrait;
 
   /**
    * Id del método de envío que regala el porte a partir de cierto importe.
@@ -58,7 +59,7 @@ trait LineaPedidoTrait {
     return [
       // El título de la línea de pedido lleva la variación pegada; el diseño
       // quiere el nombre del producto arriba y las opciones debajo.
-      'nombre' => $producto?->label() ?? $linea->label(),
+      'nombre' => $this->etiqueta($producto) ?? $linea->label(),
       'url' => $producto?->toUrl()->toString(),
       'foto' => $this->fotoDeLinea($linea, $metadatos),
       'opciones' => $this->opcionesDeLinea($linea),
@@ -111,7 +112,7 @@ trait LineaPedidoTrait {
     foreach (array_keys($variacion->getAttributeValueIds()) as $campo) {
       $valor = $variacion->getAttributeValue($campo);
       if ($valor !== NULL) {
-        $partes[] = (string) $valor->label();
+        $partes[] = (string) $this->etiqueta($valor);
       }
     }
 

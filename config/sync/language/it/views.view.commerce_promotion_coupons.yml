@@ -1,0 +1,45 @@
+label: Coupons
+display:
+  default:
+    display_title: Principale
+    display_options:
+      exposed_form:
+        options:
+          submit_button: Filtra
+          reset_button_label: Ripristina
+          exposed_sorts_label: 'Ordina per'
+          sort_asc_label: Asc
+          sort_desc_label: Disc
+      pager:
+        options:
+          tags:
+            previous: ‹‹
+            next: ››
+            first: '« Prima'
+            last: 'Ultima »'
+          expose:
+            items_per_page_label: 'Voci per pagina'
+            items_per_page_options_all_label: '- Tutto -'
+            offset_label: Scostamento
+      fields:
+        code:
+          label: Codice
+          separator: ', '
+        usage_limit:
+          label: Utilizzo
+          separator: ', '
+        usage_limit_customer:
+          separator: ', '
+        operations:
+          label: Operazioni
+      filters:
+        code:
+          expose:
+            label: Codice
+      title: Coupons
+      arguments:
+        promotion_id:
+          exception:
+            title: Tutti
+  page_1:
+    display_title: Pagina

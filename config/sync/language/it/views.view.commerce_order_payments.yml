@@ -1,0 +1,47 @@
+label: Pagamenti
+display:
+  default:
+    display_title: Predefinito
+    display_options:
+      title: Pagamenti
+      fields:
+        amount__number:
+          label: Pagamento
+          separator: ', '
+        refunded_amount__number:
+          separator: ', '
+        avs_response_code_label:
+          separator: ', '
+        avs_response_code:
+          separator: ', '
+        state:
+          label: Stato
+          separator: ', '
+        payment_gateway:
+          separator: ', '
+        authorized:
+          separator: ', '
+        completed:
+          label: Completato
+          separator: ', '
+        remote_id:
+          label: 'ID remoto'
+          separator: ', '
+        operations:
+          label: Operazioni
+      exposed_form:
+        options:
+          submit_button: Applica
+          reset_button_label: Ripristina
+          exposed_sorts_label: 'Ordina per'
+          sort_asc_label: Asc
+          sort_desc_label: Disc
+      arguments:
+        order_id:
+          exception:
+            title: Tutti
+  page_1:
+    display_title: Pagina
+    display_options:
+      menu:
+        title: Pagamenti

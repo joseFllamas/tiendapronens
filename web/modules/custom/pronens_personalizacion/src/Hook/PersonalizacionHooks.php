@@ -95,8 +95,8 @@ final class PersonalizacionHooks {
     $form['personalizacion_activa'] = [
       '#type' => 'checkbox',
       '#title' => $modo === 'inicial'
-        ? $this->t('Bordar su inicial')
-        : $this->t('Bordar su nombre'),
+        ? $this->t('Embroider your initial')
+        : $this->t('Embroider your name'),
       // En modo inicial viene marcada: la inicial es el reclamo con el que se
       // vende el producto y no cuesta nada, así que obligar a activarla sobra;
       // quien quiera la prenda lisa la desmarca. En modo texto sigue apagada
@@ -122,10 +122,13 @@ final class PersonalizacionHooks {
     // nombre. El widget es un string_textfield; se ajusta su elemento de valor.
     $texto = &$form[PersonalizacionOrderProcessor::CAMPO_TEXTO];
     if (isset($texto['widget'][0]['value']) && $modo === 'inicial') {
-      $texto['widget'][0]['value']['#title'] = $this->t('Inicial');
+      // Con contexto: "Initial" a secas es una palabra genérica que cualquier
+      // otro módulo puede registrar con otro significado y acabaría
+      // compartiendo traducción. Aquí es la letra que se borda.
+      $texto['widget'][0]['value']['#title'] = $this->t('Initial', [], ['context' => 'Embroidery']);
       $texto['widget'][0]['value']['#maxlength'] = 1;
       $texto['widget'][0]['value']['#attributes']['maxlength'] = 1;
-      $texto['widget'][0]['value']['#placeholder'] = $this->t('Una letra');
+      $texto['widget'][0]['value']['#placeholder'] = $this->t('One letter');
     }
 
     $form['#validate'][] = [self::class, 'validarPersonalizacion'];
@@ -159,7 +162,7 @@ final class PersonalizacionHooks {
         && (bool) $extra->get('field_pide_texto')->value;
       if ($pide && $texto === '') {
         $form_state->setErrorByName(self::CAMPO_EXTRAS_TEXTO, new TranslatableMarkup(
-          'Escribe el nombre para @extra.',
+          'Type the name for @extra.',
           ['@extra' => $extra->label()]
         ));
         return;
@@ -196,7 +199,7 @@ final class PersonalizacionHooks {
       // pasar de largo: sin letra elegida el pedido saldría con la prenda lisa
       // sin que nadie lo haya decidido. Se pide la letra o que se desmarque.
       if ($activa && $inicial) {
-        $form_state->setErrorByName($campo, new TranslatableMarkup('Elige la inicial que quieres bordar, o desmarca «Bordar su inicial».'));
+        $form_state->setErrorByName($campo, new TranslatableMarkup('Choose the initial you want embroidered, or untick “Embroider your initial”.'));
         return;
       }
       // Sin casilla o sin texto no hay bordado: se vacía todo para que ni el
@@ -207,7 +210,7 @@ final class PersonalizacionHooks {
     }
 
     if ($inicial && mb_strlen($texto) > 1) {
-      $form_state->setErrorByName($campo, new TranslatableMarkup('Este producto se personaliza con una sola inicial.'));
+      $form_state->setErrorByName($campo, new TranslatableMarkup('This product is personalised with a single initial.'));
       return;
     }
 

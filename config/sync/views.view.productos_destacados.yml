@@ -61,10 +61,27 @@ display:
           plugin_id: boolean
           operator: '='
           value: '1'
+        langcode:
+          id: langcode
+          table: commerce_product_field_data
+          field: langcode
+          relationship: none
+          group_type: group
+          admin_label: ''
+          entity_type: commerce_product
+          entity_field: langcode
+          plugin_id: language
+          operator: in
+          value:
+            '***LANGUAGE_language_content***': '***LANGUAGE_language_content***'
+          group: 1
+          exposed: false
+          is_grouped: false
       row:
         type: 'entity:commerce_product'
         options:
           view_mode: tarjeta
+      rendering_language: '***LANGUAGE_language_content***'
       display_extenders: {  }
     cache_metadata:
       max-age: -1

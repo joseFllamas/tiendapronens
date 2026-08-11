@@ -5,6 +5,7 @@ namespace Drupal\pronens\Hook;
 use Drupal\commerce_product\Entity\ProductInterface;
 use Drupal\commerce_product\Entity\ProductVariationInterface;
 use Drupal\Core\Cache\Cache;
+use Drupal\Core\Entity\EntityRepositoryInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Field\EntityReferenceFieldItemListInterface;
 use Drupal\file\FileInterface;
@@ -18,6 +19,7 @@ use Drupal\Core\Render\RendererInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\pronens\CamposTrait;
 use Drupal\pronens\PrecioTrait;
+use Drupal\pronens\TraduccionTrait;
 
 /**
  * Hooks de la ficha de producto.
@@ -32,6 +34,7 @@ class FichaHooks {
   use CamposTrait;
   use PrecioTrait;
   use StringTranslationTrait;
+  use TraduccionTrait;
 
   /**
    * Cuántas fotos entran en la cuadrícula de la galería.
@@ -55,6 +58,7 @@ class FichaHooks {
     protected EntityTypeManagerInterface $entityTypeManager,
     protected ConfigFactoryInterface $configFactory,
     protected RendererInterface $renderer,
+    protected EntityRepositoryInterface $entityRepository,
   ) {
   }
 
@@ -151,6 +155,7 @@ class FichaHooks {
     if (isset($form['purchased_entity'])) {
       $form['purchased_entity']['#attributes']['class'][] = 'pro-attrs';
       $form['purchased_entity']['#weight'] = 0;
+      $this->traduceEtiquetasDeAtributo($form['purchased_entity']);
     }
 
     // Card del personalizador: el checkbox y los dos campos van juntos.
@@ -198,7 +203,7 @@ class FichaHooks {
         $limite = (int) ($valor['#maxlength'] ?? 0);
         $valor['#description'] = NULL;
         if (($valor['#placeholder'] ?? '') === '' && $limite > 1) {
-          $valor['#placeholder'] = $this->t('Escribe el nombre (máx. @n)', ['@n' => $limite]);
+          $valor['#placeholder'] = $this->t('Type the name (max. @n)', ['@n' => $limite]);
         }
         unset($valor);
       }
@@ -368,13 +373,50 @@ class FichaHooks {
   }
 
   /**
+   * Rehace el título de cada selector de atributo en el idioma de la página.
+   *
+   * Commerce saca ese título del atributo
+   * (commerce_product.commerce_product_attribute.talla) y lo traduce al idioma
+   * de la VARIACIÓN, no al de la página: ProductVariationAttributeMapper::
+   * prepareAttributes() llama a getTranslationFromContext() pasándole
+   * $selected_variation->language(). Aquí las 1123 variaciones son solo `es`,
+   * así que el selector decía "Talla" también en la ficha francesa por mucho
+   * que el atributo estuviera traducido.
+   *
+   * Se relee del config factory, que ya aplica el override del idioma activo.
+   * Ojo: la etiqueta que Commerce usa es la del atributo, NO la del campo
+   * `field.field.commerce_product_variation.default.attribute_talla`, que
+   * también está traducida pero solo sale en el backoffice.
+   *
+   * @param array<string, mixed> $elemento
+   *   El sub-árbol purchased_entity del formulario.
+   */
+  protected function traduceEtiquetasDeAtributo(array &$elemento): void {
+    foreach ($elemento as $clave => &$hijo) {
+      if (!is_array($hijo)) {
+        continue;
+      }
+      if (is_string($clave) && str_starts_with($clave, 'attribute_') && isset($hijo['#title'])) {
+        $etiqueta = $this->configFactory
+          ->get('commerce_product.commerce_product_attribute.' . substr($clave, strlen('attribute_')))
+          ->get('label');
+        if (is_string($etiqueta) && $etiqueta !== '') {
+          $hijo['#title'] = $etiqueta;
+        }
+        continue;
+      }
+      $this->traduceEtiquetasDeAtributo($hijo);
+    }
+  }
+
+  /**
    * Eyebrow del diseño: categoría y composición separadas por punto medio.
    */
   protected function eyebrow(ProductInterface $producto): ?string {
     $partes = [];
     $termino = $this->termFromField($producto, 'field_tipo_de_producto');
     if ($termino !== NULL) {
-      $partes[] = $termino->label();
+      $partes[] = $this->etiqueta($termino);
     }
     if ($producto->hasField('field_composicion') && !$producto->get('field_composicion')->isEmpty()) {
       $partes[] = (string) $producto->get('field_composicion')->value;
@@ -422,9 +464,11 @@ class FichaHooks {
       return NULL;
     }
 
+    $traducido = $this->traducido($termino);
+
     return [
-      'titulo' => $termino->label(),
-      'contenido' => $termino->get('description')->view(['label' => 'hidden', 'type' => 'text_default']),
+      'titulo' => $traducido->label(),
+      'contenido' => $traducido->get('description')->view(['label' => 'hidden', 'type' => 'text_default']),
     ];
   }
 

@@ -88,10 +88,17 @@ process:
         migration: pronens_taxonomia_tipo_producto
         source: tid
         no_stub: true
-  # field_edades no se mapea: en el D7 field__tama_o está en el producto-SKU, no
-  # en el nodo de display, y sus valores (rangos de edad con medida física) los
-  # consume el atributo Medida de la variación. El campo y el vocabulario se
-  # conservan para la navegación facetada del theme nuevo.
+  # field_edades no se mapea, y desde 2026-07-31 ni el campo ni el vocabulario
+  # existen: se borraron. El vocabulario del D7 se llama "Tamaño" (el nombre de
+  # máquina `edades` engañaba) y su campo field__tama_o vivía en el producto-SKU
+  # de `producto_costumizado`, donde cada talla era un producto aparte, así que
+  # marcaba de qué talla era ese producto. Al consolidar en un producto con
+  # variaciones, esa función pasó a los atributos de Commerce: los meses al
+  # atributo Talla (3/6/9/12/18 meses, recuentos idénticos a los del D7) y los
+  # centímetros al atributo Medida. El campo llegó a tener 0 filas y 14 de sus
+  # 24 términos eran copias repetidas creadas a mano en el D7, 13 de ellas nunca
+  # usadas. Las filas de migrate_map_pronens_taxonomia_edades se dejan a
+  # propósito: con la fila en el mapa, un re-import no recrea los términos.
   field_lavado:
     plugin: sub_process
     source: field_recomendaciones_de_lavado

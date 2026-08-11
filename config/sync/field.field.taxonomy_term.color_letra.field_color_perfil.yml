@@ -14,7 +14,7 @@ bundle: color_letra
 label: 'Color del perfil'
 description: 'El contorno de la letra. El relleno va en "Color", y con los dos se dibuja la letra de muestra en la ficha.'
 required: false
-translatable: true
+translatable: false
 default_value: {  }
 default_value_callback: ''
 settings:

@@ -1,0 +1,58 @@
+display:
+  default:
+    display_title: Predefinito
+    display_options:
+      exposed_form:
+        options:
+          submit_button: Applica
+          reset_button_label: Ripristina
+          exposed_sorts_label: 'Ordina per'
+          sort_asc_label: Asc
+          sort_desc_label: Disc
+      pager:
+        options:
+          tags:
+            previous: ‹‹
+            next: ››
+            first: '« Prima'
+            last: 'Ultima »'
+          expose:
+            items_per_page_label: 'Voci per pagina'
+            items_per_page_options_all_label: '- Tutto -'
+            offset_label: Scostamento
+      fields:
+        name:
+          label: Nome
+          separator: ', '
+        offer__target_plugin_id:
+          separator: ', '
+        usage_limit:
+          label: Utilizzo
+          separator: ', '
+        usage_limit_customer:
+          separator: ', '
+        start_date:
+          label: 'Data iniziale'
+          separator: ', '
+        end_date:
+          label: 'Data finale'
+          separator: ', '
+        operations:
+          label: Operazioni
+      filters:
+        name:
+          expose:
+            label: Nome
+        code:
+          expose:
+            label: 'Codice coupon'
+        status:
+          expose:
+            label: Stato
+  admin:
+    display_title: Pagina
+    display_options:
+      menu:
+        title: Elenco
+      tab_options:
+        title: Elenco

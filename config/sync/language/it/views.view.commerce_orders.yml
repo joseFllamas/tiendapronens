@@ -1,0 +1,69 @@
+label: Ordini
+display:
+  default:
+    display_title: Principale
+    display_options:
+      exposed_form:
+        options:
+          submit_button: Filtra
+          reset_button_label: Ripristina
+          exposed_sorts_label: 'Ordina per'
+          sort_asc_label: Asc
+          sort_desc_label: Disc
+      pager:
+        options:
+          expose:
+            items_per_page_label: 'Voci per pagina'
+            items_per_page_options_all_label: '- Tutto -'
+            offset_label: Scostamento
+          tags:
+            previous: '‹ precedente'
+            next: 'seguente ›'
+            first: '« prima'
+            last: 'ultima »'
+      fields:
+        commerce_order_bulk_form:
+          action_title: 'Con la selezione'
+        order_number:
+          separator: ', '
+        placed:
+          label: Data
+          separator: ', '
+        type:
+          label: Tipo
+          separator: ', '
+        store_id:
+          label: Negozio
+          separator: ', '
+        uid:
+          label: Cliente
+          separator: ', '
+        mail:
+          label: E-mail
+          separator: ', '
+        state:
+          label: Stato
+          separator: ', '
+        total_price__number:
+          label: Totale
+          separator: ', '
+        operations:
+          label: Operazioni
+      filters:
+        order_number:
+          expose:
+            label: "Numero d'ordine"
+        type:
+          expose:
+            label: Tipo
+        state:
+          expose:
+            label: Stato
+      title: Ordini
+  page_1:
+    display_title: Pagina
+    display_options:
+      menu:
+        title: Ordini
+      tab_options:
+        title: Ordini

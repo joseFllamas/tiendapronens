@@ -6,6 +6,7 @@ use Drupal\commerce_cart\CartProviderInterface;
 use Drupal\commerce_order\Entity\OrderItemInterface;
 use Drupal\commerce_price\Price;
 use Drupal\Core\Cache\CacheableMetadata;
+use Drupal\Core\Entity\EntityRepositoryInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Hook\Attribute\Hook;
@@ -30,6 +31,7 @@ class CarritoHooks {
   public function __construct(
     protected EntityTypeManagerInterface $entityTypeManager,
     protected CartProviderInterface $cartProvider,
+    protected EntityRepositoryInterface $entityRepository,
   ) {
   }
 

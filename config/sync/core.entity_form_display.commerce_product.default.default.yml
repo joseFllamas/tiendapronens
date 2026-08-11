@@ -7,7 +7,6 @@ dependencies:
     - field.field.commerce_product.default.body
     - field.field.commerce_product.default.field_composicion
     - field.field.commerce_product.default.field_destacado
-    - field.field.commerce_product.default.field_edades
     - field.field.commerce_product.default.field_escuela
     - field.field.commerce_product.default.field_extras_disponibles
     - field.field.commerce_product.default.field_fuentes_permitidas
@@ -66,12 +65,6 @@ content:
     region: content
     settings:
       display_label: true
-    third_party_settings: {  }
-  field_edades:
-    type: options_buttons
-    weight: 13
-    region: content
-    settings: {  }
     third_party_settings: {  }
   field_escuela:
     type: options_buttons

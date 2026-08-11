@@ -13,7 +13,7 @@ bundle: color
 label: 'Foto de la muestra'
 description: 'Para estampados como el camuflaje, donde un color plano no sirve. Si está vacío se usa el color.'
 required: false
-translatable: true
+translatable: false
 default_value: {  }
 default_value_callback: ''
 settings:

@@ -1,0 +1,16 @@
+label: 'Blocco del carrello'
+display:
+  default:
+    display_title: Principale
+    display_options:
+      exposed_form:
+        options:
+          submit_button: Applica
+          reset_button_label: Ripristina
+          exposed_sorts_label: 'Ordina per'
+          sort_asc_label: Asc
+          sort_desc_label: Disc
+      arguments:
+        order_id:
+          exception:
+            title: Tutti

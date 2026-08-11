@@ -8,7 +8,6 @@ dependencies:
     - field.field.commerce_product.default.body
     - field.field.commerce_product.default.field_composicion
     - field.field.commerce_product.default.field_destacado
-    - field.field.commerce_product.default.field_edades
     - field.field.commerce_product.default.field_escuela
     - field.field.commerce_product.default.field_extras_disponibles
     - field.field.commerce_product.default.field_fuentes_permitidas
@@ -34,7 +33,6 @@ hidden:
   created: true
   field_composicion: true
   field_destacado: true
-  field_edades: true
   field_escuela: true
   field_extras_disponibles: true
   field_fuentes_permitidas: true

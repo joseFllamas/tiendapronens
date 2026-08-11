@@ -16,6 +16,7 @@ use Drupal\media\MediaInterface;
 use Drupal\paragraphs\ParagraphInterface;
 use Drupal\pronens\CamposTrait;
 use Drupal\pronens\PrecioTrait;
+use Drupal\pronens\TraduccionTrait;
 use Drupal\taxonomy\TermInterface;
 
 /**
@@ -25,6 +26,7 @@ class PronensHooks {
 
   use CamposTrait;
   use PrecioTrait;
+  use TraduccionTrait;
   /**
    * @file
    * Functions to support theming.
@@ -154,16 +156,6 @@ class PronensHooks {
       }
     }
     $variables['breadcrumb'][] = ['text' => $producto->label()];
-  }
-
-  /**
-   * Traducción de un término al idioma de la página.
-   */
-  protected function traducido(TermInterface $termino): TermInterface {
-    /** @var \Drupal\taxonomy\TermInterface $traducido */
-    $traducido = $this->entityRepository->getTranslationFromContext($termino);
-
-    return $traducido;
   }
 
   /**
@@ -312,7 +304,7 @@ class PronensHooks {
           break;
         }
         $etiqueta = $paragraph->hasField('field_etiqueta') ? $paragraph->get('field_etiqueta')->value : NULL;
-        $variables['tile_label'] = $etiqueta ?: $term->label();
+        $variables['tile_label'] = $etiqueta ?: $this->etiqueta($term);
         $variables['tile_url'] = $term->toUrl()->toString();
         $media = $this->mediaFromField($paragraph, 'field_imagen_media')
           ?? $this->mediaFromField($term, 'field_imagen');
@@ -363,7 +355,7 @@ class PronensHooks {
               $tids[] = (int) $descendant->tid;
             }
             $groups[] = [
-              'label' => $chip->get('field_etiqueta')->value ?: $term->label(),
+              'label' => $chip->get('field_etiqueta')->value ?: $this->etiqueta($term),
               'view' => $embed(implode('+', $tids)),
             ];
             $variables['#cache']['tags'] = Cache::mergeTags($variables['#cache']['tags'] ?? [], $chip->getCacheTags());
@@ -401,7 +393,7 @@ class PronensHooks {
     }
     $card = [
       'url' => $product->toUrl()->toString(),
-      'title' => $product->label(),
+      'title' => $this->etiqueta($product),
       'image' => NULL,
       'price' => NULL,
       'personalizable' => $product->hasField('field_personalizable') && (bool) $product->get('field_personalizable')->value,
@@ -467,7 +459,7 @@ class PronensHooks {
       }
       $vistos[$valor->id()] = TRUE;
       $opciones[] = [
-        'etiqueta' => (string) $valor->label(),
+        'etiqueta' => (string) $this->etiqueta($valor),
         'url' => $product->toUrl('canonical', ['query' => ['v' => $variation->id()]])->toString(),
       ];
       $variables['#cache']['tags'] = Cache::mergeTags($variables['#cache']['tags'] ?? [], $valor->getCacheTags());

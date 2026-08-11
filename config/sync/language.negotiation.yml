@@ -9,9 +9,11 @@ url:
     ca: ca
     fr: fr
     en: en
+    it: it
   domains:
     en: ''
     es: ''
     ca: ''
     fr: ''
+    it: ''
 selected_langcode: site_default

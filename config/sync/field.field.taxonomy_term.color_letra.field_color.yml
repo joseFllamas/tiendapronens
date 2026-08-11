@@ -14,7 +14,7 @@ bundle: color_letra
 label: 'Color del interior'
 description: 'El relleno de la letra.'
 required: false
-translatable: true
+translatable: false
 default_value: {  }
 default_value_callback: ''
 settings:

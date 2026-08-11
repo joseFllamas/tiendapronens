@@ -8,7 +8,8 @@ Categoría y Ficha). El detalle completo de pantallas, tokens y comportamiento e
 ## Contexto del repo
 - Drupal 11 (`web/` como docroot), Commerce 3 + PayPal + Sermepa + Shipping + Stock ya en composer.
 - No hay tema custom todavía: créalo en `web/themes/custom/pronens` (starterkit de core).
-- Idiomas: ES (por defecto), CA, FR, EN — módulos multilingües de core.
+- Idiomas: ES (por defecto), CA, FR, EN e IT — módulos multilingües de core. Los 366 productos
+  están traducidos a los cinco (agosto de 2026).
 - **La migración desde el D7 está hecha**: 370 productos con 1076 variaciones (bundle `default`),
   taxonomías con imagen en Media (2325), 1578 usuarios con contraseña, direcciones, alias y 4 páginas.
   Checkout completo con envíos por zonas, IVA europeo, cupones y pasarelas (Redsys/PayPal/manual).
@@ -246,8 +247,66 @@ Donde este documento y la realidad del repo discrepan, manda esta lista (decidid
     y el modo inicial admite **una sola letra**. O se corrige el copy o se decide si la rejilla admite
     dos. Copia previa de todo esto: snapshot `pre-sudaderas-inicial`.
 - **El nombre de los extras y de los formatos no está traducido** en CA/FR/EN porque son términos de
-  taxonomía y los vocabularios no son traducibles: en este sitio **el contenido es solo español** (0
-  traducciones de producto), así que es coherente con el resto. La interfaz sí está en los 4 idiomas.
+  taxonomía y los vocabularios no son traducibles. La interfaz sí está en los idiomas del sitio.
+- **Formato de los títulos de producto (2026-08-11)**: el catálogo migrado mezclaba tres estilos
+  (100 títulos gritados en MAYÚSCULAS, una veintena en Title Case y el resto bien). La regla ya
+  dominante en ES/CA/FR/IT era **frase + nombre del motivo en mayúscula** ("Bata babi escolar
+  Cupcake"), así que es la que se ha aplicado a los 5 idiomas menos el inglés, que se queda en
+  **Title Case** por ser su convención y su estilo mayoritario (decisión del cliente). Se
+  normalizaron **523 títulos** y se regeneraron los de las variaciones, que llevaban el título del
+  producto dentro (`generateTitle: true` en el tipo `default`) y salen en el carrito y en los
+  correos. Detalles que conviene no reinventar:
+  - El léxico de qué palabra es genérica (prenda, color, talla, material) y cómo se acentúa se
+    **dedujo de los títulos que ya estaban bien escritos**, no de una lista a mano; solo se
+    añadieron los términos que nunca aparecieron fuera de las mayúsculas. Al pasar a minúsculas se
+    recuperaron las tildes que faltaban en el D7 (COJIN → Cojín, BUHO → Búho, CAPITAN → Capitán).
+  - **Los colores van en minúscula** aunque sean lo único que distingue al producto ("Mascarilla
+    higiénica rosa"), y los nombres de estampado en mayúscula ("Mascarilla higiénica Aguacates").
+  - `GOAR` y `POP Culture` son las **únicas** mayúsculas legítimas del catálogo: cualquier otra
+    palabra en caja alta era un grito.
+  - **Las URLs no se movieron**: los 366 productos tienen `pathauto_state` a 0 salvo 15, y ninguno
+    de esos 15 estaba en la lista, así que pathauto no regeneró ningún alias (2038 antes y después).
+  - Copia previa: snapshot `pre-normalizar-titulos`.
+- **Repaso de las traducciones de título (2026-08-11)**: la pasada de traducción por IA dejó restos
+  de castellano en 89 productos. Se corrigieron **166 títulos** por sustitución quirúrgica, tomando
+  el término de destino del idioma hermano que ya lo tenía bien en ese mismo producto, no de una
+  elección propia. Lo que hay que saber para la próxima tanda:
+  - **La categoría manda sobre el título**. Los productos 15, 23, 24, 25 y 31 son de "Batas
+    guardería" y la traducción los convirtió en baberos (*bavoir*, *pitet*, *bavaglino*, *bib*) y
+    uno en body. No se detecta leyendo el título: hay que cruzar con `field_tipo_de_producto`.
+  - **Los motivos sí se traducen**, que es lo que ya hacían inglés, francés e italiano (Owl Bib,
+    Bavoir Hibou, Bavaglino Gufo). El catalán lo hacía a medias y se ha completado.
+  - **Un título traía un token del modelo**: el producto 67 en francés era `Short<|endoftext|>`, y
+    el 332 en italiano acababa en salto de línea. Barrido hecho sobre títulos, `body` y
+    `field_composicion` en los 5 idiomas: no hay más.
+  - **Sin decidir a propósito**, porque son ambiguos y los deja el cliente: `Carpas` (144 y 211,
+    ¿carpas de circo o peces?), `Helada` (281, el catalán lo tradujo y los demás no), `Blanca` (110,
+    ¿el personaje de Street Fighter, Blancanieves o el color?) y `Márfega` (261, 262, 267), que se
+    trata como nombre de gama y no se traduce en ningún idioma.
+  - Copia previa: snapshot `pre-traducciones-titulos`.
+- **Lo que el tema carga por su cuenta hay que traducirlo a mano (2026-08-11)**: una entidad
+  cargada por id llega en su idioma por defecto, que aquí es el castellano, así que `->label()` a
+  secas devolvía "Batas guardería" también en la ficha francesa. Vale para términos de taxonomía,
+  valores de atributo y el producto de una línea de pedido; lo que renderiza el view builder (el
+  título del producto, los campos del display) ya viene traducido. El helper está en
+  `TraduccionTrait` (`traducido()` / `etiqueta()`) y lo usan las cinco clases de hooks del tema.
+- **La etiqueta del selector de variación la fuerza Commerce al idioma de la variación**:
+  `ProductVariationAttributeMapper::prepareAttributes()` llama a `getTranslationFromContext()`
+  pasándole `$selected_variation->language()`, y aquí las 1123 variaciones son solo `es`, así que
+  el selector decía "Talla" en los cinco idiomas. Dos cosas: la etiqueta sale del **atributo**
+  (`commerce_product.commerce_product_attribute.talla`), no del campo de la variación, que es lo
+  que estaba traducido y solo se ve en el backoffice; y aunque se traduzca el atributo, Commerce
+  la seguiría pidiendo en `es`. `FichaHooks::traduceEtiquetasDeAtributo()` rehace el `#title`
+  leyendo la config, que ya llega con el override del idioma activo.
+- **Los valores de atributo siguen solo en castellano**: las 78 opciones (`0 (0-1 años)`,
+  `40 x 40 cm`…) son entidades `commerce_product_attribute_value` traducibles pero sin traducir, así
+  que las pastillas de talla salen en castellano en los cinco idiomas. Es tarea de datos.
+- **Las views tienen que filtrar por idioma**: `commerce_product_field_data` tiene una fila por
+  idioma y el índice de Search API indexa los cinco, así que sin filtro cada producto salía **cinco
+  veces** (74 productos en una categoría daban "370 productos" y 24 tarjetas eran 5 productos
+  repetidos). Añadido `search_api_language` en `catalogo` y `langcode` en `productos_destacados`,
+  las dos con `***LANGUAGE_language_content***`, que Views sustituye por el idioma de la página: no
+  hacen falta displays por idioma. Cualquier view nueva que liste productos necesita lo mismo.
 - **`field_relacionados` está vacío en los 370 productos**, así que "Combínalo con" cae a los 4
   productos más recientes del mismo término. Si el cliente rellena el campo, manda el campo.
 - **Contraste AA del naranja**: el `#f4854e` del prototipo con texto blanco da 2,5:1 y el CTA es

@@ -1,0 +1,30 @@
+display:
+  default:
+    display_title: Principale
+    display_options:
+      title: 'Attività ordine'
+      fields:
+        created:
+          label: Data
+          separator: ', '
+        rendered_entity:
+          label: Messaggio
+        uid:
+          label: Utente
+          separator: ', '
+      exposed_form:
+        options:
+          submit_button: Applica
+          reset_button_label: Ripristina
+          exposed_sorts_label: 'Ordina per'
+          sort_asc_label: Asc
+          sort_desc_label: Disc
+      arguments:
+        source_entity_id:
+          exception:
+            title: Tutti
+        source_entity_type:
+          exception:
+            title: Tutti
+  block_1:
+    display_title: Blocco

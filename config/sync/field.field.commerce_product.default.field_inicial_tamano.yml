@@ -12,7 +12,7 @@ bundle: default
 label: 'Inicial: tamaño (% del ancho)'
 description: 'Ancho del parche respecto al ancho de la foto. El parche real mide 9 x 9 cm.'
 required: false
-translatable: true
+translatable: false
 default_value: {  }
 default_value_callback: ''
 settings:

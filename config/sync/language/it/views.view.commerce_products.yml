@@ -1,0 +1,53 @@
+label: Prodotti
+display:
+  default:
+    display_title: Principale
+    display_options:
+      exposed_form:
+        options:
+          submit_button: Filtra
+          reset_button_label: Ripristina
+          exposed_sorts_label: 'Ordina per'
+          sort_asc_label: Asc
+          sort_desc_label: Disc
+      pager:
+        options:
+          expose:
+            items_per_page_label: 'Voci per pagina'
+            items_per_page_options_all_label: '- Tutto -'
+            offset_label: Scostamento
+          tags:
+            previous: '‹ precedente'
+            next: 'seguente ›'
+            first: '« prima'
+            last: 'ultima »'
+      fields:
+        commerce_product_bulk_form:
+          action_title: 'Con la selezione'
+        title:
+          label: Titolo
+          separator: ', '
+        type:
+          label: Tipo
+          separator: ', '
+        status:
+          label: Stato
+          settings:
+            format_custom_true: Pubblicato
+            format_custom_false: 'Non pubblicato'
+          separator: ', '
+        changed:
+          label: Aggiornato
+          separator: ', '
+        operations:
+          label: Operazioni
+      filters:
+        type:
+          expose:
+            label: Tipo
+        title:
+          expose:
+            label: Titolo
+      title: Prodotti
+  page_1:
+    display_title: Pagina

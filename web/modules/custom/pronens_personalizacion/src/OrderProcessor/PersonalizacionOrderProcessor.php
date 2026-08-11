@@ -86,7 +86,7 @@ final class PersonalizacionOrderProcessor implements OrderProcessorInterface {
 
       $item->addAdjustment(new Adjustment([
         'type' => 'fee',
-        'label' => $this->t('Bordado personalizado'),
+        'label' => $this->t('Custom embroidery'),
         'amount' => $recargo,
         'source_id' => self::SOURCE_ID,
       ]));

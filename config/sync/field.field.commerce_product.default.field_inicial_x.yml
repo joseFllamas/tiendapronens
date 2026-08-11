@@ -12,7 +12,7 @@ bundle: default
 label: 'Inicial: posición horizontal (%)'
 description: 'Centro de la inicial medido desde el borde izquierdo de la foto, en porcentaje. 50 es el centro.'
 required: false
-translatable: true
+translatable: false
 default_value: {  }
 default_value_callback: ''
 settings:

@@ -189,7 +189,21 @@ display:
             operation: view
             multiple: 0
           break_phrase: false
-      filters: {  }
+      filters:
+        search_api_language:
+          id: search_api_language
+          table: search_api_index_catalogo
+          field: search_api_language
+          relationship: none
+          group_type: group
+          admin_label: ''
+          plugin_id: search_api_language
+          operator: in
+          value:
+            - '***LANGUAGE_language_content***'
+          group: 1
+          exposed: false
+          is_grouped: false
       style:
         type: default
         options:
@@ -215,6 +229,7 @@ display:
       use_ajax: false
       header: {  }
       footer: {  }
+      rendering_language: '***LANGUAGE_language_content***'
       display_extenders: {  }
     cache_metadata:
       max-age: -1

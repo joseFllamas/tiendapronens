@@ -1,0 +1,34 @@
+display:
+  default:
+    display_title: Principale
+    display_options:
+      exposed_form:
+        options:
+          submit_button: Applica
+          reset_button_label: Ripristina
+          exposed_sorts_label: 'Ordina per'
+          sort_asc_label: Asc
+          sort_desc_label: Disc
+      fields:
+        title:
+          label: Titolo
+          separator: ', '
+        shipping_method:
+          label: 'Metodo di spedizione'
+          separator: ', '
+        amount__number:
+          label: Importo
+          separator: ', '
+        tracking_code:
+          separator: ', '
+        state:
+          label: Stato
+          separator: ', '
+        operations:
+          label: 'Link operativi'
+      arguments:
+        order_id:
+          exception:
+            title: Tutti
+  page_1:
+    display_title: Pagina

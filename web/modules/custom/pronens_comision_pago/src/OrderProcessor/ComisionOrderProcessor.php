@@ -72,7 +72,7 @@ final class ComisionOrderProcessor implements OrderProcessorInterface {
 
     $order->addAdjustment(new Adjustment([
       'type' => 'fee',
-      'label' => $this->t('Comisión de @pasarela', [
+      'label' => $this->t('@pasarela commission', [
         '@pasarela' => $pasarela->getPlugin()->getDisplayLabel(),
       ]),
       'amount' => $this->rounder->round($comision),

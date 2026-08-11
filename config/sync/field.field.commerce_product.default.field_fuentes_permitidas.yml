@@ -13,7 +13,7 @@ bundle: default
 label: 'Fuentes permitidas'
 description: 'Si se deja vacío se ofrecen todas las fuentes activas.'
 required: false
-translatable: true
+translatable: false
 default_value: {  }
 default_value_callback: ''
 settings:

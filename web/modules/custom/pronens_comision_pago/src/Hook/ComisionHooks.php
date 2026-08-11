@@ -152,7 +152,7 @@ final class ComisionHooks {
     $formateado = $this->calculator->formatearPorcentaje($porcentaje);
 
     if ($comision === NULL) {
-      return (string) $this->t('@etiqueta (+@porcentaje% de comisión)', [
+      return (string) $this->t('@etiqueta (+@porcentaje% commission)', [
         '@etiqueta' => $etiqueta,
         '@porcentaje' => $formateado,
       ]);
@@ -162,7 +162,7 @@ final class ComisionHooks {
     // el pedido se cobran 0,58 €.
     $comision = $this->rounder->round($comision);
 
-    return (string) $this->t('@etiqueta (+@porcentaje% de comisión: @importe)', [
+    return (string) $this->t('@etiqueta (+@porcentaje% commission: @importe)', [
       '@etiqueta' => $etiqueta,
       '@porcentaje' => $formateado,
       '@importe' => $this->currencyFormatter->format($comision->getNumber(), $comision->getCurrencyCode()),

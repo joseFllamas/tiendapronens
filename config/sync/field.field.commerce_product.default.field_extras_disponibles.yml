@@ -13,7 +13,7 @@ bundle: default
 label: 'Extras que ofrece'
 description: 'Complementos que el cliente podrá añadir en la ficha de este producto.'
 required: false
-translatable: true
+translatable: false
 default_value: {  }
 default_value_callback: ''
 settings:

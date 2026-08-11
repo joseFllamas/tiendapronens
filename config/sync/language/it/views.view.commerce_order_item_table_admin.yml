@@ -1,0 +1,28 @@
+display:
+  default:
+    display_title: Principale
+    display_options:
+      fields:
+        title:
+          label: Titolo
+          separator: ', '
+        unit_price__number:
+          label: 'Prezzo unitario'
+          separator: ', '
+        quantity:
+          label: Quantità
+          separator: ', '
+        total_price__number:
+          label: 'Prezzo totale'
+          separator: ', '
+      exposed_form:
+        options:
+          submit_button: Applica
+          reset_button_label: Ripristina
+          exposed_sorts_label: 'Ordina per'
+          sort_asc_label: Asc
+          sort_desc_label: Disc
+      arguments:
+        order_item_id:
+          exception:
+            title: Tutti

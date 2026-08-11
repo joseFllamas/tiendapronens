@@ -4,6 +4,7 @@ namespace Drupal\pronens\Hook;
 
 use Drupal\commerce_order\Entity\OrderInterface;
 use Drupal\Core\Cache\CacheableMetadata;
+use Drupal\Core\Entity\EntityRepositoryInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Hook\Attribute\Hook;
@@ -46,6 +47,7 @@ class CheckoutHooks {
     protected EntityTypeManagerInterface $entityTypeManager,
     protected RouteMatchInterface $routeMatch,
     protected MenuLinkTreeInterface $menuLinkTree,
+    protected EntityRepositoryInterface $entityRepository,
   ) {
   }
 
