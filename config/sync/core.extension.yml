@@ -80,6 +80,7 @@ module:
   pronens_correos_express: 0
   pronens_migrate: 0
   pronens_personalizacion: 0
+  pronens_seo: 0
   recipe_tracker: 0
   responsive_image: 0
   search_api: 0

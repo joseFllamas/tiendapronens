@@ -1,0 +1,9 @@
+name: 'Pronens: SEO del catálogo'
+type: module
+description: 'Corrige la URL canónica y las directivas para robots de las páginas de categoría: cada página del paginador se declara canónica de sí misma y las combinaciones de facetas quedan fuera del índice.'
+package: Pronens
+core_version_requirement: ^11
+dependencies:
+  - metatag:metatag
+  - drupal:taxonomy
+  - drupal:views

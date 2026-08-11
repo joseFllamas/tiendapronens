@@ -1,0 +1,3 @@
+services:
+  Drupal\pronens_seo\CanonicalCalculator:
+    class: Drupal\pronens_seo\CanonicalCalculator
