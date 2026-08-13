@@ -1,0 +1,18 @@
+uuid: 2ef0d33f-31c2-4782-86d6-05dc1143536b
+langcode: ca
+status: true
+dependencies:
+  config:
+    - block_content.type.guia_bordado
+  module:
+    - content_translation
+third_party_settings:
+  content_translation:
+    enabled: false
+    bundle_settings:
+      untranslatable_fields_hide: '0'
+id: block_content.guia_bordado
+target_entity_type_id: block_content
+target_bundle: guia_bordado
+default_langcode: site_default
+language_alterable: false

@@ -15,7 +15,7 @@ bundle: mosaico_categorias
 label: Tiles
 description: ''
 required: false
-translatable: true
+translatable: false
 default_value: {  }
 default_value_callback: ''
 settings:

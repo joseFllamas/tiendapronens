@@ -1,0 +1,26 @@
+uuid: 323e35ec-6713-4f9d-8211-f7178b9588ae
+langcode: en
+status: true
+dependencies:
+  module:
+    - user
+id: user.register_pending_approval_admin
+configuration:
+  email_subject:
+    value: 'Registro pendiente de aprobar: [user:display-name]'
+  email_body:
+    content:
+      value: |-
+        <h1>Hay un registro esperando</h1>
+        <p>[user:display-name] ([user:mail]) se ha registrado en la tienda y espera aprobación.</p>
+        <table class="pro-mail__btn-wrap" cellpadding="0" cellspacing="0" border="0" role="presentation"><tr><td>
+          <table class="pro-mail__btn" cellpadding="0" cellspacing="0" border="0" role="presentation"><tr><td>
+            <a class="pro-mail__btn-link" href="[site:url]admin/people">Revisar en el backoffice</a>
+          </td></tr></table>
+        </td></tr></table>
+      format: email_html
+  email_to:
+    addresses:
+      -
+        value: '<site>'
+        display: ''

@@ -54,6 +54,25 @@
   background: var(--pro-img-bg);
 }
 
+/* Degradado hacia negro anclado abajo: da contraste al texto blanco sin
+   apagar la foto. La primera parada se mantiene hasta 96px porque ahí vive
+   el bloque de texto y varias fotos del catálogo son bodegones sobre fondo
+   claro; por encima se apaga rápido para que la foto siga limpia. */
+.pro-tile::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background: linear-gradient(
+    to top,
+    rgba(0, 0, 0, 0.62) 0,
+    rgba(0, 0, 0, 0.58) 96px,
+    rgba(0, 0, 0, 0.22) 46%,
+    rgba(0, 0, 0, 0) 78%
+  );
+}
+
 .pro-tile__media,
 .pro-tile__media img {
   width: 100%;
@@ -79,17 +98,73 @@
   inset: 0;
 }
 
-.pro-tile__label {
+.pro-tile__body {
   position: absolute;
-  left: 16px;
+  z-index: 2;
+  right: 16px;
   bottom: 16px;
-  background: #fff;
-  color: var(--pro-ink);
+  left: 16px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.pro-tile__count {
+  display: block;
   font-size: 10px;
-  font-weight: 800;
-  letter-spacing: 0.14em;
+  font-weight: 700;
+  letter-spacing: 0.22em;
   text-transform: uppercase;
-  padding: 8px 12px;
+  color: rgba(255, 255, 255, 0.92);
+  text-shadow: 0 1px 10px rgba(14, 27, 32, 0.5);
+}
+
+.pro-tile__label {
+  display: block;
+  margin-top: 5px;
+  font-size: 18px;
+  font-weight: 800;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+  color: #fff;
+  text-shadow: 0 1px 12px rgba(14, 27, 32, 0.5);
+}
+
+/* El tile alto tiene sitio para el título grande del prototipo; los medios se
+   quedan en 18px porque las etiquetas reales ("Baberos bebé y complementos")
+   ya ocupan dos líneas. Para acortarlas está el campo "Etiqueta" del tile. */
+.pro-mosaico__grid .pro-tile:nth-of-type(1) .pro-tile__label {
+  font-size: 20px;
+}
+
+.pro-tile__arrow {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border-radius: var(--pro-radius-pill);
+  background: rgba(255, 255, 255, 0.95);
+  color: var(--pro-ink);
+}
+
+.pro-tile__arrow svg {
+  display: block;
+  width: 16px;
+  height: 16px;
+}
+
+.pro-tile:hover .pro-tile__arrow,
+.pro-tile:focus-visible .pro-tile__arrow {
+  background: var(--pro-teal);
+  color: #fff;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .pro-tile__arrow {
+    transition: background-color 200ms ease, color 200ms ease;
+  }
 }
 
 @media (max-width: 900px) {

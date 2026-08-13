@@ -1,0 +1,12 @@
+uuid: b3b4a76d-df88-4d39-9810-3675056300a1
+langcode: es
+status: true
+dependencies: {  }
+id: contacto
+label: Contacto
+recipients:
+  - pronens@pronens.com
+reply: ''
+weight: 0
+message: 'Hemos recibido tu mensaje. Te contestamos lo antes posible.'
+redirect: ''

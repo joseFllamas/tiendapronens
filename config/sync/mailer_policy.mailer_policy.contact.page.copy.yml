@@ -1,0 +1,17 @@
+uuid: 89de109d-1587-4eac-b99b-ee0bf54fa98e
+langcode: en
+status: true
+dependencies:
+  module:
+    - contact
+id: contact.page.copy
+configuration:
+  email_subject:
+    value: 'Copia de tu mensaje: {{ subject }}'
+  email_body:
+    content:
+      value: |-
+        <h1>Copia de tu mensaje</h1>
+        <p>Esta es la copia del mensaje que nos has enviado.</p>
+        {{ contact_message }}
+      format: email_html

@@ -16,8 +16,11 @@
    * Inicializa un carrito con panel.
    *
    * @param {Element} cart - Contenedor [data-pro-cart].
+   * @param {boolean} abrirAlCargar - Abrir el panel nada más pintarse: llega
+   *   de drupalSettings cuando acaba de entrar algo al carrito (la marca la
+   *   pone pronens_carrito y es de un solo uso).
    */
-  function init(cart) {
+  function init(cart, abrirAlCargar) {
     const toggle = cart.querySelector('[data-pro-cart-toggle]');
     const panel = cart.querySelector('[data-pro-cart-panel]');
     if (!toggle || !panel) {
@@ -86,6 +89,20 @@
     });
     overlay.addEventListener('click', cierra);
 
+    if (abrirAlCargar) {
+      // El mensaje verde de "añadido a su carrito" queda redundante con el
+      // panel abierto enseñando el producto; se retira solo el de Commerce,
+      // que se distingue por su enlace a la cesta, y solo aquí: sin JS no hay
+      // panel y el mensaje sigue siendo la única confirmación.
+      document.querySelectorAll('.messages--status a[href$="/cart"]').forEach((enlace) => {
+        const caja = enlace.closest('.messages');
+        if (caja) {
+          caja.remove();
+        }
+      });
+      abre();
+    }
+
     document.addEventListener('keydown', (e) => {
       if (e.key === 'Escape' && abierto) {
         cierra();
@@ -113,8 +130,16 @@
   }
 
   Drupal.behaviors.pronensCarrito = {
-    attach(context) {
-      once('pro-cart', '[data-pro-cart]', context).forEach(init);
+    attach(context, settings) {
+      // El bloque llega por BigPipe después del primer attach: la señal de
+      // abrir se consume en el attach en el que el panel por fin existe.
+      once('pro-cart', '[data-pro-cart]', context).forEach((cart) => {
+        const abrir = Boolean(settings.pronensCarrito && settings.pronensCarrito.abrir);
+        if (abrir) {
+          settings.pronensCarrito.abrir = false;
+        }
+        init(cart, abrir);
+      });
     },
   };
 })(Drupal, once);

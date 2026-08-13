@@ -202,31 +202,6 @@ class CheckoutHooks {
   }
 
   /**
-   * Ajustes del pedido para el pie del resumen.
-   *
-   * @param array<string, mixed> $totales
-   *   Los totales que monta OrderTotalSummary::buildTotals().
-   *
-   * @return array<int, array<string, mixed>>
-   *   Etiqueta, importe y si es informativo (el IVA incluido no se suma).
-   */
-  protected function ajustesDelPedido(array $totales): array {
-    $ajustes = [];
-    foreach ($totales['adjustments'] ?? [] as $ajuste) {
-      $ajustes[] = [
-        'etiqueta' => $ajuste['label'] ?? '',
-        'importe' => $this->precio($ajuste['total']),
-        // El IVA de la tienda es incluido (display_inclusive), así que
-        // buildTotals() lo deja en la lista por obligación legal pero no lo
-        // suma. Enseñarlo como una línea más engañaría.
-        'incluido' => ($ajuste['type'] ?? '') === 'tax' && !empty($ajuste['included']),
-      ];
-    }
-
-    return $ajustes;
-  }
-
-  /**
    * Enlaces legales del aviso que va debajo del CTA.
    *
    * Al no haber paso de revisión, este aviso es la confirmación informada que

@@ -1,0 +1,19 @@
+uuid: 3ec35abf-669f-4352-8cd7-77a7e5d89467
+langcode: en
+status: true
+dependencies: {  }
+_core:
+  default_config_hash: hGo6PUp6_bg_m9CxTnF16v3ScW3qx6EZZytG-n0-KU0
+id: _
+configuration:
+  email_theme:
+    theme: pronens
+  email_from:
+    addresses:
+      -
+        value: pronens@pronens.com
+        display: Pronens
+  mailer_url_to_absolute: {  }
+  mailer_inline_css: {  }
+  mailer_wrap_and_convert:
+    plain: false

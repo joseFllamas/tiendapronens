@@ -12,6 +12,13 @@ libraries:
   - pronens/messages
   - core/normalize
 
+libraries-override:
+  # El correo lo viste el tema entero. Las hojas que symfony_mailer adjunta a
+  # sus correos son las de su demo (azul #0e69be, bordes grises) y se inlinean
+  # encima de las nuestras, así que se quitan en vez de pelearse con ellas.
+  symfony_mailer/commerce_order: false
+  symfony_mailer/contact: false
+
 libraries-extend:
   user/drupal.user:
     - pronens/user

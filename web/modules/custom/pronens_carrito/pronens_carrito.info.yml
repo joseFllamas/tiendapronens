@@ -1,0 +1,8 @@
+name: 'Pronens: carrito'
+type: module
+description: 'Añadir al carrito con un clic desde las sugerencias del flyout ("Completa el conjunto"). Solo para productos sin nada que elegir: una única variación.'
+package: Pronens
+core_version_requirement: ^11
+dependencies:
+  - commerce:commerce_cart
+  - commerce:commerce_product

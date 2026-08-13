@@ -1,0 +1,22 @@
+uuid: 4d60d71b-0356-460e-b8b7-6a6cce45455b
+langcode: es
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_texto_largo
+    - paragraphs.paragraphs_type.texto_medios
+  module:
+    - text
+id: paragraph.texto_medios.field_texto_largo
+field_name: field_texto_largo
+entity_type: paragraph
+bundle: texto_medios
+label: Texto
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  allowed_formats: {  }
+field_type: text_long

@@ -1,0 +1,75 @@
+uuid: 67ab8f6c-1c46-42ae-87ec-7586b429d649
+langcode: es
+status: true
+dependencies:
+  config:
+    - field.field.paragraph.cta.field_enlace
+    - field.field.paragraph.cta.field_enlace_secundario
+    - field.field.paragraph.cta.field_estilo
+    - field.field.paragraph.cta.field_eyebrow
+    - field.field.paragraph.cta.field_icono
+    - field.field.paragraph.cta.field_texto
+    - field.field.paragraph.cta.field_titulo
+    - paragraphs.paragraphs_type.cta
+  module:
+    - link
+id: paragraph.cta.default
+targetEntityType: paragraph
+bundle: cta
+mode: default
+content:
+  field_enlace:
+    type: link_default
+    weight: 5
+    region: content
+    settings:
+      placeholder_url: ''
+      placeholder_title: ''
+    third_party_settings: {  }
+  field_enlace_secundario:
+    type: link_default
+    weight: 6
+    region: content
+    settings:
+      placeholder_url: ''
+      placeholder_title: ''
+    third_party_settings: {  }
+  field_estilo:
+    type: options_select
+    weight: 0
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  field_eyebrow:
+    type: string_textfield
+    weight: 2
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  field_icono:
+    type: options_select
+    weight: 1
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  field_texto:
+    type: string_textarea
+    weight: 4
+    region: content
+    settings:
+      rows: 4
+      placeholder: ''
+    third_party_settings: {  }
+  field_titulo:
+    type: string_textfield
+    weight: 3
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+hidden:
+  created: true
+  status: true

@@ -26,12 +26,15 @@
            {{ loop.first ? 'data-pro-preview-target' : '' }}>
           {{ foto.imagen }}
           {% if loop.first and ficha.personalizable %}
-            {# Vista previa en vivo: el JS escribe aquí lo que se teclea. El
-               ancla bottom:44px es la del prototipo. #}
+            {# Vista previa en vivo: el JS escribe aquí lo que se teclea. #}
             {# El montaje se coloca en porcentajes del alto y del ancho de la
-               foto, así que vale igual en cualquier tamaño de pantalla. #}
-            <div class="pro-ficha__preview" data-pro-preview hidden
-                 style="--pro-inicial-x:{{ ficha.inicial.x }}%;--pro-inicial-y:{{ ficha.inicial.y }}%;--pro-inicial-tamano:{{ ficha.inicial.tamano }}%">
+               foto, así que vale igual en cualquier tamaño de pantalla. En modo
+               inicial el tamaño es el lado del parche y en modo nombre la altura
+               de la letra, de ahí las dos variables. #}
+            {% set bordado = ficha.bordado %}
+            <div class="pro-ficha__preview pro-ficha__preview--{{ bordado.modo == 'inicial' ? 'inicial' : 'nombre' }} pro-ficha__preview--{{ bordado.fuente }}{{ bordado.mayusculas ? ' pro-ficha__preview--caps' }}"
+                 data-pro-preview hidden
+                 style="--pro-inicial-x:{{ ficha.inicial.x }}%;--pro-inicial-y:{{ ficha.inicial.y }}%;--pro-inicial-tamano:{{ ficha.inicial.tamano }}%;--pro-bordado-alto:{{ ficha.inicial.tamano }}{% if bordado.color %};--pro-bordado-color:{{ bordado.color }}{% endif %}">
               <span class="pro-ficha__preview-text" data-pro-preview-text></span>
             </div>
           {% endif %}
@@ -94,8 +97,10 @@
         <li>{{ 'Returns within 30 days'|t }}</li>
       </ul>
 
+      {# Plegada: las descripciones migradas son largas y empujaban el resto
+         de la columna de compra fuera de pantalla (decisión 2026-08-11). #}
       {% if product.body|render|trim %}
-        <details class="pro-acc" open>
+        <details class="pro-acc">
           <summary class="pro-acc__title">{{ 'Description'|t }}</summary>
           <div class="pro-acc__body">{{ product.body }}</div>
         </details>
@@ -121,9 +126,14 @@
     </div>
   </div>
 
+  {# Los complementarios (field_complementarios) NO se enseñan aquí: salen en
+     el flyout del carrito como "Completa el conjunto", que es donde la
+     referencia los pone y donde de verdad convierten. #}
+
+  {# Similares: alternativas de la misma categoría, automáticos. #}
   {% if ficha.relacionados %}
     <section class="pro-ficha__related">
-      <h2 class="pro-ficha__related-title">{{ 'Pair it with'|t }}</h2>
+      <h2 class="pro-ficha__related-title">{{ 'You may also like'|t }}</h2>
       <div class="pro-grid" data-pro-cols="4">
         {% for tarjeta in ficha.relacionados %}
           <div class="pro-grid__cell">{{ tarjeta }}</div>

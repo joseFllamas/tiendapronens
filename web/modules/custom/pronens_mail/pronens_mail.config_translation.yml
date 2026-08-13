@@ -1,0 +1,16 @@
+# Traducción de las políticas de correo.
+#
+# mailer_policy declara `email_subject.value` como `label` y
+# `email_body.content` como `text_format`, o sea que asunto y cuerpo SON
+# traducibles y MailerPlus::changeActiveLanguage() aplica el override del idioma
+# al enviar. Lo que el módulo no trae es este fichero, así que sin él no aparece
+# la pestaña "Traducir" y no hay forma de escribir esos overrides desde el
+# backoffice. Es el mismo caso que dejó pathauto con sus patrones, y aquí
+# importa más: el copy de los correos lo tiene que poder reescribir el cliente.
+mailer_policy:
+  class: '\Drupal\config_translation\ConfigEntityMapper'
+  base_route_name: entity.mailer_policy.edit_form
+  title: 'Política de correo'
+  names: {  }
+  entity_type: mailer_policy
+  weight: 10

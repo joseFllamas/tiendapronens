@@ -1,0 +1,14 @@
+{#
+/**
+ * @file
+ * Tarjeta de la rejilla de valores: icono + título + texto.
+ */
+#}
+<div{{ attributes.addClass('pro-valor') }}>
+  {% include '@pronens/misc/pro-icono.html.twig' with {
+    icono: paragraph.field_icono.value,
+    clases: 'pro-valor__icono',
+  } only %}
+  <h3 class="pro-valor__title">{{ content.field_titulo }}</h3>
+  <div class="pro-valor__text">{{ content.field_texto }}</div>
+</div>

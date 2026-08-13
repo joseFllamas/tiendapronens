@@ -2,11 +2,20 @@
 /**
  * @file
  * Paso numerado (el número 01/02/03 lo pone un contador CSS).
+ *
+ * El icono es opcional: la home no lo usa y el paso se pinta en una línea con
+ * el número a la izquierda; cuando hay icono (páginas tipo "Cómo lo hacemos")
+ * número e icono forman una fila y el texto pasa debajo.
  */
 #}
-<div{{ attributes.addClass('pro-paso') }}>
+{% set icono = paragraph.field_icono.value %}
+<div{{ attributes.addClass(['pro-paso', icono ? 'pro-paso--con-icono']) }}>
   <span class="pro-paso__num" aria-hidden="true"></span>
-  <div>
+  {% include '@pronens/misc/pro-icono.html.twig' with {
+    icono: icono,
+    clases: 'pro-paso__icono',
+  } only %}
+  <div class="pro-paso__body">
     <div class="pro-paso__title">{{ content.field_titulo }}</div>
     <div class="pro-paso__text">{{ content.field_texto }}</div>
   </div>

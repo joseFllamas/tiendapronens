@@ -1,0 +1,31 @@
+uuid: d87261cf-ba22-46bd-90dd-171379322a5e
+langcode: es
+status: true
+dependencies:
+  config:
+    - field.field.paragraph.cifra.field_texto
+    - field.field.paragraph.cifra.field_titulo
+    - paragraphs.paragraphs_type.cifra
+id: paragraph.cifra.default
+targetEntityType: paragraph
+bundle: cifra
+mode: default
+content:
+  field_texto:
+    type: basic_string
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    weight: 1
+    region: content
+  field_titulo:
+    type: string
+    label: hidden
+    settings:
+      link_to_entity: false
+      link_rel: canonical
+    third_party_settings: {  }
+    weight: 0
+    region: content
+hidden:
+  search_api_excerpt: true

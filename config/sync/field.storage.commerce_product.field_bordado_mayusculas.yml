@@ -1,0 +1,18 @@
+uuid: 8bd9b066-cdb2-4a6b-9bcd-a0e4e4ae2d87
+langcode: es
+status: true
+dependencies:
+  module:
+    - commerce_product
+id: commerce_product.field_bordado_mayusculas
+field_name: field_bordado_mayusculas
+entity_type: commerce_product
+type: boolean
+settings: {  }
+module: core
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

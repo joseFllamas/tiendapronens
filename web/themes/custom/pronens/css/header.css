@@ -291,6 +291,19 @@
   transform: translateY(-6px) rotate(-45deg);
 }
 
+/**
+ * Desktop estrecho: con 7 categorías el nav es más ancho que su columna 1fr
+ * y, al llevar white-space: nowrap, desborda y empuja el logo a la derecha
+ * (56px a 1025px). Apretando el hueco y el cuerpo entra en la columna y el
+ * logo vuelve al centro; a partir de 1180px ya cabe con los valores base.
+ */
+@media (min-width: 1025px) and (max-width: 1180px) {
+  .pro-nav__list {
+    gap: 9px;
+    font-size: 12px;
+  }
+}
+
 /* --- Mobile: off-canvas con acordeones. --- */
 @media (max-width: 1024px) {
   .pro-header__inner {

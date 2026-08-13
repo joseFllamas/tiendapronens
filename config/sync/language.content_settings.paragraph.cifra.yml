@@ -1,0 +1,16 @@
+uuid: 0ab9236b-77d4-47f7-a466-a1abc8bb6c0e
+langcode: es
+status: true
+dependencies:
+  config:
+    - paragraphs.paragraphs_type.cifra
+  module:
+    - content_translation
+third_party_settings:
+  content_translation:
+    enabled: true
+id: paragraph.cifra
+target_entity_type_id: paragraph
+target_bundle: cifra
+default_langcode: site_default
+language_alterable: false

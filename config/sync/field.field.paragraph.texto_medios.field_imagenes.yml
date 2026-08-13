@@ -1,0 +1,24 @@
+uuid: 1557926d-5dcd-4d09-9a39-2f77cbe0ea5d
+langcode: es
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_imagenes
+    - media.type.image
+    - paragraphs.paragraphs_type.texto_medios
+id: paragraph.texto_medios.field_imagenes
+field_name: field_imagenes
+entity_type: paragraph
+bundle: texto_medios
+label: Imágenes
+description: 'Una imagen ocupa la columna entera; con dos se pintan escalonadas.'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:media'
+  handler_settings:
+    target_bundles:
+      image: image
+field_type: entity_reference

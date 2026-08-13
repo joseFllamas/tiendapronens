@@ -1,0 +1,39 @@
+uuid: aca65c04-724e-4647-8c48-112285b1fb83
+langcode: es
+status: true
+dependencies:
+  config:
+    - field.field.paragraph.valor.field_icono
+    - field.field.paragraph.valor.field_texto
+    - field.field.paragraph.valor.field_titulo
+    - paragraphs.paragraphs_type.valor
+id: paragraph.valor.default
+targetEntityType: paragraph
+bundle: valor
+mode: default
+content:
+  field_icono:
+    type: options_select
+    weight: 0
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  field_texto:
+    type: string_textarea
+    weight: 2
+    region: content
+    settings:
+      rows: 4
+      placeholder: ''
+    third_party_settings: {  }
+  field_titulo:
+    type: string_textfield
+    weight: 1
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+hidden:
+  created: true
+  status: true

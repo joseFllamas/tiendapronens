@@ -1,0 +1,19 @@
+uuid: efdb9005-92c0-4af9-820a-c8ac5da18527
+langcode: en
+status: true
+dependencies:
+  module:
+    - user
+id: user.status_blocked
+configuration:
+  email_subject:
+    value: 'Tu cuenta de Pronens ha quedado bloqueada'
+  email_body:
+    content:
+      value: |-
+        <h1>Tu cuenta está bloqueada</h1>
+        <p>Hola [user:display-name], tu cuenta de Pronens ha quedado bloqueada y de momento no puedes entrar.</p>
+        <p>Si crees que es un error, escríbenos y lo miramos.</p>
+      format: email_html
+  email_skip_sending:
+    message: 'Notification disabled in settings'

@@ -1,0 +1,204 @@
+/**
+ * @file
+ * Recibo de pedido dentro del envoltorio de correo.
+ *
+ * Mismas reglas que css/email/email.css: nada de var(), nada de fuentes del
+ * sitio, y las media queries en el <style> de la plantilla.
+ */
+
+/* El pedido es un bloque dentro del cuerpo del correo, y detrás suele ir el
+   cierre del copy. Sin este aire, la despedida se pegaba a la dirección. */
+.pro-mail-order {
+  margin: 0 0 22px;
+}
+
+/* --- Cabecera del pedido: número y fecha. --- */
+.pro-mail-order__meta {
+  width: 100%;
+  margin: 0 0 18px;
+  font-size: 13px;
+  color: #5b7078;
+}
+
+.pro-mail-order__meta td {
+  padding: 0 0 4px;
+}
+
+.pro-mail-order__num {
+  font-weight: 800;
+  color: #10222b;
+}
+
+/* --- Líneas. --- */
+.pro-mail-order__items {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 0 0 6px;
+}
+
+.pro-mail-order__item {
+  border-top: 1px solid #ece7de;
+}
+
+.pro-mail-order__thumb {
+  width: 72px;
+  padding: 14px 14px 14px 0;
+  vertical-align: top;
+}
+
+.pro-mail-order__thumb img {
+  display: block;
+  width: 72px;
+  height: auto;
+  border-radius: 8px;
+  border: 1px solid #ece7de;
+}
+
+.pro-mail-order__info {
+  padding: 14px 10px 14px 0;
+  vertical-align: top;
+}
+
+.pro-mail-order .pro-mail-order__name {
+  margin: 0 0 3px;
+  font-size: 15px;
+  font-weight: 700;
+  color: #10222b;
+}
+
+.pro-mail-order__name a {
+  color: #10222b;
+  text-decoration: none;
+}
+
+/* Doble clase a propósito en unas cuantas reglas de este fichero: compiten con
+   `.pro-mail__body p` y `.pro-mail__body ul` del envoltorio, que son más
+   específicas que una clase suelta, y el inliner resuelve por especificidad
+   igual que un navegador. Sin esto, los márgenes y el color del cuerpo se
+   comían los de la línea de pedido. */
+.pro-mail-order .pro-mail-order__opts,
+.pro-mail-order .pro-mail-order__qty {
+  margin: 0 0 2px;
+  font-size: 13px;
+  color: #5b7078;
+}
+
+/* El bordado es el motivo de la compra, así que se destaca en vez de quedar
+   como una opción más. Es además lo que el cliente revisa al recibir el
+   correo: si la inicial está mal, es ahora cuando hay que verlo. */
+.pro-mail-order .pro-mail-order__emb {
+  margin: 6px 0 2px;
+  padding: 7px 10px;
+  background-color: #f7f3ec;
+  border-radius: 8px;
+  font-size: 13px;
+  color: #10222b;
+}
+
+.pro-mail-order__emb strong {
+  font-weight: 800;
+}
+
+.pro-mail-order .pro-mail-order__fees {
+  margin: 4px 0 0;
+  padding: 0;
+  list-style: none;
+  font-size: 13px;
+  color: #5b7078;
+}
+
+.pro-mail-order__price {
+  padding: 14px 0;
+  text-align: right;
+  vertical-align: top;
+  font-size: 15px;
+  font-weight: 700;
+  white-space: nowrap;
+  color: #10222b;
+}
+
+/* --- Totales. --- */
+.pro-mail-order__totals {
+  width: 100%;
+  border-collapse: collapse;
+  border-top: 1px solid #ece7de;
+  margin: 0 0 6px;
+}
+
+.pro-mail-order__totals td {
+  padding: 7px 0 0;
+  font-size: 14px;
+  color: #5b7078;
+}
+
+.pro-mail-order__totals td.pro-mail-order__amount {
+  text-align: right;
+  white-space: nowrap;
+  color: #10222b;
+}
+
+.pro-mail-order__totals tr.pro-mail-order__grand td {
+  padding-top: 12px;
+  font-family: Archivo, "Helvetica Neue", Arial, Helvetica, sans-serif;
+  font-size: 19px;
+  font-weight: 800;
+  color: #10222b;
+}
+
+.pro-mail-order__included td {
+  font-size: 12px;
+  color: #8aa0a6;
+}
+
+/* --- Direcciones y envío. --- */
+.pro-mail-order__cols {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 22px 0 0;
+}
+
+.pro-mail-order__col {
+  width: 50%;
+  padding: 0 12px 0 0;
+  vertical-align: top;
+  font-size: 13px;
+  line-height: 1.55;
+  color: #5b7078;
+}
+
+.pro-mail-order__col h3 {
+  margin: 0 0 6px;
+  font-family: "Nunito Sans", Arial, Helvetica, sans-serif;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #10222b;
+}
+
+.pro-mail-order .pro-mail-order__col p,
+.pro-mail-order__col .address {
+  margin: 0;
+  color: #5b7078;
+}
+
+.pro-mail-order .pro-mail-order__col .pro-mail-order__ship {
+  margin: 8px 0 0;
+  color: #5b7078;
+}
+
+.pro-mail-order__notes {
+  margin: 22px 0 0;
+  font-size: 13px;
+  color: #5b7078;
+}
+
+.pro-mail-order__notes h3 {
+  margin: 0 0 6px;
+  font-family: "Nunito Sans", Arial, Helvetica, sans-serif;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #10222b;
+}

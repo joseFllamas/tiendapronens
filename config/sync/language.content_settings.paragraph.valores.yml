@@ -1,0 +1,16 @@
+uuid: abb5f371-e219-4a72-a675-35c0e6a2bb2d
+langcode: es
+status: true
+dependencies:
+  config:
+    - paragraphs.paragraphs_type.valores
+  module:
+    - content_translation
+third_party_settings:
+  content_translation:
+    enabled: true
+id: paragraph.valores
+target_entity_type_id: paragraph
+target_bundle: valores
+default_langcode: site_default
+language_alterable: false

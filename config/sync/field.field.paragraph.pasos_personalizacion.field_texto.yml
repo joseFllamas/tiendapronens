@@ -1,0 +1,19 @@
+uuid: 0c1cc7d4-1b6c-4f42-ad23-9db868a4651b
+langcode: es
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_texto
+    - paragraphs.paragraphs_type.pasos_personalizacion
+id: paragraph.pasos_personalizacion.field_texto
+field_name: field_texto
+entity_type: paragraph
+bundle: pasos_personalizacion
+label: Entradilla
+description: 'Opcional. Va entre el título y los pasos.'
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string_long

@@ -1,0 +1,41 @@
+/**
+ * @file
+ * Cuadrícula de tarjetas de producto.
+ *
+ * La comparten el catálogo (vista 2/4) y la franja "También te puede gustar"
+ * de la ficha: si viviera en catalogo.css, en la ficha las tarjetas saldrían
+ * en columna, una tras otra (pasó el 2026-08-11).
+ */
+
+.pro-grid {
+  display: grid;
+  row-gap: 36px;
+}
+
+.pro-grid[data-pro-cols='4'] {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  column-gap: 16px;
+}
+
+/* Vista 2: menos separación porque las fotos son mucho más grandes. */
+.pro-grid[data-pro-cols='2'] {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  column-gap: 4px;
+}
+
+/* La vista 4 baja a 3, a 2 y la 2 a 1, como el handoff. */
+@media (max-width: 1024px) {
+  .pro-grid[data-pro-cols='4'] {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 768px) {
+  .pro-grid[data-pro-cols='4'] {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .pro-grid[data-pro-cols='2'] {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

@@ -132,6 +132,18 @@ button {
   color: #fff;
 }
 
+/* Secundario sobre fondos claros: el --ghost lleva el borde blanco. */
+.pro-btn--outline {
+  background: transparent;
+  border-color: var(--pro-border-2);
+  color: var(--pro-ink);
+}
+
+.pro-btn--outline:hover {
+  background: var(--pro-cream);
+  color: var(--pro-ink);
+}
+
 /* Reduced motion: sin animaciones ni transiciones largas. */
 @media (prefers-reduced-motion: reduce) {
   *,

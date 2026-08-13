@@ -9,6 +9,7 @@ dependencies:
     - commerce_order
     - commerce_payment
     - commerce_product
+    - contact
     - file
     - filter
     - media
@@ -22,6 +23,7 @@ is_admin: false
 permissions:
   - 'access checkout'
   - 'access content'
+  - 'access site-wide contact form'
   - 'delete own files'
   - 'manage own commerce_payment_method'
   - 'use text format basic_html'

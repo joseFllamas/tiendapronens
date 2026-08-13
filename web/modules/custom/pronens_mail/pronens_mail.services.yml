@@ -1,0 +1,44 @@
+services:
+  _defaults:
+    autowire: true
+
+  Drupal\pronens_mail\IdiomaPedido: ~
+
+  Drupal\pronens_mail\Hook\CorreoHooks: ~
+
+  # MailerPass descubre los correos por la clase (ComponentMailerInterface más
+  # el atributo MailerInfo) y le inyecta él mismo el argumento $baseTag.
+  Drupal\pronens_mail\Component\EnvioMailerInterface:
+    class: Drupal\pronens_mail\Component\EnvioMailer
+    autowire: false
+    arguments:
+      - '@Drupal\symfony_mailer\MailerPlusInterface'
+      - '@Drupal\symfony_mailer\MailerLookupInterface'
+
+  Drupal\pronens_mail\Component\PedidoAdminMailerInterface:
+    class: Drupal\pronens_mail\Component\PedidoAdminMailer
+    autowire: false
+    arguments:
+      - '@Drupal\symfony_mailer\MailerPlusInterface'
+      - '@Drupal\symfony_mailer\MailerLookupInterface'
+      # Hueco del $baseTag, que rellena MailerPass por nombre al compilar.
+      - ''
+      - '@commerce_price.currency_formatter'
+
+  pronens_mail.pedido_admin_subscriber:
+    class: Drupal\pronens_mail\EventSubscriber\PedidoAdminSubscriber
+    arguments: ['@Drupal\pronens_mail\Component\PedidoAdminMailerInterface']
+    tags:
+      - { name: event_subscriber }
+
+  pronens_mail.idioma_pedido_subscriber:
+    class: Drupal\pronens_mail\EventSubscriber\IdiomaPedidoSubscriber
+    arguments: ['@language_manager']
+    tags:
+      - { name: event_subscriber }
+
+  pronens_mail.envio_subscriber:
+    class: Drupal\pronens_mail\EventSubscriber\EnvioSubscriber
+    arguments: ['@Drupal\pronens_mail\Component\EnvioMailerInterface']
+    tags:
+      - { name: event_subscriber }

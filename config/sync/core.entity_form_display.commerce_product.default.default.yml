@@ -5,6 +5,10 @@ dependencies:
   config:
     - commerce_product.commerce_product_type.default
     - field.field.commerce_product.default.body
+    - field.field.commerce_product.default.field_bordado_color
+    - field.field.commerce_product.default.field_bordado_fuente
+    - field.field.commerce_product.default.field_bordado_mayusculas
+    - field.field.commerce_product.default.field_complementarios
     - field.field.commerce_product.default.field_composicion
     - field.field.commerce_product.default.field_destacado
     - field.field.commerce_product.default.field_escuela
@@ -50,6 +54,39 @@ content:
     weight: 5
     region: content
     settings: {  }
+    third_party_settings: {  }
+  field_bordado_color:
+    type: color_field_widget_box
+    weight: 13
+    region: content
+    settings:
+      default_colors: |
+
+        #000000,#ffffff,#e6007e,#d81f26,#0d2b5e
+        #1a7f4b,#f4a0c0,#7b4397,#f4854e,#2e9daa
+    third_party_settings: {  }
+  field_bordado_fuente:
+    type: options_select
+    weight: 12
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  field_bordado_mayusculas:
+    type: boolean_checkbox
+    weight: 14
+    region: content
+    settings:
+      display_label: true
+    third_party_settings: {  }
+  field_complementarios:
+    type: entity_reference_autocomplete
+    weight: 25
+    region: content
+    settings:
+      match_operator: CONTAINS
+      match_limit: 10
+      size: 60
+      placeholder: ''
     third_party_settings: {  }
   field_composicion:
     type: string_textfield

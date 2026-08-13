@@ -3,6 +3,7 @@ langcode: es
 status: true
 dependencies:
   config:
+    - field.field.paragraph.paso.field_icono
     - field.field.paragraph.paso.field_texto
     - field.field.paragraph.paso.field_titulo
     - paragraphs.paragraphs_type.paso
@@ -27,4 +28,6 @@ content:
     third_party_settings: {  }
     weight: 0
     region: content
-hidden: {  }
+hidden:
+  field_icono: true
+  search_api_excerpt: true

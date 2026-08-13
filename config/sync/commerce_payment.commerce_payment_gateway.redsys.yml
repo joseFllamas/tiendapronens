@@ -10,17 +10,19 @@ weight: 0
 plugin: commerce_sermepa
 configuration:
   display_label: 'Tarjeta de crédito'
-  mode: test
+  mode: live
   payment_method_types:
-    - credit_card
+    - 'Tarjeta de crédito'
   collect_billing_information: true
-  merchant_name: ''
-  merchant_code: ''
+  merchant_name: PRONENS
+  merchant_code: '329583926'
   merchant_group: ''
-  merchant_password: ''
-  merchant_terminal: ''
-  merchant_paymethods: {  }
-  merchant_consumer_language: ''
+  merchant_password: YjdXOakcG5F4P9FxwG7oTrFYFn19CGKU
+  merchant_terminal: '001'
+  merchant_paymethods:
+    C: C
+    D: D
+  merchant_consumer_language: '001'
   currency: 978
   transaction_type: '0'
   instructions:

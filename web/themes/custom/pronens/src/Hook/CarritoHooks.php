@@ -5,6 +5,9 @@ namespace Drupal\pronens\Hook;
 use Drupal\commerce_cart\CartProviderInterface;
 use Drupal\commerce_order\Entity\OrderItemInterface;
 use Drupal\commerce_price\Price;
+use Drupal\commerce_product\Entity\ProductInterface;
+use Drupal\commerce_product\Entity\ProductVariationInterface;
+use Drupal\Core\Field\EntityReferenceFieldItemListInterface;
 use Drupal\Core\Cache\CacheableMetadata;
 use Drupal\Core\Entity\EntityRepositoryInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
@@ -12,6 +15,7 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Hook\Attribute\Hook;
 use Drupal\Core\Url;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Drupal\pronens\LineaPedidoTrait;
 use Drupal\views\ViewExecutable;
 
@@ -32,6 +36,7 @@ class CarritoHooks {
     protected EntityTypeManagerInterface $entityTypeManager,
     protected CartProviderInterface $cartProvider,
     protected EntityRepositoryInterface $entityRepository,
+    protected RequestStack $requestStack,
   ) {
   }
 
@@ -56,7 +61,24 @@ class CarritoHooks {
       'checkout_url' => \count($carritos) === 1
         ? Url::fromRoute('commerce_checkout.form', ['commerce_order' => $carritos[0]->id()])->toString()
         : NULL,
+      'completa' => $this->completaElConjunto($carritos, $metadatos),
     ];
+
+    // Señal de "abre el panel": la dejó pronens_carrito en la sesión al entrar
+    // algo al carrito y es de un solo uso. Va AQUÍ y no en page_attachments
+    // porque los attachments de página se guardan en la Dynamic Page Cache: en
+    // una ficha ya visitada el hook de página ni corre y la señal se perdía.
+    // Este bloque es un placeholder de BigPipe que se rehace en cada petición,
+    // así que la señal llega también con la página cacheada. Consumirla vacía
+    // la marca; max-age 0 evita que el render "abierto" se quede en la caché
+    // de render y reabra el panel en cada página.
+    $sesion = $this->requestStack->getCurrentRequest()?->getSession();
+    if ($sesion !== NULL && $sesion->get('pronens_carrito_abrir')) {
+      $sesion->remove('pronens_carrito_abrir');
+      $variables['#attached']['drupalSettings']['pronensCarrito']['abrir'] = TRUE;
+      $metadatos->setCacheMaxAge(0);
+    }
+
     $render = $variables;
     $metadatos->applyTo($render);
     $variables['#cache'] = $render['#cache'] ?? [];
@@ -127,6 +149,95 @@ class CarritoHooks {
     }
 
     return $carritos;
+  }
+
+  /**
+   * Sugerencias "Completa el conjunto" para el flyout.
+   *
+   * Los complementarios (field_complementarios) de lo que ya hay en el
+   * carrito, quitando lo que ya está dentro y ordenados por cuántas líneas
+   * los piden. Dos como mucho: el panel es estrecho y la sugerencia es un
+   * empujón, no un catálogo.
+   *
+   * Cada sugerencia lleva o un enlace de añadir directo (producto de UNA
+   * variación, ruta pronens_carrito.anadir con su token CSRF) o el enlace a
+   * la ficha cuando hay talla o medida que elegir.
+   *
+   * @param array<int, \Drupal\commerce_order\Entity\OrderInterface> $carritos
+   *   Carritos con líneas del usuario actual.
+   *
+   * @return array<int, array<string, mixed>>
+   *   Sugerencias listas para el template.
+   */
+  protected function completaElConjunto(array $carritos, CacheableMetadata $metadatos): array {
+    $en_carrito = [];
+    $votos = [];
+    foreach ($carritos as $carrito) {
+      foreach ($carrito->getItems() as $linea) {
+        $variacion = $linea->getPurchasedEntity();
+        $producto = $variacion instanceof ProductVariationInterface ? $variacion->getProduct() : NULL;
+        if ($producto === NULL) {
+          continue;
+        }
+        $en_carrito[(int) $producto->id()] = TRUE;
+        if (!$producto->hasField('field_complementarios')) {
+          continue;
+        }
+        $lista = $producto->get('field_complementarios');
+        if (!$lista instanceof EntityReferenceFieldItemListInterface) {
+          continue;
+        }
+        // El orden del campo es la curación: el primero pesa más.
+        $peso = 100;
+        foreach ($lista->referencedEntities() as $complementario) {
+          if ($complementario instanceof ProductInterface && $complementario->isPublished()) {
+            $votos[(int) $complementario->id()] = ($votos[(int) $complementario->id()] ?? 0) + $peso;
+            $peso--;
+          }
+        }
+      }
+    }
+    $votos = array_diff_key($votos, $en_carrito);
+    if ($votos === []) {
+      return [];
+    }
+    arsort($votos);
+
+    $sugerencias = [];
+    $almacen = $this->entityTypeManager->getStorage('commerce_product');
+    foreach (array_keys(array_slice($votos, 0, 2, TRUE)) as $pid) {
+      $producto = $almacen->load($pid);
+      if (!$producto instanceof ProductInterface) {
+        continue;
+      }
+      $metadatos->addCacheableDependency($producto);
+      $variaciones = array_values(array_filter(
+        $producto->getVariations(),
+        static fn($v): bool => $v->isPublished()
+      ));
+      if ($variaciones === []) {
+        continue;
+      }
+      $precio = $variaciones[0]->getPrice();
+      $media = $this->mediaFromField($producto, 'field_imagen_principal');
+      $unica = \count($variaciones) === 1;
+      $sugerencias[] = [
+        'nombre' => $this->etiqueta($producto),
+        'url' => $this->traducido($producto)->toUrl()->toString(),
+        'foto' => $media !== NULL ? $this->buildStyledImage($media, self::ESTILO_MINIATURA) : NULL,
+        'precio' => $precio !== NULL ? $this->precio($precio) : NULL,
+        // Con varias variaciones el precio de la primera es orientativo.
+        'desde' => !$unica,
+        // Añadir directo solo si no hay nada que elegir; el enlace vuelve a la
+        // página actual por el referer, sin destination, para no fragmentar la
+        // caché del lazy builder por página.
+        'anadir_url' => $unica
+          ? Url::fromRoute('pronens_carrito.anadir', ['commerce_product' => $pid])->toString()
+          : NULL,
+      ];
+    }
+
+    return $sugerencias;
   }
 
   /**

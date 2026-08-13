@@ -1,0 +1,19 @@
+uuid: ab85fc39-7d82-466f-8d32-b82b5467051b
+langcode: en
+status: true
+dependencies:
+  module:
+    - user
+id: user.status_canceled
+configuration:
+  email_subject:
+    value: 'Tu cuenta de Pronens se ha dado de baja'
+  email_body:
+    content:
+      value: |-
+        <h1>Tu cuenta se ha dado de baja</h1>
+        <p>Hola [user:display-name], tu cuenta de Pronens ya no existe.</p>
+        <p>Gracias por haber comprado con nosotras. Si algún día vuelves, puedes crear otra cuando quieras.</p>
+      format: email_html
+  email_skip_sending:
+    message: 'Notification disabled in settings'

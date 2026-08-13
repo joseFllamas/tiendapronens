@@ -1,0 +1,55 @@
+uuid: cd47ec0d-25c7-4ebb-bea8-02863a6f0fe6
+langcode: es
+status: true
+dependencies:
+  config:
+    - field.field.paragraph.texto_medios.field_eyebrow
+    - field.field.paragraph.texto_medios.field_imagenes
+    - field.field.paragraph.texto_medios.field_texto_largo
+    - field.field.paragraph.texto_medios.field_titulo
+    - field.field.paragraph.texto_medios.field_titulo_enfasis
+    - paragraphs.paragraphs_type.texto_medios
+  module:
+    - text
+id: paragraph.texto_medios.default
+targetEntityType: paragraph
+bundle: texto_medios
+mode: default
+content:
+  field_eyebrow:
+    type: string
+    label: hidden
+    settings:
+      link_to_entity: false
+      link_rel: canonical
+    third_party_settings: {  }
+    weight: 0
+    region: content
+  field_texto_largo:
+    type: text_default
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    weight: 3
+    region: content
+  field_titulo:
+    type: string
+    label: hidden
+    settings:
+      link_to_entity: false
+      link_rel: canonical
+    third_party_settings: {  }
+    weight: 1
+    region: content
+  field_titulo_enfasis:
+    type: string
+    label: hidden
+    settings:
+      link_to_entity: false
+      link_rel: canonical
+    third_party_settings: {  }
+    weight: 2
+    region: content
+hidden:
+  field_imagenes: true
+  search_api_excerpt: true

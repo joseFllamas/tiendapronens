@@ -15,11 +15,19 @@ configuration:
     - paypal_checkout
   collect_billing_information: false
   payment_solution: smart_payment_buttons
-  client_id: ''
-  secret: ''
+  client_id: AY0hdrre5QKBi_JDSUJDbpAgRzg46xo-jiIfg-3fKEWSTb6s7cIgFRpl2duYBKJqsLbRtnnu8Cm8LBZH
+  secret: EERofq_2MEVJD7IZI6m7tFFCM8pzR6us48yj95_7GrJshYdh9GycHRb_Cmt31XW2VB09sTsbpbGMPGhq
   intent: capture
-  disable_funding: {  }
-  disable_card: {  }
+  disable_funding:
+    paypal: paypal
+  disable_card:
+    visa: visa
+    mastercard: mastercard
+    amex: amex
+    discover: discover
+    jcb: jcb
+    elo: elo
+    hiper: hiper
   shipping_preference: get_from_file
   update_billing_profile: true
   update_shipping_profile: true

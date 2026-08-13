@@ -1,0 +1,17 @@
+uuid: a9628077-2a3b-475e-90b3-8334c79b82c4
+langcode: es
+status: true
+dependencies:
+  module:
+    - contact
+id: contact.page.autoreply
+configuration:
+  email_subject:
+    value: 'Hemos recibido tu mensaje'
+  email_body:
+    content:
+      value: |-
+        <h1>Hemos recibido tu mensaje</h1>
+        <p>Gracias por escribirnos. Te contestamos en cuanto podamos, normalmente en menos de 24 horas laborables.</p>
+        <p>Mientras tanto, quizá encuentres la respuesta en nuestras páginas de envíos y devoluciones o de formas de pago, que tienes enlazadas aquí abajo.</p>
+      format: email_html

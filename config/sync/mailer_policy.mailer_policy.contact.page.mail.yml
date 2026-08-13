@@ -1,0 +1,22 @@
+uuid: 0b23ea7b-c1df-4909-8edc-cbdf40db5a29
+langcode: en
+status: true
+dependencies:
+  module:
+    - contact
+id: contact.page.mail
+configuration:
+  email_subject:
+    value: 'Contacto web: {{ subject }}'
+  email_body:
+    content:
+      value: |-
+        <h1>Mensaje desde la web</h1>
+        <p><strong>{{ sender_name }}</strong> ha escrito desde el formulario de contacto.</p>
+        {{ contact_message }}
+      format: email_html
+  email_to:
+    addresses:
+      -
+        value: '<site>'
+        display: ''

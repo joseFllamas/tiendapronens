@@ -6,8 +6,10 @@ use Drupal\commerce_product\Entity\ProductInterface;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Entity\EntityRepositoryInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\Entity\FieldableEntityInterface;
 use Drupal\Core\Field\EntityReferenceFieldItemListInterface;
 use Drupal\Core\Hook\Attribute\Hook;
+use Drupal\Core\Language\LanguageInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\Url;
@@ -32,6 +34,15 @@ class PronensHooks {
    * Functions to support theming.
    */
 
+  /**
+   * Secciones cuyo fondo es crema.
+   *
+   * Sirve para no pegar dos bandas del mismo color: la sección de pasos, que
+   * en la home va sobre crema porque la precede una blanca, se pinta en blanco
+   * cuando cae detrás de una de estas.
+   */
+  protected const SECCIONES_CREMA = ['valores', 'newsletter', 'pasos_personalizacion'];
+
   public function __construct(
     protected EntityTypeManagerInterface $entityTypeManager,
     protected LanguageManagerInterface $languageManager,
@@ -51,9 +62,10 @@ class PronensHooks {
   public function preprocessPage(array &$variables): void {
     // Las pantallas del rediseño (home, categoría, ficha) son full-width y
     // cada componente acota con .pro-container; el resto de páginas (CMS,
-    // checkout, usuario…) usa el contenedor central. De momento solo la
-    // portada es full-width; la fase 5 ampliará la condición.
-    $variables['main_boxed'] = empty($variables['is_front']);
+    // checkout, usuario…) usa el contenedor central. Una página del CMS
+    // montada con secciones (field_secciones) es una landing y va también a
+    // ancho completo: su primera sección suele ser un hero de sangre completa.
+    $variables['main_boxed'] = empty($variables['is_front']) && !$this->esLanding();
 
     // En la categoría y en la ficha el H1 va dentro de la plantilla: en la
     // categoría acompañado del recuento de productos (que solo se conoce con la
@@ -70,7 +82,8 @@ class PronensHooks {
     $es_catalogo = $this->routeMatch->getParameter('view_id') === 'catalogo';
     $es_ficha = $this->routeMatch->getRouteName() === 'entity.commerce_product.canonical';
     $es_checkout = str_starts_with((string) $this->routeMatch->getRouteName(), 'commerce_checkout.');
-    if ($es_catalogo || $es_ficha || $es_checkout) {
+    // En una landing el H1 lo pone el hero de la primera sección.
+    if ($es_catalogo || $es_ficha || $es_checkout || $this->esLanding()) {
       foreach (array_keys($variables['page']['content'] ?? []) as $key) {
         $bloque = $variables['page']['content'][$key];
         if (is_array($bloque) && ($bloque['#base_plugin_id'] ?? '') === 'page_title_block') {
@@ -78,6 +91,21 @@ class PronensHooks {
         }
       }
     }
+  }
+
+  /**
+   * ¿Estamos en una página del CMS montada con secciones?
+   *
+   * El tipo de contenido sigue siendo `page` (no se creó uno "landing"): lo
+   * que distingue a una landing es que tenga párrafos en field_secciones. Así
+   * las páginas de texto corrido (Aviso legal, Envíos…) siguen con el
+   * contenedor central y su bloque de título.
+   */
+  protected function esLanding(): bool {
+    $node = $this->routeMatch->getParameter('node');
+    return $node instanceof FieldableEntityInterface
+      && $node->hasField('field_secciones')
+      && !$node->get('field_secciones')->isEmpty();
   }
 
   /**
@@ -305,11 +333,22 @@ class PronensHooks {
         }
         $etiqueta = $paragraph->hasField('field_etiqueta') ? $paragraph->get('field_etiqueta')->value : NULL;
         $variables['tile_label'] = $etiqueta ?: $this->etiqueta($term);
-        $variables['tile_url'] = $term->toUrl()->toString();
+        $variables['tile_url'] = $this->traducido($term)->toUrl()->toString();
         $media = $this->mediaFromField($paragraph, 'field_imagen_media')
           ?? $this->mediaFromField($term, 'field_imagen');
         $variables['tile_image'] = $media !== NULL ? $this->buildStyledImage($media, 'pronens_mosaico') : NULL;
-        $variables['#cache']['tags'] = Cache::mergeTags($variables['#cache']['tags'] ?? [], $term->getCacheTags());
+        $variables['tile_count'] = $this->cuentaProductos($term);
+        // commerce_product_list: el recuento cambia al publicar o despublicar
+        // un producto, no al editar el término. El contexto de idioma porque
+        // el recuento se cuenta en el idioma de la página.
+        $variables['#cache']['tags'] = Cache::mergeTags(
+          $variables['#cache']['tags'] ?? [],
+          Cache::mergeTags($term->getCacheTags(), ['commerce_product_list']),
+        );
+        $variables['#cache']['contexts'] = Cache::mergeContexts(
+          $variables['#cache']['contexts'] ?? [],
+          ['languages:' . LanguageInterface::TYPE_CONTENT],
+        );
         break;
 
       case 'mosaico_categorias':
@@ -321,6 +360,29 @@ class PronensHooks {
         $variables['enlace'] = $this->linkArray($paragraph, 'field_enlace');
         $media = $this->mediaFromField($paragraph, 'field_imagen_media');
         $variables['pasos_image'] = $media !== NULL ? $this->buildStyledImage($media, 'pronens_cuadro') : NULL;
+        // Con más de tres pasos la columna se alarga demasiado al lado de la
+        // foto y el template los reparte en dos por fila.
+        $variables['pasos_grid'] = $paragraph->hasField('field_items')
+          && $paragraph->get('field_items')->count() > 3;
+        $variables['pasos_blanco'] = in_array($this->seccionAnterior($paragraph), self::SECCIONES_CREMA, TRUE);
+        break;
+
+      case 'texto_medios':
+        // pronens_card (600x800) y no pronens_cuadro: las fotos de esta
+        // sección son verticales y el estilo apaisado las recortaba una vez
+        // en el servidor y otra en el CSS.
+        $variables['imagenes'] = array_map(
+          fn(MediaInterface $media): ?array => $this->buildStyledImage($media, 'pronens_card'),
+          $this->mediasFromFields($paragraph, ['field_imagenes']),
+        );
+        $variables['imagenes'] = array_values(array_filter($variables['imagenes']));
+        break;
+
+      case 'cta':
+        $variables['ctas'] = array_values(array_filter([
+          $this->linkArray($paragraph, 'field_enlace'),
+          $this->linkArray($paragraph, 'field_enlace_secundario'),
+        ]));
         break;
 
       case 'best_sellers':
@@ -367,6 +429,79 @@ class PronensHooks {
   }
 
   /**
+   * Cuenta los productos publicados de una categoría y sus descendientes.
+   *
+   * Los productos referencian términos hoja, así que un término de rama (Moda
+   * y Mascarillas) solo suma si se incluye su subárbol, igual que hacen los
+   * chips de best_sellers.
+   *
+   * Se filtra por el idioma de contenido porque "status" es traducible: sin el
+   * filtro un producto despublicado solo en castellano seguiría contando (la
+   * consulta encontraría la traducción catalana publicada) y el número no
+   * cuadraría con el del catálogo, que filtra por idioma en la view.
+   *
+   * @param \Drupal\taxonomy\TermInterface $term
+   *   Término de la categoría.
+   *
+   * @return int
+   *   Productos publicados de la categoría en el idioma de la página.
+   */
+  protected function cuentaProductos(TermInterface $term): int {
+    $tids = [(int) $term->id()];
+    /** @var \Drupal\taxonomy\TermStorageInterface $storage */
+    $storage = $this->entityTypeManager->getStorage('taxonomy_term');
+    /** @var array<int, object{tid: int|string}> $tree */
+    $tree = $storage->loadTree($term->bundle(), (int) $term->id());
+    foreach ($tree as $descendiente) {
+      $tids[] = (int) $descendiente->tid;
+    }
+
+    $idioma = $this->languageManager
+      ->getCurrentLanguage(LanguageInterface::TYPE_CONTENT)
+      ->getId();
+
+    // Sin accessCheck: el recuento es el de productos publicados y no debe
+    // variar por usuario, que fragmentaría la caché de la portada.
+    return (int) $this->entityTypeManager->getStorage('commerce_product')
+      ->getQuery()
+      ->accessCheck(FALSE)
+      ->condition('status', 1)
+      ->condition('langcode', $idioma)
+      ->condition('field_tipo_de_producto', $tids, 'IN')
+      ->count()
+      ->execute();
+  }
+
+  /**
+   * Devuelve el tipo de la sección que precede a esta dentro de la página.
+   *
+   * No vale un selector CSS de hermano: Drupal envuelve cada párrafo en su
+   * propio "field__item", así que las secciones no son hermanas en el DOM.
+   *
+   * @param \Drupal\paragraphs\ParagraphInterface $paragraph
+   *   La sección de la que se busca la anterior.
+   *
+   * @return string|null
+   *   Tipo de la sección anterior, o NULL si es la primera.
+   */
+  protected function seccionAnterior(ParagraphInterface $paragraph): ?string {
+    $padre = $paragraph->getParentEntity();
+    $campo = $paragraph->get('parent_field_name')->value;
+    if (!$padre instanceof FieldableEntityInterface || !is_string($campo) || !$padre->hasField($campo)) {
+      return NULL;
+    }
+
+    $anterior = NULL;
+    foreach ($padre->get($campo)->referencedEntities() as $hermano) {
+      if ($hermano->id() === $paragraph->id()) {
+        return $anterior;
+      }
+      $anterior = $hermano->bundle();
+    }
+    return NULL;
+  }
+
+  /**
    * Implements hook_preprocess_commerce_product().
    *
    * Construye los datos de la tarjeta (view mode "tarjeta"): imagen 3:4,
@@ -392,7 +527,7 @@ class PronensHooks {
       return;
     }
     $card = [
-      'url' => $product->toUrl()->toString(),
+      'url' => $this->traducido($product)->toUrl()->toString(),
       'title' => $this->etiqueta($product),
       'image' => NULL,
       'price' => NULL,
@@ -615,7 +750,7 @@ class PronensHooks {
    *   Datos del enlace o NULL si el campo está vacío.
    */
   protected function linkArray(object $entity, string $field_name): ?array {
-    if (!$entity instanceof \Drupal\Core\Entity\FieldableEntityInterface || !$entity->hasField($field_name) || $entity->get($field_name)->isEmpty()) {
+    if (!$entity instanceof FieldableEntityInterface || !$entity->hasField($field_name) || $entity->get($field_name)->isEmpty()) {
       return NULL;
     }
     /** @var \Drupal\link\Plugin\Field\FieldType\LinkItem $item */

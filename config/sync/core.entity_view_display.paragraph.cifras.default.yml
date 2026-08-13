@@ -1,0 +1,25 @@
+uuid: 682837aa-f4fd-4d50-9ec5-328af33cf668
+langcode: es
+status: true
+dependencies:
+  config:
+    - field.field.paragraph.cifras.field_items
+    - paragraphs.paragraphs_type.cifras
+  module:
+    - entity_reference_revisions
+id: paragraph.cifras.default
+targetEntityType: paragraph
+bundle: cifras
+mode: default
+content:
+  field_items:
+    type: entity_reference_revisions_entity_view
+    label: hidden
+    settings:
+      view_mode: default
+      link: ''
+    third_party_settings: {  }
+    weight: 0
+    region: content
+hidden:
+  search_api_excerpt: true

@@ -5,6 +5,10 @@ dependencies:
   config:
     - commerce_product.commerce_product_type.default
     - field.field.commerce_product.default.body
+    - field.field.commerce_product.default.field_bordado_color
+    - field.field.commerce_product.default.field_bordado_fuente
+    - field.field.commerce_product.default.field_bordado_mayusculas
+    - field.field.commerce_product.default.field_complementarios
     - field.field.commerce_product.default.field_composicion
     - field.field.commerce_product.default.field_destacado
     - field.field.commerce_product.default.field_escuela
@@ -76,6 +80,10 @@ content:
     region: content
 hidden:
   created: true
+  field_bordado_color: true
+  field_bordado_fuente: true
+  field_bordado_mayusculas: true
+  field_complementarios: true
   field_destacado: true
   field_escuela: true
   field_extras_disponibles: true

@@ -1,0 +1,16 @@
+uuid: 7d6d296e-416e-4c69-915c-4b2586e54773
+langcode: es
+status: true
+dependencies:
+  config:
+    - paragraphs.paragraphs_type.texto_medios
+  module:
+    - content_translation
+third_party_settings:
+  content_translation:
+    enabled: true
+id: paragraph.texto_medios
+target_entity_type_id: paragraph
+target_bundle: texto_medios
+default_langcode: site_default
+language_alterable: false

@@ -20,6 +20,12 @@ graduate:
     base:
       css/graduate.css: {}
 
+delius:
+  version: VERSION
+  css:
+    base:
+      css/delius.css: {}
+
 marquee:
   version: VERSION
   css:
@@ -54,6 +60,30 @@ beneficios:
   css:
     component:
       css/beneficios.css: {}
+
+cifras:
+  version: VERSION
+  css:
+    component:
+      css/cifras.css: {}
+
+texto-medios:
+  version: VERSION
+  css:
+    component:
+      css/texto-medios.css: {}
+
+valores:
+  version: VERSION
+  css:
+    component:
+      css/valores.css: {}
+
+cta:
+  version: VERSION
+  css:
+    component:
+      css/cta.css: {}
 
 mosaico:
   version: VERSION
@@ -276,3 +306,18 @@ user:
     component:
       css/components/user.css:
         weight: -10
+
+# --- Correo. ---
+# Se adjuntan desde pronens_mail (hook_mailer_build), no desde una plantilla:
+# el inliner de symfony_mailer solo mira las libraries del propio correo.
+email:
+  version: VERSION
+  css:
+    theme:
+      css/email/email.css: {}
+
+email-commerce:
+  version: VERSION
+  css:
+    theme:
+      css/email/email-commerce.css: {}

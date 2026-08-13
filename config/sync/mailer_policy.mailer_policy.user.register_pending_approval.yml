@@ -1,0 +1,17 @@
+uuid: f8bf8dcf-6101-4be3-93b8-df99aaf745bb
+langcode: en
+status: true
+dependencies:
+  module:
+    - user
+id: user.register_pending_approval
+configuration:
+  email_subject:
+    value: 'Hemos recibido tu registro en Pronens'
+  email_body:
+    content:
+      value: |-
+        <h1>Estamos revisando tu registro</h1>
+        <p>Hola [user:display-name], gracias por registrarte en Pronens.</p>
+        <p>Revisamos las altas a mano, así que te escribiremos en cuanto tu cuenta esté activa.</p>
+      format: email_html

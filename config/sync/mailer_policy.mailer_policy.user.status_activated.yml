@@ -1,0 +1,25 @@
+uuid: 306ea389-681b-4ead-b4ca-d710529eba43
+langcode: en
+status: true
+dependencies:
+  module:
+    - user
+id: user.status_activated
+configuration:
+  email_subject:
+    value: 'Tu cuenta de Pronens ya está activa'
+  email_body:
+    content:
+      value: |-
+        <h1>Tu cuenta ya está activa</h1>
+        <p>Hola [user:display-name], ya puedes usar tu cuenta de Pronens.</p>
+        <table class="pro-mail__btn-wrap" cellpadding="0" cellspacing="0" border="0" role="presentation"><tr><td>
+          <table class="pro-mail__btn" cellpadding="0" cellspacing="0" border="0" role="presentation"><tr><td>
+            <a class="pro-mail__btn-link" href="[user:one-time-login-url]">Entrar en mi cuenta</a>
+          </td></tr></table>
+        </td></tr></table>
+        <div class="pro-mail__panel">
+          <p style="margin:0"><strong>Tu usuario:</strong> [user:account-name]</p>
+        </div>
+        <p class="pro-mail__note">Este enlace entra sin contraseña una sola vez y caduca en 24 horas; después te pedirá la tuya en <a href="[site:login-url]">[site:login-url]</a>.</p>
+      format: email_html

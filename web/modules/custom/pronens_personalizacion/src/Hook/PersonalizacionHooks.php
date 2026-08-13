@@ -214,6 +214,16 @@ final class PersonalizacionHooks {
       return;
     }
 
+    // Los productos que se bordan en caja alta lo dicen en su ficha
+    // (field_bordado_mayusculas), y se aplica aquí y no solo en la vista previa:
+    // lo que se guarda en la línea es lo que va a leer el taller, así que el
+    // pedido, el correo y el albarán tienen que decir MÓNICA y no Mónica.
+    if (!$inicial && $producto instanceof ProductInterface
+      && $producto->hasField('field_bordado_mayusculas')
+      && (bool) $producto->get('field_bordado_mayusculas')->value) {
+      $texto = mb_strtoupper($texto);
+    }
+
     $form_state->setValue([$campo, 0, 'value'], $texto);
   }
 

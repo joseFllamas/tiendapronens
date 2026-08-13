@@ -4,8 +4,10 @@ status: true
 dependencies:
   config:
     - field.field.node.page.body
+    - field.field.node.page.field_secciones
     - node.type.page
   module:
+    - paragraphs
     - path
     - text
 id: node.page.default
@@ -28,6 +30,24 @@ content:
     weight: 3
     region: content
     settings: {  }
+    third_party_settings: {  }
+  field_secciones:
+    type: paragraphs
+    weight: 7
+    region: content
+    settings:
+      title: Sección
+      title_plural: Secciones
+      edit_mode: closed
+      closed_mode: summary
+      autocollapse: none
+      closed_mode_threshold: 0
+      add_mode: dropdown
+      form_display_mode: default
+      default_paragraph_type: ''
+      features:
+        collapse_edit_all: collapse_edit_all
+        duplicate: duplicate
     third_party_settings: {  }
   langcode:
     type: language_select
@@ -66,6 +86,11 @@ content:
       match_limit: 10
       size: 60
       placeholder: ''
+    third_party_settings: {  }
+  url_redirects:
+    weight: 50
+    region: content
+    settings: {  }
     third_party_settings: {  }
 hidden:
   promote: true

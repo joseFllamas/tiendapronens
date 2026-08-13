@@ -1,0 +1,117 @@
+/**
+ * @file
+ * Bloque de cierre en dos variantes.
+ *
+ * --oscuro: banda ink a ancho completo, texto a la izquierda y botón a la
+ *   derecha (el aviso de B2B del prototipo).
+ * --centrado: sobre el fondo de la página, título grande y botones centrados.
+ */
+
+.pro-cta--oscuro {
+  background: var(--pro-ink);
+  border-top: 1px solid var(--pro-border);
+}
+
+.pro-cta--oscuro .pro-cta__inner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 32px;
+  padding-top: 64px;
+  padding-bottom: 64px;
+}
+
+.pro-cta--oscuro .pro-cta__body {
+  max-width: 64ch;
+}
+
+.pro-cta--oscuro .pro-cta__eyebrow {
+  color: var(--pro-teal-light);
+}
+
+.pro-cta--oscuro .pro-cta__title {
+  color: #fff;
+}
+
+.pro-cta--oscuro .pro-cta__text {
+  color: #9fb3ba;
+}
+
+.pro-cta--centrado .pro-cta__inner {
+  padding-top: 88px;
+  padding-bottom: 88px;
+  text-align: center;
+}
+
+.pro-cta--centrado .pro-cta__body {
+  max-width: 48rem;
+  margin-inline: auto;
+}
+
+.pro-cta--centrado .pro-cta__title {
+  font-size: 42px;
+  line-height: 1.1;
+}
+
+.pro-cta--centrado .pro-cta__actions {
+  justify-content: center;
+  margin-top: 34px;
+}
+
+.pro-cta__eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0 0 14px;
+}
+
+.pro-cta--centrado .pro-cta__eyebrow {
+  justify-content: center;
+}
+
+.pro-cta__icono {
+  width: 16px;
+  height: 16px;
+}
+
+.pro-cta__title {
+  font-size: 32px;
+  line-height: 1.15;
+  margin: 0;
+  text-wrap: pretty;
+}
+
+.pro-cta__text {
+  margin-top: 16px;
+  font-size: 14.5px;
+  line-height: 1.7;
+  color: var(--pro-text-2);
+}
+
+.pro-cta__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.pro-cta__flecha {
+  transition: transform 160ms ease;
+}
+
+.pro-btn:hover .pro-cta__flecha {
+  transform: translateX(2px);
+}
+
+@media (max-width: 900px) {
+  .pro-cta--oscuro .pro-cta__inner,
+  .pro-cta--centrado .pro-cta__inner {
+    padding-top: 56px;
+    padding-bottom: 56px;
+  }
+
+  .pro-cta__title,
+  .pro-cta--centrado .pro-cta__title {
+    font-size: 26px;
+  }
+}

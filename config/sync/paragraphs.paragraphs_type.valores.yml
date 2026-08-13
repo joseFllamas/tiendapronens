@@ -1,0 +1,10 @@
+uuid: 1e4e7e23-1d89-4e4b-9eb4-2866c357424c
+langcode: es
+status: true
+dependencies: {  }
+id: valores
+label: Valores
+icon_uuid: null
+icon_default: null
+description: 'Rejilla de tarjetas con icono, título y texto.'
+behavior_plugins: {  }

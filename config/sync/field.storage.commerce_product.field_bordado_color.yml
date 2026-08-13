@@ -1,0 +1,20 @@
+uuid: a8d9eb2e-6b07-4a46-a03c-edb6747b14a2
+langcode: es
+status: true
+dependencies:
+  module:
+    - color_field
+    - commerce_product
+id: commerce_product.field_bordado_color
+field_name: field_bordado_color
+entity_type: commerce_product
+type: color_field_type
+settings:
+  format: '#HEXHEX'
+module: color_field
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

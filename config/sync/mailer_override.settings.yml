@@ -1,0 +1,7 @@
+_core:
+  default_config_hash: VDoC60NMQRQUZCTSZNze2lAnUGAaP_0pvV5HNQbvSL8
+override:
+  commerce_order: 1
+  contact: 1
+  update: 2
+  user: 1

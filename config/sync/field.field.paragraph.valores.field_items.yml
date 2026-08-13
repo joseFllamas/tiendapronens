@@ -1,0 +1,27 @@
+uuid: acd1be98-f498-472e-8d97-9e6abf263ef4
+langcode: es
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_items
+    - paragraphs.paragraphs_type.valor
+    - paragraphs.paragraphs_type.valores
+  module:
+    - entity_reference_revisions
+id: paragraph.valores.field_items
+field_name: field_items
+entity_type: paragraph
+bundle: valores
+label: Valores
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:paragraph'
+  handler_settings:
+    target_bundles:
+      valor: valor
+    negate: 0
+field_type: entity_reference_revisions

@@ -1,0 +1,101 @@
+/**
+ * @file
+ * Bloque de texto con fotos al lado.
+ *
+ * Con dos fotos se escalonan: la segunda baja 40px, que es el desnivel del
+ * prototipo. Sin fotos el texto se queda en una columna de lectura en vez de
+ * estirarse a los 1280px del contenedor.
+ */
+
+.pro-texto-medios__inner {
+  padding-top: 88px;
+  padding-bottom: 88px;
+}
+
+.pro-texto-medios--con-fotos .pro-texto-medios__inner {
+  display: grid;
+  grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
+  gap: 56px;
+  align-items: center;
+}
+
+.pro-texto-medios__body {
+  max-width: 62ch;
+}
+
+.pro-texto-medios__eyebrow {
+  margin: 0 0 14px;
+}
+
+.pro-texto-medios__title {
+  font-size: 42px;
+  line-height: 1.08;
+  margin: 0 0 26px;
+  text-wrap: pretty;
+}
+
+.pro-texto-medios__title-accent {
+  display: block;
+  font-weight: 300;
+  font-style: italic;
+  color: var(--pro-ink);
+}
+
+.pro-texto-medios__text p {
+  font-size: 15px;
+  line-height: 1.75;
+  color: var(--pro-text-2);
+  margin: 0 0 16px;
+}
+
+.pro-texto-medios__text p:last-child {
+  margin-bottom: 0;
+}
+
+.pro-texto-medios__text strong {
+  color: var(--pro-ink);
+  font-size: 17px;
+}
+
+.pro-texto-medios__media {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(0, 1fr));
+  gap: 20px;
+  align-items: start;
+}
+
+/* 3:4, el mismo recorte que sirve el estilo de imagen (600x800): así la foto
+   se recorta una sola vez y la caja no da saltos mientras carga. */
+.pro-texto-medios__foto img {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 3 / 4;
+  object-fit: cover;
+  display: block;
+  border-radius: var(--pro-radius-size);
+  background: var(--pro-img-bg);
+}
+
+.pro-texto-medios__foto:nth-child(2) {
+  margin-top: 40px;
+}
+
+@media (max-width: 900px) {
+  .pro-texto-medios__inner {
+    padding-top: 56px;
+    padding-bottom: 56px;
+  }
+
+  .pro-texto-medios--con-fotos .pro-texto-medios__inner {
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
+
+  .pro-texto-medios__title {
+    font-size: 32px;
+  }
+
+  .pro-texto-medios__foto:nth-child(2) {
+    margin-top: 0;
+  }
+}

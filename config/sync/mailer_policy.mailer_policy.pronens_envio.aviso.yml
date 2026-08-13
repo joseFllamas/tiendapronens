@@ -1,0 +1,26 @@
+uuid: 90905436-a964-49da-95d9-6c2387f61a1b
+langcode: es
+status: true
+dependencies: {  }
+id: pronens_envio.aviso
+configuration:
+  email_subject:
+    value: 'Tu pedido #{{ order_number }} ya está en camino'
+  email_body:
+    content:
+      value: |-
+        <h1>Tu pedido va de camino</h1>
+        <p>Hola, tu pedido ha salido del taller y ya lo lleva Correos Express.</p>
+        {% if url_seguimiento %}
+        <div class="pro-mail__panel">
+          <p style="margin:0"><strong>Nº de seguimiento:</strong> {{ seguimiento }}</p>
+        </div>
+        <table class="pro-mail__btn-wrap" cellpadding="0" cellspacing="0" border="0" role="presentation"><tr><td>
+          <table class="pro-mail__btn" cellpadding="0" cellspacing="0" border="0" role="presentation"><tr><td>
+            <a class="pro-mail__btn-link" href="{{ url_seguimiento }}">Seguir mi envío</a>
+          </td></tr></table>
+        </td></tr></table>
+        <p class="pro-mail__note">El seguimiento puede tardar unas horas en dar señales: el transportista lo activa al registrar el paquete en su almacén.</p>
+        {% endif %}
+        {{ commerce_order }}
+      format: email_html

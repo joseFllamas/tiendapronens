@@ -1,0 +1,1 @@
+pattern: '/produits/[term:name]'

@@ -1,0 +1,50 @@
+{#
+/**
+ * @file
+ * Bloque de cierre: banda oscura (texto a un lado, botón al otro) o cierre
+ * centrado sobre el fondo de la página. Lo decide field_estilo; sin valor se
+ * pinta la banda oscura.
+ *
+ * ctas lo aporta PronensHooks::preprocessParagraph().
+ */
+#}
+{{ attach_library('pronens/cta') }}
+{% set estilo = paragraph.field_estilo.value ?: 'oscuro' %}
+<section{{ attributes.addClass(['pro-cta', 'pro-cta--' ~ estilo]) }}>
+  <div class="pro-cta__inner pro-container">
+    <div class="pro-cta__body">
+      {% if content.field_eyebrow|render %}
+        <p class="pro-eyebrow pro-cta__eyebrow">
+          {% include '@pronens/misc/pro-icono.html.twig' with {
+            icono: paragraph.field_icono.value,
+            clases: 'pro-cta__icono',
+          } only %}
+          {{ content.field_eyebrow }}
+        </p>
+      {% endif %}
+      <h2 class="pro-cta__title">{{ content.field_titulo }}</h2>
+      {% if content.field_texto|render %}
+        <div class="pro-cta__text">{{ content.field_texto }}</div>
+      {% endif %}
+    </div>
+    {% if ctas %}
+      <div class="pro-cta__actions">
+        {% for cta in ctas %}
+          <a class="pro-btn {{ loop.first
+               ? (estilo == 'oscuro' ? 'pro-btn--light' : 'pro-btn--cta')
+               : (estilo == 'oscuro' ? 'pro-btn--ghost' : 'pro-btn--outline') }}"
+             href="{{ cta.url }}">
+            {{ cta.title }}
+            {% if loop.first %}
+              <svg class="pro-cta__flecha" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                   stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                   stroke-linejoin="round" aria-hidden="true" focusable="false">
+                <path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>
+              </svg>
+            {% endif %}
+          </a>
+        {% endfor %}
+      </div>
+    {% endif %}
+  </div>
+</section>

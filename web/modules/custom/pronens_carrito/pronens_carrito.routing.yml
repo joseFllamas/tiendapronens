@@ -1,0 +1,15 @@
+pronens_carrito.anadir:
+  path: '/carrito/anadir/{commerce_product}'
+  defaults:
+    _controller: 'Drupal\pronens_carrito\Controller\AnadirController::anadir'
+    _title: 'Añadir al carrito'
+  requirements:
+    # Cualquiera puede comprar; el token CSRF evita que un tercero añada
+    # productos al carrito de otro con un enlace preparado.
+    _access: 'TRUE'
+    _csrf_token: 'TRUE'
+    commerce_product: \d+
+  options:
+    parameters:
+      commerce_product:
+        type: entity:commerce_product

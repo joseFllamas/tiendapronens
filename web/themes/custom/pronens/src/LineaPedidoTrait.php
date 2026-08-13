@@ -60,7 +60,7 @@ trait LineaPedidoTrait {
       // El título de la línea de pedido lleva la variación pegada; el diseño
       // quiere el nombre del producto arriba y las opciones debajo.
       'nombre' => $this->etiqueta($producto) ?? $linea->label(),
-      'url' => $producto?->toUrl()->toString(),
+      'url' => $producto !== NULL ? $this->traducido($producto)->toUrl()->toString() : NULL,
       'foto' => $this->fotoDeLinea($linea, $metadatos),
       'opciones' => $this->opcionesDeLinea($linea),
       'bordado' => $this->bordadoDeLinea($linea),
@@ -145,6 +145,35 @@ trait LineaPedidoTrait {
       $ajustes[] = [
         'etiqueta' => (string) $ajuste->getLabel(),
         'importe' => $this->precio($ajuste->getAmount()),
+      ];
+    }
+
+    return $ajustes;
+  }
+
+  /**
+   * Ajustes del pedido para el pie de un resumen.
+   *
+   * Lo comparten el resumen del checkout y el recibo por correo, que tienen que
+   * enseñar exactamente los mismos números: el cliente compara el correo con lo
+   * que vio al pagar.
+   *
+   * @param array<string, mixed> $totales
+   *   Los totales que monta OrderTotalSummary::buildTotals().
+   *
+   * @return array<int, array<string, mixed>>
+   *   Etiqueta, importe y si es informativo (el IVA incluido no se suma).
+   */
+  protected function ajustesDelPedido(array $totales): array {
+    $ajustes = [];
+    foreach ($totales['adjustments'] ?? [] as $ajuste) {
+      $ajustes[] = [
+        'etiqueta' => $ajuste['label'] ?? '',
+        'importe' => $this->precio($ajuste['total']),
+        // El IVA de la tienda es incluido (display_inclusive), así que
+        // buildTotals() lo deja en la lista por obligación legal pero no lo
+        // suma. Enseñarlo como una línea más engañaría.
+        'incluido' => ($ajuste['type'] ?? '') === 'tax' && !empty($ajuste['included']),
       ];
     }
 

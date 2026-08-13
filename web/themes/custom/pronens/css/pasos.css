@@ -8,6 +8,16 @@
   margin-top: 72px;
 }
 
+/* En la home la precede una sección blanca y ese margen es aire; detrás de una
+   sección crema, en cambio, dejaría una franja blanca entre dos bandas del
+   mismo color que parece un fallo. Ahí la sección se pinta en blanco, que es
+   lo que hace el prototipo de Nosotras: crema (valores) → blanco (cómo lo
+   hacemos) → oscuro (B2B). La decide el preprocess (SECCIONES_CREMA). */
+.pro-pasos--blanco {
+  background: var(--pro-bg);
+  margin-top: 0;
+}
+
 .pro-pasos__inner {
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
@@ -37,6 +47,14 @@
 .pro-pasos__title-accent {
   color: var(--pro-teal-ink);
   font-style: italic;
+}
+
+.pro-pasos__intro {
+  font-size: 14.5px;
+  line-height: 1.7;
+  color: var(--pro-text-2);
+  margin-bottom: 18px;
+  max-width: 56ch;
 }
 
 .pro-pasos__items {
@@ -77,6 +95,35 @@
   color: var(--pro-text-2);
 }
 
+/* Cuatro pasos o más no caben en columna al lado de la foto: se reparten en
+   dos por fila y el número deja de compartir línea con el texto. Lo marca
+   PronensHooks::preprocessParagraph() contando los items, no un campo. */
+.pro-pasos__items--grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  column-gap: 28px;
+}
+
+.pro-paso--con-icono {
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+}
+
+.pro-paso--con-icono .pro-paso__body {
+  flex-basis: 100%;
+}
+
+.pro-paso--con-icono .pro-paso__num {
+  padding-top: 0;
+}
+
+.pro-paso__icono {
+  width: 16px;
+  height: 16px;
+  color: var(--pro-mute);
+}
+
 .pro-pasos__cta {
   margin-top: 26px;
 }
@@ -89,6 +136,10 @@
   .pro-pasos__inner {
     grid-template-columns: 1fr;
     gap: 32px;
+  }
+
+  .pro-pasos__items--grid {
+    grid-template-columns: 1fr;
   }
 
   .pro-pasos__media img {

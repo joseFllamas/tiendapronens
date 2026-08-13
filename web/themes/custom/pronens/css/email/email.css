@@ -1,0 +1,211 @@
+/**
+ * @file
+ * Envoltorio de marca de todos los correos.
+ *
+ * OJO: aquí NO se puede usar var(--pro-*). El inliner de symfony_mailer copia
+ * la declaración tal cual dentro del atributo style y Outlook (motor Word)
+ * descarta cualquier custom property, así que un `color: var(--pro-ink)` se
+ * vería negro del navegador o directamente sin color. Los valores literales de
+ * este fichero salen de css/tokens.css y hay que mantener los dos a la vez:
+ *
+ *   --pro-ink        #10222b   --pro-cream     #f3eee6
+ *   --pro-text-2     #5b7078   --pro-cream-2   #f7f3ec
+ *   --pro-mute       #8aa0a6   --pro-border    #ece7de
+ *   --pro-teal       #2e9daa   --pro-teal-ink  #1e6e77
+ *   --pro-orange-cta #c2551f   --pro-border-2  #dcd5c9
+ *
+ * Tampoco se pueden usar las fuentes del sitio: Archivo y Nunito Sans están
+ * self-hosted y ningún cliente de correo carga una @font-face de un tercero.
+ * La maqueta está pensada para Arial, que es lo que se va a ver de verdad.
+ *
+ * Las media queries y el modo oscuro NO van aquí: el inliner solo sabe inlinear
+ * reglas planas. Viven en el <style> de email-wrap.html.twig, que sobrevive a
+ * la conversión (CssToInlineStyles lee esas reglas pero no borra la etiqueta).
+ */
+
+/* --- Lienzo. --- */
+.pro-mail {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  background-color: #f3eee6;
+  font-family: "Nunito Sans", -apple-system, "Segoe UI", Arial, Helvetica, sans-serif;
+  font-size: 15px;
+  line-height: 1.6;
+  color: #10222b;
+}
+
+.pro-mail__outer {
+  width: 100%;
+  background-color: #f3eee6;
+}
+
+.pro-mail__gutter {
+  padding: 32px 16px;
+}
+
+.pro-mail__card {
+  width: 600px;
+  max-width: 100%;
+  margin: 0 auto;
+  background-color: #ffffff;
+  border: 1px solid #ece7de;
+  border-radius: 12px;
+}
+
+/* --- Cabecera: el wordmark es texto, no imagen. ---
+   El logo de la tienda es "pronens." escrito, no un símbolo, así que en correo
+   se pinta con texto y no con un PNG: se ve igual con las imágenes bloqueadas,
+   que es como lo abre la mayoría, y no hay nada que se descargue. */
+.pro-mail__head {
+  padding: 28px 32px 4px;
+  text-align: center;
+}
+
+.pro-mail__brand {
+  font-family: Archivo, "Helvetica Neue", Arial, Helvetica, sans-serif;
+  font-size: 25px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  text-transform: lowercase;
+  color: #10222b;
+  text-decoration: none;
+}
+
+.pro-mail__dot {
+  color: #2e9daa;
+}
+
+.pro-mail__rule {
+  height: 1px;
+  line-height: 1px;
+  font-size: 0;
+  background-color: #ece7de;
+}
+
+/* --- Cuerpo. --- */
+.pro-mail__body {
+  padding: 24px 32px 32px;
+}
+
+.pro-mail__body h1 {
+  font-family: Archivo, "Helvetica Neue", Arial, Helvetica, sans-serif;
+  font-size: 23px;
+  font-weight: 800;
+  line-height: 1.25;
+  letter-spacing: -0.01em;
+  color: #10222b;
+  margin: 0 0 14px;
+}
+
+.pro-mail__body h2 {
+  font-family: Archivo, "Helvetica Neue", Arial, Helvetica, sans-serif;
+  font-size: 17px;
+  font-weight: 800;
+  color: #10222b;
+  margin: 26px 0 10px;
+}
+
+.pro-mail__body h3 {
+  font-family: "Nunito Sans", Arial, Helvetica, sans-serif;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #5b7078;
+  margin: 22px 0 8px;
+}
+
+.pro-mail__body p {
+  margin: 0 0 14px;
+  color: #10222b;
+}
+
+.pro-mail__body a {
+  color: #1e6e77;
+}
+
+.pro-mail__body ul {
+  margin: 0 0 14px;
+  padding-left: 20px;
+}
+
+/* Doble selector a propósito en esta y en las dos siguientes: compiten con
+   `.pro-mail__body p` y `.pro-mail__body a`, que son más específicas que una
+   clase suelta, y el inliner resuelve por especificidad igual que un navegador.
+   Sin esto el texto del botón salía turquesa sobre naranja. */
+.pro-mail__body .pro-mail__note {
+  font-size: 13px;
+  color: #5b7078;
+}
+
+/* Enlace largo que hay que poder copiar y pegar (el de un solo uso). */
+.pro-mail__body .pro-mail__url {
+  font-size: 13px;
+  word-break: break-all;
+  color: #1e6e77;
+}
+
+/* --- Botón. Va como tabla porque Outlook no pinta el fondo de un <a>. --- */
+.pro-mail__btn {
+  border-radius: 999px;
+  background-color: #c2551f;
+}
+
+.pro-mail__body .pro-mail__btn-link {
+  display: inline-block;
+  padding: 13px 28px;
+  font-family: "Nunito Sans", Arial, Helvetica, sans-serif;
+  font-size: 15px;
+  font-weight: 800;
+  line-height: 1;
+  color: #ffffff;
+  text-decoration: none;
+}
+
+.pro-mail__btn-wrap {
+  padding: 6px 0 20px;
+}
+
+/* --- Aviso destacado (crema). --- */
+.pro-mail__panel {
+  background-color: #f7f3ec;
+  border: 1px solid #ece7de;
+  border-radius: 12px;
+  padding: 16px 20px;
+  margin: 0 0 18px;
+}
+
+/* --- Pie. --- */
+.pro-mail__foot {
+  background-color: #f7f3ec;
+  border-top: 1px solid #ece7de;
+  border-radius: 0 0 12px 12px;
+  padding: 22px 32px 26px;
+  text-align: center;
+  font-size: 13px;
+  line-height: 1.6;
+  color: #5b7078;
+}
+
+.pro-mail__foot p {
+  margin: 0 0 8px;
+  color: #5b7078;
+}
+
+.pro-mail__foot a {
+  color: #1e6e77;
+}
+
+/* Con el selector suelto pierden contra `.pro-mail__foot p`, que es más
+   específico, y el inliner resuelve por especificidad igual que un navegador. */
+.pro-mail__foot .pro-mail__links {
+  margin: 12px 0 0;
+  font-size: 12px;
+}
+
+.pro-mail__foot .pro-mail__copy {
+  margin: 8px 0 0;
+  font-size: 12px;
+  color: #8aa0a6;
+}

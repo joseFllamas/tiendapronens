@@ -1,0 +1,107 @@
+{#
+/**
+ * @file
+ * El pedido dentro del recibo por correo.
+ *
+ * Variables de Commerce:
+ * - order: campos del modo de vista `email` (facturación y envío).
+ * - order_entity: la entidad del pedido.
+ *
+ * Variables del tema (CorreoHooks::preprocessCommerceOrder):
+ * - lineas: foto, nombre, opciones, bordado, cantidad, importe y ajustes de
+ *   cada línea, del MISMO trait que la cesta, el flyout y el checkout.
+ * - numero, fecha, subtotal, ajustes, total, url_pedido.
+ *
+ * Por qué no se usa el formateador `commerce_order_item_table` que trae el
+ * modo de vista de fábrica: renderiza la view commerce_order_item_table, que
+ * enseña cantidad, título y total de línea y nada más. Aquí eso deja fuera lo
+ * que se ha comprado de verdad (el texto o la inicial bordada, el formato, los
+ * extras) y además el total de línea de Commerce NO incluye los ajustes, así
+ * que la tabla no cuadraría con el total del pie.
+ */
+#}
+<div{{ attributes.addClass('pro-mail-order') }}>
+
+  <table class="pro-mail-order__meta" cellpadding="0" cellspacing="0" border="0" role="presentation">
+    <tr>
+      <td>{{ 'Order'|t }} <span class="pro-mail-order__num">#{{ numero }}</span></td>
+      <td align="right">{{ fecha|format_date('custom', 'j/m/Y') }}</td>
+    </tr>
+  </table>
+
+  <table class="pro-mail-order__items" cellpadding="0" cellspacing="0" border="0" role="presentation">
+    {% for linea in lineas %}
+      <tr class="pro-mail-order__item">
+        {% if linea.foto %}
+          <td class="pro-mail-order__thumb">{{ linea.foto }}</td>
+        {% endif %}
+        <td class="pro-mail-order__info"{% if not linea.foto %} colspan="2"{% endif %}>
+          <p class="pro-mail-order__name">
+            {% if linea.url %}<a href="{{ linea.url }}">{{ linea.nombre }}</a>{% else %}{{ linea.nombre }}{% endif %}
+          </p>
+          {% if linea.opciones %}<p class="pro-mail-order__opts">{{ linea.opciones }}</p>{% endif %}
+          <p class="pro-mail-order__qty">{{ 'Quantity'|t }}: {{ linea.cantidad }}</p>
+          {% if linea.bordado %}
+            <p class="pro-mail-order__emb">{{ 'Embroidery'|t }}: <strong>{{ linea.bordado }}</strong></p>
+          {% endif %}
+          {% if linea.tiene_ajustes %}
+            <ul class="pro-mail-order__fees">
+              {% for ajuste in linea.ajustes %}
+                <li>{{ ajuste.etiqueta }} +{{ ajuste.importe }}</li>
+              {% endfor %}
+            </ul>
+          {% endif %}
+        </td>
+        <td class="pro-mail-order__price">{{ linea.importe }}</td>
+      </tr>
+    {% endfor %}
+  </table>
+
+  <table class="pro-mail-order__totals" cellpadding="0" cellspacing="0" border="0" role="presentation">
+    {% if subtotal %}
+      <tr>
+        <td>{{ 'Subtotal'|t }}</td>
+        <td class="pro-mail-order__amount">{{ subtotal }}</td>
+      </tr>
+    {% endif %}
+    {% for ajuste in ajustes %}
+      {# El IVA de la tienda es incluido: se enseña por obligación legal, pero
+         no suma, y por eso va en gris y con el "incluido" delante. #}
+      <tr{% if ajuste.incluido %} class="pro-mail-order__included"{% endif %}>
+        <td>{{ ajuste.etiqueta }}</td>
+        <td class="pro-mail-order__amount">{% if ajuste.incluido %}({{ ajuste.importe }}){% else %}{{ ajuste.importe }}{% endif %}</td>
+      </tr>
+    {% endfor %}
+    <tr class="pro-mail-order__grand">
+      <td>{{ 'Total'|t }}</td>
+      <td class="pro-mail-order__amount">{{ total }}</td>
+    </tr>
+  </table>
+
+  <table class="pro-mail-order__cols" cellpadding="0" cellspacing="0" border="0" role="presentation">
+    <tr>
+      {% if envio and envio.direccion %}
+        <td class="pro-mail-order__col">
+          <h3>{{ 'Shipping address'|t }}</h3>
+          {{ envio.direccion }}
+          {% if envio.metodo %}<p class="pro-mail-order__ship">{{ envio.metodo }}</p>{% endif %}
+          {% if envio.seguimiento %}<p class="pro-mail-order__ship">{{ 'Tracking number'|t }}: {{ envio.seguimiento }}</p>{% endif %}
+        </td>
+      {% endif %}
+      {% if facturacion %}
+        <td class="pro-mail-order__col">
+          <h3>{{ 'Billing address'|t }}</h3>
+          {{ facturacion }}
+        </td>
+      {% endif %}
+    </tr>
+  </table>
+
+  {% if order.customer_comments|render|trim %}
+    <div class="pro-mail-order__notes">
+      <h3>{{ 'Order comments'|t }}</h3>
+      {{ order.customer_comments }}
+    </div>
+  {% endif %}
+
+</div>

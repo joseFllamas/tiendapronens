@@ -1,0 +1,31 @@
+uuid: ba000ee6-aafe-4daa-9e37-cf5271b2e4c1
+langcode: es
+status: true
+dependencies:
+  module:
+    - commerce_sermepa
+id: bizum
+label: Bizum
+weight: 0
+plugin: commerce_sermepa
+configuration:
+  display_label: Bizum
+  mode: live
+  payment_method_types:
+    - 'Tarjeta de crédito'
+  collect_billing_information: true
+  merchant_name: PRONENS
+  merchant_code: '329583926'
+  merchant_group: ''
+  merchant_password: YjdXOakcG5F4P9FxwG7oTrFYFn19CGKU
+  merchant_terminal: '001'
+  merchant_paymethods:
+    z: z
+  merchant_consumer_language: '001'
+  currency: 978
+  transaction_type: '0'
+  instructions:
+    value: ''
+    format: plain_text
+conditions: {  }
+conditionOperator: AND

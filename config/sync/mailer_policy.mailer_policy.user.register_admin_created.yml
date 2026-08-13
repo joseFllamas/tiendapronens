@@ -1,0 +1,26 @@
+uuid: 51611ef8-4de9-44f0-9032-a215f1560c36
+langcode: en
+status: true
+dependencies:
+  module:
+    - user
+id: user.register_admin_created
+configuration:
+  email_subject:
+    value: 'Tu cuenta de Pronens ya está lista'
+  email_body:
+    content:
+      value: |-
+        <h1>Bienvenida a Pronens</h1>
+        <p>Hola [user:display-name], hemos creado tu cuenta en la tienda.</p>
+        <p>Pulsa el botón para entrar por primera vez y elegir tu contraseña.</p>
+        <table class="pro-mail__btn-wrap" cellpadding="0" cellspacing="0" border="0" role="presentation"><tr><td>
+          <table class="pro-mail__btn" cellpadding="0" cellspacing="0" border="0" role="presentation"><tr><td>
+            <a class="pro-mail__btn-link" href="[user:one-time-login-url]">Entrar y elegir contraseña</a>
+          </td></tr></table>
+        </td></tr></table>
+        <div class="pro-mail__panel">
+          <p style="margin:0"><strong>Tu usuario:</strong> [user:account-name]</p>
+        </div>
+        <p class="pro-mail__note">El enlace solo se puede usar una vez y caduca en 24 horas. A partir de ahí entras en <a href="[site:login-url]">[site:login-url]</a> con tu usuario y la contraseña que hayas elegido.</p>
+      format: email_html

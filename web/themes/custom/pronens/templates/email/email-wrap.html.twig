@@ -1,0 +1,111 @@
+{#
+/**
+ * @file
+ * Envoltorio de marca de TODOS los correos de la tienda.
+ *
+ * Variables de symfony_mailer:
+ * - body: cuerpo del correo (ya renderizado).
+ * - is_html: verdadero en la parte HTML, falso en la de texto plano.
+ * - subject, type, sub_type, attributes.
+ *
+ * Variables del tema (CorreoHooks::preprocessEmailWrap):
+ * - url_inicio: portada en el idioma del correo.
+ * - pie: bloque de marca y contacto del footer, editable por el cliente en
+ *   /admin/content/block.
+ * - enlaces_legales: lista de {titulo, url} del menú legal.
+ * - pie_texto: la misma información del pie, en texto plano.
+ * - enlaces_legales: lista de {titulo, url} del menú legal.
+ * - anyo: año en curso, para el copyright.
+ * - idioma: código de idioma del correo.
+ *
+ * Maquetación de correo, no de web: tablas, ancho fijo de 600 y CSS inline. El
+ * <style> de aquí abajo es lo único que no se puede inlinear (media queries y
+ * modo oscuro); CssToInlineStyles lee sus reglas pero no borra la etiqueta, así
+ * que llega al cliente de correo intacto.
+ */
+#}
+{% if is_html %}
+<html lang="{{ idioma }}">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <meta name="supported-color-schemes" content="light">
+  <title>{{ subject }}</title>
+  <style>
+    @media only screen and (max-width: 620px) {
+      .pro-mail__card { width: 100% !important; }
+      .pro-mail__gutter { padding: 16px 8px !important; }
+      .pro-mail__body { padding: 20px 20px 24px !important; }
+      .pro-mail__head { padding: 22px 20px 4px !important; }
+      .pro-mail__foot { padding: 20px 20px 22px !important; }
+    }
+    /* Gmail y Outlook invierten los colores por su cuenta y no se les puede
+       impedir; esto es para los que sí respetan la media query (Apple Mail). */
+    @media (prefers-color-scheme: dark) {
+      .pro-mail, .pro-mail__outer { background-color: #10222b !important; }
+      .pro-mail__card { background-color: #173039 !important; border-color: #1e3a42 !important; }
+      .pro-mail__foot { background-color: #1e3a42 !important; border-color: #1e3a42 !important; }
+      .pro-mail__brand, .pro-mail__body h1, .pro-mail__body h2, .pro-mail__body p { color: #fcfbf9 !important; }
+      .pro-mail__body a, .pro-mail__foot a { color: #7fd4dd !important; }
+      .pro-mail__rule { background-color: #1e3a42 !important; }
+      .pro-mail__panel { background-color: #1e3a42 !important; border-color: #1e3a42 !important; }
+    }
+  </style>
+</head>
+<body class="pro-mail" style="margin:0;padding:0;">
+<table class="pro-mail__outer" width="100%" cellpadding="0" cellspacing="0" border="0" role="presentation">
+  <tr>
+    <td class="pro-mail__gutter" align="center">
+
+      <table class="pro-mail__card" width="600" cellpadding="0" cellspacing="0" border="0" role="presentation">
+        <tr>
+          <td class="pro-mail__head" align="center">
+            <a class="pro-mail__brand" href="{{ url_inicio }}">Pronens<span class="pro-mail__dot">.</span></a>
+          </td>
+        </tr>
+        <tr>
+          <td style="padding:20px 32px 0;">
+            <table width="100%" cellpadding="0" cellspacing="0" border="0" role="presentation">
+              <tr><td class="pro-mail__rule">&nbsp;</td></tr>
+            </table>
+          </td>
+        </tr>
+        <tr>
+          <td class="pro-mail__body">
+            <div{{ attributes.addClass('email-type-' ~ type|clean_class, 'email-sub-type-' ~ sub_type|clean_class) }}>
+              {{ body }}
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td class="pro-mail__foot" align="center">
+            {% if pie %}{{ pie }}{% endif %}
+            {% if enlaces_legales %}
+              <p class="pro-mail__links">
+                {% for enlace in enlaces_legales %}
+                  <a href="{{ enlace.url }}">{{ enlace.titulo }}</a>{% if not loop.last %} &nbsp;·&nbsp; {% endif %}
+                {% endfor %}
+              </p>
+            {% endif %}
+            <p class="pro-mail__copy">© {{ anyo }} Pronens. {{ 'All rights reserved.'|t }}</p>
+          </td>
+        </tr>
+      </table>
+
+    </td>
+  </tr>
+</table>
+</body>
+</html>
+{% else %}
+{{ body }}
+
+--
+Pronens
+{{ url_inicio }}
+{% if pie_texto %}{{ pie_texto }}
+{% endif %}
+{% for enlace in enlaces_legales %}{{ enlace.titulo }}: {{ enlace.url }}
+{% endfor %}
+{% endif %}

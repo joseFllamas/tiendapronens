@@ -1,0 +1,19 @@
+uuid: 35fa076f-475c-4abb-b9e4-e7b8519254cb
+langcode: es
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_eyebrow
+    - paragraphs.paragraphs_type.valores
+id: paragraph.valores.field_eyebrow
+field_name: field_eyebrow
+entity_type: paragraph
+bundle: valores
+label: Antetítulo
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

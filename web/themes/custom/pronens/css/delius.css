@@ -1,0 +1,23 @@
+/**
+ * @file
+ * Delius Unicase: la letra del nombre bordado (library pronens/delius, attach
+ * solo en la ficha de un producto que borde nombre y la haya elegido).
+ *
+ * Unicase quiere decir que la caja alta y la baja tienen la misma altura, así
+ * que "Alex" se borda ALeX y el nombre queda a una sola línea de letras, que es
+ * lo que hace el bordado real de Pronens; con una tipografía normal, la ese de
+ * "Jose" quedaba media letra más baja que la jota. Es la única unicase con
+ * dibujo redondeado de Google Fonts (la otra, Cormorant Unicase, es serif).
+ *
+ * Un solo peso, el 700: el hilo tiene grosor y el 400 se veía flaco de lejos.
+ * Subset latin, que cubre las tildes y la eñe de los nombres del catálogo
+ * (Mónica, Iñaki, Anaïs).
+ */
+
+@font-face {
+  font-family: "Delius Unicase";
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("../fonts/delius-unicase-v30-latin-700.woff2") format("woff2");
+}

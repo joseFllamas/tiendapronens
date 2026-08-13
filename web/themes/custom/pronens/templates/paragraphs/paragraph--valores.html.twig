@@ -1,0 +1,26 @@
+{#
+/**
+ * @file
+ * Sección "Lo que nos define": entradilla y rejilla de tarjetas con icono.
+ *
+ * La rejilla es una sola caja con borde y separadores de 1px hechos con el
+ * gap sobre fondo borde (como el prototipo), así no hay bordes dobles.
+ */
+#}
+{{ attach_library('pronens/valores') }}
+<section{{ attributes.addClass('pro-valores') }}>
+  <div class="pro-valores__inner pro-container">
+    <div class="pro-valores__head">
+      {% if content.field_eyebrow|render %}
+        <p class="pro-eyebrow pro-valores__eyebrow">{{ content.field_eyebrow }}</p>
+      {% endif %}
+      <h2 class="pro-valores__title">{{ content.field_titulo }}</h2>
+      {% if content.field_texto|render %}
+        <div class="pro-valores__intro">{{ content.field_texto }}</div>
+      {% endif %}
+    </div>
+    <div class="pro-valores__grid">
+      {{ content.field_items }}
+    </div>
+  </div>
+</section>

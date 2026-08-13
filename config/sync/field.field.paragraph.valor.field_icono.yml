@@ -1,0 +1,21 @@
+uuid: bc9d1eda-fbec-4e3b-b273-39f63e4ac94e
+langcode: es
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_icono
+    - paragraphs.paragraphs_type.valor
+  module:
+    - options
+id: paragraph.valor.field_icono
+field_name: field_icono
+entity_type: paragraph
+bundle: valor
+label: Icono
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: list_string

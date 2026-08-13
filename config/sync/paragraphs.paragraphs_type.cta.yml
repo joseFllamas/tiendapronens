@@ -1,0 +1,10 @@
+uuid: 330f7178-4ae2-4f91-8cb6-ca2be2661dd5
+langcode: es
+status: true
+dependencies: {  }
+id: cta
+label: 'Llamada a la acción'
+icon_uuid: null
+icon_default: null
+description: 'Bloque de cierre con título y hasta dos botones.'
+behavior_plugins: {  }

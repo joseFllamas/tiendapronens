@@ -1,0 +1,47 @@
+uuid: 64c2f6ec-d445-460e-a30d-b4c6370a632c
+langcode: es
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_secciones
+    - node.type.page
+    - paragraphs.paragraphs_type.beneficios
+    - paragraphs.paragraphs_type.best_sellers
+    - paragraphs.paragraphs_type.cifras
+    - paragraphs.paragraphs_type.cta
+    - paragraphs.paragraphs_type.hero
+    - paragraphs.paragraphs_type.historia
+    - paragraphs.paragraphs_type.mosaico_categorias
+    - paragraphs.paragraphs_type.newsletter
+    - paragraphs.paragraphs_type.pasos_personalizacion
+    - paragraphs.paragraphs_type.texto_medios
+    - paragraphs.paragraphs_type.valores
+  module:
+    - entity_reference_revisions
+id: node.page.field_secciones
+field_name: field_secciones
+entity_type: node
+bundle: page
+label: Secciones
+description: 'Deja el cuerpo vacío si montas la página con secciones.'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:paragraph'
+  handler_settings:
+    target_bundles:
+      hero: hero
+      cifras: cifras
+      texto_medios: texto_medios
+      valores: valores
+      pasos_personalizacion: pasos_personalizacion
+      cta: cta
+      beneficios: beneficios
+      mosaico_categorias: mosaico_categorias
+      best_sellers: best_sellers
+      historia: historia
+      newsletter: newsletter
+    negate: 0
+field_type: entity_reference_revisions

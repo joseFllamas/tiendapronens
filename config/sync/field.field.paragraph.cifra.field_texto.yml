@@ -1,0 +1,19 @@
+uuid: b4f3fbf1-8da0-4c84-93c8-d25749c65b1f
+langcode: es
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_texto
+    - paragraphs.paragraphs_type.cifra
+id: paragraph.cifra.field_texto
+field_name: field_texto
+entity_type: paragraph
+bundle: cifra
+label: Etiqueta
+description: 'Qué mide la cifra. Se pinta en mayúsculas.'
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string_long

@@ -1,0 +1,51 @@
+/**
+ * @file
+ * Franja de cifras sobre crema: 4 columnas centradas.
+ */
+
+.pro-cifras {
+  background: var(--pro-cream-2);
+  border-block: 1px solid var(--pro-border);
+}
+
+.pro-cifras__grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 32px;
+  padding-top: 40px;
+  padding-bottom: 40px;
+}
+
+.pro-cifra {
+  text-align: center;
+}
+
+.pro-cifra__num {
+  font-family: var(--pro-font-display);
+  font-weight: 900;
+  font-size: 46px;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  color: var(--pro-teal-ink);
+}
+
+.pro-cifra__label {
+  margin-top: 8px;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--pro-text-2);
+  text-wrap: balance;
+}
+
+@media (max-width: 900px) {
+  .pro-cifras__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 28px;
+  }
+
+  .pro-cifra__num {
+    font-size: 36px;
+  }
+}

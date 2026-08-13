@@ -1,0 +1,23 @@
+uuid: 5df3049c-4971-43d4-a35d-d1f5b1fa1638
+langcode: en
+status: true
+dependencies:
+  module:
+    - user
+id: user.cancel_confirm
+configuration:
+  email_subject:
+    value: 'Confirma que quieres dar de baja tu cuenta'
+  email_body:
+    content:
+      value: |-
+        <h1>¿Seguro que quieres darte de baja?</h1>
+        <p>Hola [user:display-name], hemos recibido una petición para cancelar tu cuenta de Pronens.</p>
+        <p>Si es lo que quieres, confírmalo aquí:</p>
+        <table class="pro-mail__btn-wrap" cellpadding="0" cellspacing="0" border="0" role="presentation"><tr><td>
+          <table class="pro-mail__btn" cellpadding="0" cellspacing="0" border="0" role="presentation"><tr><td>
+            <a class="pro-mail__btn-link" href="[user:cancel-url]">Confirmar la baja</a>
+          </td></tr></table>
+        </td></tr></table>
+        <p class="pro-mail__note">El enlace caduca en 24 horas. Si no has sido tú, ignora este correo y tu cuenta seguirá como está.</p>
+      format: email_html

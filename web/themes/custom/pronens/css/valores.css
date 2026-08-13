@@ -1,0 +1,100 @@
+/**
+ * @file
+ * Sección de valores sobre crema: entradilla y rejilla de tarjetas con icono.
+ *
+ * Los separadores de la rejilla son el gap de 1px sobre el fondo del borde:
+ * así no hay bordes dobles ni reglas :last-child para quitarlos.
+ */
+
+.pro-valores {
+  background: var(--pro-cream);
+  border-block: 1px solid var(--pro-border);
+}
+
+.pro-valores__inner {
+  padding-top: 88px;
+  padding-bottom: 88px;
+}
+
+.pro-valores__head {
+  max-width: 62ch;
+}
+
+.pro-valores__eyebrow {
+  margin: 0 0 14px;
+}
+
+.pro-valores__title {
+  font-size: 42px;
+  line-height: 1.1;
+  margin: 0;
+  text-wrap: pretty;
+}
+
+.pro-valores__intro {
+  margin-top: 16px;
+  font-size: 15px;
+  line-height: 1.7;
+  color: var(--pro-text-2);
+}
+
+.pro-valores__grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1px;
+  margin-top: 52px;
+  background: var(--pro-border-cream);
+  border: 1px solid var(--pro-border-cream);
+  border-radius: var(--pro-radius-size);
+  overflow: hidden;
+}
+
+.pro-valor {
+  background: var(--pro-bg);
+  padding: 30px 26px;
+}
+
+.pro-valor__icono {
+  color: var(--pro-teal-ink);
+}
+
+.pro-valor__title {
+  font-size: 16px;
+  font-weight: 800;
+  line-height: 1.3;
+  margin: 18px 0 8px;
+  text-wrap: pretty;
+}
+
+.pro-valor__text {
+  font-size: 13.5px;
+  line-height: 1.65;
+  color: var(--pro-text-2);
+}
+
+@media (max-width: 1000px) {
+  .pro-valores__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 900px) {
+  .pro-valores__inner {
+    padding-top: 56px;
+    padding-bottom: 56px;
+  }
+
+  .pro-valores__title {
+    font-size: 32px;
+  }
+
+  .pro-valores__grid {
+    margin-top: 36px;
+  }
+}
+
+@media (max-width: 560px) {
+  .pro-valores__grid {
+    grid-template-columns: 1fr;
+  }
+}

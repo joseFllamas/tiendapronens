@@ -1,0 +1,10 @@
+uuid: 39a06e8b-2fd8-4d71-a7e9-697c2a5b7b20
+langcode: es
+status: true
+dependencies: {  }
+id: valor
+label: Valor
+icon_uuid: null
+icon_default: null
+description: 'Tarjeta de la rejilla de valores.'
+behavior_plugins: {  }

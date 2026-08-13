@@ -1,0 +1,6 @@
+services:
+  pronens_carrito.abrir_flyout:
+    class: Drupal\pronens_carrito\EventSubscriber\AbrirFlyoutSubscriber
+    arguments: ['@request_stack']
+    tags:
+      - { name: event_subscriber }

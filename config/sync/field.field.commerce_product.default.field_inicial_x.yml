@@ -9,8 +9,8 @@ id: commerce_product.default.field_inicial_x
 field_name: field_inicial_x
 entity_type: commerce_product
 bundle: default
-label: 'Inicial: posición horizontal (%)'
-description: 'Centro de la inicial medido desde el borde izquierdo de la foto, en porcentaje. 50 es el centro.'
+label: 'Posición del bordado: X (%)'
+description: 'Distancia desde el borde izquierdo de la foto, en porcentaje de su ancho.'
 required: false
 translatable: false
 default_value: {  }

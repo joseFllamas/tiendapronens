@@ -1,0 +1,23 @@
+uuid: aabee9aa-5a59-4b9a-839f-e36bbdade5cb
+langcode: es
+status: true
+dependencies:
+  config:
+    - commerce_product.commerce_product_type.default
+    - field.storage.commerce_product.field_bordado_fuente
+  module:
+    - options
+id: commerce_product.default.field_bordado_fuente
+field_name: field_bordado_fuente
+entity_type: commerce_product
+bundle: default
+label: 'Fuente del bordado'
+description: 'Con qué letra se borda el nombre. Sin elegir nada se borda en unicase. No se usa en los productos de inicial, que llevan siempre la letra de parche.'
+required: false
+translatable: false
+default_value:
+  -
+    value: unicase
+default_value_callback: ''
+settings: {  }
+field_type: list_string

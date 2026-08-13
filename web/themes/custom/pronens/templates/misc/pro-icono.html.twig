@@ -1,0 +1,36 @@
+{#
+/**
+ * @file
+ * Juego de iconos de línea del rediseño (los mismos trazos que el prototipo).
+ *
+ * Se pintan inline y sin fichero aparte: son 8 trazos cortos, así que un
+ * sprite externo costaría una petición más y un icono no se repite lo
+ * suficiente para amortizarla. El `stroke: currentColor` deja que cada
+ * componente decida el color.
+ *
+ * Las claves son los valores de field_icono (paragraph). Si el párrafo no
+ * trae icono no se pinta nada.
+ *
+ * Variables:
+ * - icono: clave del icono.
+ * - clases: (opcional) clases extra para el <svg>.
+ *
+ * Uso: {% include '@pronens/misc/pro-icono.html.twig' with {icono: 'paleta'} only %}
+ */
+#}
+{% set trazos = {
+  'paleta': '<path d="M12 22a1 1 0 0 1 0-20 10 9 0 0 1 10 9 5 5 0 0 1-5 5h-2.25a1.75 1.75 0 0 0-1.4 2.8l.3.4a1.75 1.75 0 0 1-1.4 2.8z"/><circle cx="13.5" cy="6.5" r=".6" fill="currentColor" stroke="none"/><circle cx="17.5" cy="10.5" r=".6" fill="currentColor" stroke="none"/><circle cx="6.5" cy="12.5" r=".6" fill="currentColor" stroke="none"/><circle cx="8.5" cy="7.5" r=".6" fill="currentColor" stroke="none"/>',
+  'escudo': '<path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/><path d="m9 12 2 2 4-4"/>',
+  'chispas': '<path d="M11.02 2.81a1 1 0 0 1 1.96 0l1.05 5.56a2 2 0 0 0 1.6 1.59l5.55 1.05a1 1 0 0 1 0 1.97l-5.55 1.05a2 2 0 0 0-1.6 1.59l-1.05 5.56a1 1 0 0 1-1.96 0l-1.05-5.56a2 2 0 0 0-1.6-1.59l-5.55-1.05a1 1 0 0 1 0-1.97l5.55-1.05a2 2 0 0 0 1.6-1.59z"/><path d="M20 2v4"/><path d="M22 4h-4"/><circle cx="4" cy="20" r="2"/>',
+  'regla': '<path d="M21.3 15.3a2.4 2.4 0 0 1 0 3.4l-2.6 2.6a2.4 2.4 0 0 1-3.4 0L2.7 8.7a2.41 2.41 0 0 1 0-3.4l2.6-2.6a2.41 2.41 0 0 1 3.4 0Z"/><path d="m14.5 12.5 2-2"/><path d="m11.5 9.5 2-2"/><path d="m8.5 6.5 2-2"/><path d="m17.5 15.5 2-2"/>',
+  'tijeras': '<circle cx="6" cy="6" r="3"/><path d="M8.12 8.12 12 12"/><path d="M20 4 8.12 15.88"/><circle cx="6" cy="18" r="3"/><path d="M14.8 14.8 20 20"/>',
+  'fabrica': '<path d="M12 16h.01"/><path d="M16 16h.01"/><path d="M3 19a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V8.5a.5.5 0 0 0-.77-.42l-4.46 2.84A.5.5 0 0 1 15 10.5v-2a.5.5 0 0 0-.77-.42L9.77 10.92A.5.5 0 0 1 9 10.5V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2z"/><path d="M8 16h.01"/>',
+  'camion': '<path d="M14 18V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v11a1 1 0 0 0 1 1h2"/><path d="M15 18H9"/><path d="M19 18h2a1 1 0 0 0 1-1v-3.65a1 1 0 0 0-.22-.62l-3.48-4.35A1 1 0 0 0 17.52 8H14"/><circle cx="17" cy="18" r="2"/><circle cx="7" cy="18" r="2"/>',
+  'corazon': '<path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/>',
+  'edificio': '<path d="M10 12h4"/><path d="M10 8h4"/><path d="M14 21v-3a2 2 0 0 0-4 0v3"/><path d="M6 10H4a2 2 0 0 0-2 2v7a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-2"/><path d="M6 21V5a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v16"/>',
+} %}
+{% if icono and trazos[icono] is defined %}
+  <svg class="pro-icono{{ clases ? ' ' ~ clases }}" width="24" height="24" viewBox="0 0 24 24"
+       fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"
+       stroke-linejoin="round" aria-hidden="true" focusable="false">{{ trazos[icono]|raw }}</svg>
+{% endif %}

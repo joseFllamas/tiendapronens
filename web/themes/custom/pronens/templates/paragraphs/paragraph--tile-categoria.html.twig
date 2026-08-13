@@ -1,14 +1,28 @@
 {#
 /**
  * @file
- * Tile del mosaico: foto de la categoría con etiqueta chip blanca.
+ * Tile del mosaico: foto de la categoría con degradado y texto blanco encima
+ * (recuento de piezas, nombre y flecha).
  *
- * tile_url, tile_label y tile_image vienen del preprocess.
+ * El degradado es el ::before de .pro-tile y la flecha es decorativa: el
+ * enlace ya lo es todo el tile y su nombre accesible es tile_label.
+ *
+ * tile_url, tile_label, tile_count y tile_image vienen del preprocess.
  */
 #}
 <a{{ attributes.addClass('pro-tile') }} href="{{ tile_url }}">
   {% if tile_image %}
     <div class="pro-tile__media">{{ tile_image }}</div>
   {% endif %}
-  <span class="pro-tile__label">{{ tile_label }}</span>
+  <span class="pro-tile__body">
+    <span class="pro-tile__text">
+      {% if tile_count %}
+        <span class="pro-tile__count">{% trans with {'context': 'category tile'} %}1 piece{% plural tile_count %}@count pieces{% endtrans %}</span>
+      {% endif %}
+      <span class="pro-tile__label">{{ tile_label }}</span>
+    </span>
+    <span class="pro-tile__arrow" aria-hidden="true">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+    </span>
+  </span>
 </a>

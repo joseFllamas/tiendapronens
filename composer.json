@@ -38,7 +38,9 @@
         "drupal/paragraphs_asymmetric_translation_widgets": "^1.4",
         "drupal/pathauto": "^1.15",
         "drupal/recipe_tracker": "^1",
+        "drupal/redirect": "^1.13",
         "drupal/search_api": "^1.41",
+        "drupal/symfony_mailer": "^2.0.2",
         "drupal/tmgmt": "^1.18",
         "drupal/tmgmt_deepl_glossary": "^2.2",
         "drush/drush": "^13.7"

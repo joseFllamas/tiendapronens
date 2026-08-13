@@ -31,7 +31,7 @@
 /web/sites/*/settings.local.php
 /web/sites/*/settings.ddev.php
 /web/sites/*/services.local.yml
-
+**/files_back/
 # Ignore Drupal's file directory.
 /web/sites/*/files/
 
@@ -46,3 +46,8 @@
 
 # macOS.
 .DS_Store
+
+# Venv del script de unificacion de imagenes
+/scripts/unificacion-imagenes/.venv/
+/salida_unificacion/
+/scripts/

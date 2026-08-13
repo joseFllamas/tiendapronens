@@ -1,0 +1,1 @@
+pattern: '/products/[commerce_product:field_tipo_de_producto:entity:name]/[commerce_product:title]'

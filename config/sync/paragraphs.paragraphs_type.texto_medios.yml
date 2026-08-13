@@ -1,0 +1,10 @@
+uuid: 1927ec20-fc08-4068-906a-592ac718be55
+langcode: es
+status: true
+dependencies: {  }
+id: texto_medios
+label: 'Texto con imágenes'
+icon_uuid: null
+icon_default: null
+description: 'Bloque a dos columnas: texto a un lado y una o dos fotos al otro.'
+behavior_plugins: {  }

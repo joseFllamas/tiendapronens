@@ -206,6 +206,89 @@
 }
 
 /* --- Pie. --- */
+/* --- "Completa el conjunto": sugerencia compacta sobre el pie. --- */
+.pro-flyout__completa {
+  padding: 14px 24px 16px;
+  border-top: 1px solid var(--pro-border);
+  background: var(--pro-teal-bg);
+}
+
+.pro-flyout__completa-title {
+  margin: 0 0 10px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--pro-ink-2);
+}
+
+.pro-completa {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.pro-completa + .pro-completa {
+  margin-top: 10px;
+}
+
+.pro-completa__media {
+  flex: 0 0 48px;
+}
+
+.pro-completa__media img {
+  display: block;
+  width: 48px;
+  height: 60px;
+  object-fit: cover;
+  border-radius: 6px;
+}
+
+.pro-completa__info {
+  flex: 1;
+  min-width: 0;
+}
+
+.pro-completa__name {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--pro-ink);
+  text-decoration: none;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.pro-completa__name:hover,
+.pro-completa__name:focus-visible {
+  text-decoration: underline;
+}
+
+.pro-completa__price {
+  font-size: 13px;
+  color: var(--pro-ink-2);
+}
+
+.pro-completa__add {
+  flex: none;
+  padding: 7px 14px;
+  border: 1.5px solid var(--pro-ink);
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--pro-ink);
+  text-decoration: none;
+  white-space: nowrap;
+  background: #fff;
+}
+
+.pro-completa__add:hover,
+.pro-completa__add:focus-visible {
+  background: var(--pro-ink);
+  color: #fff;
+}
+
 .pro-flyout__foot {
   padding: 20px 24px;
   border-top: 1px solid var(--pro-border);
@@ -237,24 +320,6 @@
   padding: 15px;
 }
 
-.pro-flyout__keep {
-  display: block;
-  width: 100%;
-  background: none;
-  border: 0;
-  color: var(--pro-teal-ink);
-  font-family: var(--pro-font-display);
-  font-weight: 700;
-  font-size: 14px;
-  padding: 12px;
-  cursor: pointer;
-  margin-top: 4px;
-}
-
-.pro-flyout__keep:hover {
-  color: var(--pro-ink);
-}
-
 /* Carrito vacío. */
 .pro-flyout__empty,
 .pro-flyout__items .view-empty {
@@ -265,6 +330,9 @@
 }
 
 /* --- Overlay (lo crea carrito.js). --- */
+/* El desenfoque de la página de detrás es el patrón de la referencia (Natura):
+   con blur el velo puede ser más suave sin perder separación. Donde no hay
+   backdrop-filter (poco ya) queda el velo algo más oscuro y listo. */
 .pro-cart-overlay {
   position: fixed;
   inset: 0;
@@ -273,6 +341,14 @@
   opacity: 0;
   visibility: hidden;
   transition: opacity 280ms var(--pro-ease-panel), visibility 280ms;
+}
+
+@supports (backdrop-filter: blur(4px)) {
+  .pro-cart-overlay {
+    background: rgba(18, 38, 44, 0.28);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+  }
 }
 
 .pro-cart-overlay.is-visible {

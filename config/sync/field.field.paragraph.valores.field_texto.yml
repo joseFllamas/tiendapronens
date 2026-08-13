@@ -1,0 +1,19 @@
+uuid: 8acc76e8-a4d0-4eb9-914a-907ec9690e0d
+langcode: es
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_texto
+    - paragraphs.paragraphs_type.valores
+id: paragraph.valores.field_texto
+field_name: field_texto
+entity_type: paragraph
+bundle: valores
+label: Entradilla
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string_long

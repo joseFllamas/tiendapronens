@@ -1,0 +1,21 @@
+uuid: 16e97a66-04f0-4997-928a-02c065ce39fd
+langcode: es
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_estilo
+    - paragraphs.paragraphs_type.cta
+  module:
+    - options
+id: paragraph.cta.field_estilo
+field_name: field_estilo
+entity_type: paragraph
+bundle: cta
+label: Estilo
+description: 'Banda oscura (texto a la izquierda, botón a la derecha) o cierre centrado.'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: list_string

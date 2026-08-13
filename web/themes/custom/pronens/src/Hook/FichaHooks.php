@@ -54,6 +54,38 @@ class FichaHooks {
     'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z',
   ];
 
+  /**
+   * Library que trae cada fuente de bordado.
+   *
+   * Cada una es un solo @font-face y se carga solo en la ficha que la usa: son
+   * tres WOFF2 de entre 6 y 10 KB y no tiene sentido servir los tres.
+   */
+  protected const FUENTES = [
+    'unicase' => 'pronens/delius',
+    'script' => 'pronens/caveat',
+    'letra' => 'pronens/graduate',
+  ];
+
+  /**
+   * Fuente con la que se borda un nombre cuando el producto no dice otra.
+   *
+   * Unicase, que es como sale del taller: la misma altura para la caja alta y la
+   * baja. Los 279 productos de nombre migrados no traen valor, así que este es
+   * el que se les aplica; poniéndoles "Cursiva" vuelven a la Caveat de antes.
+   */
+  protected const FUENTE_DEFECTO = 'unicase';
+
+  /**
+   * Tamaño de partida del bordado en cada modo, en % del ancho de la foto.
+   *
+   * En inicial es el lado del parche y en nombre la altura de la letra. Son los
+   * mismos que la barra del widget del backoffice (MontajeHooks).
+   */
+  protected const TAMANO_DEFECTO = [
+    'inicial' => 12.0,
+    'texto' => 5.0,
+  ];
+
   public function __construct(
     protected EntityTypeManagerInterface $entityTypeManager,
     protected ConfigFactoryInterface $configFactory,
@@ -91,21 +123,23 @@ class FichaHooks {
         ? $this->precioSuelto((string) $recargo, $precio?->getCurrencyCode() ?? 'EUR')
         : NULL,
       'personalizable' => $this->esPersonalizable($producto),
-      // Dónde y de qué tamaño va la inicial sobre la foto, en porcentaje: la
+      // Dónde y de qué tamaño va el bordado sobre la foto, en porcentaje: la
       // misma foto se sirve en varios estilos y anchos, así que en píxeles solo
       // valdría para un tamaño.
       'inicial' => $this->posicionInicial($producto),
+      // Y con qué letra, en qué color y en qué caja se borda, que en los
+      // productos de nombre lo decide el backoffice producto a producto.
+      'bordado' => $this->estiloBordado($producto),
       'guia_tallas' => $this->guiaTallas($producto),
       'guia_bordado' => $this->esModoInicial($producto) ? $this->guiaBordado($variables) : NULL,
-      'relacionados' => $this->relacionados($variables, $producto),
     ];
+    // Los complementarios no se pintan en la ficha: viven en el flyout del
+    // carrito ("Completa el conjunto", CarritoHooks::completaElConjunto()).
+    $variables['ficha']['relacionados'] = $this->relacionados($variables, $producto);
     $variables['#attached']['library'][] = 'pronens/ficha';
-    // Dos tipografías para dos cosas distintas, y solo la que toca: la cursiva
-    // Caveat es el nombre bordado del modo texto, y Graduate la letra de parche
-    // de la rejilla A-Z y su vista previa en el modo inicial.
-    $variables['#attached']['library'][] = $this->esModoInicial($producto)
-      ? 'pronens/graduate'
-      : 'pronens/caveat';
+    // Una tipografía por producto y solo la que toca: la letra de parche
+    // (Graduate) en el modo inicial, y en el de nombre la que diga la ficha.
+    $variables['#attached']['library'][] = self::FUENTES[$variables['ficha']['bordado']['fuente']];
     $variables['#attached']['drupalSettings']['pronens']['ficha'] = [
       'precioBase' => $variables['ficha']['precio_base'],
       'recargo' => $recargo,
@@ -205,6 +239,14 @@ class FichaHooks {
         if (($valor['#placeholder'] ?? '') === '' && $limite > 1) {
           $valor['#placeholder'] = $this->t('Type the name (max. @n)', ['@n' => $limite]);
         }
+        // Los productos que se bordan en caja alta lo enseñan ya al teclear, no
+        // solo en la vista previa. El servidor lo confirma de todas formas
+        // (PersonalizacionHooks::validarPersonalizacion), que es lo que guarda
+        // MÓNICA en la línea de pedido.
+        if ($producto instanceof ProductInterface && $this->estiloBordado($producto)['mayusculas']) {
+          $valor['#attributes']['class'][] = 'pro-perso__texto--caps';
+          $valor['#attributes']['autocapitalize'] = 'characters';
+        }
         unset($valor);
       }
       if (isset($form['pro_perso']['field_color_bordado'])) {
@@ -264,7 +306,7 @@ class FichaHooks {
   }
 
   /**
-   * Posición y tamaño de la inicial sobre la foto, en porcentaje.
+   * Posición y tamaño del bordado sobre la foto, en porcentaje.
    *
    * @return array<string, float>
    *   Claves x, y y tamaño.
@@ -281,7 +323,49 @@ class FichaHooks {
     return [
       'x' => $lee('field_inicial_x', 50.0),
       'y' => $lee('field_inicial_y', 50.0),
-      'tamano' => $lee('field_inicial_tamano', 12.0),
+      'tamano' => $lee(
+        'field_inicial_tamano',
+        self::TAMANO_DEFECTO[$this->esModoInicial($producto) ? 'inicial' : 'texto']
+      ),
+    ];
+  }
+
+  /**
+   * Con qué letra, en qué color y en qué caja se borda este producto.
+   *
+   * En modo inicial no hay nada que decidir aquí: la letra va en Graduate y los
+   * colores salen del formato que elige el cliente en la ficha. En modo nombre
+   * los tres los fija el backoffice producto a producto, porque son una
+   * característica de la prenda y no una elección de quien compra: la bolsa gris
+   * de referencia lleva el nombre en mayúsculas y en rosa siempre.
+   *
+   * @return array{modo: string, fuente: string, color: string|null, mayusculas: bool}
+   *   El estilo del bordado.
+   */
+  protected function estiloBordado(ProductInterface $producto): array {
+    if ($this->esModoInicial($producto)) {
+      return ['modo' => 'inicial', 'fuente' => 'letra', 'color' => NULL, 'mayusculas' => FALSE];
+    }
+
+    $fuente = self::FUENTE_DEFECTO;
+    if ($producto->hasField('field_bordado_fuente') && !$producto->get('field_bordado_fuente')->isEmpty()) {
+      $valor = (string) $producto->get('field_bordado_fuente')->value;
+      $fuente = isset(self::FUENTES[$valor]) ? $valor : self::FUENTE_DEFECTO;
+    }
+
+    $color = NULL;
+    if ($producto->hasField('field_bordado_color') && !$producto->get('field_bordado_color')->isEmpty()) {
+      $valor = (string) $producto->get('field_bordado_color')->color;
+      // Solo hexadecimal: el valor acaba dentro de un atributo style.
+      $color = preg_match('/^#[0-9A-Fa-f]{6}$/', $valor) === 1 ? $valor : NULL;
+    }
+
+    return [
+      'modo' => 'texto',
+      'fuente' => $fuente,
+      'color' => $color,
+      'mayusculas' => $producto->hasField('field_bordado_mayusculas')
+        && (bool) $producto->get('field_bordado_mayusculas')->value,
     ];
   }
 
@@ -473,14 +557,13 @@ class FichaHooks {
   }
 
   /**
-   * Productos para "Combínalo con".
+   * Productos similares: "También te puede gustar".
    *
-   * field_relacionados está vacío en los 370 productos migrados, así que se
-   * cae a los del mismo término, que es lo que el cliente esperaría ver.
+   * field_relacionados manda si está relleno; si no, los más recientes de la
+   * misma categoría.
    *
    * @param array<string, mixed> $variables
    *   Variables del template (se anotan cache tags).
-   *
    * @return array<int, array<string, mixed>>
    *   Render arrays de tarjetas.
    */
@@ -514,14 +597,26 @@ class FichaHooks {
       );
     }
 
+    return $this->tarjetas($ids);
+  }
+
+  /**
+   * Render arrays de tarjeta para una lista de ids, hasta 4.
+   *
+   * @param array<int, int> $ids
+   *   Ids de producto.
+   *
+   * @return array<int, array<string, mixed>>
+   *   Render arrays de tarjetas.
+   */
+  protected function tarjetas(array $ids): array {
     if ($ids === []) {
       return [];
     }
-
     $constructor = $this->entityTypeManager->getViewBuilder('commerce_product');
     $tarjetas = [];
-    foreach ($this->entityTypeManager->getStorage('commerce_product')->loadMultiple(array_slice($ids, 0, 4)) as $relacionado) {
-      $tarjetas[] = $constructor->view($relacionado, 'tarjeta');
+    foreach ($this->entityTypeManager->getStorage('commerce_product')->loadMultiple(array_slice($ids, 0, 4)) as $producto) {
+      $tarjetas[] = $constructor->view($producto, 'tarjeta');
     }
 
     return $tarjetas;

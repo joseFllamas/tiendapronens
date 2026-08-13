@@ -1,0 +1,34 @@
+{#
+/**
+ * @file
+ * Bloque a dos columnas: texto y una o dos fotos escalonadas.
+ *
+ * imagenes lo aporta PronensHooks::preprocessParagraph() (render arrays con
+ * el estilo pronens_cuadro y lazy). Sin fotos el texto ocupa el ancho de la
+ * columna de lectura, así que la sección se sostiene sola.
+ */
+#}
+{{ attach_library('pronens/texto-medios') }}
+<section{{ attributes.addClass(['pro-texto-medios', imagenes ? 'pro-texto-medios--con-fotos']) }}>
+  <div class="pro-texto-medios__inner pro-container">
+    <div class="pro-texto-medios__body">
+      {% if content.field_eyebrow|render %}
+        <p class="pro-eyebrow pro-texto-medios__eyebrow">{{ content.field_eyebrow }}</p>
+      {% endif %}
+      <h2 class="pro-texto-medios__title">
+        {{ content.field_titulo }}
+        {% if paragraph.field_titulo_enfasis.value %}
+          <span class="pro-texto-medios__title-accent">{{ paragraph.field_titulo_enfasis.value }}</span>
+        {% endif %}
+      </h2>
+      <div class="pro-texto-medios__text">{{ content.field_texto_largo }}</div>
+    </div>
+    {% if imagenes %}
+      <div class="pro-texto-medios__media">
+        {% for imagen in imagenes %}
+          <div class="pro-texto-medios__foto">{{ imagen }}</div>
+        {% endfor %}
+      </div>
+    {% endif %}
+  </div>
+</section>

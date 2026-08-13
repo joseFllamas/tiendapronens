@@ -9,7 +9,7 @@ dependencies:
 id: producto
 label: Producto
 type: 'canonical_entities:commerce_product'
-pattern: '/productos/[commerce_product:title]'
+pattern: '/productos/[commerce_product:field_tipo_de_producto:entity:name]/[commerce_product:title]'
 selection_criteria:
   04226d63-128b-4801-9e6c-a1751eac8dd3:
     id: 'entity_bundle:commerce_product'

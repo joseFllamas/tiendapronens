@@ -53,14 +53,43 @@
         {% endif %}
       </div>
 
+      {# "Completa el conjunto": complementarios de lo que ya hay dentro, con
+         añadir directo si el producto no tiene nada que elegir. #}
+      {% if count > 0 and carrito.completa %}
+        <section class="pro-flyout__completa" aria-label="{{ 'Complete the set'|t }}">
+          <h3 class="pro-flyout__completa-title">{{ 'Complete the set'|t }}</h3>
+          {% for s in carrito.completa %}
+            <div class="pro-completa">
+              {% if s.foto %}
+                <a class="pro-completa__media" href="{{ s.url }}" tabindex="-1" aria-hidden="true">{{ s.foto }}</a>
+              {% endif %}
+              <div class="pro-completa__info">
+                <a class="pro-completa__name" href="{{ s.url }}">{{ s.nombre }}</a>
+                {% if s.precio %}
+                  <span class="pro-completa__price">
+                    {%- if s.desde %}{{ 'from @precio'|t({'@precio': s.precio}) }}{% else %}{{ s.precio }}{% endif -%}
+                  </span>
+                {% endif %}
+              </div>
+              {% if s.anadir_url %}
+                <a class="pro-completa__add" href="{{ s.anadir_url }}" rel="nofollow">+ {{ 'Add'|t({}, {context: 'cart suggestion'}) }}</a>
+              {% else %}
+                <a class="pro-completa__add pro-completa__add--ver" href="{{ s.url }}">{{ 'Choose'|t({}, {context: 'cart suggestion'}) }}</a>
+              {% endif %}
+            </div>
+          {% endfor %}
+        </section>
+      {% endif %}
+
       <footer class="pro-flyout__foot">
         <div class="pro-flyout__row">
           <span>{{ 'Subtotal'|t }}</span>
           <span>{{ carrito.total_texto }}</span>
         </div>
         <p class="pro-flyout__note">{{ 'Taxes included. Shipping calculated at checkout.'|t }}</p>
+        {# Sin "Seguir comprando": ganaba espacio quitado (cliente, 2026-08-11);
+           para seguir comprando ya están la X, el overlay y Escape. #}
         <a class="pro-btn pro-btn--cta pro-flyout__checkout" href="{{ carrito.checkout_url ?: url }}">{{ 'Checkout'|t }}</a>
-        <button type="button" class="pro-flyout__keep" data-pro-cart-close>{{ 'Keep shopping'|t }}</button>
       </footer>
   </aside>
 </div>

@@ -1,0 +1,33 @@
+uuid: 352d49b5-65c4-4a81-a07b-8093cd2e9e5d
+langcode: es
+status: true
+dependencies:
+  config:
+    - field.field.paragraph.valor.field_icono
+    - field.field.paragraph.valor.field_texto
+    - field.field.paragraph.valor.field_titulo
+    - paragraphs.paragraphs_type.valor
+id: paragraph.valor.default
+targetEntityType: paragraph
+bundle: valor
+mode: default
+content:
+  field_texto:
+    type: basic_string
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    weight: 2
+    region: content
+  field_titulo:
+    type: string
+    label: hidden
+    settings:
+      link_to_entity: false
+      link_rel: canonical
+    third_party_settings: {  }
+    weight: 1
+    region: content
+hidden:
+  field_icono: true
+  search_api_excerpt: true

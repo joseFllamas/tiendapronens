@@ -5,7 +5,7 @@
  */
 #}
 {{ attach_library('pronens/pasos') }}
-<section{{ attributes.addClass('pro-pasos') }}>
+<section{{ attributes.addClass(['pro-pasos', pasos_blanco ? 'pro-pasos--blanco']) }}>
   <div class="pro-pasos__inner pro-container">
     {% if pasos_image %}
       <div class="pro-pasos__media">{{ pasos_image }}</div>
@@ -20,7 +20,10 @@
           <em class="pro-pasos__title-accent">{{ paragraph.field_titulo_enfasis.value }}</em>
         {% endif %}
       </h2>
-      <div class="pro-pasos__items">
+      {% if content.field_texto|render %}
+        <div class="pro-pasos__intro">{{ content.field_texto }}</div>
+      {% endif %}
+      <div class="pro-pasos__items{{ pasos_grid ? ' pro-pasos__items--grid' }}">
         {{ content.field_items }}
       </div>
       {% if enlace %}

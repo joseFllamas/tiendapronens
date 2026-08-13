@@ -1,0 +1,19 @@
+uuid: 6c698ee5-2bab-49bc-813c-b9d4b78946ad
+langcode: es
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_titulo_enfasis
+    - paragraphs.paragraphs_type.texto_medios
+id: paragraph.texto_medios.field_titulo_enfasis
+field_name: field_titulo_enfasis
+entity_type: paragraph
+bundle: texto_medios
+label: 'Segunda línea del título'
+description: 'Se pinta en cursiva fina debajo del título.'
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

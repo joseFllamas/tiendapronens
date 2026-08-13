@@ -1,0 +1,21 @@
+uuid: fa28c796-f827-4eb7-9000-b4b30be7abbf
+langcode: es
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_icono
+    - paragraphs.paragraphs_type.paso
+  module:
+    - options
+id: paragraph.paso.field_icono
+field_name: field_icono
+entity_type: paragraph
+bundle: paso
+label: Icono
+description: 'Opcional. Sin icono se pinta solo el número.'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: list_string

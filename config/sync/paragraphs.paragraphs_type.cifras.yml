@@ -1,0 +1,10 @@
+uuid: b5a57089-2e66-421a-b4f4-17cd50c5d6f4
+langcode: es
+status: true
+dependencies: {  }
+id: cifras
+label: Cifras
+icon_uuid: null
+icon_default: null
+description: 'Franja con las cifras de la marca (+40 años, +500 productos…).'
+behavior_plugins: {  }

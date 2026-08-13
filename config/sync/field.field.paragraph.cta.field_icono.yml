@@ -1,0 +1,21 @@
+uuid: 1035bfb2-3e17-4e34-9391-321bd74cd0e9
+langcode: es
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_icono
+    - paragraphs.paragraphs_type.cta
+  module:
+    - options
+id: paragraph.cta.field_icono
+field_name: field_icono
+entity_type: paragraph
+bundle: cta
+label: 'Icono del antetítulo'
+description: Opcional.
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: list_string

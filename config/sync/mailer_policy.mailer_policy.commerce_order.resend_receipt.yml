@@ -1,0 +1,17 @@
+uuid: de76e49d-a3d7-42f5-baad-9f7f846e751b
+langcode: es
+status: true
+dependencies:
+  module:
+    - commerce_order
+id: commerce_order.resend_receipt
+configuration:
+  email_subject:
+    value: 'Copia de tu pedido #{{ order_number }}'
+  email_body:
+    content:
+      value: |-
+        <h1>Aquí tienes tu pedido</h1>
+        <p>Hola, esta es la copia del pedido que nos has pedido.</p>
+        {{ commerce_order }}
+      format: email_html

@@ -1,0 +1,48 @@
+uuid: fda32a16-3c5d-4567-b96e-c03a4406aa30
+langcode: es
+status: true
+dependencies:
+  module:
+    - options
+    - paragraphs
+id: paragraph.field_icono
+field_name: field_icono
+entity_type: paragraph
+type: list_string
+settings:
+  allowed_values:
+    -
+      value: paleta
+      label: 'Paleta (color y diseño)'
+    -
+      value: escudo
+      label: 'Escudo (calidad)'
+    -
+      value: chispas
+      label: 'Chispas (personalización)'
+    -
+      value: regla
+      label: 'Regla (patronaje y tallas)'
+    -
+      value: tijeras
+      label: 'Tijeras (corte y tejidos)'
+    -
+      value: fabrica
+      label: 'Fábrica (taller propio)'
+    -
+      value: camion
+      label: 'Camión (envíos)'
+    -
+      value: corazon
+      label: 'Corazón (cariño)'
+    -
+      value: edificio
+      label: 'Edificio (colegios y empresas)'
+  allowed_values_function: ''
+module: options
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

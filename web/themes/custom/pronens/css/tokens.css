@@ -43,6 +43,10 @@
   /* La letra del parche bordado: collegiate, un solo peso. Solo se carga en la
      ficha de modo inicial (library pronens/graduate). */
   --pro-font-letra: "Graduate", var(--pro-font-display);
+  /* El nombre bordado: unicase, o sea caja alta y baja a la misma altura, que es
+     como sale del taller. Es la de por defecto de los tres estilos que elige el
+     backoffice en field_bordado_fuente (library pronens/delius). */
+  --pro-font-unicase: "Delius Unicase", var(--pro-font-display);
 
   /* Radios. */
   --pro-radius-pill: 999px;

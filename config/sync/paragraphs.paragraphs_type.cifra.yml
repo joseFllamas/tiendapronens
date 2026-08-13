@@ -1,0 +1,10 @@
+uuid: 38891790-1d82-4315-a5b7-808fa33f4957
+langcode: es
+status: true
+dependencies: {  }
+id: cifra
+label: Cifra
+icon_uuid: null
+icon_default: null
+description: 'Un dato de la franja de cifras.'
+behavior_plugins: {  }

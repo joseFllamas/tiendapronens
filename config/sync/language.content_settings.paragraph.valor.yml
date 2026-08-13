@@ -1,0 +1,16 @@
+uuid: c46a681e-1bbb-4175-b3db-95c9ea1dd0d3
+langcode: es
+status: true
+dependencies:
+  config:
+    - paragraphs.paragraphs_type.valor
+  module:
+    - content_translation
+third_party_settings:
+  content_translation:
+    enabled: true
+id: paragraph.valor
+target_entity_type_id: paragraph
+target_bundle: valor
+default_langcode: site_default
+language_alterable: false

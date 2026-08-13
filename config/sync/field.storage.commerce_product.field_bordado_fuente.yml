@@ -1,0 +1,30 @@
+uuid: b71bcd31-51c9-40ad-acf7-4b3956c0dd53
+langcode: es
+status: true
+dependencies:
+  module:
+    - commerce_product
+    - options
+id: commerce_product.field_bordado_fuente
+field_name: field_bordado_fuente
+entity_type: commerce_product
+type: list_string
+settings:
+  allowed_values:
+    -
+      value: unicase
+      label: 'Unicase (mayúsculas y minúsculas a la misma altura)'
+    -
+      value: script
+      label: Cursiva
+    -
+      value: letra
+      label: 'Parche, la misma letra que las iniciales'
+  allowed_values_function: ''
+module: options
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false
