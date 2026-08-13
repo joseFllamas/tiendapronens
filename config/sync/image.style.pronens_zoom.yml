@@ -1,0 +1,21 @@
+uuid: 25f0e816-ae60-4fb2-a2c4-30f30bd85fd5
+langcode: es
+status: true
+dependencies: {  }
+name: pronens_zoom
+label: 'Pronens lupa (máx 2600, sin recortar ni ampliar)'
+effects:
+  61306696-d1c5-4957-bd8e-28f17d2d2768:
+    uuid: 61306696-d1c5-4957-bd8e-28f17d2d2768
+    id: image_scale
+    weight: 0
+    data:
+      width: 2600
+      height: 2600
+      upscale: false
+  75b552f4-8905-4912-8ecb-f8f212b8807c:
+    uuid: 75b552f4-8905-4912-8ecb-f8f212b8807c
+    id: image_convert
+    weight: 1
+    data:
+      extension: webp

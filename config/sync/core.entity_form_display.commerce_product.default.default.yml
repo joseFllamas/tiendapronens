@@ -8,6 +8,7 @@ dependencies:
     - field.field.commerce_product.default.field_bordado_color
     - field.field.commerce_product.default.field_bordado_fuente
     - field.field.commerce_product.default.field_bordado_mayusculas
+    - field.field.commerce_product.default.field_bordado_rotacion
     - field.field.commerce_product.default.field_complementarios
     - field.field.commerce_product.default.field_composicion
     - field.field.commerce_product.default.field_destacado
@@ -27,6 +28,7 @@ dependencies:
     - field.field.commerce_product.default.field_relacionados
     - field.field.commerce_product.default.field_tipo_de_producto
   module:
+    - color_field
     - commerce
     - commerce_price
     - media_library
@@ -57,26 +59,36 @@ content:
     third_party_settings: {  }
   field_bordado_color:
     type: color_field_widget_box
-    weight: 13
+    weight: 14
     region: content
     settings:
       default_colors: |
 
-        #000000,#ffffff,#e6007e,#d81f26,#0d2b5e
-        #1a7f4b,#f4a0c0,#7b4397,#f4854e,#2e9daa
+        #000000,#4a4a4a,#9b9b9b,#ffffff,#f0e4cf,#7b5230
+        #f4a0c0,#f06eaa,#e6007e,#ff6f61,#d81f26,#8e1b2e
+        #f4854e,#ff9f1c,#f2c200,#cfa000,#c2551f,#8a4b1a
+        #a4c639,#7ab648,#1a7f4b,#0f5c3a,#7fd4dd,#2e9daa
+        #9fc6e7,#4986e7,#1f5fbf,#0d2b5e,#b99aff,#7b4397
     third_party_settings: {  }
   field_bordado_fuente:
     type: options_select
-    weight: 12
+    weight: 13
     region: content
     settings: {  }
     third_party_settings: {  }
   field_bordado_mayusculas:
     type: boolean_checkbox
-    weight: 14
+    weight: 15
     region: content
     settings:
       display_label: true
+    third_party_settings: {  }
+  field_bordado_rotacion:
+    type: number
+    weight: 12
+    region: content
+    settings:
+      placeholder: ''
     third_party_settings: {  }
   field_complementarios:
     type: entity_reference_autocomplete

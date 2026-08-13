@@ -37,55 +37,100 @@
   display: block;
 }
 
+/* La foto de la vista previa es el contenedor que mide el bordado: la altura de
+   la letra del nombre va en % de su ancho, igual que la posición. */
+.pro-ficha__shot--main {
+  container-type: inline-size;
+}
+
 /* Vista previa del bordado sobre la primera foto.
-   Sin posición configurada cae al ancla del prototipo (centrado, 44px desde
-   abajo); con ella, el montaje va donde diga el producto, en porcentajes. */
+   Sin posición configurada cae al centro; con ella, el montaje va donde diga el
+   producto, en porcentajes. */
 .pro-ficha__preview {
   position: absolute;
   /* Solo top: poniendo también bottom, la caja se estiraba entre las dos y
      dejaba de ser cuadrada, que es la forma del parche. */
   left: var(--pro-inicial-x, 50%);
   top: var(--pro-inicial-y, 80%);
-  width: var(--pro-inicial-tamano, 40%);
-  transform: translate(-50%, -50%);
+  /* El giro se compone con el centrado, así que va en la misma transform. */
+  transform: translate(-50%, -50%) rotate(var(--pro-bordado-giro, 0deg));
   display: flex;
   align-items: center;
   justify-content: center;
-  aspect-ratio: 1;
   text-align: center;
   pointer-events: none;
-  /* La letra se dimensiona con la caja del parche: hace falta declarar el
-     contenedor para poder usar cqw/cqh. */
-  container-type: size;
 }
 
 .pro-ficha__preview[hidden] {
   display: none;
 }
 
+/* Sin sombra: el bordado se pinta en el color del hilo que dice el producto, y
+   una sombra clara detrás lo ensuciaba y no se parecía a un bordado. Si algún
+   nombre se leyera mal sobre su foto, se cambia el hilo o se mueve, que es la
+   decisión que se toma en el taller de verdad. */
 .pro-ficha__preview-text {
-  font-family: var(--pro-font-script);
-  font-size: 44px;
+  font-size: 1em;
   line-height: 1;
-  color: var(--pro-preview-color, var(--pro-ink));
-  text-shadow: 0 1px 2px rgba(255, 255, 255, 0.35);
+  color: var(--pro-bordado-color, var(--pro-ink));
 }
 
-/* En modo inicial la vista previa es la letra del parche, no el nombre en
-   cursiva: mismo dibujo que la rejilla para que lo que se elige y lo que se ve
-   sean lo mismo. */
-.pro-ficha__preview[style*='--pro-letra-interior'] .pro-ficha__preview-text {
+/* --- Modo inicial: un parche cuadrado con una letra dentro. --- */
+.pro-ficha__preview--inicial {
+  width: var(--pro-inicial-tamano, 12%);
+  aspect-ratio: 1;
+  /* La letra se dimensiona con la caja del parche: hace falta declarar el
+     contenedor para poder usar cqw/cqh. */
+  container-type: size;
+}
+
+/* La vista previa es la letra del parche, no el nombre: mismo dibujo que la
+   rejilla A-Z para que lo que se elige y lo que se ve sean lo mismo. */
+.pro-ficha__preview--inicial .pro-ficha__preview-text {
+  /* La letra ocupa la caja del parche: así crece y decrece con la foto. */
+  font-size: min(100cqw, 100cqh);
+  color: var(--pro-letra-interior, var(--pro-ink));
+  -webkit-text-stroke: 3px var(--pro-letra-perfil, transparent);
+  paint-order: stroke fill;
+}
+
+/* --- Modo nombre: manda la altura de la letra y el ancho lo pone el nombre. ---
+   Es como funciona el bordado real: la máquina borda a una altura dada y
+   "MÓNICA" ocupa más que "ANA". Por eso no hay caja cuadrada ni se reescala el
+   texto para que quepa en un ancho. */
+.pro-ficha__preview--nombre {
+  /* Suelo de 10px: en la tira de fotos de móvil la foto es estrecha y un 3% se
+     quedaría en nada. */
+  font-size: max(10px, calc(var(--pro-bordado-alto, 5) * 1cqw));
+  white-space: nowrap;
+}
+
+/* Las tres fuentes de bordado que ofrece el backoffice. */
+.pro-ficha__preview--unicase .pro-ficha__preview-text {
+  font-family: var(--pro-font-unicase);
+  /* Delius Unicase solo se sirve en el 700: el hilo tiene grosor. */
+  font-weight: 700;
+}
+
+.pro-ficha__preview--script .pro-ficha__preview-text {
+  font-family: var(--pro-font-script);
+  font-weight: 600;
+}
+
+.pro-ficha__preview--letra .pro-ficha__preview-text {
   font-family: var(--pro-font-letra);
   /* Graduate solo tiene el peso 400: forzar bold lo sintetizaría y el contorno
      saldría sucio. */
   font-weight: 400;
-  /* La letra ocupa la caja del parche: así crece y decrece con la foto. */
-  font-size: min(100cqw, 100cqh);
-  line-height: 1;
-  color: var(--pro-letra-interior, var(--pro-ink));
-  -webkit-text-stroke: 3px var(--pro-letra-perfil, transparent);
-  paint-order: stroke fill;
-  text-shadow: none;
+}
+
+.pro-ficha__preview--caps .pro-ficha__preview-text {
+  text-transform: uppercase;
+}
+
+/* Y el mismo trato al campo: lo que se teclea se ve ya como se va a bordar. */
+.pro-perso__texto--caps {
+  text-transform: uppercase;
 }
 
 /* La foto avisa de que se puede ampliar. */
@@ -152,6 +197,15 @@
   gap: 10px;
 }
 
+/* El lienzo se ajusta a la foto (align-items:center lo deja en fit-content, que
+   es lo que mantiene el ancho del diálogo) y recorta lo que sobresale al
+   acercarla. */
+.pro-zoom__lienzo {
+  position: relative;
+  overflow: hidden;
+  max-width: 100%;
+}
+
 /* La foto entera, nunca recortada, y sin pasarse del alto de la ventana. */
 .pro-zoom__figure img {
   display: block;
@@ -160,6 +214,37 @@
   width: auto;
   height: auto;
   object-fit: contain;
+}
+
+/* --- Lupa: acercar la foto y recorrerla con el cursor. --- */
+/* Solo cuando la foto tiene píxeles de sobra; el JS pone la clase. */
+.pro-zoom__lienzo--puede {
+  cursor: zoom-in;
+}
+
+.pro-zoom__lienzo--activa {
+  cursor: crosshair;
+  /* Con la foto acercada el dedo la recorre, así que ni desplaza la página ni
+     pasa a la siguiente. */
+  touch-action: none;
+}
+
+/* La escala se transiciona y el punto de origen no, así que acercar y alejar
+   son suaves y el recorrido va pegado al cursor, sin arrastre. */
+@media (prefers-reduced-motion: no-preference) {
+  .pro-zoom__lienzo--puede img {
+    transition: transform 180ms ease;
+  }
+}
+
+.pro-zoom__lienzo--activa img {
+  transform: scale(var(--pro-lupa, 2));
+}
+
+/* El aviso de que se puede acercar, en la barra del diálogo. */
+.pro-zoom__hint {
+  font-size: 12.5px;
+  color: var(--pro-text-2);
 }
 
 .pro-zoom__caption {
@@ -1026,10 +1111,6 @@
   .pro-ficha__shot {
     flex: 0 0 78%;
     scroll-snap-align: center;
-  }
-
-  .pro-ficha__preview-text {
-    font-size: 36px;
   }
 
   .pro-ficha__related-title {

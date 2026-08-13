@@ -5,8 +5,12 @@
 
 .pro-montaje__lienzo {
   position: relative;
-  display: inline-block;
-  max-width: 320px;
+  /* Bloque con ancho declarado, y no inline-block: container-type calcula el
+     ancho SIN mirar el contenido, así que un inline-block (que se ajusta a la
+     foto) se quedaría en cero y la marca no se vería. */
+  display: block;
+  width: 320px;
+  max-width: 100%;
   margin-bottom: 8px;
   cursor: crosshair;
   border: 1px solid #ccc;
@@ -75,6 +79,10 @@
   font-size: 1em;
   color: var(--pro-montaje-color, #fff);
   white-space: nowrap;
+  /* Sin sombra, igual que la ficha: aquí se juzga el color del hilo y una
+     sombra detrás lo falsea. La marca del parche sí la conserva, que va en
+     blanco sobre la foto y sin ella se pierde. */
+  text-shadow: none;
 }
 
 .pro-montaje__marca--caps b {

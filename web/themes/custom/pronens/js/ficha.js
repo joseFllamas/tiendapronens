@@ -253,6 +253,189 @@
   }
 
   /**
+   * Lupa del lightbox: acerca la foto y la recorre siguiendo al cursor.
+   *
+   * El acercamiento no es un número fijo: sale de dividir los píxeles que tiene
+   * la foto entre los que ocupa en pantalla, porque ni pronens_lightbox ni
+   * pronens_zoom amplían y más de la mitad del catálogo no llega a 1000px de
+   * ancho. Donde no hay píxeles que enseñar no se ofrece la lupa, que es
+   * preferible a emborronar la foto.
+   *
+   * La escala va en una clase y el punto de origen en una propiedad en línea:
+   * así la transición del CSS suaviza el acercar y el alejar sin arrastrar el
+   * recorrido, que tiene que ir pegado al cursor.
+   *
+   * @param {Element} dialogo - El <dialog> del lightbox.
+   * @param {HTMLImageElement} img - La foto grande.
+   * @param {Function} foto - Devuelve los datos de la foto que se está viendo.
+   *
+   * @return {?object} API de la lupa, o null si el diálogo no la trae.
+   */
+  function iniciaLupa(dialogo, img, foto) {
+    const lienzo = dialogo.querySelector('[data-pro-zoom-lienzo]');
+    if (!lienzo) {
+      return null;
+    }
+    const aviso = dialogo.querySelector('[data-pro-zoom-hint]');
+    // Por debajo de este acercamiento la lupa no aporta nada, y por encima del
+    // tope se ven los píxeles del original por muchos que tenga.
+    const MINIMO = 1.25;
+    const TOPE = 3;
+    let factor = 1;
+    let puede = false;
+    let activa = false;
+    let movido = false;
+    let partida = null;
+    // Solo cambia el texto del aviso: lo que decide el comportamiento es el
+    // pointerType de cada evento, no esta consulta, porque hay portátiles con
+    // ratón y pantalla táctil a la vez.
+    let dedo = window.matchMedia('(hover: none)').matches;
+
+    /** Mide la foto y decide si hay píxeles de sobra para acercarla. */
+    function calibra() {
+      // offsetWidth y no getBoundingClientRect(): el rect ya viene multiplicado
+      // por la escala cuando la foto está acercada, y recalibrar en ese momento
+      // (al llegar la versión de detalle) daba factor 1 y apagaba la lupa.
+      const ancho = img.offsetWidth;
+      // El dato del servidor es el de la versión que se va a acabar sirviendo,
+      // que puede ser mayor que la cargada; el de la foto cargada es el que
+      // seguro que existe. Manda el mayor de los dos.
+      const pixeles = Math.max(foto().ancho || 0, img.naturalWidth || 0);
+      factor = ancho > 0 && pixeles > 0
+        ? Math.min(pixeles / ancho, TOPE)
+        : 1;
+      puede = factor >= MINIMO;
+      lienzo.classList.toggle('pro-zoom__lienzo--puede', puede);
+      lienzo.style.setProperty('--pro-lupa', factor.toFixed(2));
+      if (aviso) {
+        aviso.hidden = !puede;
+        aviso.textContent = dedo
+          ? Drupal.t('Tap the photo to zoom')
+          : Drupal.t('Hover over the photo to zoom');
+      }
+    }
+
+    /** El punto de la foto que se queda quieto es el que está bajo el cursor. */
+    function apunta(e) {
+      const caja = lienzo.getBoundingClientRect();
+      if (!caja.width || !caja.height) {
+        return;
+      }
+      const x = Math.min(Math.max((e.clientX - caja.left) / caja.width, 0), 1);
+      const y = Math.min(Math.max((e.clientY - caja.top) / caja.height, 0), 1);
+      img.style.transformOrigin = `${(x * 100).toFixed(2)}% ${(y * 100).toFixed(2)}%`;
+    }
+
+    /**
+     * Pide la versión de más resolución, si la foto la tiene.
+     *
+     * Se pide al acercar y no al abrir el lightbox: son unos cientos de KB que
+     * solo hacen falta cuando alguien mira de cerca. El tamaño en pantalla no
+     * cambia (los dos estilos escalan sin recortar, misma proporción), así que
+     * el cambio no mueve nada.
+     */
+    function pideDetalle() {
+      const datos = foto();
+      if (!datos.lupa || datos.pedida) {
+        return;
+      }
+      datos.pedida = true;
+      const previa = new Image();
+      previa.addEventListener('load', () => {
+        // Puede haberse pasado a otra foto mientras cargaba.
+        if (foto() === datos) {
+          img.src = datos.lupa;
+        }
+      });
+      previa.src = datos.lupa;
+    }
+
+    function enciende(e) {
+      if (!puede) {
+        return;
+      }
+      apunta(e);
+      activa = true;
+      lienzo.classList.add('pro-zoom__lienzo--activa');
+      pideDetalle();
+    }
+
+    function apaga() {
+      activa = false;
+      lienzo.classList.remove('pro-zoom__lienzo--activa');
+    }
+
+    // Con ratón basta pasar por encima; el dedo necesita un toque, y otro para
+    // volver a la foto entera.
+    lienzo.addEventListener('pointermove', (e) => {
+      if (e.pointerType !== 'mouse') {
+        // Un arrastre no es un toque, y hay que descartarlo también con la foto
+        // entera: si no, el gesto de pasar de foto acabaría además en un
+        // pointerup que la acerca. El umbral es el de un dedo que no quiso
+        // moverse.
+        if (partida && Math.hypot(e.clientX - partida.x, e.clientY - partida.y) > 10) {
+          movido = true;
+        }
+        if (activa) {
+          apunta(e);
+        }
+        return;
+      }
+      if (activa) {
+        apunta(e);
+      }
+      else {
+        enciende(e);
+      }
+    });
+    lienzo.addEventListener('pointerleave', (e) => {
+      if (e.pointerType === 'mouse') {
+        apaga();
+      }
+    });
+    lienzo.addEventListener('pointerdown', (e) => {
+      if (e.pointerType === 'mouse') {
+        return;
+      }
+      movido = false;
+      partida = { x: e.clientX, y: e.clientY };
+      // El aviso se escribe pensando en el ratón hasta que llega un dedo.
+      if (!dedo) {
+        dedo = true;
+        calibra();
+      }
+    });
+    lienzo.addEventListener('pointerup', (e) => {
+      const arrastre = movido;
+      partida = null;
+      if (e.pointerType === 'mouse' || arrastre) {
+        return;
+      }
+      if (activa) {
+        apaga();
+      }
+      else {
+        enciende(e);
+      }
+    });
+    // La foto nueva puede tener otra proporción, así que otro tamaño en
+    // pantalla y otro acercamiento posible.
+    img.addEventListener('load', calibra);
+    window.addEventListener('resize', () => {
+      if (dialogo.open) {
+        apaga();
+        calibra();
+      }
+    });
+
+    return {
+      calibra,
+      apaga,
+      activa: () => activa,
+    };
+  }
+
+  /**
    * Lightbox de la galería: la foto entera, sin el recorte 3:4 de la cuadrícula.
    *
    * Sin JS cada foto es un enlace a su versión grande, así que la galería sigue
@@ -277,12 +460,20 @@
       alt: (enlace.querySelector('img') || {}).alt || '',
       // El pie llega vacío cuando el alt es un nombre de fichero heredado.
       pie: enlace.dataset.proPie || '',
+      // Píxeles reales de la mejor versión disponible y, si existe, la URL de
+      // esa versión: con ellos la lupa sabe cuánto puede acercar.
+      ancho: parseInt(enlace.dataset.proAncho, 10) || 0,
+      lupa: enlace.dataset.proLupa || '',
     }));
     let actual = 0;
     let origen = null;
+    const lupa = iniciaLupa(dialogo, img, () => fotos[actual]);
 
     function muestra(indice) {
       actual = (indice + fotos.length) % fotos.length;
+      if (lupa) {
+        lupa.apaga();
+      }
       img.src = fotos[actual].url;
       img.alt = fotos[actual].alt;
       if (pie) {
@@ -297,6 +488,10 @@
       origen = disparador || null;
       muestra(indice);
       dialogo.showModal();
+      // El lienzo no mide nada hasta que el diálogo está abierto.
+      if (lupa) {
+        lupa.calibra();
+      }
     }
 
     enlaces.forEach((enlace, indice) => {
@@ -337,18 +532,22 @@
       }
     });
     dialogo.addEventListener('close', () => {
+      if (lupa) {
+        lupa.apaga();
+      }
       if (origen) {
         origen.focus();
       }
     });
 
-    // Arrastrar de lado en táctil.
+    // Arrastrar de lado en táctil. Con la foto acercada el dedo la recorre, así
+    // que ahí no se pasa de foto.
     let inicioX = null;
     dialogo.addEventListener('touchstart', (e) => {
-      inicioX = e.changedTouches[0].clientX;
+      inicioX = lupa && lupa.activa() ? null : e.changedTouches[0].clientX;
     }, { passive: true });
     dialogo.addEventListener('touchend', (e) => {
-      if (inicioX === null || fotos.length < 2) {
+      if (inicioX === null || fotos.length < 2 || (lupa && lupa.activa())) {
         return;
       }
       const avance = e.changedTouches[0].clientX - inicioX;

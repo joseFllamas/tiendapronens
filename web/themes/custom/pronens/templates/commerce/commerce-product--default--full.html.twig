@@ -23,6 +23,10 @@
            href="{{ foto.grande }}"
            data-pro-zoom="{{ loop.index0 }}"
            data-pro-pie="{{ foto.pie }}"
+           {# Píxeles reales de la foto y, si el original da para más, la
+              versión de más resolución que carga la lupa al acercarla. #}
+           data-pro-ancho="{{ foto.ancho }}"
+           {% if foto.lupa %}data-pro-lupa="{{ foto.lupa }}"{% endif %}
            {{ loop.first ? 'data-pro-preview-target' : '' }}>
           {{ foto.imagen }}
           {% if loop.first and ficha.personalizable %}
@@ -34,7 +38,7 @@
             {% set bordado = ficha.bordado %}
             <div class="pro-ficha__preview pro-ficha__preview--{{ bordado.modo == 'inicial' ? 'inicial' : 'nombre' }} pro-ficha__preview--{{ bordado.fuente }}{{ bordado.mayusculas ? ' pro-ficha__preview--caps' }}"
                  data-pro-preview hidden
-                 style="--pro-inicial-x:{{ ficha.inicial.x }}%;--pro-inicial-y:{{ ficha.inicial.y }}%;--pro-inicial-tamano:{{ ficha.inicial.tamano }}%;--pro-bordado-alto:{{ ficha.inicial.tamano }}{% if bordado.color %};--pro-bordado-color:{{ bordado.color }}{% endif %}">
+                 style="--pro-inicial-x:{{ ficha.inicial.x }}%;--pro-inicial-y:{{ ficha.inicial.y }}%;--pro-inicial-tamano:{{ ficha.inicial.tamano }}%;--pro-bordado-alto:{{ ficha.inicial.tamano }};--pro-bordado-giro:{{ ficha.inicial.rotacion }}deg{% if bordado.color %};--pro-bordado-color:{{ bordado.color }}{% endif %}">
               <span class="pro-ficha__preview-text" data-pro-preview-text></span>
             </div>
           {% endif %}
@@ -48,10 +52,17 @@
       <dialog class="pro-zoom" data-pro-zoom-dialog>
         <div class="pro-zoom__bar">
           <span class="pro-zoom__count" data-pro-zoom-count></span>
+          {# Aviso de que la foto se puede acercar: lo escribe el JS, que es
+             quien sabe si esta foto tiene píxeles de sobra y si se apunta con
+             ratón o con el dedo. #}
+          <span class="pro-zoom__hint" data-pro-zoom-hint hidden></span>
           <button type="button" class="pro-zoom__close" data-pro-zoom-close aria-label="{{ 'Close'|t }}">✕</button>
         </div>
         <figure class="pro-zoom__figure">
-          <img data-pro-zoom-img alt="">
+          {# El lienzo recorta lo que se sale al acercar la foto. #}
+          <div class="pro-zoom__lienzo" data-pro-zoom-lienzo>
+            <img data-pro-zoom-img alt="">
+          </div>
           <figcaption class="pro-zoom__caption" data-pro-zoom-caption></figcaption>
         </figure>
         {% if ficha.fotos|length > 1 %}

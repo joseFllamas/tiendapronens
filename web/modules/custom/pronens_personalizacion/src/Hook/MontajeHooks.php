@@ -50,6 +50,16 @@ final class MontajeHooks {
   ];
 
   /**
+   * Inclinación del bordado, en grados.
+   *
+   * Aparte de CAMPOS porque los tres de arriba son obligatorios para que el
+   * widget tenga sentido y este no: si faltara, se arrastra y se mide igual. Y
+   * en grados y no en porcentaje como los otros: un porcentaje necesita algo
+   * contra lo que medirse, y una rotación no lo tiene.
+   */
+  private const CAMPO_ROTACION = 'field_bordado_rotacion';
+
+  /**
    * Campos que solo tienen sentido bordando un nombre.
    *
    * En modo inicial la letra va en Graduate y con los colores del formato que
@@ -149,6 +159,21 @@ final class MontajeHooks {
         ],
         '#weight' => -10,
       ];
+      // Barra de rotación: la inclinación es lo único del montaje que no se
+      // puede arrastrar sobre la foto, así que la barra es la forma de ajustarla
+      // mirando el resultado en vez de teclear grados a ciegas.
+      if (isset($form[self::CAMPO_ROTACION])) {
+        $form['pro_montaje']['rotacion_barra'] = [
+          '#type' => 'range',
+          '#title' => $this->t('Inclinación'),
+          '#min' => -180,
+          '#max' => 180,
+          '#step' => 1,
+          '#default_value' => $this->valor($producto, self::CAMPO_ROTACION, 0.0),
+          '#attributes' => ['data-pro-montaje-barra-rotacion' => TRUE],
+          '#weight' => -8,
+        ];
+      }
       $form['pro_montaje']['tamano_barra'] = [
         '#type' => 'range',
         '#title' => $inicial ? $this->t('Tamaño de la inicial') : $this->t('Altura de la letra'),
@@ -185,8 +210,13 @@ final class MontajeHooks {
       ];
     }
 
-    // Los campos se mueven dentro del grupo conservando su orden.
-    foreach (self::CAMPOS as $clave => $campo) {
+    // Los campos se mueven dentro del grupo conservando su orden. La rotación va
+    // con ellos: es colocación, así que se pregunta también en modo inicial.
+    $colocacion = self::CAMPOS;
+    if (isset($form[self::CAMPO_ROTACION])) {
+      $colocacion['rotacion'] = self::CAMPO_ROTACION;
+    }
+    foreach ($colocacion as $clave => $campo) {
       $form[$campo]['#attributes']['data-pro-montaje-campo'] = $clave;
       $form['pro_montaje'][$campo] = $form[$campo];
       unset($form[$campo]);

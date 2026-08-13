@@ -158,8 +158,57 @@ Donde este documento y la realidad del repo discrepan, manda esta lista (decidid
   `MontajeHooks` adjunta la library del tema: si el widget usara otra tipografía, la marca que se
   arrastra tendría otro ancho que el bordado que se acaba viendo). **Un solo peso, el 400**: Graduate no
   tiene bold y el sintético emborrona el contorno, así que los tres sitios lo declaran explícitamente.
-  Las dos tipografías del bordado son excluyentes y se cargan por modo: `pronens/graduate` en modo
-  inicial y `pronens/caveat` (la cursiva del nombre) en modo texto, no las dos siempre.
+  Las tipografías del bordado son excluyentes y se carga **una por producto**: en modo inicial siempre
+  `pronens/graduate`, y en modo nombre la que diga `field_bordado_fuente` (ver la resolución siguiente).
+- **El nombre bordado tiene fuente, color y caja por producto (2026-08-13, cliente)**: en modo `texto`
+  el nombre se pintaba siempre en la cursiva Caveat y en el gris del texto, y eso no es lo que sale del
+  taller (la bolsa de referencia lleva "MÓNICA" en mayúsculas y en rosa). Son tres campos del producto
+  —`field_bordado_fuente`, `field_bordado_color` y `field_bordado_mayusculas`— y viven en el mismo
+  `details` que la colocación, porque son la misma decisión: cómo va el bordado en esa prenda. Los pone
+  `MontajeHooks`, que **oculta los tres en modo inicial** (ahí la letra va en Graduate y los colores
+  salen del formato que elige el cliente). Lo que conviene no reinventar:
+  - **Son del backoffice, no del cliente**: es una característica de la prenda, no una elección de
+    quien compra, así que no resucitan el vocabulario `fuente_bordado` ni `field_fuentes_permitidas`,
+    que eran un selector para la tienda y siguen dormidos. Por eso la fuente es una **lista cerrada de
+    tres**: cada opción necesita su WOFF2 en el tema, igual que los 9 iconos de las landings.
+  - **La unicase es la de por defecto** (cliente): `Delius Unicase` 700, self-hosted (10 KB, subset
+    latin, library `pronens/delius`, token `--pro-font-unicase`). Unicase quiere decir que la caja alta
+    y la baja miden lo mismo, que es como borda el taller ("Alex" sale ALeX); es la **única unicase con
+    dibujo redondeado de Google Fonts** (la otra, Cormorant Unicase, es serif). Cubre las tildes y la
+    eñe de los nombres del catálogo, comprobado con Mónica / Anaïs / Iñaki. Los **279 productos de
+    nombre migrados no traen valor**, así que se les aplica esta; poniéndoles "Cursiva" vuelven a la
+    Caveat de antes, producto a producto.
+  - **Las mayúsculas se aplican en servidor**, en `validarPersonalizacion()`, y no solo en la vista
+    previa: lo que se guarda en la línea de pedido es lo que va a leer el taller, así que el pedido, el
+    correo y el albarán dicen MÓNICA. `mb_strtoupper` respeta la tilde (mónica → MÓNICA). El campo de
+    la ficha además se teclea ya en caja alta (`text-transform` + `autocapitalize`).
+  - **El "tamaño" cambia de significado con el modo**, y por eso el widget cambia de etiqueta y de
+    rango: en inicial es el **lado del parche** cuadrado (2–60%, defecto 12) y en nombre la **altura de
+    la letra** (1–20%, defecto 5), con el ancho a lo que salga, como en el bordado real. Los dos en %
+    del ancho de la foto. Solo 2 de los 279 productos de nombre tenían valor, así que el cambio de
+    defecto no descoloca nada ya calibrado.
+  - **La vista previa ya no lleva 44px a pelo**: escala con la configuración (`cqw` sobre la foto), así
+    que el nombre se ve del tamaño que se va a bordar en cualquier ancho de pantalla y desaparece la
+    excepción de móvil.
+  - **Ojo con `container-type` y los anchos intrínsecos**: el lienzo del backoffice era un
+    `inline-block` y al declararlo contenedor su ancho se calculó **sin mirar la foto**, o sea 0, y la
+    marca se quedaba en nada (`font-size: 0px`). Con `display:block` y ancho declarado, resuelto. En la
+    ficha no pasa: la foto es celda de una cuadrícula y su ancho ya viene de fuera.
+  - **Carta de 30 hilos** (2026-08-13, cliente), en cinco filas por familia y de claro a oscuro:
+    neutros, rosas y rojos, naranjas y amarillos, verdes, y azules y violetas. Los 10 anteriores están
+    dentro, así que ampliarla no deselecciona nada ya configurado, y el widget de color_field sigue
+    dejando elegir cualquier otro a mano. Vive en los **settings del widget** del form display, no en
+    el campo, así que se amplía en `scripts/bordado-nombre.php` y no en la administración.
+- **La rotación del bordado va en grados y sirve para los dos modos (2026-08-13)**:
+  `field_bordado_rotacion`, decimal 5,2, en el mismo grupo que la posición, porque es colocación y no
+  una decisión sobre la letra: un parche de inicial también se puede inclinar. **No va en porcentaje**
+  como la posición y el tamaño (el cliente lo pidió así) porque un porcentaje necesita algo contra lo
+  que medirse, el ancho de la foto en ese caso, y una rotación no lo tiene; los grados además se
+  entienden sin explicación (90 es un cuarto de vuelta). Tiene su propia barra, **la única del montaje
+  que no se puede arrastrar sobre la foto**, y se compone con el centrado en la misma `transform`
+  (`translate(-50%,-50%) rotate(...)`), tanto en la marca del widget como en la vista previa: una
+  `transform` en línea sustituye a la de la hoja de estilos entera, así que el centrado tiene que
+  repetirse ahí y no basta con añadir el giro.
 - **El formato viene elegido de entrada (2026-07-30, cliente)**: el nº 1 de la foto guía, que hoy es
   "perfil negro interior blanco". No está escrito a mano: es el **primero por peso** del vocabulario
   `color_letra`, así que para cambiar el que sale marcado basta reordenarlo en
@@ -186,6 +235,33 @@ Donde este documento y la realidad del repo discrepan, manda esta lista (decidid
   original de 6480px sirve 1400 nítidos y uno de 679 sirve 679 sin emborronar. El diálogo usa
   `width: fit-content` para no dejar hueco alrededor de las fotos pequeñas. Se pasa con flechas,
   botones o arrastrando, y **sin JS cada foto es un enlace a su versión grande**.
+- **Y ahora también lupa, dentro del lightbox (2026-08-13, cliente)**: acercar la foto y recorrerla
+  con el cursor, al estilo de Amazon. Revisa en parte la resolución anterior, pero no la contradice:
+  la lupa **solo se ofrece donde hay píxeles que enseñar** y el acercamiento no es un número fijo,
+  sale de dividir los píxeles reales de la foto entre los que ocupa en pantalla. Medido sobre las
+  366 fichas: **363 dan lupa** (354 entre 2x y 3x) y **3 no** (fotos apaisadas anchas, que en
+  escritorio ya se ven a tamaño real). Lo que conviene no reinventar:
+  - **El "no se vería bien" de julio venía de un dato falso**: 893 de las 1165 medias guardan en
+    `field_media_image` el ancho y alto del original de **antes del dedupe** de la migración
+    (`tote-1v1.jpg` dice 860x842 y mide 1200x1600), así que la mediana de 945px del catálogo no es
+    real. `datosDeEstilo()` lee las medidas **del fichero** con `image.factory` y no del campo, en
+    una sola lectura para los dos estilos. **Queda pendiente** corregir ese metadato en los 893
+    medias: afecta a los `width`/`height` de todas las imágenes del sitio, no solo a la lupa.
+    `scripts/refrescar-dimensiones.php` hace justo eso, pero solo para `public://2026-08/`.
+  - **Estilo `pronens_zoom`** (2600 máx, `image_scale` sin ampliar, WebP) para el detalle, y se pide
+    **solo al acercar** y solo si el original pasa de los 1400 del lightbox: son unos cientos de KB
+    que no hacen falta para ver la foto entera. Como los dos estilos escalan sin recortar, el tamaño
+    en pantalla no cambia al llegar el detalle y no se mueve nada.
+  - **La escala va en una clase CSS y el punto de origen en línea**: así la transición suaviza el
+    acercar y el alejar sin arrastrar el recorrido, que tiene que ir pegado al cursor. Ojo con
+    **`getBoundingClientRect()`, que ya viene multiplicado por la escala**: recalibrar con él al
+    llegar la foto de detalle daba factor 1 y apagaba la lupa sola. Se mide con `offsetWidth`.
+  - **Con el dedo, un toque acerca y otro aleja**, y con la foto acercada el arrastre la recorre en
+    vez de pasar de foto. Un arrastre se descarta como toque **también con la foto entera** (umbral
+    de 10px desde el `pointerdown`): en táctil el `pointerup` llega antes que el `touchend` del
+    gesto de pasar de foto, así que sin eso un swipe cambiaba de foto **y** la dejaba acercada.
+  - Las dos cadenas del aviso ("Pasa el ratón…" / "Toca la foto…") se traducen en
+    `scripts/traducir-lupa.php`.
 - **Cuidado con el AJAX del add-to-cart**: al cambiar de talla o color, Commerce vuelve a renderizar
   **el formulario entero**, así que todo lo que el tema le añada tiene que ir con un `once()` puesto
   en algo que esté **dentro** del formulario. El enlace "¿Cómo queda?" se perdía porque su `once`

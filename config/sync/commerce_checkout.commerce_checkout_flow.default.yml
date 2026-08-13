@@ -83,9 +83,9 @@ configuration:
       wrapper_element: fieldset
     review:
       display_label: null
-      step: _disabled
-      weight: 10
-      wrapper_element: null
+      step: review
+      weight: 4
+      wrapper_element: container
     paypal_checkout_payment_process:
       display_label: null
       step: _disabled

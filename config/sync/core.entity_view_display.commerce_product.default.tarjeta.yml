@@ -9,6 +9,7 @@ dependencies:
     - field.field.commerce_product.default.field_bordado_color
     - field.field.commerce_product.default.field_bordado_fuente
     - field.field.commerce_product.default.field_bordado_mayusculas
+    - field.field.commerce_product.default.field_bordado_rotacion
     - field.field.commerce_product.default.field_complementarios
     - field.field.commerce_product.default.field_composicion
     - field.field.commerce_product.default.field_destacado
@@ -38,6 +39,7 @@ hidden:
   field_bordado_color: true
   field_bordado_fuente: true
   field_bordado_mayusculas: true
+  field_bordado_rotacion: true
   field_complementarios: true
   field_composicion: true
   field_destacado: true

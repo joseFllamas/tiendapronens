@@ -24,6 +24,7 @@
     const grupo = lienzo.closest('.pro-montaje');
     const marca = lienzo.querySelector('[data-pro-montaje-marca]');
     const barra = grupo ? grupo.querySelector('[data-pro-montaje-barra]') : null;
+    const barraGiro = grupo ? grupo.querySelector('[data-pro-montaje-barra-rotacion]') : null;
     const nombre = lienzo.dataset.proMontajeModo !== 'inicial';
     const campos = {};
     if (!grupo || !marca) {
@@ -48,8 +49,12 @@
       const x = lee(campos.x, 50);
       const y = lee(campos.y, 50);
       const tamano = lee(campos.tamano, nombre ? 5 : 12);
+      const giro = campos.rotacion ? lee(campos.rotacion, 0) : 0;
       marca.style.left = `${x}%`;
       marca.style.top = `${y}%`;
+      // El centrado va aquí y no solo en el CSS: la rotación se compone con él,
+      // y una transform inline sustituye la de la hoja de estilos entera.
+      marca.style.transform = `translate(-50%, -50%) rotate(${giro}deg)`;
       if (nombre) {
         // La altura de la letra, en % del ancho de la foto: el CSS la resuelve
         // con cqw sobre el lienzo, así que sigue valiendo si cambia de tamaño.
@@ -97,6 +102,12 @@
     if (barra) {
       barra.addEventListener('input', () => {
         guarda(campos.tamano, parseFloat(barra.value));
+        coloca();
+      });
+    }
+    if (barraGiro && campos.rotacion) {
+      barraGiro.addEventListener('input', () => {
+        guarda(campos.rotacion, parseFloat(barraGiro.value));
         coloca();
       });
     }

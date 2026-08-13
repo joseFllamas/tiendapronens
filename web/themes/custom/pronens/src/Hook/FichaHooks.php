@@ -12,6 +12,7 @@ use Drupal\file\FileInterface;
 use Drupal\image\ImageStyleInterface;
 use Drupal\media\MediaInterface;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Image\ImageFactory;
 use Drupal\Core\Hook\Attribute\Hook;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Render\Markup;
@@ -91,6 +92,7 @@ class FichaHooks {
     protected ConfigFactoryInterface $configFactory,
     protected RendererInterface $renderer,
     protected EntityRepositoryInterface $entityRepository,
+    protected ImageFactory $imageFactory,
   ) {
   }
 
@@ -327,6 +329,9 @@ class FichaHooks {
         'field_inicial_tamano',
         self::TAMANO_DEFECTO[$this->esModoInicial($producto) ? 'inicial' : 'texto']
       ),
+      // La inclinación va en grados y vale para los dos modos: es colocación,
+      // igual que la posición, no una decisión sobre la letra.
+      'rotacion' => $lee('field_bordado_rotacion', 0.0),
     ];
   }
 
@@ -409,11 +414,25 @@ class FichaHooks {
         continue;
       }
       $alt = (string) ($imagen['#alt'] ?? '');
+      // La cuadrícula recorta a 3:4; en el lightbox se ve entera. El enlace
+      // sirve además sin JS: lleva a la foto grande directamente.
+      $derivados = $this->datosDeEstilo($media, ['pronens_lightbox', 'pronens_zoom']);
+      $grande = $derivados['pronens_lightbox'] ?? NULL;
+      $lupa = $derivados['pronens_zoom'] ?? NULL;
+      // La versión de más resolución solo se ofrece cuando el original da para
+      // más de los 1400 del lightbox (215 medias pasan de 2600 y 74 andan entre
+      // medias); en el resto sería el mismo fichero pesando dos veces. La pide
+      // el JS únicamente cuando se acerca la foto, no al abrir el lightbox.
+      $hay_lupa = $grande !== NULL && $lupa !== NULL
+        && (int) ($lupa['ancho'] ?? 0) > (int) ($grande['ancho'] ?? 0);
       $fotos[] = [
         'imagen' => $imagen,
-        // La cuadrícula recorta a 3:4; en el lightbox se ve entera. El enlace
-        // sirve además sin JS: lleva a la foto grande directamente.
-        'grande' => $this->urlDeEstilo($media, 'pronens_lightbox'),
+        'grande' => $grande['url'] ?? NULL,
+        'lupa' => $hay_lupa ? $lupa['url'] : NULL,
+        // Los píxeles reales de la mejor versión que se va a servir: con ellos
+        // el JS sabe cuánto puede acercar sin emborronar. Ninguno de los dos
+        // estilos amplía, así que la mitad del catálogo no da para nada.
+        'ancho' => $hay_lupa ? $lupa['ancho'] : ($grande['ancho'] ?? NULL),
         'alt' => $alt,
         // La migración dejó el nombre del fichero como texto alternativo en las
         // fotos del D7, y "Foto Cupcake 1 - copia.jpg" no es un pie de foto.
@@ -436,24 +455,59 @@ class FichaHooks {
   }
 
   /**
-   * URL de la imagen de un media con un estilo dado.
+   * URL y medidas de la imagen de un media con un estilo dado.
+   *
+   * Las medidas son las del derivado, no las del original: los dos estilos que
+   * usa el lightbox escalan sin ampliar, así que un original de 945px sale de
+   * 945px pida lo que pida el estilo. Es justo el dato que necesita la lupa
+   * para saber si hay píxeles que enseñar.
+   *
+   * @param \Drupal\media\MediaInterface $media
+   *   El media con la foto.
+   * @param string[] $estilos
+   *   Nombres de los estilos de imagen. Se piden juntos porque leer el fichero
+   *   cuesta, y con uno basta para calcular todos los derivados.
+   *
+   * @return array<string, array{url: string, ancho: int, alto: int}>
+   *   Datos de cada derivado, indexados por estilo. El estilo que no exista no
+   *   trae entrada, y la lista sale vacía si el media no tiene imagen.
    */
-  protected function urlDeEstilo(MediaInterface $media, string $estilo): ?string {
+  protected function datosDeEstilo(MediaInterface $media, array $estilos): array {
     if (!$media->hasField('field_media_image')) {
-      return NULL;
+      return [];
     }
     $campo = $media->get('field_media_image');
     $ficheros = $campo instanceof EntityReferenceFieldItemListInterface ? $campo->referencedEntities() : [];
     $fichero = reset($ficheros);
     if (!$fichero instanceof FileInterface) {
-      return NULL;
+      return [];
     }
-    $estilo_imagen = $this->entityTypeManager->getStorage('image_style')->load($estilo);
-    if (!$estilo_imagen instanceof ImageStyleInterface) {
-      return NULL;
+    $uri = (string) $fichero->getFileUri();
+    // Las medidas se leen del fichero y no del campo: 893 de las 1165 medias
+    // guardan las del original que había antes del dedupe de la migración
+    // (tote-1v1.jpg dice 860x842 y mide 1200x1600), así que fiarse del campo
+    // dejaría sin lupa fotos que sí tienen píxeles de sobra.
+    $imagen = $this->imageFactory->get($uri);
+    if (!$imagen->isValid()) {
+      return [];
+    }
+    $almacen = $this->entityTypeManager->getStorage('image_style');
+    $datos = [];
+    foreach ($estilos as $estilo) {
+      $estilo_imagen = $almacen->load($estilo);
+      if (!$estilo_imagen instanceof ImageStyleInterface) {
+        continue;
+      }
+      $medidas = ['width' => $imagen->getWidth(), 'height' => $imagen->getHeight()];
+      $estilo_imagen->transformDimensions($medidas, $uri);
+      $datos[$estilo] = [
+        'url' => $estilo_imagen->buildUrl($uri),
+        'ancho' => (int) $medidas['width'],
+        'alto' => (int) $medidas['height'],
+      ];
     }
 
-    return $estilo_imagen->buildUrl((string) $fichero->getFileUri());
+    return $datos;
   }
 
   /**
