@@ -25,6 +25,10 @@
     const marca = lienzo.querySelector('[data-pro-montaje-marca]');
     const barra = grupo ? grupo.querySelector('[data-pro-montaje-barra]') : null;
     const barraGiro = grupo ? grupo.querySelector('[data-pro-montaje-barra-rotacion]') : null;
+    const barraFondo = grupo ? grupo.querySelector('[data-pro-montaje-barra-fondo]') : null;
+    const caja = lienzo.querySelector('[data-pro-montaje-caja]');
+    const texto = lienzo.querySelector('[data-pro-montaje-texto]');
+    const fondo = lienzo.querySelector('.pro-montaje__fondo');
     const nombre = lienzo.dataset.proMontajeModo !== 'inicial';
     const campos = {};
     if (!grupo || !marca) {
@@ -63,6 +67,42 @@
       else {
         marca.style.width = `${tamano}%`;
       }
+      if (campos.fondo) {
+        // El ancho de la nube, también en % del ancho de la foto. El alto sale
+        // de la proporción de su propia foto, así que no hay nada que fijar.
+        marca.style.setProperty('--pro-montaje-fondo-ancho', `${lee(campos.fondo, 34)}%`);
+      }
+      encoge();
+    }
+
+    // El mismo encogido que la ficha: la máquina borda a la altura configurada,
+    // pero un nombre largo no cabe en su caja (la de la nube, o la de 8,6ch sin
+    // nube) y hay que bajarlo. Si el widget no lo hiciera, se colocaría mirando
+    // una cosa y se vería otra. Con la muestra "Mónica" (6 letras) el factor se
+    // queda en 1; la caja punteada enseña de todas formas la huella máxima.
+    function encoge() {
+      if (!caja || !texto || !marca.classList.contains('pro-montaje__marca--nombre')) {
+        return;
+      }
+      marca.style.setProperty('--pro-montaje-encoge', '1');
+      const anchoCaja = caja.offsetWidth;
+      // Con la foto del fondo aún sin cargar la caja mide cero: se deja en 1 y
+      // se vuelve a medir en cuanto llega.
+      if (!texto.offsetWidth || !anchoCaja) {
+        return;
+      }
+      // El 0,98 es margen de redondeo, igual que en la ficha.
+      let factor = (anchoCaja / texto.offsetWidth) * 0.98;
+      // La altura solo limita dentro de la nube: sin fondo la caja mide lo que
+      // mida el texto y el tope sería circular.
+      if (marca.classList.contains('pro-montaje__marca--con-fondo')) {
+        const altoCaja = caja.offsetHeight;
+        if (!texto.offsetHeight || !altoCaja) {
+          return;
+        }
+        factor = Math.min(factor, (altoCaja / texto.offsetHeight) * 0.98);
+      }
+      marca.style.setProperty('--pro-montaje-encoge', Math.min(1, factor).toFixed(3));
     }
 
     // Escribe con dos decimales: más precisión no la aprecia nadie y ensucia.
@@ -111,6 +151,20 @@
         coloca();
       });
     }
+    if (barraFondo && campos.fondo) {
+      barraFondo.addEventListener('input', () => {
+        guarda(campos.fondo, parseFloat(barraFondo.value));
+        coloca();
+      });
+    }
+    if (fondo) {
+      fondo.addEventListener('load', encoge);
+    }
+    if (document.fonts && document.fonts.ready) {
+      // Medir el nombre con la fuente de reserva da un ancho que no es el que
+      // se va a bordar.
+      document.fonts.ready.then(encoge);
+    }
     // Escribir a mano en los números también recoloca la marca.
     Object.values(campos).forEach((input) => {
       input.addEventListener('input', coloca);
@@ -127,11 +181,14 @@
         ? opciones.fuente.querySelector('select, input:checked')
         : null;
       if (fuente) {
+        // Los 279 productos migrados tienen el campo vacío y el select dice
+        // "_none": sin esto se apagaban las TRES clases de fuente y la marca
+        // caía a la tipografía del administrador, con otro ancho que el
+        // bordado real (y otra caja de 8,6ch). Vacío = unicase, la de defecto,
+        // que es lo que va a servir la ficha (FichaHooks::FUENTE_DEFECTO).
+        const valor = fuente.value === '_none' ? 'unicase' : (fuente.value || 'unicase');
         ['unicase', 'script', 'letra'].forEach((clave) => {
-          marca.classList.toggle(
-            `pro-montaje__marca--fuente-${clave}`,
-            (fuente.value || 'unicase') === clave
-          );
+          marca.classList.toggle(`pro-montaje__marca--fuente-${clave}`, valor === clave);
         });
       }
       // El widget de color_field esconde su input y pinta unos botones que lo
@@ -143,12 +200,15 @@
       if (color) {
         marca.style.setProperty('--pro-montaje-color', color.value || '');
       }
-      const caja = opciones.mayusculas
+      const mayusculas = opciones.mayusculas
         ? opciones.mayusculas.querySelector('input[type="checkbox"]')
         : null;
-      if (caja) {
-        marca.classList.toggle('pro-montaje__marca--caps', caja.checked);
+      if (mayusculas) {
+        marca.classList.toggle('pro-montaje__marca--caps', mayusculas.checked);
       }
+      // Otra fuente o la caja alta cambian el ancho del nombre, así que puede
+      // pasar a caber o a no caber dentro del fondo.
+      encoge();
     }
 
     Object.values(opciones).forEach((envoltorio) => {

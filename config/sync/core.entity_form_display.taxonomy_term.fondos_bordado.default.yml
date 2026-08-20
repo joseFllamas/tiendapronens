@@ -1,0 +1,93 @@
+uuid: f8392cbe-3299-429f-be59-fbc4dde4ce42
+langcode: es
+status: true
+dependencies:
+  config:
+    - field.field.taxonomy_term.fondos_bordado.field_caja_alto
+    - field.field.taxonomy_term.fondos_bordado.field_caja_ancho
+    - field.field.taxonomy_term.fondos_bordado.field_color
+    - field.field.taxonomy_term.fondos_bordado.field_imagen
+    - taxonomy.vocabulary.fondos_bordado
+  module:
+    - color_field
+    - path
+    - text
+id: taxonomy_term.fondos_bordado.default
+targetEntityType: taxonomy_term
+bundle: fondos_bordado
+mode: default
+content:
+  description:
+    type: text_textfield
+    weight: 0
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  field_caja_alto:
+    type: number
+    weight: 4
+    region: content
+    settings:
+      placeholder: ''
+    third_party_settings: {  }
+  field_caja_ancho:
+    type: number
+    weight: 3
+    region: content
+    settings:
+      placeholder: ''
+    third_party_settings: {  }
+  field_color:
+    type: color_field_widget_box
+    weight: 2
+    region: content
+    settings:
+      default_colors: |
+
+        #000000,#4a4a4a,#9b9b9b,#ffffff,#f0e4cf,#7b5230
+        #f4a0c0,#f06eaa,#e6007e,#ff6f61,#d81f26,#8e1b2e
+        #f4854e,#ff9f1c,#f2c200,#cfa000,#c2551f,#8a4b1a
+        #a4c639,#7ab648,#1a7f4b,#0f5c3a,#7fd4dd,#2e9daa
+        #9fc6e7,#4986e7,#1f5fbf,#0d2b5e,#b99aff,#7b4397
+    third_party_settings: {  }
+  field_imagen:
+    type: entity_reference_autocomplete
+    weight: 1
+    region: content
+    settings:
+      match_operator: CONTAINS
+      match_limit: 10
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  langcode:
+    type: language_select
+    weight: 2
+    region: content
+    settings:
+      include_locked: true
+    third_party_settings: {  }
+  name:
+    type: string_textfield
+    weight: -5
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  path:
+    type: path
+    weight: 30
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  status:
+    type: boolean_checkbox
+    weight: 100
+    region: content
+    settings:
+      display_label: true
+    third_party_settings: {  }
+hidden: {  }

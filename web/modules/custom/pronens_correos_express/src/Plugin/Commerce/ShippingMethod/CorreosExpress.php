@@ -61,6 +61,10 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
     'paq24_oficina' => new TranslatableMarkup('Paq 24 Oficina Elegida'),
     'paqpunto' => new TranslatableMarkup('PaqPunto'),
     'paq_ecommerce' => new TranslatableMarkup('PaqEcommerce'),
+    'baleares_express' => new TranslatableMarkup('Baleares Express'),
+    'canarias_express' => new TranslatableMarkup('Canarias Express'),
+    'canarias_aereo' => new TranslatableMarkup('Canarias Aéreo'),
+    'canarias_maritimo' => new TranslatableMarkup('Canarias Marítimo'),
   ],
 )]
 final class CorreosExpress extends ShippingMethodBase implements SupportsTrackingInterface {

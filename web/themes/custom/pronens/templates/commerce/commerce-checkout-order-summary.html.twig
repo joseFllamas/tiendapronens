@@ -32,6 +32,9 @@
           {% if linea.opciones %}<p class="pro-sum__opts">{{ linea.opciones }}</p>{% endif %}
           {% if linea.bordado %}
             <p class="pro-sum__emb">{{ 'Embroidery'|t }}: <strong>{{ linea.bordado }}</strong></p>
+            {% if linea.fondo %}
+              <p class="pro-sum__emb">{{ 'Background'|t({}, {'context': 'Embroidery'}) }}: <strong>{{ linea.fondo }}</strong></p>
+            {% endif %}
           {% endif %}
           <p class="pro-sum__qty-text">{{ 'Quantity'|t }}: {{ linea.cantidad }}</p>
           {# Los recargos van en esta columna y no junto al importe: son textos

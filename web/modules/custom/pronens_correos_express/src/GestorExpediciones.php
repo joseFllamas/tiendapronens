@@ -130,6 +130,8 @@ final class GestorExpediciones {
       (int) ($etiqueta['tipo'] ?? 1),
       (int) ($etiqueta['posicion'] ?? 1),
       (string) ($etiqueta['logo_base64'] ?? ''),
+      (bool) ($etiqueta['ocultar_remitente'] ?? FALSE),
+      (string) ($etiqueta['texto_remitente_alternativo'] ?? ''),
     );
   }
 

@@ -6,6 +6,7 @@ dependencies:
     - commerce_product.commerce_product_type.default
     - field.field.commerce_product.default.body
     - field.field.commerce_product.default.field_bordado_color
+    - field.field.commerce_product.default.field_bordado_foto
     - field.field.commerce_product.default.field_bordado_fuente
     - field.field.commerce_product.default.field_bordado_mayusculas
     - field.field.commerce_product.default.field_bordado_rotacion
@@ -14,6 +15,8 @@ dependencies:
     - field.field.commerce_product.default.field_destacado
     - field.field.commerce_product.default.field_escuela
     - field.field.commerce_product.default.field_extras_disponibles
+    - field.field.commerce_product.default.field_fondo_tamano
+    - field.field.commerce_product.default.field_fondos_disponibles
     - field.field.commerce_product.default.field_fuentes_permitidas
     - field.field.commerce_product.default.field_galeria
     - field.field.commerce_product.default.field_guia_tallas
@@ -82,6 +85,7 @@ content:
 hidden:
   created: true
   field_bordado_color: true
+  field_bordado_foto: true
   field_bordado_fuente: true
   field_bordado_mayusculas: true
   field_bordado_rotacion: true
@@ -89,6 +93,8 @@ hidden:
   field_destacado: true
   field_escuela: true
   field_extras_disponibles: true
+  field_fondo_tamano: true
+  field_fondos_disponibles: true
   field_fuentes_permitidas: true
   field_galeria: true
   field_guia_tallas: true

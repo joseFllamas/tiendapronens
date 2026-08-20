@@ -6,6 +6,7 @@ dependencies:
     - commerce_product.commerce_product_type.default
     - field.field.commerce_product.default.body
     - field.field.commerce_product.default.field_bordado_color
+    - field.field.commerce_product.default.field_bordado_foto
     - field.field.commerce_product.default.field_bordado_fuente
     - field.field.commerce_product.default.field_bordado_mayusculas
     - field.field.commerce_product.default.field_bordado_rotacion
@@ -14,6 +15,8 @@ dependencies:
     - field.field.commerce_product.default.field_destacado
     - field.field.commerce_product.default.field_escuela
     - field.field.commerce_product.default.field_extras_disponibles
+    - field.field.commerce_product.default.field_fondo_tamano
+    - field.field.commerce_product.default.field_fondos_disponibles
     - field.field.commerce_product.default.field_fuentes_permitidas
     - field.field.commerce_product.default.field_galeria
     - field.field.commerce_product.default.field_guia_tallas
@@ -59,7 +62,7 @@ content:
     third_party_settings: {  }
   field_bordado_color:
     type: color_field_widget_box
-    weight: 14
+    weight: 15
     region: content
     settings:
       default_colors: |
@@ -70,22 +73,29 @@ content:
         #a4c639,#7ab648,#1a7f4b,#0f5c3a,#7fd4dd,#2e9daa
         #9fc6e7,#4986e7,#1f5fbf,#0d2b5e,#b99aff,#7b4397
     third_party_settings: {  }
+  field_bordado_foto:
+    type: media_library_widget
+    weight: 7
+    region: content
+    settings:
+      media_types: {  }
+    third_party_settings: {  }
   field_bordado_fuente:
     type: options_select
-    weight: 13
+    weight: 14
     region: content
     settings: {  }
     third_party_settings: {  }
   field_bordado_mayusculas:
     type: boolean_checkbox
-    weight: 15
+    weight: 16
     region: content
     settings:
       display_label: true
     third_party_settings: {  }
   field_bordado_rotacion:
     type: number
-    weight: 12
+    weight: 13
     region: content
     settings:
       placeholder: ''
@@ -122,6 +132,19 @@ content:
     settings: {  }
     third_party_settings: {  }
   field_extras_disponibles:
+    type: options_buttons
+    weight: 8
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  field_fondo_tamano:
+    type: number
+    weight: 12
+    region: content
+    settings:
+      placeholder: ''
+    third_party_settings: {  }
+  field_fondos_disponibles:
     type: options_buttons
     weight: 8
     region: content

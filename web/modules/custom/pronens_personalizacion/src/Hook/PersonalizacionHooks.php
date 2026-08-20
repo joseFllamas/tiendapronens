@@ -36,7 +36,23 @@ final class PersonalizacionHooks {
   private const CAMPOS = [
     PersonalizacionOrderProcessor::CAMPO_TEXTO,
     'field_color_bordado',
+    self::CAMPO_FONDO,
   ];
+
+  /**
+   * Campo de la línea de pedido con el fondo sobre el que va el bordado.
+   *
+   * La nube de las mochilas y las bolsas: el nombre no se borda sobre la tela
+   * sino dentro de una forma, que viene en varios colores. No cuesta nada, así
+   * que no tiene procesador de pedido; solo hay que guardar cuál eligió el
+   * cliente, que es lo que va a leer el taller.
+   */
+  private const CAMPO_FONDO = 'field_fondo_bordado';
+
+  /**
+   * Campo del producto con los fondos que ofrece.
+   */
+  private const CAMPO_FONDO_PRODUCTO = 'field_fondos_disponibles';
 
   /**
    * Campo de la línea de pedido con los extras elegidos.
@@ -89,6 +105,8 @@ final class PersonalizacionHooks {
     }
 
     $modo = $this->modo($producto);
+    // El fondo del bordado: qué nubes ofrece este producto, si ofrece alguna.
+    $this->preparaFondos($form, $producto);
 
     // La card del diseño: checkbox que pliega y despliega la personalización.
     // No es un campo, es UX; que haya bordado o no lo decide el texto.
@@ -154,7 +172,7 @@ final class PersonalizacionHooks {
     }
 
     $tids = array_map(static fn ($valor) => is_array($valor) ? ($valor['target_id'] ?? $valor) : $valor, $elegidos);
-    /** @var array<int, \Drupal\taxonomy\TermInterface> $extras */
+    /** @var array<int, TermInterface> $extras */
     $extras = \Drupal::entityTypeManager()->getStorage('taxonomy_term')->loadMultiple($tids);
     foreach ($extras as $extra) {
       $pide = $extra->hasField('field_pide_texto')
@@ -206,7 +224,27 @@ final class PersonalizacionHooks {
       // recargo ni el taller reciban restos.
       $form_state->setValue($campo, []);
       $form_state->setValue('field_color_bordado', []);
+      $form_state->setValue(self::CAMPO_FONDO, []);
       return;
+    }
+
+    // El fondo elegido tiene que ser uno de los que ofrece el producto: el
+    // selector ya solo enseña esos, pero el valor llega por POST y el campo
+    // apunta a todo el vocabulario, así que aquí se reafirma. Sin fondos
+    // declarados el campo ni se enseña y el nombre va sobre la tela.
+    if ($producto instanceof ProductInterface) {
+      $fondo = $form_state->getValue([self::CAMPO_FONDO, 0, 'target_id']);
+      $ofrecidos = $inicial ? [] : array_map(
+        static fn ($termino) => (string) $termino->id(),
+        self::fondosDisponibles($producto)
+      );
+      if ($ofrecidos === []) {
+        $form_state->setValue(self::CAMPO_FONDO, []);
+      }
+      elseif ($fondo === NULL || $fondo === '' || !in_array((string) $fondo, $ofrecidos, TRUE)) {
+        $form_state->setErrorByName(self::CAMPO_FONDO, new TranslatableMarkup('Choose the background for the embroidery.'));
+        return;
+      }
     }
 
     if ($inicial && mb_strlen($texto) > 1) {
@@ -225,6 +263,74 @@ final class PersonalizacionHooks {
     }
 
     $form_state->setValue([$campo, 0, 'value'], $texto);
+  }
+
+  /**
+   * Deja en el formulario solo los fondos que ofrece este producto.
+   *
+   * El campo de la línea de pedido apunta a todo el vocabulario, así que aquí se
+   * recorta a lo que declara el producto en field_fondos_disponibles. Un
+   * producto que no declara ninguno no ve el selector y borda el nombre
+   * directamente sobre la tela, que es lo que hacen los 279 de nombre migrados.
+   *
+   * @param array<string, mixed> $form
+   *   El formulario.
+   * @param \Drupal\commerce_product\Entity\ProductInterface $producto
+   *   El producto de la ficha.
+   */
+  private function preparaFondos(array &$form, ProductInterface $producto): void {
+    if (!isset($form[self::CAMPO_FONDO]['widget']['#options'])) {
+      return;
+    }
+    // El fondo es el de un NOMBRE bordado: una inicial es un parche que va
+    // sobre la tela y no dentro de una nube, así que en modo inicial ni se
+    // pregunta aunque el producto tuviera fondos declarados.
+    $disponibles = $this->modo($producto) === 'inicial' ? [] : self::fondosDisponibles($producto);
+    if ($disponibles === []) {
+      $form[self::CAMPO_FONDO]['#access'] = FALSE;
+      return;
+    }
+
+    $opciones = [];
+    foreach ($disponibles as $fondo) {
+      $opciones[$fondo->id()] = $fondo->label();
+    }
+    // Sin la opción vacía: estos productos se bordan siempre dentro del fondo,
+    // y quien no quiera bordado desmarca la casilla, que ya vacía la línea
+    // entera. Es la misma regla que el formato de la inicial.
+    $form[self::CAMPO_FONDO]['widget']['#options'] = $opciones;
+
+    // El primero viene elegido de entrada: el campo no es obligatorio, así que
+    // sin esto se podía pedir el bordado sin decir sobre qué fondo va. Ojo: en
+    // un campo de un solo valor, options_buttons espera el tid **suelto**; con
+    // un array dentro no marca ningún radio.
+    $actual = $form[self::CAMPO_FONDO]['widget']['#default_value'] ?? NULL;
+    if (in_array($actual, [NULL, '', '_none', [], ['_none']], TRUE)) {
+      $primero = array_key_first($opciones);
+      $form[self::CAMPO_FONDO]['widget']['#default_value'] =
+        ($form[self::CAMPO_FONDO]['widget']['#type'] ?? '') === 'checkboxes' ? [$primero] : $primero;
+    }
+  }
+
+  /**
+   * Fondos que declara el producto, en el orden en que los declara.
+   *
+   * @return array<int, TermInterface>
+   *   Los términos de fondo publicados.
+   */
+  private static function fondosDisponibles(ProductInterface $producto): array {
+    if (!$producto->hasField(self::CAMPO_FONDO_PRODUCTO)) {
+      return [];
+    }
+    $campo = $producto->get(self::CAMPO_FONDO_PRODUCTO);
+    if (!$campo instanceof EntityReferenceFieldItemListInterface) {
+      return [];
+    }
+
+    return array_values(array_filter(
+      $campo->referencedEntities(),
+      static fn ($fondo) => $fondo instanceof TermInterface && $fondo->isPublished()
+    ));
   }
 
   /**
@@ -275,7 +381,7 @@ final class PersonalizacionHooks {
   /**
    * Extras que declara el producto.
    *
-   * @return array<int, \Drupal\taxonomy\TermInterface>
+   * @return array<int, TermInterface>
    *   Los términos de extra.
    */
   private function extrasDisponibles(ProductInterface $producto): array {

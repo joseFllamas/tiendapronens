@@ -209,6 +209,122 @@ Donde este documento y la realidad del repo discrepan, manda esta lista (decidid
   (`translate(-50%,-50%) rotate(...)`), tanto en la marca del widget como en la vista previa: una
   `transform` en línea sustituye a la de la hoja de estilos entera, así que el centrado tiene que
   repetirse ahí y no basta con añadir el giro.
+- **Los 41 bodys de bebé llevan el montaje del esmoquin (2026-08-13)**: el cliente calibró el body
+  de esmoquin (76: unicase, sin mayúsculas, 50,36 / 30,30, 2,5 % de altura) y
+  `scripts/bordado-bodys.php` lo replica en los otros 40 de la categoría (177), que comparten
+  encuadre de catálogo JHK. El **hilo se decidió por producto** midiendo con ImageMagick la tela
+  bajo el nombre y el estampado: blanco sobre prenda oscura (como la referencia), el color del
+  print en las claras estampadas (negro, grafito en el iPood, frambuesa en los magenta, verde en
+  Young wild) y el complementario de la carta de 30 en los lisos (verde agua sobre rosa, violeta
+  sobre amarillo, ámbar sobre marino y azulón, marino sobre naranja; blanco donde el complementario
+  no contrasta: fucsia, rojo, negro). Dos excepciones de colocación medidas sobre la foto: el
+  **iPood (55)** lleva el rótulo en el pecho y el nombre baja a la barriga (y=66), y el
+  **Perezoso (56)** tiene la cabeza del oso ahí y el nombre sube encima del dibujo (y=24). El
+  script **solo escribe donde está vacío**, así que el 76 no se tocó y relanzarlo no pisa ajustes.
+  Copia previa: snapshot `pre-bordado-bodys`.
+- **El nombre se borda dentro de una nube en las mochilas y las bolsas (2026-08-13, cliente)**: no va
+  sobre la tela, va dentro de una forma de color que hoy viene en dos tonos (marrón y rosa) y mañana
+  en los que haga falta. Por eso es un **vocabulario, `fondos_bordado`**, y no una lista cerrada como
+  `field_bordado_fuente`: añadir un color o una silueta es crear un término con su foto, sin tocar
+  código. El modelo es el de los extras (vocabulario + qué ofrece cada producto + qué eligió cada
+  línea): `field_fondos_disponibles` con casillas en el producto, `field_fondo_bordado` en la línea de
+  pedido, y todo **compartido entre traducciones**, que aquí no hay nada que redactar. **El fondo no
+  cuesta nada**: no tiene procesador de pedido, al revés que los extras. Lo que conviene no reinventar:
+  - **Se coloca UNA vez, no dos**: el nombre va centrado dentro de la nube y viaja con ella, así que la
+    posición (`field_inicial_x` / `_y`) y la rotación son las de siempre y solo hace falta un número
+    nuevo, `field_fondo_tamano`, el **ancho de la nube en % del ancho de la foto**. El alto sale de la
+    proporción de la propia foto del fondo, así que una nube más apaisada encaja sin tocar nada.
+  - **La caja de texto la declara el término** (`field_caja_ancho` / `field_caja_alto`, en % del
+    fondo, **50 y 34** por defecto): una nube no es un rectángulo y el nombre tiene que quedarse dentro
+    de la panza. Es lo que permite que un fondo con otra silueta encaje sin CSS nuevo. El 50 está
+    **medido sobre el alfa de la nube**, no puesto a ojo: la forma es **asimétrica** (el lóbulo de
+    arriba a la derecha se queda en el 79 % del ancho mientras la panza llega al 99 %), así que una
+    caja centrada no puede pasar del 58 % sin salirse por ahí; el resto, hasta el 50, es aire. Empezó
+    en 66 y el nombre rozaba el contorno (cliente, 2026-08-13).
+  - **Los nombres largos encogen solos**, que es lo que hace el taller: se mide el texto con
+    `offsetWidth` (no `getBoundingClientRect()`, que vendría girado por la rotación del montaje) y se
+    escribe un factor en `--pro-bordado-encoge`. Ojo: el factor va **fuera** del `max(10px, …)` del
+    tamaño de letra; metido dentro, el suelo lo anulaba y el nombre seguía saliéndose de la nube.
+  - **El hilo lo puede decidir el fondo**: `field_color` en el término manda sobre el
+    `field_bordado_color` del producto, porque sobre la nube marrón el nombre va en blanco y sobre la
+    tela iría en rosa. Se declara el último en el atributo `style`, que es lo que hace que gane.
+  - **Solo en modo `texto`**: una inicial es un parche sobre la tela, no un nombre dentro de una nube,
+    así que en modo inicial no se pregunta ni en la ficha ni en el backoffice.
+  - **Las fotos que llegaron NO tenían transparencia**: eran PNG de 3 canales con el **damero gris
+    pintado dentro**, así que puestas sobre la prenda se habrían visto con su recuadro de cuadros. Las
+    de `fondos/` son una reconstrucción hecha aquí (máscara por saturación + umbral de luminosidad,
+    ImageMagick) y sirven para verlo funcionando: **hay que pedirle al taller el PNG bueno o el SVG**.
+  - **Puestas en 91 productos** de Mochilas (179) y Bolsas guardería (182) con
+    `scripts/fondos-bordado-asignar.php`, que **solo escribe donde está vacío**, así que no pisa nada
+    calibrado a mano. La colocación de partida (77 / 88 / 26) sale de la foto de tienda y **acierta
+    donde la bolsa llena el encuadre**; en las fotos de objeto pequeño sobre blanco la nube cae fuera
+    de la prenda y hay que moverla producto a producto.
+  - **La colocación de partida quedó sustituida por la de la Caperucita (2026-08-13, cliente)**: el
+    cliente calibró la bolsa 132 (69,48 / 70,59, letra 5,5 %, nube 26 %) y
+    `scripts/bordado-bolsas.php` lo copió a las **85 bolsas** de las tres familias (término 182
+    entero más las 13 "Bolsa mochila…" de Mochilas, verificado sobre las 87 fotos que la nube cae
+    dentro: aquí la lámina llena el encuadre). Al revés que los otros scripts de bordado, este
+    **pisa, pero solo lo que siga exactamente en la partida** (77 / 88 / 4 / 26): cualquier otro
+    valor cuenta como calibración manual y se respeta entera (la 132 y la bolsa Mamá 304, afinada a
+    mano con 70,57 / 71,99 / 3,5 / 29,5). Pendiente de datos: las fotos de las 13 "Bolsa mochila"
+    (218–230) traen un **nombre de ejemplo impreso en la lámina** ("Lucas", "ERIC", "HUGO"…), así
+    que la vista previa pinta un segundo nombre; la solución es foto sin nombre, como en las
+    sudaderas de inicial. Copia previa: snapshot `pre-bordado-bolsas`.
+  - **Los baberos también llevan nube (2026-08-13, cliente)**: el cliente calibró el Baby Shark
+    (162: nube con fondos 225+226, nombre en 64,27 / 76,72, unicase, hilo blanco, y **tamaño de
+    letra y ancho de nube vacíos a propósito**, que caen a los defectos 5 % / 34 %) y
+    `scripts/bordado-baberos.php` lo copió a los otros **45 baberos** del término 180, packs de
+    rizo incluidos (su foto es un solo babero y el punto cae dentro). Verificado sobre las 47
+    fotos. Este vuelve a la regla de **solo escribir donde está vacío** (los baberos no pasaron
+    por el script de fondos): cualquier `field_inicial_x/_y` relleno cuenta como calibración
+    manual y el producto se salta entero (el 162 y el Lorito 338, afinado a mano con
+    64,61 / 47,52 y letra 3, sin nube). Copia previa: snapshot `pre-bordado-baberos`.
+- **El nombre sin nube también tiene tope (2026-08-13, cliente)**: la zona de bordado de una prenda
+  no es infinita, así que el encogido de los nombres largos deja de ser exclusivo del fondo. La
+  regla del cliente era "elijo el tamaño con Mónica y que quepan 8 letras como máximo", y se expresa
+  sin números en píxeles: la caja del nombre mide **8,6ch** (`--pro-nombre-max`), o sea 8 letras
+  típicas en la fuente y tamaño configurados ("Fernanda" son 8,33ch en Delius y cabe entera;
+  "Valentina" ya roza). `ch` y no una medida fija porque el límite **escala con el tamaño y con la
+  fuente del producto**; en mayúsculas los nombres ocupan más y encogen antes, que es lo que pasa en
+  la prenda de verdad. Tres detalles que costaron encontrar y conviene no reintroducir:
+  - **El factor de encogido va en el TEXTO, no en el elemento**: la caja se mide en ch del tamaño
+    configurado, y si encogiera con el texto el límite se movería con cada medida (bucle).
+  - **La fuente del bordado se declara en el ELEMENTO** (`.pro-ficha__preview--unicase` y hermanas,
+    antes en el `-text`): el ch de la caja depende de la fuente, y con la fuente solo en el texto la
+    caja medía en Archivo, más estrecha que Delius, y el límite salía más duro de lo configurado.
+    Mismo arreglo en el widget del backoffice (la fuente en la marca, el `b` hereda).
+  - **El select de fuente de los 279 productos migrados vale `_none`**, no vacío: `viste()` en
+    montaje.js apagaba las tres clases de fuente y la marca del backoffice caía a la tipografía del
+    administrador, con otro ancho que el bordado real. `_none` = unicase, la de defecto de la ficha.
+    El bug era anterior (solo desviaba el ancho de la muestra); con la caja de 8,6ch pasó a mover el
+    límite y por eso se encontró.
+  - La altura solo limita **dentro de la nube**: sin fondo la caja mide lo que mida el texto y el
+    tope sería circular. Y la marca del backoffice enseña la caja punteada de 8,6ch aunque "Mónica"
+    no la llene: al colocar se ve la huella máxima que puede ocupar un nombre largo.
+- **La foto del bordado se puede elegir (2026-08-13, cliente)**: `field_bordado_foto` en el
+  producto (referencia a media, opcional, compartida entre traducciones), para cuando el bordado va
+  en una cara que la foto principal no enseña (un body con el dibujo delante y el nombre en la
+  espalda: la vista previa pintaba el nombre encima del dibujo). Revisa la resolución "la foto del
+  montaje es siempre `field_imagen_principal`" sin romper su invariante: sigue habiendo **una sola
+  foto de referencia para medir y para pintar**, solo que ahora se puede decir cuál
+  (`MontajeHooks::fotoDeMontaje()` y `FichaHooks::fotos()` hacen la misma elección: bordado_foto →
+  principal). Lo demás que se decidió con el cliente:
+  - **La foto del bordado NO pasa a ser la primera de la galería**: la primera vende el producto (el
+    dibujo) y una espalda lisa no. La vista previa **se ancla a la foto esté donde esté** en la
+    cuadrícula (`foto.bordado` en la plantilla, una sola lo lleva; si no está en la galería o quedó
+    fuera del corte de seis, se añade al final). Se descartó también el intercambio en vivo de la
+    primera foto al activar el bordado (más JS, frágil con el AJAX del add-to-cart).
+  - **La señal es un resplandor turquesa + traerla a la vista**: al activarse el bordado de verdad
+    (casilla + texto, no solo la casilla), la foto recibe `pro-ficha__shot--brilla` y, si está fuera
+    de pantalla, `scrollIntoView` **solo en el flanco de apagado a encendido**: desplazarse en cada
+    tecla pelearía con el usuario por el scroll. Respeta `prefers-reduced-motion` (scroll sin
+    animar y sin transición del glow). Se descartó el sombreado oscuro: oscurece justo lo que se
+    quiere mirar.
+  - **El contenedor de medida viaja con la vista previa**: `container-type` vive en
+    `pro-ficha__shot--preview` (la foto del bordado), ya no en `--main`. Sin él, los `cqw` de la
+    altura de la letra medirían contra otra caja.
+  - En el backoffice el campo entra el **primero** del grupo de montaje: todo lo demás se mide sobre
+    esa foto. Cambiarla pide guardar y volver, igual que ya pasaba con la principal.
 - **El formato viene elegido de entrada (2026-07-30, cliente)**: el nº 1 de la foto guía, que hoy es
   "perfil negro interior blanco". No está escrito a mano: es el **primero por peso** del vocabulario
   `color_letra`, así que para cambiar el que sale marcado basta reordenarlo en

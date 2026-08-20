@@ -36,6 +36,10 @@ final readonly class OpcionesExpedicion {
    * @param \Drupal\pronens_correos_express\Payload\DatosRecogida|null $recogida
    *   Recogida a crear junto con el alta. Es la única forma que da la API de
    *   crear una.
+   * @param string $telefonoDestinatario
+   *   Teléfono del destinatario tecleado por el operario. La API lo exige, y
+   *   los pedidos anteriores al campo del checkout no lo traen: este valor
+   *   manda sobre el del perfil cuando se rellena.
    */
   public function __construct(
     public ServicioCex $servicio,
@@ -45,6 +49,7 @@ final readonly class OpcionesExpedicion {
     public string $observaciones = '',
     public bool $entregaSabado = FALSE,
     public ?DatosRecogida $recogida = NULL,
+    public string $telefonoDestinatario = '',
   ) {}
 
 }

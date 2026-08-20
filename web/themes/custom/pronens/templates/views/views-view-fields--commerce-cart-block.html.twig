@@ -19,6 +19,9 @@
     {% endif %}
     {% if linea.bordado %}
       <p class="pro-line__perso">{{ 'Embroidery'|t }}: {{ linea.bordado }}</p>
+      {% if linea.fondo %}
+        <p class="pro-line__perso">{{ 'Background'|t({}, {'context': 'Embroidery'}) }}: {{ linea.fondo }}</p>
+      {% endif %}
     {% endif %}
     <div class="pro-line__row">
       <span class="pro-line__qty">{{ 'Qty.'|t }} {{ fields.quantity.content }}</span>

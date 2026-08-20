@@ -95,6 +95,8 @@
     const cta = form.querySelector('[data-pro-cta]');
     const preview = document.querySelector('[data-pro-preview]');
     const previewTexto = document.querySelector('[data-pro-preview-text]');
+    const previewFondo = document.querySelector('[data-pro-preview-fondo]');
+    const previewCaja = document.querySelector('[data-pro-preview-caja]');
     const total = document.querySelector('[data-pro-total]');
     const desglose = document.querySelector('[data-pro-breakdown]');
     const ctaBase = cta ? cta.value : '';
@@ -152,6 +154,100 @@
       });
     }
 
+    // El fondo del bordado (la nube de las mochilas y las bolsas): al cambiar
+    // de color cambia la foto, la caja donde cabe el nombre y, si el término lo
+    // dice, el hilo con el que se borda encima. Sin fondos, nada de esto existe
+    // y el nombre se borda sobre la tela, como en el resto del catálogo.
+    function pintaFondo() {
+      if (!preview || !previewFondo) {
+        return;
+      }
+      const marcado = form.querySelector('.pro-fondos input[type="radio"]:checked');
+      const fondo = marcado ? (ajustes.fondos || {})[marcado.value] : null;
+      if (!fondo || !fondo.foto) {
+        return;
+      }
+      if (previewFondo.getAttribute('src') !== fondo.foto) {
+        previewFondo.src = fondo.foto;
+      }
+      preview.style.setProperty('--pro-caja-ancho', `${fondo.ancho}%`);
+      preview.style.setProperty('--pro-caja-alto', `${fondo.alto}%`);
+      // Sin color propio manda el del producto, que es el que ya trae el
+      // atributo style de la plantilla: se quita el de aquí y reaparece.
+      if (fondo.color) {
+        preview.style.setProperty('--pro-bordado-color', fondo.color);
+      }
+      else {
+        preview.style.removeProperty('--pro-bordado-color');
+      }
+    }
+
+    // La máquina borda a la altura configurada, pero un nombre largo no cabe
+    // en su caja y el taller lo baja hasta que quepa: la ficha tiene que
+    // enseñar eso mismo. La caja es la de dentro de la nube cuando hay fondo, y
+    // sin fondo una de 8,6ch (unas 8 letras al tamaño configurado, ver
+    // ficha.css): la zona de bordado de la prenda tampoco es infinita. Se mide
+    // con offsetWidth y no con getBoundingClientRect(), que llegaría girado por
+    // la rotación del montaje.
+    function encoge() {
+      if (!preview || !previewTexto || !previewCaja
+        || !preview.classList.contains('pro-ficha__preview--nombre')) {
+        return;
+      }
+      preview.style.setProperty('--pro-bordado-encoge', '1');
+      const anchoCaja = previewCaja.offsetWidth;
+      const ancho = previewTexto.offsetWidth;
+      // Con la foto del fondo aún sin cargar, la caja mide cero: se deja el
+      // factor en 1 y se vuelve a medir en cuanto la foto llega.
+      if (!ancho || !anchoCaja) {
+        return;
+      }
+      // El 0,98 es margen: offsetWidth viene redondeado a entero y sin él un
+      // nombre justo se sale un píxel por la costura de la nube.
+      let factor = (anchoCaja / ancho) * 0.98;
+      // La altura solo limita dentro de la nube: sin fondo la caja no tiene
+      // alto propio (mide lo que mida el texto) y el tope sería circular.
+      if (preview.classList.contains('pro-ficha__preview--con-fondo')) {
+        const altoCaja = previewCaja.offsetHeight;
+        const alto = previewTexto.offsetHeight;
+        if (!alto || !altoCaja) {
+          return;
+        }
+        factor = Math.min(factor, (altoCaja / alto) * 0.98);
+      }
+      preview.style.setProperty('--pro-bordado-encoge', Math.min(1, factor).toFixed(3));
+    }
+
+    // La foto donde vive la vista previa, que puede no ser la primera
+    // (field_bordado_foto: el bordado va en la espalda y el dibujo delante).
+    // Al activarse el bordado se enciende un resplandor y, si la foto está
+    // fuera de pantalla, se trae a la vista: sin señal, el cliente teclearía
+    // mirando una foto y el nombre aparecería en otra.
+    const shotPreview = preview ? preview.closest('.pro-ficha__shot') : null;
+    let bordadoPrevio = false;
+
+    function senalaFoto(activo) {
+      if (!shotPreview) {
+        return;
+      }
+      shotPreview.classList.toggle('pro-ficha__shot--brilla', activo);
+      // Solo en el flanco de apagado a encendido: desplazarse en cada tecla
+      // pelearía con el usuario por el scroll.
+      if (activo && !bordadoPrevio) {
+        const caja = shotPreview.getBoundingClientRect();
+        const fuera = caja.top < 0 || caja.bottom > window.innerHeight
+          || caja.left < 0 || caja.right > window.innerWidth;
+        if (fuera) {
+          shotPreview.scrollIntoView({
+            behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth',
+            block: 'nearest',
+            inline: 'nearest',
+          });
+        }
+      }
+      bordadoPrevio = activo;
+    }
+
     function pinta() {
       const activo = bordadoActivo();
       const unidades = Math.max(1, parseInt(cantidad && cantidad.value, 10) || 1);
@@ -161,6 +257,10 @@
       if (preview && previewTexto) {
         preview.hidden = !activo;
         previewTexto.textContent = activo ? valorTexto() : '';
+        pintaFondo();
+        // Después de escribir el texto: se mide lo que hay, no lo que había.
+        encoge();
+        senalaFoto(activo);
       }
       if (desglose) {
         desglose.hidden = !activo;
@@ -185,9 +285,23 @@
       campo.addEventListener('input', pinta);
       campo.addEventListener('change', pinta);
     });
-    form.querySelectorAll('.pro-formatos input[type="radio"]').forEach((radio) => {
+    form.querySelectorAll('.pro-formatos input[type="radio"], .pro-fondos input[type="radio"]').forEach((radio) => {
       radio.addEventListener('change', pinta);
     });
+    // La caja del texto se mide en porcentaje del fondo, así que hasta que la
+    // foto no está no se sabe cuánto mide de alto. Con `once` porque la vista
+    // previa vive en la plantilla del producto y no se reemplaza: sin él, cada
+    // refresco AJAX del formulario apilaría otro handler sobre la misma foto.
+    if (previewFondo) {
+      once('pro-fondo-carga', previewFondo).forEach((foto) => {
+        foto.addEventListener('load', encoge);
+      });
+    }
+    // Y lo mismo con la tipografía del bordado: medir "MÓNICA" en la fuente de
+    // reserva da un ancho que no es el que se va a ver.
+    if (document.fonts && document.fonts.ready) {
+      document.fonts.ready.then(encoge);
+    }
     form.querySelectorAll('[data-pro-extras] input[type="checkbox"]').forEach((casillaExtra) => {
       casillaExtra.addEventListener('change', pinta);
     });

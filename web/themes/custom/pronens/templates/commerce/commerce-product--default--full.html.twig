@@ -19,7 +19,12 @@
       {% for foto in ficha.fotos %}
         {# Enlace y no div: sin JS lleva a la foto grande, y con JS el propio JS
            intercepta el clic y abre el lightbox. #}
-        <a class="pro-ficha__shot{{ loop.first ? ' pro-ficha__shot--main' }}"
+        {# La vista previa del bordado vive en la foto que diga
+           field_bordado_foto (foto.bordado), no siempre en la primera: en un
+           body con el dibujo delante y el nombre detrás, pintarla sobre la
+           primera la pondría encima del dibujo. El JS la señala con un
+           resplandor y la trae a la vista al activar el bordado. #}
+        <a class="pro-ficha__shot{{ loop.first ? ' pro-ficha__shot--main' }}{{ foto.bordado ? ' pro-ficha__shot--preview' }}"
            href="{{ foto.grande }}"
            data-pro-zoom="{{ loop.index0 }}"
            data-pro-pie="{{ foto.pie }}"
@@ -27,19 +32,30 @@
               versión de más resolución que carga la lupa al acercarla. #}
            data-pro-ancho="{{ foto.ancho }}"
            {% if foto.lupa %}data-pro-lupa="{{ foto.lupa }}"{% endif %}
-           {{ loop.first ? 'data-pro-preview-target' : '' }}>
+           {{ foto.bordado ? 'data-pro-preview-target' : '' }}>
           {{ foto.imagen }}
-          {% if loop.first and ficha.personalizable %}
+          {% if foto.bordado and ficha.personalizable %}
             {# Vista previa en vivo: el JS escribe aquí lo que se teclea. #}
             {# El montaje se coloca en porcentajes del alto y del ancho de la
                foto, así que vale igual en cualquier tamaño de pantalla. En modo
                inicial el tamaño es el lado del parche y en modo nombre la altura
                de la letra, de ahí las dos variables. #}
+            {# Y si el producto ofrece fondo (la nube de las mochilas y las
+               bolsas), el nombre no va sobre la tela sino dentro de él: la
+               nube manda el ancho y la caja de dentro es el hueco al que el
+               JS encoge el nombre cuando es largo. El color del hilo del
+               fondo se declara el último porque gana al del producto. #}
             {% set bordado = ficha.bordado %}
-            <div class="pro-ficha__preview pro-ficha__preview--{{ bordado.modo == 'inicial' ? 'inicial' : 'nombre' }} pro-ficha__preview--{{ bordado.fuente }}{{ bordado.mayusculas ? ' pro-ficha__preview--caps' }}"
+            {% set fondo = ficha.fondo %}
+            <div class="pro-ficha__preview pro-ficha__preview--{{ bordado.modo == 'inicial' ? 'inicial' : 'nombre' }} pro-ficha__preview--{{ bordado.fuente }}{{ bordado.mayusculas ? ' pro-ficha__preview--caps' }}{{ fondo ? ' pro-ficha__preview--con-fondo' }}"
                  data-pro-preview hidden
-                 style="--pro-inicial-x:{{ ficha.inicial.x }}%;--pro-inicial-y:{{ ficha.inicial.y }}%;--pro-inicial-tamano:{{ ficha.inicial.tamano }}%;--pro-bordado-alto:{{ ficha.inicial.tamano }};--pro-bordado-giro:{{ ficha.inicial.rotacion }}deg{% if bordado.color %};--pro-bordado-color:{{ bordado.color }}{% endif %}">
-              <span class="pro-ficha__preview-text" data-pro-preview-text></span>
+                 style="--pro-inicial-x:{{ ficha.inicial.x }}%;--pro-inicial-y:{{ ficha.inicial.y }}%;--pro-inicial-tamano:{{ ficha.inicial.tamano }}%;--pro-bordado-alto:{{ ficha.inicial.tamano }};--pro-bordado-giro:{{ ficha.inicial.rotacion }}deg{% if bordado.color %};--pro-bordado-color:{{ bordado.color }}{% endif %}{% if fondo %};--pro-fondo-ancho:{{ ficha.inicial.fondo_ancho }}%;--pro-caja-ancho:{{ fondo.ancho }}%;--pro-caja-alto:{{ fondo.alto }}%{% if fondo.color %};--pro-bordado-color:{{ fondo.color }}{% endif %}{% endif %}">
+              {% if fondo %}
+                <img class="pro-ficha__preview-fondo" src="{{ fondo.foto }}" alt="" data-pro-preview-fondo>
+              {% endif %}
+              <span class="pro-ficha__preview-caja" data-pro-preview-caja>
+                <span class="pro-ficha__preview-text" data-pro-preview-text></span>
+              </span>
             </div>
           {% endif %}
         </a>

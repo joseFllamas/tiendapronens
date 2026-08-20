@@ -7,6 +7,7 @@ use Drupal\commerce_product\Entity\ProductVariationInterface;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Entity\EntityRepositoryInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\Entity\FieldableEntityInterface;
 use Drupal\Core\Field\EntityReferenceFieldItemListInterface;
 use Drupal\file\FileInterface;
 use Drupal\image\ImageStyleInterface;
@@ -18,6 +19,7 @@ use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Render\Markup;
 use Drupal\Core\Render\RendererInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
+use Drupal\taxonomy\TermInterface;
 use Drupal\pronens\CamposTrait;
 use Drupal\pronens\PrecioTrait;
 use Drupal\pronens\TraduccionTrait;
@@ -87,6 +89,24 @@ class FichaHooks {
     'texto' => 5.0,
   ];
 
+  /**
+   * Ancho de partida del fondo del bordado, en % del ancho de la foto.
+   *
+   * El mismo que la barra del widget del backoffice (MontajeHooks) y que el
+   * valor por defecto de field_fondo_tamano.
+   */
+  protected const FONDO_ANCHO_DEFECTO = 34.0;
+
+  /**
+   * Caja de texto que cabe dentro de un fondo, en % del propio fondo.
+   *
+   * Los mismos números que los valores por defecto de field_caja_ancho y
+   * field_caja_alto: un fondo sin medir cae aquí en vez de dejar el nombre
+   * desbordado. Una nube no es un rectángulo, así que el texto no puede llegar
+   * a los bordes de la foto.
+   */
+  protected const CAJA_DEFECTO = ['ancho' => 50.0, 'alto' => 34.0];
+
   public function __construct(
     protected EntityTypeManagerInterface $entityTypeManager,
     protected ConfigFactoryInterface $configFactory,
@@ -135,6 +155,12 @@ class FichaHooks {
       'guia_tallas' => $this->guiaTallas($producto),
       'guia_bordado' => $this->esModoInicial($producto) ? $this->guiaBordado($variables) : NULL,
     ];
+    // La nube de las mochilas y las bolsas. El primero es el que sale elegido
+    // de entrada, igual que en el formulario (PersonalizacionHooks), así que la
+    // vista previa ya se pinta bien antes de que el JS toque nada.
+    $fondos = $this->fondosDelProducto($producto, $variables);
+    $variables['ficha']['fondos'] = $fondos;
+    $variables['ficha']['fondo'] = $fondos === [] ? NULL : reset($fondos);
     // Los complementarios no se pintan en la ficha: viven en el flyout del
     // carrito ("Completa el conjunto", CarritoHooks::completaElConjunto()).
     $variables['ficha']['relacionados'] = $this->relacionados($variables, $producto);
@@ -151,6 +177,9 @@ class FichaHooks {
       // Perfil e interior de cada formato: con eso el JS dibuja las letras y la
       // vista previa tal como quedarán bordadas.
       'formatos' => $this->coloresDeFormatos(),
+      // Foto, caja de texto y color de hilo de cada fondo: con eso el JS cambia
+      // la nube y encoge el nombre para que quepa dentro al elegir otra.
+      'fondos' => $fondos,
       // Para rehacer el desglose al cambiar de variación.
       'etiquetaBordado' => (string) $this->t('embroidery'),
     ];
@@ -204,7 +233,7 @@ class FichaHooks {
         ],
         '#weight' => 5,
       ];
-      foreach (['personalizacion_activa', 'field_texto_bordado', 'field_color_bordado'] as $clave) {
+      foreach (['personalizacion_activa', 'field_texto_bordado', 'field_fondo_bordado', 'field_color_bordado'] as $clave) {
         if (isset($form[$clave])) {
           $form['pro_perso'][$clave] = $form[$clave];
           unset($form[$clave]);
@@ -250,6 +279,10 @@ class FichaHooks {
           $valor['#attributes']['autocapitalize'] = 'characters';
         }
         unset($valor);
+      }
+      if (isset($form['pro_perso']['field_fondo_bordado'])
+        && ($form['pro_perso']['field_fondo_bordado']['#access'] ?? TRUE) !== FALSE) {
+        $this->vistealosFondos($form['pro_perso']['field_fondo_bordado']);
       }
       if (isset($form['pro_perso']['field_color_bordado'])) {
         // El formato solo se elige en los productos de inicial: en el D7 el
@@ -332,7 +365,103 @@ class FichaHooks {
       // La inclinación va en grados y vale para los dos modos: es colocación,
       // igual que la posición, no una decisión sobre la letra.
       'rotacion' => $lee('field_bordado_rotacion', 0.0),
+      // Ancho de la nube, también en % del ancho de la foto. Solo se usa en los
+      // productos que ofrecen fondo; en el resto la variable sobra y no estorba.
+      'fondo_ancho' => $lee('field_fondo_tamano', self::FONDO_ANCHO_DEFECTO),
     ];
+  }
+
+  /**
+   * Fondos del bordado que ofrece el producto, con lo que necesita el JS.
+   *
+   * La nube de las mochilas y las bolsas: el nombre no se borda sobre la tela
+   * sino dentro de una forma. De cada una hace falta la foto (que se cambia al
+   * elegir otro color), la caja de texto que cabe dentro de la silueta y el
+   * color del hilo con el que se borda encima, que puede no ser el del producto:
+   * sobre la nube marrón el nombre va en blanco y sobre la tela iría en rosa.
+   *
+   * @param \Drupal\commerce_product\Entity\ProductInterface $producto
+   *   El producto de la ficha.
+   * @param array<string, mixed> $variables
+   *   Variables del template (se anotan cache tags).
+   *
+   * @return array<int, array<string, mixed>>
+   *   Datos indexados por id de término, en el orden en que los ofrece el
+   *   producto: el primero es el que sale elegido de entrada.
+   */
+  protected function fondosDelProducto(ProductInterface $producto, array &$variables): array {
+    // El fondo es el de un NOMBRE bordado: una inicial es un parche que va
+    // sobre la tela, no dentro de una nube. La misma regla que el módulo, que
+    // es quien decide si el selector se enseña (PersonalizacionHooks).
+    if ($this->esModoInicial($producto) || !$producto->hasField('field_fondos_disponibles')) {
+      return [];
+    }
+    $lista = $producto->get('field_fondos_disponibles');
+    if (!$lista instanceof EntityReferenceFieldItemListInterface) {
+      return [];
+    }
+
+    $fondos = [];
+    foreach ($lista->referencedEntities() as $termino) {
+      if (!$termino instanceof TermInterface || !$termino->isPublished()) {
+        continue;
+      }
+      $media = $this->mediaFromField($termino, 'field_imagen');
+      $variables['#cache']['tags'] = Cache::mergeTags(
+        $variables['#cache']['tags'] ?? [],
+        $termino->getCacheTags()
+      );
+      $fondos[(int) $termino->id()] = [
+        'nombre' => (string) $termino->label(),
+        'foto' => $media !== NULL ? $this->urlDeEstilo($media, 'pronens_fondo') : NULL,
+        // Porcentajes de la propia foto del fondo: una nube no es un
+        // rectángulo y el nombre tiene que quedarse dentro de la panza.
+        'ancho' => $this->numero($termino, 'field_caja_ancho', self::CAJA_DEFECTO['ancho']),
+        'alto' => $this->numero($termino, 'field_caja_alto', self::CAJA_DEFECTO['alto']),
+        'color' => $this->colorDeCampo($termino, 'field_color'),
+      ];
+    }
+
+    // Un fondo sin foto no se puede pintar: se descarta en vez de dejar un
+    // hueco que el cliente elegiría a ciegas.
+    return array_filter($fondos, static fn (array $fondo) => $fondo['foto'] !== NULL);
+  }
+
+  /**
+   * URL de la imagen de un media en un estilo dado.
+   *
+   * Hace falta la URL suelta y no el render array porque el JS cambia el src al
+   * elegir otro fondo, y por eso mismo el estilo se genera aquí: si la primera
+   * petición del fichero derivado la hiciera el JS, el fondo tardaría en verse.
+   */
+  protected function urlDeEstilo(MediaInterface $media, string $estilo): ?string {
+    if (!$media->hasField('field_media_image')) {
+      return NULL;
+    }
+    $lista = $media->get('field_media_image');
+    $ficheros = $lista instanceof EntityReferenceFieldItemListInterface ? $lista->referencedEntities() : [];
+    $fichero = reset($ficheros);
+    if (!$fichero instanceof FileInterface) {
+      return NULL;
+    }
+    $imagen = $this->entityTypeManager->getStorage('image_style')->load($estilo);
+
+    return $imagen instanceof ImageStyleInterface
+      ? $imagen->buildUrl((string) $fichero->getFileUri())
+      : NULL;
+  }
+
+  /**
+   * Valor numérico de un campo, o el que se pase por defecto.
+   */
+  protected function numero(object $entidad, string $campo, float $defecto): float {
+    if (!$entidad instanceof FieldableEntityInterface
+      || !$entidad->hasField($campo)
+      || $entidad->get($campo)->isEmpty()) {
+      return $defecto;
+    }
+
+    return (float) $entidad->get($campo)->value;
   }
 
   /**
@@ -402,49 +531,94 @@ class FichaHooks {
    *   Lista de imágenes renderizables.
    */
   protected function fotos(array &$variables, ProductInterface $producto): array {
+    // Sobre qué foto va la vista previa del bordado: la que diga
+    // field_bordado_foto (el bordado va en una cara que la principal no
+    // enseña) y, sin ella, la primera. La misma elección que hace el widget
+    // del backoffice (MontajeHooks::fotoDeMontaje), que es lo que garantiza
+    // que lo colocado y lo que se ve coinciden.
+    $media_bordado = $this->mediaFromField($producto, 'field_bordado_foto');
+    $id_bordado = $media_bordado?->id();
+
     $fotos = [];
     foreach ($this->mediasFromFields($producto, ['field_imagen_principal', 'field_galeria']) as $media) {
-      $principal = $fotos === [];
-      $imagen = $this->buildStyledImage(
-        $media,
-        $principal ? 'pronens_ficha_principal' : 'pronens_ficha_miniatura',
-        $principal
-      );
-      if ($imagen === NULL) {
-        continue;
+      $foto = $this->foto($variables, $media, $fotos === [], $id_bordado);
+      if ($foto !== NULL) {
+        $fotos[] = $foto;
       }
-      $alt = (string) ($imagen['#alt'] ?? '');
-      // La cuadrícula recorta a 3:4; en el lightbox se ve entera. El enlace
-      // sirve además sin JS: lleva a la foto grande directamente.
-      $derivados = $this->datosDeEstilo($media, ['pronens_lightbox', 'pronens_zoom']);
-      $grande = $derivados['pronens_lightbox'] ?? NULL;
-      $lupa = $derivados['pronens_zoom'] ?? NULL;
-      // La versión de más resolución solo se ofrece cuando el original da para
-      // más de los 1400 del lightbox (215 medias pasan de 2600 y 74 andan entre
-      // medias); en el resto sería el mismo fichero pesando dos veces. La pide
-      // el JS únicamente cuando se acerca la foto, no al abrir el lightbox.
-      $hay_lupa = $grande !== NULL && $lupa !== NULL
-        && (int) ($lupa['ancho'] ?? 0) > (int) ($grande['ancho'] ?? 0);
-      $fotos[] = [
-        'imagen' => $imagen,
-        'grande' => $grande['url'] ?? NULL,
-        'lupa' => $hay_lupa ? $lupa['url'] : NULL,
-        // Los píxeles reales de la mejor versión que se va a servir: con ellos
-        // el JS sabe cuánto puede acercar sin emborronar. Ninguno de los dos
-        // estilos amplía, así que la mitad del catálogo no da para nada.
-        'ancho' => $hay_lupa ? $lupa['ancho'] : ($grande['ancho'] ?? NULL),
-        'alt' => $alt,
-        // La migración dejó el nombre del fichero como texto alternativo en las
-        // fotos del D7, y "Foto Cupcake 1 - copia.jpg" no es un pie de foto.
-        'pie' => $this->pareceNombreDeFichero($alt) ? '' : $alt,
-      ];
-      $variables['#cache']['tags'] = Cache::mergeTags($variables['#cache']['tags'] ?? [], $media->getCacheTags());
       if (\count($fotos) === self::MAX_FOTOS) {
         break;
       }
     }
+    // Si la foto del bordado no está entre las que se enseñan (no es de la
+    // galería, o quedó fuera del corte de seis), se añade al final: la vista
+    // previa necesita una foto donde vivir.
+    if ($media_bordado !== NULL && !array_filter($fotos, static fn (array $foto) => $foto['bordado'])) {
+      $foto = $this->foto($variables, $media_bordado, $fotos === [], $id_bordado);
+      if ($foto !== NULL) {
+        $fotos[] = $foto;
+      }
+    }
+    // Sin foto elegida, la vista previa va en la primera, como siempre.
+    if ($fotos !== [] && !array_filter($fotos, static fn (array $foto) => $foto['bordado'])) {
+      $fotos[0]['bordado'] = TRUE;
+    }
 
     return $fotos;
+  }
+
+  /**
+   * Una foto de la galería, con todo lo que pide la plantilla.
+   *
+   * @param array<string, mixed> $variables
+   *   Variables del template (se anotan cache tags).
+   * @param \Drupal\media\MediaInterface $media
+   *   El media con la foto.
+   * @param bool $principal
+   *   Si es la primera de la galería (estilo grande y carga eager).
+   * @param int|string|null $id_bordado
+   *   Id del media sobre el que va la vista previa del bordado, o NULL.
+   *
+   * @return array<string, mixed>|null
+   *   Datos de la foto, o NULL si el media no trae imagen.
+   */
+  protected function foto(array &$variables, MediaInterface $media, bool $principal, int|string|null $id_bordado): ?array {
+    $imagen = $this->buildStyledImage(
+      $media,
+      $principal ? 'pronens_ficha_principal' : 'pronens_ficha_miniatura',
+      $principal
+    );
+    if ($imagen === NULL) {
+      return NULL;
+    }
+    $alt = (string) ($imagen['#alt'] ?? '');
+    // La cuadrícula recorta a 3:4; en el lightbox se ve entera. El enlace
+    // sirve además sin JS: lleva a la foto grande directamente.
+    $derivados = $this->datosDeEstilo($media, ['pronens_lightbox', 'pronens_zoom']);
+    $grande = $derivados['pronens_lightbox'] ?? NULL;
+    $lupa = $derivados['pronens_zoom'] ?? NULL;
+    // La versión de más resolución solo se ofrece cuando el original da para
+    // más de los 1400 del lightbox (215 medias pasan de 2600 y 74 andan entre
+    // medias); en el resto sería el mismo fichero pesando dos veces. La pide
+    // el JS únicamente cuando se acerca la foto, no al abrir el lightbox.
+    $hay_lupa = $grande !== NULL && $lupa !== NULL
+      && (int) ($lupa['ancho'] ?? 0) > (int) ($grande['ancho'] ?? 0);
+    $variables['#cache']['tags'] = Cache::mergeTags($variables['#cache']['tags'] ?? [], $media->getCacheTags());
+
+    return [
+      'imagen' => $imagen,
+      'grande' => $grande['url'] ?? NULL,
+      'lupa' => $hay_lupa ? $lupa['url'] : NULL,
+      // Los píxeles reales de la mejor versión que se va a servir: con ellos
+      // el JS sabe cuánto puede acercar sin emborronar. Ninguno de los dos
+      // estilos amplía, así que la mitad del catálogo no da para nada.
+      'ancho' => $hay_lupa ? $lupa['ancho'] : ($grande['ancho'] ?? NULL),
+      'alt' => $alt,
+      // La migración dejó el nombre del fichero como texto alternativo en las
+      // fotos del D7, y "Foto Cupcake 1 - copia.jpg" no es un pie de foto.
+      'pie' => $this->pareceNombreDeFichero($alt) ? '' : $alt,
+      // Aquí vive la vista previa del bordado (una sola foto la lleva).
+      'bordado' => $id_bordado !== NULL && (string) $media->id() === (string) $id_bordado,
+    ];
   }
 
   /**
@@ -756,10 +930,51 @@ class FichaHooks {
   }
 
   /**
+   * Pone la foto de cada fondo junto a su radio.
+   *
+   * La nube se elige por su color, así que la etiqueta útil es la propia foto;
+   * el nombre se queda para lectores de pantalla, igual que en el selector de
+   * color de variación. El módulo ya ha recortado las opciones a los fondos que
+   * ofrece este producto y ha marcado el primero.
+   *
+   * @param array<string, mixed> $elemento
+   *   El elemento de formulario del campo, por referencia.
+   */
+  protected function vistealosFondos(array &$elemento): void {
+    if (!isset($elemento['widget']['#options'])) {
+      return;
+    }
+    $elemento['#attributes']['class'][] = 'pro-fondos';
+    $elemento['widget']['#title'] = $this->t('Background', [], ['context' => 'Embroidery']);
+    $elemento['widget']['#description'] = NULL;
+    $elemento['#description'] = NULL;
+
+    /** @var array<int, TermInterface> $terminos */
+    $terminos = $this->entityTypeManager->getStorage('taxonomy_term')
+      ->loadMultiple(array_keys($elemento['widget']['#options']));
+
+    foreach ($elemento['widget']['#options'] as $tid => $etiqueta) {
+      $termino = $terminos[$tid] ?? NULL;
+      if ($termino === NULL) {
+        continue;
+      }
+      $media = $this->mediaFromField($termino, 'field_imagen');
+      $foto = $media !== NULL ? $this->buildStyledImage($media, 'pronens_fondo_muestra') : NULL;
+      if ($foto === NULL) {
+        continue;
+      }
+      $elemento['widget']['#options'][$tid] = Markup::create(
+        '<span class="pro-fondo__foto">' . $this->renderer->render($foto) . '</span>'
+        . '<span class="pro-fondo__nombre">' . $etiqueta . '</span>'
+      );
+    }
+  }
+
+  /**
    * Color del hilo de un formato, en hexadecimal, o NULL.
    */
   protected function colorDeFormato(object $termino): ?string {
-    if (!$termino instanceof \Drupal\Core\Entity\FieldableEntityInterface) {
+    if (!$termino instanceof FieldableEntityInterface) {
       return NULL;
     }
     if (!$termino->hasField('field_color') || $termino->get('field_color')->isEmpty()) {
@@ -777,7 +992,7 @@ class FichaHooks {
    * tamaño de la ficha en pantallas normales, y de hecho no son letras.
    */
   protected function fotoUtil(?object $media): bool {
-    if (!$media instanceof \Drupal\media\MediaInterface || !$media->hasField('field_media_image')) {
+    if (!$media instanceof MediaInterface || !$media->hasField('field_media_image')) {
       return FALSE;
     }
     $item = $media->get('field_media_image')->first();
@@ -794,7 +1009,7 @@ class FichaHooks {
    */
   protected function coloresDeFormatos(): array {
     $colores = [];
-    /** @var array<int, \Drupal\taxonomy\TermInterface> $terminos */
+    /** @var array<int, TermInterface> $terminos */
     $terminos = $this->entityTypeManager->getStorage('taxonomy_term')
       ->loadByProperties(['vid' => 'color_letra', 'status' => 1]);
     foreach ($terminos as $termino) {
@@ -811,7 +1026,7 @@ class FichaHooks {
    * Hexadecimal de un campo de color, o NULL.
    */
   protected function colorDeCampo(object $entidad, string $campo): ?string {
-    if (!$entidad instanceof \Drupal\Core\Entity\FieldableEntityInterface
+    if (!$entidad instanceof FieldableEntityInterface
       || !$entidad->hasField($campo)
       || $entidad->get($campo)->isEmpty()) {
       return NULL;
@@ -837,7 +1052,7 @@ class FichaHooks {
     }
     $precios = [];
     foreach ($lista->referencedEntities() as $extra) {
-      if (!$extra instanceof \Drupal\Core\Entity\FieldableEntityInterface
+      if (!$extra instanceof FieldableEntityInterface
         || !$extra->hasField('field_precio')
         || $extra->get('field_precio')->isEmpty()) {
         continue;
@@ -899,7 +1114,7 @@ class FichaHooks {
       return;
     }
     $elemento['#attributes']['class'][] = 'pro-extras__lista';
-    /** @var array<int, \Drupal\taxonomy\TermInterface> $terminos */
+    /** @var array<int, TermInterface> $terminos */
     $terminos = $this->entityTypeManager->getStorage('taxonomy_term')
       ->loadMultiple(array_keys($elemento['widget']['#options']));
 

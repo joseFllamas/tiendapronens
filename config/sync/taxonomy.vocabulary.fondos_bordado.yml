@@ -1,0 +1,9 @@
+uuid: 5ecef9d3-d520-40ab-a4c3-5f9cc7a91dfa
+langcode: es
+status: true
+dependencies: {  }
+name: 'Fondos del bordado'
+vid: fondos_bordado
+description: 'La forma sobre la que se borda el nombre: la nube de las mochilas y las bolsas, en sus distintos colores.'
+weight: 0
+new_revision: false

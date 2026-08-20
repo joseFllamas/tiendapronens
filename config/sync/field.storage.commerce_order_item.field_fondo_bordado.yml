@@ -1,0 +1,20 @@
+uuid: 2de12d55-b352-45f3-8c45-6a460c2f0d08
+langcode: es
+status: true
+dependencies:
+  module:
+    - commerce_order
+    - taxonomy
+id: commerce_order_item.field_fondo_bordado
+field_name: field_fondo_bordado
+entity_type: commerce_order_item
+type: entity_reference
+settings:
+  target_type: taxonomy_term
+module: core
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

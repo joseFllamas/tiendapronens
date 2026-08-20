@@ -72,7 +72,7 @@ final class ConstructorPayloadEnvioTest extends UnitTestCase {
     $payload = $this->constructor->construir($this->envio());
 
     $this->assertSame([
-      'solicitante' => 'P123456',
+      'solicitante' => 'I123456',
       'canalEntrada' => '',
       'numEnvio' => '',
       'ref' => '2026-000123',
@@ -108,7 +108,7 @@ final class ConstructorPayloadEnvioTest extends UnitTestCase {
       'emailOtrs' => '',
 
       'observac' => 'Timbre 3r 2a',
-      'numBultos' => 1,
+      'numBultos' => '1',
       'kilos' => '0.42',
       'volumen' => '',
       'alto' => '',
@@ -124,13 +124,13 @@ final class ConstructorPayloadEnvioTest extends UnitTestCase {
         [
           'alto' => '0.15',
           'ancho' => '0.25',
-          'codBultoCli' => 1,
+          'codBultoCli' => '1',
           'codUnico' => '',
           'descripcion' => '',
-          'kilos' => 0,
+          'kilos' => '',
           'largo' => '0.35',
           'observaciones' => 'Timbre 3r 2a',
-          'orden' => 1,
+          'orden' => '1',
           'referencia' => '',
           'volumen' => '',
         ],
@@ -139,7 +139,7 @@ final class ConstructorPayloadEnvioTest extends UnitTestCase {
       'password' => '',
       'listaInformacionAdicional' => [
         [
-          'tipoEtiqueta' => '5',
+          'tipoEtiqueta' => '',
           'etiquetaPDF' => 'N',
           'posicionEtiqueta' => '',
           'hideSender' => '0',
@@ -245,13 +245,13 @@ final class ConstructorPayloadEnvioTest extends UnitTestCase {
       ],
     ));
 
-    $this->assertSame(3, $payload['numBultos']);
+    $this->assertSame('3', $payload['numBultos']);
     $this->assertSame('2.00', $payload['kilos']);
     $this->assertCount(3, $payload['listaBultos']);
     $this->assertSame('0.50', $payload['listaBultos'][0]['kilos']);
     $this->assertSame('1.25', $payload['listaBultos'][1]['kilos']);
     $this->assertSame('0.25', $payload['listaBultos'][2]['kilos']);
-    $this->assertSame([1, 2, 3], array_column($payload['listaBultos'], 'orden'));
+    $this->assertSame(['1', '2', '3'], array_column($payload['listaBultos'], 'orden'));
   }
 
   /**
@@ -266,10 +266,10 @@ final class ConstructorPayloadEnvioTest extends UnitTestCase {
       bultos: [new Bulto(), new Bulto()],
     ));
 
-    $this->assertSame(2, $payload['numBultos']);
+    $this->assertSame('2', $payload['numBultos']);
     $this->assertSame('1.80', $payload['kilos']);
-    $this->assertSame(0, $payload['listaBultos'][0]['kilos']);
-    $this->assertSame(0, $payload['listaBultos'][1]['kilos']);
+    $this->assertSame('', $payload['listaBultos'][0]['kilos']);
+    $this->assertSame('', $payload['listaBultos'][1]['kilos']);
   }
 
   /**
@@ -357,7 +357,7 @@ final class ConstructorPayloadEnvioTest extends UnitTestCase {
   public function testSinBultosSeDeclaraUno(): void {
     $payload = $this->constructor->construir($this->envio(bultos: []));
 
-    $this->assertSame(1, $payload['numBultos']);
+    $this->assertSame('1', $payload['numBultos']);
     $this->assertCount(1, $payload['listaBultos']);
     $this->assertSame('0', $payload['listaBultos'][0]['alto']);
   }
@@ -409,6 +409,7 @@ final class ConstructorPayloadEnvioTest extends UnitTestCase {
   ): DatosEnvio {
     return new DatosEnvio(
       codigoCliente: '123456',
+      solicitante: 'I123456',
       referencia: '2026-000123',
       fecha: new \DateTimeImmutable('2026-07-29 10:00:00'),
       remitente: $remitente ?? new DatosRemitente(

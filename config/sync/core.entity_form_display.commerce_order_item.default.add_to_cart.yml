@@ -8,6 +8,7 @@ dependencies:
     - field.field.commerce_order_item.default.field_color_bordado
     - field.field.commerce_order_item.default.field_extras
     - field.field.commerce_order_item.default.field_extras_texto
+    - field.field.commerce_order_item.default.field_fondo_bordado
     - field.field.commerce_order_item.default.field_fuente
     - field.field.commerce_order_item.default.field_posicion_bordado
     - field.field.commerce_order_item.default.field_texto_bordado
@@ -44,6 +45,12 @@ content:
     settings:
       size: 60
       placeholder: ''
+    third_party_settings: {  }
+  field_fondo_bordado:
+    type: options_buttons
+    weight: 3
+    region: content
+    settings: {  }
     third_party_settings: {  }
   field_texto_bordado:
     type: string_textfield

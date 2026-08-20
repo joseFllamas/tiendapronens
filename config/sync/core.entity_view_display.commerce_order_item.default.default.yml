@@ -7,6 +7,7 @@ dependencies:
     - field.field.commerce_order_item.default.field_color_bordado
     - field.field.commerce_order_item.default.field_extras
     - field.field.commerce_order_item.default.field_extras_texto
+    - field.field.commerce_order_item.default.field_fondo_bordado
     - field.field.commerce_order_item.default.field_fuente
     - field.field.commerce_order_item.default.field_posicion_bordado
     - field.field.commerce_order_item.default.field_texto_bordado
@@ -77,6 +78,7 @@ hidden:
   field_color_bordado: true
   field_extras: true
   field_extras_texto: true
+  field_fondo_bordado: true
   field_fuente: true
   field_posicion_bordado: true
   field_texto_bordado: true

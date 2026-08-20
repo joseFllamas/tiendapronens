@@ -34,20 +34,25 @@ interface CorreosExpressClientInterface {
    * @param string $expedicion
    *   Número de expedición devuelto por el alta.
    * @param int $tipoEtiqueta
-   *   1 para etiqueta térmica o adhesiva, 3 para hoja A4 con tres etiquetas.
+   *   Formato oficial: 1 PDF de 10x15, 2 ZPL para impresora de etiquetas,
+   *   3 PDF adhesivo de tres por hoja, 4 PDF de medio folio, 5 PDF térmico.
    * @param int $posicionEnHoja
-   *   Posición de la primera etiqueta en la hoja, contando desde 1. Se ignora
-   *   con el tipo 3, que la API exige en la primera posición.
+   *   Posición de la primera etiqueta en la hoja, contando desde 1. Solo
+   *   aplica a los tipos 3 y 4; en el resto se ignora.
    * @param string $logoBase64
    *   Logotipo del cliente para imprimir en la etiqueta, en base64.
+   * @param bool $ocultarRemitente
+   *   Si el remitente no se imprime en la etiqueta.
+   * @param string $textoRemitenteAlternativo
+   *   Remitente alternativo, que se muestra cuando se oculta el real.
    *
    * @return \Drupal\pronens_correos_express\Api\RespuestaEtiqueta
-   *   Las etiquetas en PDF.
+   *   Las etiquetas, en PDF o en ZPL según el tipo.
    *
    * @throws \Drupal\pronens_correos_express\Api\CorreosExpressException
    *   Si faltan credenciales, si falla la red o si no llega ninguna etiqueta.
    */
-  public function obtenerEtiquetas(string $expedicion, int $tipoEtiqueta = 1, int $posicionEnHoja = 1, string $logoBase64 = ''): RespuestaEtiqueta;
+  public function obtenerEtiquetas(string $expedicion, int $tipoEtiqueta = 1, int $posicionEnHoja = 1, string $logoBase64 = '', bool $ocultarRemitente = FALSE, string $textoRemitenteAlternativo = ''): RespuestaEtiqueta;
 
   /**
    * Consulta el seguimiento de una expedición.

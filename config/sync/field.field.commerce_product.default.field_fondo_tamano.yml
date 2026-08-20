@@ -1,0 +1,25 @@
+uuid: cff3b95e-379d-4807-9e7f-df3a645d18e0
+langcode: es
+status: true
+dependencies:
+  config:
+    - commerce_product.commerce_product_type.default
+    - field.storage.commerce_product.field_fondo_tamano
+id: commerce_product.default.field_fondo_tamano
+field_name: field_fondo_tamano
+entity_type: commerce_product
+bundle: default
+label: 'Ancho del fondo (%)'
+description: 'Lo que mide la nube de ancho, en porcentaje del ancho de la foto. El alto sale solo de la proporción de la foto del fondo. Sin valor se usa el 34 %.'
+required: false
+translatable: false
+default_value:
+  -
+    value: 34.0
+default_value_callback: ''
+settings:
+  min: null
+  max: null
+  prefix: ''
+  suffix: ''
+field_type: decimal

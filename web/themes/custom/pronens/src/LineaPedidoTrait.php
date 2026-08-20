@@ -64,6 +64,7 @@ trait LineaPedidoTrait {
       'foto' => $this->fotoDeLinea($linea, $metadatos),
       'opciones' => $this->opcionesDeLinea($linea),
       'bordado' => $this->bordadoDeLinea($linea),
+      'fondo' => $this->fondoDeLinea($linea),
       'cantidad' => (int) $linea->getQuantity(),
       // Importe de línea de Commerce, que NO incluye los ajustes: así cuadra
       // con el subtotal, que tampoco los incluye y los enseña como línea
@@ -128,6 +129,23 @@ trait LineaPedidoTrait {
     }
 
     return (string) $linea->get('field_texto_bordado')->value;
+  }
+
+  /**
+   * Fondo sobre el que va el bordado de una línea, o NULL.
+   *
+   * La nube de las mochilas y las bolsas. Hay que enseñarla en la línea porque
+   * es una elección del cliente que cambia lo que sale del taller, igual que el
+   * texto: sin esto, un pedido de dos bolsas iguales con nubes distintas se
+   * leería como dos líneas idénticas.
+   */
+  protected function fondoDeLinea(OrderItemInterface $linea): ?string {
+    if (!$linea->hasField('field_fondo_bordado') || $linea->get('field_fondo_bordado')->isEmpty()) {
+      return NULL;
+    }
+    $fondo = $linea->get('field_fondo_bordado')->entity;
+
+    return $fondo === NULL ? NULL : (string) $this->etiqueta($fondo);
   }
 
   /**

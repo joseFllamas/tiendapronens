@@ -55,12 +55,15 @@ final class MapeadorEnvio {
     $configuracion = $this->configFactory->get('pronens_correos_express.settings');
     $etiqueta = $configuracion->get('etiqueta');
 
+    $credenciales = $this->repositorioCredenciales->cargar();
+
     return new DatosEnvio(
-      codigoCliente: $this->repositorioCredenciales->cargar()->codigoCliente,
+      codigoCliente: $credenciales->codigoCliente,
+      solicitante: $credenciales->solicitante(),
       referencia: (string) ($pedido?->getOrderNumber() ?? $pedido?->id() ?? ''),
       fecha: (new \DateTimeImmutable())->setTimestamp($this->time->getRequestTime()),
       remitente: $this->remitente($envio),
-      destinatario: $this->destinatario($envio),
+      destinatario: $this->destinatario($envio, $opciones),
       servicio: $opciones->servicio,
       pesoTotal: $this->pesoTotal($envio, $opciones),
       bultos: $this->bultos($envio, $opciones),
@@ -111,9 +114,16 @@ final class MapeadorEnvio {
   /**
    * Datos del cliente como destinatario.
    */
-  private function destinatario(ShipmentInterface $envio): DatosDestinatario {
+  private function destinatario(ShipmentInterface $envio, OpcionesExpedicion $opciones): DatosDestinatario {
     $perfil = $envio->getShippingProfile();
     $direccion = $this->direccionPerfil($perfil);
+
+    // La API exige el teléfono del destinatario. Los pedidos anteriores al
+    // campo del checkout no lo traen, así que el operario puede teclearlo en el
+    // alta y ese valor manda.
+    $telefono = $opciones->telefonoDestinatario !== ''
+      ? $opciones->telefonoDestinatario
+      : $this->valorPerfil($perfil, self::CAMPO_TELEFONO);
 
     return new DatosDestinatario(
       nombre: (string) ($direccion?->getGivenName() ?? ''),
@@ -127,7 +137,7 @@ final class MapeadorEnvio {
       apellidos: (string) ($direccion?->getFamilyName() ?? ''),
       empresa: (string) ($direccion?->getOrganization() ?? ''),
       documento: $this->valorPerfil($perfil, self::CAMPO_DOCUMENTO),
-      telefono: $this->valorPerfil($perfil, self::CAMPO_TELEFONO),
+      telefono: $telefono,
       correo: (string) ($envio->getOrder()?->getEmail() ?? ''),
     );
   }

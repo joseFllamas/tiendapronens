@@ -1,0 +1,21 @@
+uuid: 3b1f2c0a-9d4e-4a71-8f2c-1a6b7c5d9e30
+langcode: es
+status: true
+dependencies: {  }
+name: pronens_fondo
+label: 'Pronens fondo del bordado (máx 600, sin recortar ni ampliar)'
+effects:
+  4f2a1d63-5c87-4b90-a1e2-6d3f8c7b2a41:
+    uuid: 4f2a1d63-5c87-4b90-a1e2-6d3f8c7b2a41
+    id: image_scale
+    weight: 0
+    data:
+      width: 600
+      height: 600
+      upscale: false
+  9c7e4b12-3a65-4d08-b7f1-2e5a9d6c8b73:
+    uuid: 9c7e4b12-3a65-4d08-b7f1-2e5a9d6c8b73
+    id: image_convert
+    weight: 1
+    data:
+      extension: webp

@@ -23,8 +23,16 @@ final readonly class EstadoSeguimiento {
    *   Elemento de la lista de estados.
    */
   public static function desdeRespuesta(array $datos): self {
+    // El código numérico llega en codigoEstado. La especificación oficial solo
+    // documenta codEstado, que en la práctica trae el mismo número, así que se
+    // acepta como reserva por si una versión de la API deja de mandar el otro.
+    $codigo = $datos['codigoEstado'] ?? NULL;
+    if (!is_numeric($codigo)) {
+      $codigo = is_numeric($datos['codEstado'] ?? NULL) ? $datos['codEstado'] : 0;
+    }
+
     return new self(
-      (int) ($datos['codigoEstado'] ?? 0),
+      (int) $codigo,
       trim((string) ($datos['codEstado'] ?? '')),
       trim((string) ($datos['descEstado'] ?? '')),
       self::fecha(

@@ -298,7 +298,7 @@ final class ClienteFalso implements CorreosExpressClientInterface {
   /**
    * {@inheritdoc}
    */
-  public function obtenerEtiquetas(string $expedicion, int $tipoEtiqueta = 1, int $posicionEnHoja = 1, string $logoBase64 = ''): RespuestaEtiqueta {
+  public function obtenerEtiquetas(string $expedicion, int $tipoEtiqueta = 1, int $posicionEnHoja = 1, string $logoBase64 = '', bool $ocultarRemitente = FALSE, string $textoRemitenteAlternativo = ''): RespuestaEtiqueta {
     return new RespuestaEtiqueta(["%PDF-1.4\n%%EOF\n"]);
   }
 

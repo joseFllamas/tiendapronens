@@ -33,19 +33,27 @@ final class Normalizador {
   /**
    * Longitudes máximas de los campos de texto del alta.
    *
-   * Son valores conservadores: la especificación oficial de la API no es
-   * pública y la integración de WooCommerce no trunca nada, lo que produce
-   * errores a mitad de un lote en lugar de un dato recortado. Hay que
-   * confirmarlos con Correos Express y ajustarlos aquí, en un solo sitio.
+   * Son las de la columna Formato de la especificación oficial
+   * (DC_SP_WS_GrabacionEnviosRest v03.19). Ojo: el catálogo de errores del
+   * mismo documento menciona límites más cortos en la dirección, la población
+   * y el correo; son textos sin actualizar de versiones anteriores, y la
+   * columna Formato es la que se revisó en la 03.09.
    */
-  public const MAX_NOMBRE = 60;
-  public const MAX_DIRECCION = 100;
-  public const MAX_POBLACION = 50;
+  public const MAX_NOMBRE = 40;
+  public const MAX_DIRECCION = 300;
+  public const MAX_POBLACION = 40;
   public const MAX_CONTACTO = 40;
-  public const MAX_DOCUMENTO = 15;
-  public const MAX_CORREO = 60;
+  public const MAX_DOCUMENTO = 20;
+  public const MAX_CORREO = 75;
   public const MAX_TELEFONO = 15;
-  public const MAX_REFERENCIA = 20;
+  public const MAX_REFERENCIA = 30;
+
+  /**
+   * Longitud máxima de las observaciones de un bulto.
+   *
+   * Más corta que la del envío: la especificación da 80 al envío y 50 al bulto.
+   */
+  public const MAX_OBSERVACIONES_BULTO = 50;
 
   /**
    * Peso mínimo que acepta la API, en kilos.

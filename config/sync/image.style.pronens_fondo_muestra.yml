@@ -1,0 +1,21 @@
+uuid: 6a8d3e17-2b94-4c50-9e6f-7d1a4b8c2f95
+langcode: es
+status: true
+dependencies: {  }
+name: pronens_fondo_muestra
+label: 'Pronens muestra de fondo (máx 200, sin recortar ni ampliar)'
+effects:
+  1e6b9a48-7c25-4f83-b0d9-3a8e2c6f4d17:
+    uuid: 1e6b9a48-7c25-4f83-b0d9-3a8e2c6f4d17
+    id: image_scale
+    weight: 0
+    data:
+      width: 200
+      height: 200
+      upscale: false
+  8d5c2f70-4a91-4e63-8b27-5f9d1c3a7e64:
+    uuid: 8d5c2f70-4a91-4e63-8b27-5f9d1c3a7e64
+    id: image_convert
+    weight: 1
+    data:
+      extension: webp

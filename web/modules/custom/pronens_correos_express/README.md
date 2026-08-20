@@ -8,17 +8,36 @@ No hay módulo contrib de Correos Express para Drupal, ni para 10 ni para 11. Lo
 más cercano, `commerce_shipping_carrier`, es alpha y solo genera enlaces de
 seguimiento con patrones de URL: no habla con ninguna API.
 
-La especificación de la API no es pública. Todo lo que hace este módulo está
-transcrito de la integración oficial de Correos para WooCommerce, que estaba en
-`correosoficial/` en la raíz del repo (sobre todo
-`classes/Apis/CorreosOficialCEXRest.php` y `install.php`).
+La especificación de la API es la documentación oficial que Correos Express
+entregó por Google Drive (carpeta "WS ESP": GrabacionEnviosRest v03.19,
+apiRestEtiquetaTransporte v01.04, apiRestSeguimientoEnviosk8s v01.06 y la hoja de
+códigos de producto). Los documentos son propiedad de Correos Express y no se
+versionan en el repo. Como referencia de comportamiento sirve también la
+integración oficial de Correos para WooCommerce (`correosoficial/` en la raíz),
+que fue la primera fuente; donde las dos discrepan, manda el documento oficial, y
+las discrepancias encontradas están corregidas y anotadas en el código:
+
+- El campo `solicitante` del alta es una credencial propia que entrega Correos
+  Express (la de esta tienda empieza por I), no "P + código de cliente" como
+  derivaba WooCommerce. El módulo tiene el campo y conserva la derivación como
+  reserva si se deja vacío.
+- El ZPL **sí existe** (tipo de etiqueta 2), al contrario de lo que hacía pensar
+  el plugin de WooCommerce, que solo usaba los tipos 1 y 3.
+- Solo el Internacional Estándar (90) es monobulto; el Express (91) admite
+  varios bultos.
+- El Paq 24 es "peninsular, Portugal, Andorra, Gibraltar y entre islas": **no
+  cubre península a Baleares**, que va con Islas Express.
+- Existen cuatro productos de Tarifa Ibérica que WooCommerce no tenía: Baleares
+  Express (66), Canarias Express (67), Canarias Aéreo (68) y Canarias
+  Marítimo (69).
+- Los límites de longitud de los campos ya son los oficiales, no estimaciones.
 
 ## Cómo se usa
 
 1. **Credenciales**: `/admin/commerce/config/correos-express/credenciales`. Son
-   tres: código de cliente, usuario y contraseña. Se guardan en `State`, no en
-   configuración, así que no viajan en un `drush cex` ni acaban en git, y cada
-   entorno tiene las suyas.
+   las que entrega Correos Express: CODIGO CLIENTE, CODIGO SOLICITANTE, USUARIO
+   y CONTRASENA. Se guardan en `State`, no en configuración, así que no viajan
+   en un `drush cex` ni acaban en git, y cada entorno tiene las suyas.
 2. **Ajustes**: `/admin/commerce/config/correos-express`. Entorno, datos del
    remitente que la tienda no guarda (NIF, contacto, teléfono), formato de
    etiqueta, pesos estimados y sincronización del seguimiento.
@@ -27,10 +46,17 @@ transcrito de la integración oficial de Correos para WooCommerce, que estaba en
 4. **Dar de alta varios**: en `/admin/commerce/orders`, se seleccionan pedidos y
    se elige «Generar expediciones de Correos Express» en el desplegable. Lleva a
    una tabla con una fila por envío antes de crear nada.
-5. **Etiqueta**: operación «Etiqueta CEX». Con más de un bulto se descarga un ZIP
-   con una etiqueta por bulto.
+5. **Etiqueta**: operación «Etiqueta CEX». Cinco formatos en los ajustes: PDF de
+   10x15, PDF térmico, ZPL para impresoras Zebra (se descarga un `.zpl` que se
+   manda a la impresora tal cual), PDF adhesivo de tres por hoja y PDF de medio
+   folio. Con más de un bulto en PDF se descarga un ZIP con una etiqueta por
+   bulto; en ZPL, un único fichero con todas.
 6. **Seguimiento**: se sincroniza por cron. El enlace público aparece solo en la
-   ficha del envío.
+   ficha del envío y en la página del pedido del cliente. Cuando el seguimiento
+   detecta que el transportista ha recogido el paquete, el envío pasa a
+   «enviado» y esa transición dispara el correo «Tu pedido ya está en camino»
+   de `pronens_mail`, con el número de seguimiento y el botón de seguimiento.
+   Probado de extremo a extremo contra Mailpit.
 
 ## El entorno de preproducción está activo por defecto
 
@@ -52,7 +78,7 @@ y el enlace de seguimiento aparece sin tocar el tema.
 | id | Método | Producto de Correos Express | Código |
 |---|---|---|---|
 | 1 | Envío España peninsular, 5,95 € | Paq 24 | 63 |
-| 2 | Envío Islas Baleares, 7,95 € | Paq 24 | 63 |
+| 2 | Envío Islas Baleares, 7,95 € | Islas Express | 26 |
 | 3 | Envío Canarias, Ceuta y Melilla, 12 € | Islas Express | 26 |
 | 4 | Envío Portugal, 9,95 € | Paq 24 | 63 |
 | 5 | Envío resto de la Unión Europea, 15 € | Internacional Express | 91 |
@@ -62,11 +88,17 @@ tarifa plana: el primero no lo transporta nadie y el segundo es un descuento
 comercial, no otro transportista. El tema lee el id 7 para la barra de progreso
 del carrito, así que no conviene tocarlo.
 
+**Por qué el método 2 usa Islas Express y no Paq 24**: la hoja oficial de códigos
+define el Paq 24 como "peninsular, Portugal, Andorra, Gibraltar y entre islas".
+Un envío de Barcelona a Palma no está cubierto; Islas Express ("Baleares
+marítimo") sí. Si el contrato incluye la Tarifa Ibérica, la alternativa es
+Baleares Express (66), que también está en el desplegable.
+
 **Por qué el método 5 usa Internacional Express (91) y no Internacional Estándar
 (90)**: el 90 solo llega a 28 países, y entre ellos no están Chipre ni Malta, que
-sí están en las condiciones del método. Con el 90 esos clientes se quedarían sin
-opción de envío en el checkout. Conviene confirmar con el comercial cuál de los
-dos está contratado; cambiarlo es un desplegable en
+sí están en las condiciones del método; además es siempre monobulto. Con el 90
+esos clientes se quedarían sin opción de envío en el checkout. Conviene confirmar
+con el comercial cuál de los dos está contratado; cambiarlo es un desplegable en
 `/admin/commerce/config/shipping-methods`.
 
 El botón de expedición **no depende** del método de envío elegido: un pedido con
@@ -126,11 +158,13 @@ Ojo con las colchonetas, donde el error no es de gramos sino de kilos.
   anulación borrando su fila local, lo que esconde un envío que el transportista
   va a facturar. Aquí no hay botón, y la interfaz dice que hay que llamar al
   comercial.
-- **Puntos de recogida** (Paq 24 Oficina Elegida y PaqPunto): el catálogo y el
-  alta ya los soportan, pero el checkout no ofrece el selector. Falta el panel de
-  elección, y el listado de oficinas **solo existe en producción**, así que no se
-  puede probar en preproducción. El mapa exigiría además infraestructura de
-  consentimiento de cookies que el sitio no tiene.
+- **Puntos de recogida** (oficina, PaqPunto y Citypaq): el catálogo y el alta ya
+  los soportan, pero el checkout no ofrece el selector. Ojo al implementarlo: la
+  especificación v03.19 dice que la entrega en oficina también va con el
+  producto 18 (PaqPunto) y el punto en `idPtoExterno`, no con el producto 44 y
+  `codDirecDestino` como hacía WooCommerce. El listado de oficinas **solo existe
+  en producción**, así que no se puede probar en preproducción, y el mapa
+  exigiría infraestructura de consentimiento de cookies que el sitio no tiene.
 - **Manifiesto**: no hay endpoint, lo genera Correos Express.
 - **Gestión de recogidas**: la API solo permite crear una recogida dentro del
   alta, y eso sí está. No hay pantalla de gestión de recogidas.
@@ -138,8 +172,6 @@ Ojo con las colchonetas, donde el error no es de gramos sino de kilos.
   tienda cobra por pasarela.
 - **Aduanas**: el payload no tiene campos para eso. El formulario avisa cuando el
   destino la requiere (Canarias, Ceuta, Melilla o fuera del ámbito nacional).
-- **ZPL**: Correos Express solo devuelve PDF. La etiqueta «térmica» es un PDF del
-  tamaño de la etiqueta.
 - **PDF fusionado de varias etiquetas**: concatenar PDF no produce un documento
   válido, así que con más de un bulto se entrega un ZIP. Fusionar de verdad
   necesitaría una librería de PDF y solo se justifica si el taller pide imprimir
@@ -147,26 +179,26 @@ Ojo con las colchonetas, donde el error no es de gramos sino de kilos.
 
 ## Pendiente de confirmar con el cliente
 
-1. **Qué productos tiene contratados.** El mapeo de la tabla es razonable, no un
-   dato. En particular, Internacional Express (91) frente a Internacional
-   Estándar (90) para el método 5.
+1. **Qué productos tiene contratados.** El error 140 de la API ("cliente: no
+   tiene producto contratado") lo dirá en la primera prueba, pero conviene
+   confirmarlo antes: en particular Islas Express (26) para Baleares y Canarias,
+   e Internacional Express (91) para la UE. Si el contrato es de Tarifa Ibérica,
+   los productos son otros (66 a 69, ya disponibles en el desplegable).
 2. **Datos del remitente**: NIF, contacto y teléfono. La tienda no los guarda.
 3. **Pesos reales** de una unidad de cada tipo de producto.
-4. **Formato de etiqueta e impresora**: etiqueta suelta o hoja A4 de tres. Si
-   quiere su logotipo en la etiqueta.
+4. **Formato de etiqueta e impresora**: PDF, térmica o ZPL. Si quiere su
+   logotipo en la etiqueta.
 5. **Recogida diaria concertada o a demanda**, para saber si los campos de
    recogida sobran.
-6. **Longitudes máximas exactas** de los campos de texto de la API. Las de
-   `Normalizador` son conservadoras y hay que ajustarlas con la especificación
-   oficial: truncar tarde produce un rechazo a mitad de un lote de 40 pedidos.
-7. **Andorra**: el comentario de la integración oficial dice que se trata como
-   nacional pero su código la manda como internacional. Además hoy `AD` no está
-   en ningún método de envío, así que un cliente andorrano no puede terminar la
-   compra.
-8. **Correo de confirmación de envío**: hoy el tipo de envío tiene
-   `sendConfirmation: false`, así que el cliente no recibe nada cuando su pedido
-   sale. Activarlo con el enlace de seguimiento es mucho valor por poco código,
-   pero la plantilla de contrib está en inglés.
+6. **Andorra**: la hoja oficial confirma que el Paq 24 llega a Andorra, pero hoy
+   `AD` no está en ningún método de envío, así que un cliente andorrano no puede
+   terminar la compra. Es una decisión de negocio.
+7. ~~Correo de confirmación de envío~~ **Resuelto**: el aviso «Tu pedido ya
+   está en camino» lo manda `pronens_mail` (`EnvioMailer`, política
+   `pronens_envio.aviso`) al aplicarse la transición `ship`, que es la que este
+   módulo aplica desde el seguimiento. El `sendConfirmation` del tipo de envío
+   de contrib debe **seguir en `false`**: activarlo mandaría un segundo correo,
+   en inglés y sin la maqueta de la tienda, en la misma transición.
 
 ## Pruebas
 

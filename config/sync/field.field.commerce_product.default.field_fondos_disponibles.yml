@@ -1,0 +1,25 @@
+uuid: ca8c6bac-5108-4e4a-bcd7-692114fb8daf
+langcode: es
+status: true
+dependencies:
+  config:
+    - commerce_product.commerce_product_type.default
+    - field.storage.commerce_product.field_fondos_disponibles
+    - taxonomy.vocabulary.fondos_bordado
+id: commerce_product.default.field_fondos_disponibles
+field_name: field_fondos_disponibles
+entity_type: commerce_product
+bundle: default
+label: 'Fondos del bordado que ofrece'
+description: 'Sobre qué fondos se puede bordar el nombre en este producto. Si no marcas ninguno, el nombre se borda directamente sobre la tela y en la ficha no aparece el selector. El primero marcado es el que sale elegido de entrada.'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:taxonomy_term'
+  handler_settings:
+    target_bundles:
+      fondos_bordado: fondos_bordado
+    auto_create: false
+field_type: entity_reference

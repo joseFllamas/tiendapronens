@@ -45,6 +45,7 @@ final class RepositorioCredenciales {
       is_string($guardado['codigo_cliente'] ?? NULL) ? $guardado['codigo_cliente'] : '',
       is_string($guardado['usuario'] ?? NULL) ? $guardado['usuario'] : '',
       is_string($guardado['contrasena'] ?? NULL) ? $guardado['contrasena'] : '',
+      is_string($guardado['codigo_solicitante'] ?? NULL) ? $guardado['codigo_solicitante'] : '',
     );
   }
 
@@ -56,6 +57,7 @@ final class RepositorioCredenciales {
       'codigo_cliente' => $credenciales->codigoCliente,
       'usuario' => $credenciales->usuario,
       'contrasena' => $credenciales->contrasena,
+      'codigo_solicitante' => $credenciales->codigoSolicitante,
     ]);
   }
 

@@ -20,13 +20,15 @@ use Drupal\physical\WeightUnit;
 final class ConstructorPayloadEnvio {
 
   /**
-   * Tipo de etiqueta que la API espera dentro del alta.
+   * Tipo de etiqueta que se pide dentro del alta: ninguno.
    *
-   * No es el formato de impresión: ese se elige al pedir la etiqueta, en su
-   * propia llamada. Aquí siempre va este valor, igual que en la integración
-   * oficial.
+   * Con el campo vacío la API no genera etiqueta en el alta, que es lo que
+   * muestra el ejemplo oficial de grabación normal. La etiqueta se pide después
+   * en su propia llamada, que permite elegir formato y reimprimir. La
+   * integración de WooCommerce mandaba aquí un '5' y descartaba la etiqueta
+   * térmica que la API le devolvía en cada alta.
    */
-  public const TIPO_ETIQUETA_ALTA = '5';
+  public const TIPO_ETIQUETA_ALTA = '';
 
   /**
    * Firma de la integración.
@@ -57,9 +59,10 @@ final class ConstructorPayloadEnvio {
     $bultos = $this->listaBultos($envio, $observaciones);
 
     $payload = [
-      // El alta es la única operación que pide el código de cliente con una P
-      // delante. En el resto de campos va tal cual.
-      'solicitante' => 'P' . $envio->codigoCliente,
+      // Identificador propio del servicio web, entregado por Correos Express
+      // junto al resto de credenciales. No confundir con el código de cliente,
+      // que viaja en codRte.
+      'solicitante' => $envio->solicitante,
       'canalEntrada' => '',
       // Lo asigna Correos Express, nunca la integración.
       'numEnvio' => '',
@@ -103,7 +106,7 @@ final class ConstructorPayloadEnvio {
       'emailOtrs' => '',
 
       'observac' => $observaciones,
-      'numBultos' => $envio->numeroBultos(),
+      'numBultos' => (string) $envio->numeroBultos(),
       'kilos' => $this->kilosTotales($envio),
       'volumen' => '',
       // Las medidas de la raíz van siempre vacías: las que cuentan son las de
@@ -154,18 +157,19 @@ final class ConstructorPayloadEnvio {
       $lista[] = [
         'alto' => $this->normalizador->metros($bulto->alto),
         'ancho' => $this->normalizador->metros($bulto->ancho),
-        'codBultoCli' => $orden,
+        'codBultoCli' => (string) $orden,
         // Lo devuelve la API en la respuesta del alta, uno por bulto.
         'codUnico' => '',
         'descripcion' => '',
-        // Con un peso único para toda la expedición, cada bulto va a cero y el
-        // total viaja en la raíz. Es lo que espera la API.
-        'kilos' => $pesosIndividuales ? $this->normalizador->kilos($bulto->peso) : 0,
+        // Con un peso único para toda la expedición, cada bulto va vacío y el
+        // total viaja en la raíz, que es lo que muestra el ejemplo oficial.
+        'kilos' => $pesosIndividuales ? $this->normalizador->kilos($bulto->peso) : '',
         'largo' => $this->normalizador->metros($bulto->largo),
-        'observaciones' => $bulto->observaciones !== ''
-          ? $this->normalizador->observaciones($bulto->observaciones)
-          : $observacionesEnvio,
-        'orden' => $orden,
+        'observaciones' => $this->normalizador->texto(
+          $bulto->observaciones !== '' ? $bulto->observaciones : $observacionesEnvio,
+          Normalizador::MAX_OBSERVACIONES_BULTO,
+        ),
+        'orden' => (string) $orden,
         'referencia' => '',
         'volumen' => '',
       ];

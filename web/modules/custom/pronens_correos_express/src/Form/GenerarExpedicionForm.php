@@ -106,7 +106,7 @@ final class GenerarExpedicionForm extends FormBase {
       $this->messenger()->addWarning($this->t('Este destino requiere documentación aduanera. La API no la gestiona: hay que tramitarla con Correos Express.'));
     }
     if ($this->telefono($envio) === '') {
-      $this->messenger()->addWarning($this->t('Este envío no tiene teléfono del destinatario, así que el cliente no recibirá el aviso por SMS y el repartidor no podrá llamar.'));
+      $this->messenger()->addWarning($this->t('Este pedido no trae teléfono del destinatario y Correos Express lo exige: sin él, el alta se rechaza. Pídeselo al cliente y tecléalo abajo.'));
     }
 
     $form['servicio'] = [
@@ -133,6 +133,13 @@ final class GenerarExpedicionForm extends FormBase {
       '#default_value' => $this->pesoEnKilos($envio),
       '#required' => TRUE,
       '#description' => $this->t('Sale del peso de los artículos más la tara del embalaje. Cámbialo si la báscula dice otra cosa: Correos Express factura por peso medido.'),
+    ];
+    $form['telefono_destinatario'] = [
+      '#type' => 'tel',
+      '#title' => $this->t('Teléfono del destinatario'),
+      '#default_value' => $this->telefono($envio),
+      '#required' => TRUE,
+      '#description' => $this->t('Correos Express lo exige: lo usa para el aviso por SMS y para que el repartidor llame.'),
     ];
     $form['observaciones'] = [
       '#type' => 'textfield',
@@ -268,6 +275,7 @@ final class GenerarExpedicionForm extends FormBase {
       observaciones: (string) $form_state->getValue('observaciones'),
       entregaSabado: (bool) $form_state->getValue('entrega_sabado'),
       recogida: $this->recogida($form_state),
+      telefonoDestinatario: trim((string) $form_state->getValue('telefono_destinatario')),
     );
 
     try {

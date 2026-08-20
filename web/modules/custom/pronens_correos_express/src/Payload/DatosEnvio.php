@@ -21,6 +21,9 @@ final readonly class DatosEnvio {
    *
    * @param string $codigoCliente
    *   Código de cliente de Correos Express.
+   * @param string $solicitante
+   *   Identificador de solicitante del servicio web, entregado por Correos
+   *   Express junto al resto de credenciales.
    * @param string $referencia
    *   Referencia del pedido, que es lo que el operario reconoce en la etiqueta.
    * @param \DateTimeImmutable $fecha
@@ -60,6 +63,7 @@ final readonly class DatosEnvio {
    */
   public function __construct(
     public string $codigoCliente,
+    public string $solicitante,
     public string $referencia,
     public \DateTimeImmutable $fecha,
     public DatosRemitente $remitente,

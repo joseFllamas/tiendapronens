@@ -1,0 +1,31 @@
+uuid: 2d5ba13a-8dfa-4b4d-8690-06292a2be53f
+langcode: es
+status: true
+dependencies:
+  config:
+    - field.field.taxonomy_term.fondos_bordado.field_caja_alto
+    - field.field.taxonomy_term.fondos_bordado.field_caja_ancho
+    - field.field.taxonomy_term.fondos_bordado.field_color
+    - field.field.taxonomy_term.fondos_bordado.field_imagen
+    - taxonomy.vocabulary.fondos_bordado
+  module:
+    - text
+id: taxonomy_term.fondos_bordado.default
+targetEntityType: taxonomy_term
+bundle: fondos_bordado
+mode: default
+content:
+  description:
+    type: text_default
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    weight: 0
+    region: content
+hidden:
+  field_caja_alto: true
+  field_caja_ancho: true
+  field_color: true
+  field_imagen: true
+  langcode: true
+  search_api_excerpt: true

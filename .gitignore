@@ -51,3 +51,6 @@
 /scripts/unificacion-imagenes/.venv/
 /salida_unificacion/
 /scripts/
+
+.ddev/
+**/*.gz

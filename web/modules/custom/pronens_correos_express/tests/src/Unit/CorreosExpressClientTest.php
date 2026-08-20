@@ -200,32 +200,70 @@ final class CorreosExpressClientTest extends UnitTestCase {
 
     $respuesta = $cliente->obtenerEtiquetas('0808000123456789');
 
-    $this->assertCount(1, $respuesta->pdfs);
-    $this->assertStringStartsWith('%PDF', $respuesta->pdfs[0]);
-  }
-
-  /**
-   * La hoja de tres etiquetas siempre empieza en la primera posición.
-   */
-  public function testLaHojaDeTresEtiquetasFuerzaLaPrimeraPosicion(): void {
-    $cliente = $this->cliente([new Response(200, [], $this->fixture('etiqueta_ok.json'))]);
-
-    $cliente->obtenerEtiquetas('0808000123456789', tipoEtiqueta: 3, posicionEnHoja: 4);
-
-    $enviado = $this->ultimoCuerpo();
-    $this->assertSame(0, $enviado['posicionEtiqueta']);
-    $this->assertSame(3, $enviado['tipo']);
+    $this->assertCount(1, $respuesta->etiquetas);
+    $this->assertFalse($respuesta->esZpl);
+    $this->assertStringStartsWith('%PDF', $respuesta->etiquetas[0]);
   }
 
   /**
    * La posición de la interfaz empieza en 1 y la de la API en 0.
+   *
+   * Solo aplica a los formatos de hoja: la adhesiva de tres (tipo 3) y el medio
+   * folio (tipo 4). En el resto la API la ignora y se manda cero.
    */
-  public function testLaPosicionDeLaEtiquetaSeConvierteABaseCero(): void {
-    $cliente = $this->cliente([new Response(200, [], $this->fixture('etiqueta_ok.json'))]);
+  public function testLaPosicionSoloAplicaALosFormatosDeHoja(): void {
+    $cliente = $this->cliente([
+      new Response(200, [], $this->fixture('etiqueta_ok.json')),
+      new Response(200, [], $this->fixture('etiqueta_ok.json')),
+      new Response(200, [], $this->fixture('etiqueta_ok.json')),
+    ]);
+
+    $cliente->obtenerEtiquetas('0808000123456789', tipoEtiqueta: 3, posicionEnHoja: 3);
+    $this->assertSame('2', $this->ultimoCuerpo()['posicionEtiqueta']);
+
+    // El medio folio solo tiene dos posiciones: la tercera se recorta.
+    $cliente->obtenerEtiquetas('0808000123456789', tipoEtiqueta: 4, posicionEnHoja: 3);
+    $this->assertSame('1', $this->ultimoCuerpo()['posicionEtiqueta']);
 
     $cliente->obtenerEtiquetas('0808000123456789', tipoEtiqueta: 1, posicionEnHoja: 3);
+    $this->assertSame('0', $this->ultimoCuerpo()['posicionEtiqueta']);
+  }
 
-    $this->assertSame(2, $this->ultimoCuerpo()['posicionEtiqueta']);
+  /**
+   * El tipo 2 devuelve ZPL, que se entrega tal cual a la impresora.
+   */
+  public function testElTipoDosDevuelveZpl(): void {
+    $zpl = "^XA^FO50,50^ADN,36,20^FDPronens^FS^XZ";
+    $cuerpo = json_encode(['codErr' => '0', 'listaEtiquetas' => [base64_encode($zpl)]]);
+    $cliente = $this->cliente([new Response(200, [], (string) $cuerpo)]);
+
+    $respuesta = $cliente->obtenerEtiquetas('0808000123456789', tipoEtiqueta: 2);
+
+    $this->assertTrue($respuesta->esZpl);
+    $this->assertSame($zpl, $respuesta->etiquetas[0]);
+  }
+
+  /**
+   * El seguimiento con error de negocio lanza excepción con el detalle.
+   *
+   * El seguimiento no usa codigoRetorno: su error viaja en el campo "error"
+   * con el texto en "mensajeError".
+   */
+  public function testElSeguimientoPropagaSuErrorDeNegocio(): void {
+    $cuerpo = json_encode([
+      'error' => 409,
+      'mensajeError' => 'NO EXISTE EL NÚMERO DE ENVÍO PARA EL CÓDIGO CLIENTE',
+    ]);
+    $cliente = $this->cliente([new Response(200, [], (string) $cuerpo)]);
+
+    try {
+      $cliente->seguimientoEnvio('0000000000000000');
+      $this->fail('Un error de negocio del seguimiento debe lanzar excepción.');
+    }
+    catch (CorreosExpressException $e) {
+      $this->assertSame('409', $e->getCodigoRetorno());
+      $this->assertStringContainsString('NO EXISTE', $e->getMensajeRetorno());
+    }
   }
 
   /**

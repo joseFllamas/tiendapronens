@@ -51,6 +51,10 @@ final class ServicioCexTest extends UnitTestCase {
       'Paq 24 Oficina Elegida' => [ServicioCex::Paq24Oficina, '44'],
       'PaqPunto' => [ServicioCex::Paqpunto, '18'],
       'PaqEcommerce' => [ServicioCex::PaqEcommerce, '24'],
+      'Baleares Express' => [ServicioCex::BalearesExpress, '66'],
+      'Canarias Express' => [ServicioCex::CanariasExpress, '67'],
+      'Canarias Aéreo' => [ServicioCex::CanariasAereo, '68'],
+      'Canarias Marítimo' => [ServicioCex::CanariasMaritimo, '69'],
     ];
   }
 
@@ -84,7 +88,9 @@ final class ServicioCexTest extends UnitTestCase {
       'la oficina elegida baja a 30 kilos' => [ServicioCex::Paq24Oficina, 30_000, 99],
       'PaqPunto baja a 15 kilos y un bulto' => [ServicioCex::Paqpunto, 15_000, 1],
       'PaqEcommerce igual que PaqPunto' => [ServicioCex::PaqEcommerce, 15_000, 1],
-      'los internacionales van en un solo bulto' => [ServicioCex::InternacionalEstandar, 40_000, 1],
+      // Según la hoja oficial de códigos, solo el Estándar es monobulto.
+      'el Internacional Estándar va en un solo bulto' => [ServicioCex::InternacionalEstandar, 40_000, 1],
+      'el Internacional Express admite varios bultos' => [ServicioCex::InternacionalExpress, 40_000, 99],
     ];
   }
 
@@ -116,6 +122,11 @@ final class ServicioCexTest extends UnitTestCase {
       'Internacional Estándar no se usa dentro de España' => [ServicioCex::InternacionalEstandar, 'ES', FALSE],
       'Internacional Express llega a Estados Unidos' => [ServicioCex::InternacionalExpress, 'US', TRUE],
       'Internacional Express no se usa dentro de España' => [ServicioCex::InternacionalExpress, 'ES', FALSE],
+      // La hoja oficial define el Paq 24 como peninsular, Portugal, Andorra,
+      // Gibraltar y entre islas.
+      'el Paq 24 llega a Gibraltar' => [ServicioCex::Paq24, 'GI', TRUE],
+      'Baleares Express es un trayecto español' => [ServicioCex::BalearesExpress, 'ES', TRUE],
+      'Baleares Express no sale de España' => [ServicioCex::BalearesExpress, 'PT', FALSE],
       'el país en minúsculas también vale' => [ServicioCex::Paq24, 'es', TRUE],
       'un país vacío no lo admite nadie' => [ServicioCex::Paq24, '', FALSE],
     ];

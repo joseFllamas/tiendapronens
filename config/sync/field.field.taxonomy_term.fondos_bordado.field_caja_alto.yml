@@ -1,0 +1,25 @@
+uuid: 410f8aa9-cfdb-467d-98f1-0da92c23d424
+langcode: es
+status: true
+dependencies:
+  config:
+    - field.storage.taxonomy_term.field_caja_alto
+    - taxonomy.vocabulary.fondos_bordado
+id: taxonomy_term.fondos_bordado.field_caja_alto
+field_name: field_caja_alto
+entity_type: taxonomy_term
+bundle: fondos_bordado
+label: 'Alto útil del fondo (%)'
+description: 'Lo mismo para el alto. Es el tope al que se encoge el nombre cuando es largo. Sin valor se usa el 34 %.'
+required: false
+translatable: false
+default_value:
+  -
+    value: 34.0
+default_value_callback: ''
+settings:
+  min: null
+  max: null
+  prefix: ''
+  suffix: ''
+field_type: decimal

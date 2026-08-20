@@ -76,7 +76,10 @@
 }
 
 .pro-montaje__marca--nombre b {
-  font-size: 1em;
+  /* El factor de encogido va en el texto y no en la marca: la caja que limita
+     el nombre se mide en ch del tamaño configurado (ver más abajo), y si
+     encogiera con el texto el límite se movería. El mismo reparto que la ficha. */
+  font-size: calc(1em * var(--pro-montaje-encoge, 1));
   color: var(--pro-montaje-color, #fff);
   white-space: nowrap;
   /* Sin sombra, igual que la ficha: aquí se juzga el color del hilo y una
@@ -89,20 +92,82 @@
   text-transform: uppercase;
 }
 
-/* Las tres fuentes del bordado, las mismas que sirve la ficha. */
-.pro-montaje__marca--fuente-unicase b {
+/* Sin nube el nombre también tiene tope, el mismo que la ficha: 8,6ch del
+   tamaño configurado, unas 8 letras en la fuente del producto (ficha.css). La
+   marca lo enseña como caja punteada, así que al colocar se ve la huella
+   máxima que puede llegar a ocupar un nombre largo, no solo la de "Mónica". */
+.pro-montaje__marca--nombre:not(.pro-montaje__marca--con-fondo) .pro-montaje__caja {
+  width: var(--pro-nombre-max, 8.6ch);
+}
+
+/* --- Fondo del bordado: la nube de las mochilas y las bolsas. ---
+   Lo que se coloca es el conjunto: el nombre va dentro de la nube y no se
+   mueve por su cuenta, así que la marca pasa a ser del tamaño del fondo y el
+   texto se centra en la caja de dentro. Las mismas reglas que la ficha
+   (ficha.css), que es de lo que depende que lo colocado y lo que se ve
+   coincidan. */
+.pro-montaje__caja {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.pro-montaje__marca--con-fondo {
+  width: var(--pro-montaje-fondo-ancho, 34%);
+  padding: 0;
+  border: 0;
+  box-shadow: none;
+}
+
+.pro-montaje__fondo {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.pro-montaje__marca--con-fondo .pro-montaje__caja {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: var(--pro-montaje-caja-ancho, 50%);
+  height: var(--pro-montaje-caja-alto, 34%);
+  /* Se ve dónde acaba el hueco útil mientras se coloca; el borde no está en la
+     tienda, solo aquí. */
+  border: 1px dashed rgba(255, 255, 255, 0.55);
+}
+
+.pro-montaje__marca--con-fondo b {
+  /* El encogido ya viene de la regla del nombre; aquí solo el orden de
+     colores: sobre el fondo manda el hilo que diga el fondo, y solo si no lo
+     dice se cae al del producto. */
+  color: var(--pro-montaje-fondo-color, var(--pro-montaje-color, #fff));
+}
+
+/* Las tres fuentes del bordado, las mismas que sirve la ficha. En la MARCA y
+   no en el texto, por lo mismo que en ficha.css: la caja del nombre se mide en
+   ch y el ch depende de la fuente, así que la caja tiene que medir en la
+   fuente del bordado. El texto la hereda (el b de la marca del nombre). */
+.pro-montaje__marca--fuente-unicase {
   font-family: "Delius Unicase", sans-serif;
   font-weight: 700;
 }
 
-.pro-montaje__marca--fuente-script b {
+.pro-montaje__marca--fuente-script {
   font-family: "Caveat", cursive;
   font-weight: 600;
 }
 
-.pro-montaje__marca--fuente-letra b {
+.pro-montaje__marca--fuente-letra {
   font-family: "Graduate", sans-serif;
   font-weight: 400;
+}
+
+/* El b base declara la Graduate del parche de inicial; el nombre hereda la
+   fuente de la marca, que es donde se elige. */
+.pro-montaje__marca--nombre b {
+  font-family: inherit;
+  font-weight: inherit;
 }
 
 .pro-montaje__ayuda {

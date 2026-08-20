@@ -1,0 +1,25 @@
+uuid: 194e2bb2-fbaf-403d-bce3-1a5a54313e94
+langcode: es
+status: true
+dependencies:
+  config:
+    - field.storage.taxonomy_term.field_caja_ancho
+    - taxonomy.vocabulary.fondos_bordado
+id: taxonomy_term.fondos_bordado.field_caja_ancho
+field_name: field_caja_ancho
+entity_type: taxonomy_term
+bundle: fondos_bordado
+label: 'Ancho útil del fondo (%)'
+description: 'Cuánto del ancho del fondo puede ocupar el nombre, en porcentaje. Una nube no es un rectángulo: el texto tiene que quedarse dentro de la panza y no llegar a los bordes. Sin valor se usa el 50 %.'
+required: false
+translatable: false
+default_value:
+  -
+    value: 50.0
+default_value_callback: ''
+settings:
+  min: null
+  max: null
+  prefix: ''
+  suffix: ''
+field_type: decimal

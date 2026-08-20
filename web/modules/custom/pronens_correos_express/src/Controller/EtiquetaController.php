@@ -64,16 +64,42 @@ final class EtiquetaController extends ControllerBase {
 
     $expedicion = (string) $this->gestorExpediciones->expedicion($commerce_shipment);
 
+    // El ZPL es texto con comandos para la impresora de etiquetas: las de todos
+    // los bultos se concatenan en un solo fichero, que es como se manda a una
+    // Zebra, y se ofrece como descarga.
+    if ($etiquetas->esZpl) {
+      return $this->zpl($etiquetas->etiquetas, $expedicion);
+    }
+
     // La API devuelve un PDF por bulto. Concatenar los ficheros no produce un
     // PDF válido de varias páginas, así que con más de uno se entregan en un
     // ZIP en lugar de un documento que la mitad de los visores no abriría.
     // Fusionar de verdad necesitaría una librería de PDF, y eso solo se
     // justifica si el taller pide imprimir de una tirada.
-    if (count($etiquetas->pdfs) > 1) {
-      return $this->zip($etiquetas->pdfs, $expedicion);
+    if (count($etiquetas->etiquetas) > 1) {
+      return $this->zip($etiquetas->etiquetas, $expedicion);
     }
 
-    return $this->pdf($etiquetas->pdfs[0], sprintf('cex-%s.pdf', $expedicion));
+    return $this->pdf($etiquetas->etiquetas[0], sprintf('cex-%s.pdf', $expedicion));
+  }
+
+  /**
+   * Respuesta con las etiquetas en ZPL, listas para la impresora.
+   *
+   * @param list<string> $etiquetas
+   *   Comandos ZPL de cada bulto.
+   * @param string $expedicion
+   *   Número de expedición, para el nombre del fichero.
+   */
+  private function zpl(array $etiquetas, string $expedicion): Response {
+    $contenido = implode("\n", $etiquetas);
+
+    return new Response($contenido, Response::HTTP_OK, [
+      'Content-Type' => 'text/plain; charset=UTF-8',
+      'Content-Disposition' => sprintf('attachment; filename="cex-%s.zpl"', $expedicion),
+      'Content-Length' => (string) strlen($contenido),
+      'Cache-Control' => 'private, no-store, max-age=0',
+    ]);
   }
 
   /**

@@ -63,10 +63,17 @@ final class CredencialesForm extends FormBase {
     $form['codigo_cliente'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Código de cliente'),
-      '#description' => $this->t('Viaja dentro de cada petición. En el alta de la expedición va con una P delante, y de eso ya se encarga el módulo.'),
+      '#description' => $this->t('El que Correos Express llama CODIGO CLIENTE. Viaja dentro de cada petición.'),
       '#default_value' => $credenciales->codigoCliente,
       '#required' => TRUE,
       '#maxlength' => 50,
+    ];
+    $form['codigo_solicitante'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('Código de solicitante'),
+      '#description' => $this->t('El que Correos Express llama CODIGO SOLICITANTE, distinto del código de cliente (suele empezar por I). Si se deja vacío, se usa el código de cliente con una P delante, que es lo que hacen las integraciones antiguas.'),
+      '#default_value' => $credenciales->codigoSolicitante,
+      '#maxlength' => 100,
     ];
     $form['usuario'] = [
       '#type' => 'textfield',
@@ -124,6 +131,7 @@ final class CredencialesForm extends FormBase {
       trim((string) $form_state->getValue('codigo_cliente')),
       trim((string) $form_state->getValue('usuario')),
       $contrasena !== '' ? $contrasena : $anteriores->contrasena,
+      trim((string) $form_state->getValue('codigo_solicitante')),
     ));
 
     $this->messenger()->addStatus($this->t('Credenciales de Correos Express guardadas.'));

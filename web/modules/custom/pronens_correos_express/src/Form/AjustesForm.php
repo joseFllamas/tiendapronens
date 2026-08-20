@@ -151,23 +151,30 @@ final class AjustesForm extends ConfigFormBase {
     $form['etiqueta']['tipo'] = [
       '#type' => 'radios',
       '#title' => $this->t('Formato'),
+      // Los cinco formatos oficiales de apiRestEtiquetaTransporte.
       '#options' => [
-        1 => $this->t('Etiqueta suelta, para impresora térmica o papel adhesivo'),
-        3 => $this->t('Hoja A4 con tres etiquetas'),
+        1 => $this->t('PDF de 10x15 cm, una etiqueta por hoja'),
+        5 => $this->t('PDF térmico, para imprimir en papel de etiquetas'),
+        2 => $this->t('ZPL, el fichero nativo de las impresoras de etiquetas Zebra'),
+        3 => $this->t('PDF adhesivo, tres etiquetas por hoja A4'),
+        4 => $this->t('PDF de medio folio, dos etiquetas por hoja A4'),
       ],
       '#default_value' => (int) ($etiqueta['tipo'] ?? 1),
-      '#description' => $this->t('Correos Express devuelve siempre un PDF: la etiqueta térmica es un PDF del tamaño de la etiqueta, no un fichero de impresora.'),
+      '#description' => $this->t('Con ZPL se descarga un fichero .zpl que se manda a la impresora tal cual; el resto son PDF.'),
       '#required' => TRUE,
     ];
     $form['etiqueta']['posicion'] = [
       '#type' => 'number',
       '#title' => $this->t('Posición de la primera etiqueta'),
       '#min' => 1,
-      '#max' => 4,
+      '#max' => 3,
       '#default_value' => (int) ($etiqueta['posicion'] ?? 1),
-      '#description' => $this->t('Para aprovechar una hoja de adhesivos empezada. Con la hoja de tres etiquetas no se aplica: la API exige empezar por la primera.'),
+      '#description' => $this->t('Para aprovechar una hoja empezada. La hoja adhesiva tiene tres posiciones y la de medio folio dos.'),
       '#states' => [
-        'visible' => [':input[name="etiqueta[tipo]"]' => ['value' => '1']],
+        'visible' => [
+          [':input[name="etiqueta[tipo]"]' => ['value' => '3']],
+          [':input[name="etiqueta[tipo]"]' => ['value' => '4']],
+        ],
       ],
     ];
     $form['etiqueta']['ocultar_remitente'] = [

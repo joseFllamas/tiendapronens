@@ -1,0 +1,22 @@
+uuid: 25bf59f9-8196-4b08-b5af-09a8e50e0356
+langcode: es
+status: true
+dependencies:
+  config:
+    - field.storage.taxonomy_term.field_color
+    - taxonomy.vocabulary.fondos_bordado
+  module:
+    - color_field
+id: taxonomy_term.fondos_bordado.field_color
+field_name: field_color
+entity_type: taxonomy_term
+bundle: fondos_bordado
+label: 'Color del nombre sobre este fondo'
+description: 'El hilo con el que se borda el nombre encima de este fondo. Sin color se usa el del producto (Color del hilo), que es lo que se borda cuando el nombre va directamente sobre la tela.'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  opacity: 0
+field_type: color_field_type

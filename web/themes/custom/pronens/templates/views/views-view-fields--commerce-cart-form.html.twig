@@ -30,6 +30,9 @@
     {% if linea.opciones %}<p class="pro-cline__opts">{{ linea.opciones }}</p>{% endif %}
     {% if linea.bordado %}
       <p class="pro-cline__emb">{{ 'Embroidery'|t }}: <strong>{{ linea.bordado }}</strong></p>
+      {% if linea.fondo %}
+        <p class="pro-cline__emb">{{ 'Background'|t({}, {'context': 'Embroidery'}) }}: <strong>{{ linea.fondo }}</strong></p>
+      {% endif %}
     {% endif %}
     {% if linea.tiene_ajustes %}
       <ul class="pro-cline__fees">

@@ -38,9 +38,25 @@
 }
 
 /* La foto de la vista previa es el contenedor que mide el bordado: la altura de
-   la letra del nombre va en % de su ancho, igual que la posición. */
-.pro-ficha__shot--main {
+   la letra del nombre va en % de su ancho, igual que la posición. Es la foto
+   que diga field_bordado_foto (la primera si no dice ninguna), no --main: en
+   un body con el dibujo delante el bordado se previsualiza sobre la espalda. */
+.pro-ficha__shot--preview {
   container-type: inline-size;
+}
+
+/* Con el bordado activo, la foto donde se previsualiza se señala con un
+   resplandor turquesa: puede no ser la primera y el cliente tiene que saber
+   dónde mirar. overflow:hidden del shot no recorta el box-shadow, que se pinta
+   fuera de la caja. */
+.pro-ficha__shot--brilla {
+  box-shadow: 0 0 0 2px var(--pro-teal), 0 0 16px rgb(46 157 170 / 0.4);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .pro-ficha__shot--preview {
+    transition: box-shadow 250ms ease;
+  }
 }
 
 /* Vista previa del bordado sobre la primera foto.
@@ -65,11 +81,50 @@
   display: none;
 }
 
+/* La caja donde cabe el texto. Sin fondo no impone nada y el bordado se
+   comporta como siempre; con fondo es el hueco de dentro de la nube, y es lo
+   que mide el JS para encoger los nombres largos. */
+.pro-ficha__preview-caja {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* --- Fondo del bordado: la nube de las mochilas y las bolsas. ---
+   El ancho lo pone el producto en % del ancho de la foto, igual que la
+   posición; el alto sale solo de la proporción de la foto del fondo, así que
+   una nube más apaisada o más alta encaja sin tocar nada. */
+.pro-ficha__preview--con-fondo {
+  width: var(--pro-fondo-ancho, 34%);
+}
+
+.pro-ficha__preview-fondo {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+/* La caja de texto va centrada sobre el fondo y en porcentajes del propio
+   fondo: una nube no es un rectángulo y el nombre tiene que quedarse dentro de
+   la panza, sin llegar a los bordes. */
+.pro-ficha__preview--con-fondo .pro-ficha__preview-caja {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: var(--pro-caja-ancho, 50%);
+  height: var(--pro-caja-alto, 34%);
+}
+
 /* Sin sombra: el bordado se pinta en el color del hilo que dice el producto, y
    una sombra clara detrás lo ensuciaba y no se parecía a un bordado. Si algún
    nombre se leyera mal sobre su foto, se cambia el hilo o se mueve, que es la
    decisión que se toma en el taller de verdad. */
 .pro-ficha__preview-text {
+  /* Inline-block y no inline: el JS lo mide con offsetWidth para encogerlo
+     dentro del fondo, y el de un inline es 0. offsetWidth y no
+     getBoundingClientRect(), que vendría girado por la rotación del montaje. */
+  display: inline-block;
   font-size: 1em;
   line-height: 1;
   color: var(--pro-bordado-color, var(--pro-ink));
@@ -100,24 +155,49 @@
    texto para que quepa en un ancho. */
 .pro-ficha__preview--nombre {
   /* Suelo de 10px: en la tira de fotos de móvil la foto es estrecha y un 3% se
-     quedaría en nada. */
+     quedaría en nada. Este es el tamaño CONFIGURADO, sin encoger: el factor de
+     encogido va en el texto de dentro y no aquí, porque la caja que limita el
+     nombre se mide en ch de este tamaño, y si encogiera con el texto el límite
+     se movería con cada medida. */
   font-size: max(10px, calc(var(--pro-bordado-alto, 5) * 1cqw));
   white-space: nowrap;
 }
 
-/* Las tres fuentes de bordado que ofrece el backoffice. */
-.pro-ficha__preview--unicase .pro-ficha__preview-text {
+/* El factor de encogido lo escribe el JS cuando el nombre no cabe en su caja:
+   la máquina borda a la altura configurada, pero si el nombre es largo el
+   taller lo baja para que quepa, y la ficha tiene que enseñar eso mismo. Puede
+   bajar del suelo de 10px a propósito: mejor pequeño que desbordado. */
+.pro-ficha__preview--nombre .pro-ficha__preview-text {
+  font-size: calc(1em * var(--pro-bordado-encoge, 1));
+}
+
+/* Sin nube el nombre también tiene tope: la zona de bordado de la prenda no es
+   infinita. La caja mide 8,6ch del tamaño configurado, o sea "un nombre de 8
+   letras en esta fuente cabe entero y uno más largo encoge" (Fernanda son
+   8,33ch en la unicase; en mayúsculas ocupan más y encogen antes, igual que en
+   la prenda). ch y no una medida fija: el límite escala con el tamaño y con la
+   fuente del producto, que es como se calibra en el taller. */
+.pro-ficha__preview--nombre:not(.pro-ficha__preview--con-fondo) .pro-ficha__preview-caja {
+  width: var(--pro-nombre-max, 8.6ch);
+}
+
+/* Las tres fuentes de bordado que ofrece el backoffice. Van en el ELEMENTO y
+   no en el texto: la caja que limita el nombre se mide en ch, y el ch depende
+   de la fuente, así que la caja tiene que medir en la fuente del bordado y no
+   en la del tema (Archivo es más estrecha que Delius y el límite salía más
+   duro de lo configurado). El texto la hereda. */
+.pro-ficha__preview--unicase {
   font-family: var(--pro-font-unicase);
   /* Delius Unicase solo se sirve en el 700: el hilo tiene grosor. */
   font-weight: 700;
 }
 
-.pro-ficha__preview--script .pro-ficha__preview-text {
+.pro-ficha__preview--script {
   font-family: var(--pro-font-script);
   font-weight: 600;
 }
 
-.pro-ficha__preview--letra .pro-ficha__preview-text {
+.pro-ficha__preview--letra {
   font-family: var(--pro-font-letra);
   /* Graduate solo tiene el peso 400: forzar bold lo sintetizaría y el contorno
      saldría sucio. */
@@ -528,6 +608,8 @@
 }
 
 /* --- Fichas de formato del bordado. --- */
+.pro-fondos,
+.pro-fondos fieldset,
 .pro-formatos,
 .pro-formatos fieldset,
 .pro-letras,
@@ -633,6 +715,78 @@
   color: #fff;
   font-size: 11px;
   font-weight: 800;
+}
+
+/* --- Selector de fondo del bordado. ---
+   La nube se elige por su color, así que la etiqueta útil es la propia foto y
+   el nombre se queda para lectores de pantalla, como en el selector de color
+   de variación. La muestra es apaisada porque la nube lo es: recortarla a un
+   cuadrado dejaría fuera justo la forma que distingue a un fondo de otro. */
+.pro-fondos .form-radios {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.pro-fondos .form-item {
+  position: relative;
+  margin: 0;
+}
+
+.pro-fondos input[type='radio'] {
+  position: absolute;
+  opacity: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  cursor: pointer;
+}
+
+.pro-fondos label {
+  display: block;
+  margin: 0;
+  border: 1px solid #bfe3e8;
+  border-radius: var(--pro-radius-sm, 8px);
+  background: #fff;
+  padding: 6px;
+  cursor: pointer;
+  transition: border-color 150ms ease;
+}
+
+.pro-fondos label:hover {
+  border-color: var(--pro-teal);
+}
+
+.pro-fondos input[type='radio']:checked + label {
+  border-color: var(--pro-teal);
+  box-shadow: 0 0 0 1px var(--pro-teal);
+}
+
+.pro-fondos input[type='radio']:focus-visible + label {
+  outline: 2px solid var(--pro-teal);
+  outline-offset: 2px;
+}
+
+.pro-fondo__foto {
+  display: block;
+  width: 72px;
+}
+
+.pro-fondo__foto img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+/* El nombre solo para lectores de pantalla: con la foto delante no aporta
+   nada a la vista, pero es lo que se lee en el carrito y en el pedido. */
+.pro-fondo__nombre {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
 }
 
 /* Enlace de ayuda junto al selector (lo añade ficha.js). */

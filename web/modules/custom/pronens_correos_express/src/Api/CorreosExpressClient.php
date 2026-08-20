@@ -108,22 +108,30 @@ final class CorreosExpressClient implements CorreosExpressClientInterface {
   /**
    * {@inheritdoc}
    */
-  public function obtenerEtiquetas(string $expedicion, int $tipoEtiqueta = 1, int $posicionEnHoja = 1, string $logoBase64 = ''): RespuestaEtiqueta {
+  public function obtenerEtiquetas(string $expedicion, int $tipoEtiqueta = 1, int $posicionEnHoja = 1, string $logoBase64 = '', bool $ocultarRemitente = FALSE, string $textoRemitenteAlternativo = ''): RespuestaEtiqueta {
     $entorno = $this->entorno();
     $credenciales = $this->credenciales();
 
-    // La hoja de tres etiquetas siempre empieza en la primera posición: la API
-    // rechaza cualquier otra.
-    $posicion = $tipoEtiqueta === 3 ? 0 : max(0, $posicionEnHoja - 1);
+    // La posición solo existe en los formatos de hoja: la adhesiva de tres por
+    // página (tipo 3, posiciones 0 a 2) y el medio folio (tipo 4, 0 o 1). En el
+    // resto la API la ignora y se manda 0.
+    $posicion = match ($tipoEtiqueta) {
+      3 => min(max(0, $posicionEnHoja - 1), 2),
+      4 => min(max(0, $posicionEnHoja - 1), 1),
+      default => 0,
+    };
 
     $datos = $this->peticion(
       $entorno->urlEtiqueta(),
       [
         'keyCli' => $credenciales->codigoCliente,
         'nenvio' => $expedicion,
-        'posicionEtiqueta' => $posicion,
-        'tipo' => $tipoEtiqueta,
+        'posicionEtiqueta' => (string) $posicion,
+        'tipo' => (string) $tipoEtiqueta,
+        'hideSender' => $ocultarRemitente ? '1' : '0',
         'logoCliente' => $logoBase64,
+        'textoRemiAlternativo' => $textoRemitenteAlternativo,
+        'idioma' => 'ES',
       ],
       self::TIMEOUT_ESCRITURA,
       reintentar: TRUE,
@@ -138,7 +146,7 @@ final class CorreosExpressClient implements CorreosExpressClientInterface {
       throw CorreosExpressException::negocio($this->codigoRetorno($datos), $this->mensajeRetorno($datos));
     }
 
-    $respuesta = RespuestaEtiqueta::desdeRespuesta($datos);
+    $respuesta = RespuestaEtiqueta::desdeRespuesta($datos, $tipoEtiqueta === 2);
     if ($respuesta->estaVacia()) {
       throw CorreosExpressException::negocio(
         $codigoError !== '' ? $codigoError : 'sin código',
@@ -166,6 +174,17 @@ final class CorreosExpressClient implements CorreosExpressClientInterface {
       self::TIMEOUT_LECTURA,
       reintentar: TRUE,
     );
+
+    // El seguimiento no usa codigoRetorno: su error de negocio viaja en el
+    // campo "error", con el detalle en "mensajeError". Por ejemplo el 409,
+    // "no existe el número de envío para el código cliente".
+    if (isset($datos['error']) && is_numeric($datos['error']) && (int) $datos['error'] !== 0) {
+      $mensaje = $datos['mensajeError'] ?? '';
+      throw CorreosExpressException::negocio(
+        (string) (int) $datos['error'],
+        is_scalar($mensaje) ? trim((string) $mensaje) : '',
+      );
+    }
 
     return RespuestaSeguimiento::desdeRespuesta($datos);
   }

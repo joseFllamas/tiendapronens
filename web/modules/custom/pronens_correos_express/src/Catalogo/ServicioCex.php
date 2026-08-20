@@ -38,6 +38,10 @@ enum ServicioCex: string {
   case Paq24Oficina = 'paq24_oficina';
   case Paqpunto = 'paqpunto';
   case PaqEcommerce = 'paq_ecommerce';
+  case BalearesExpress = 'baleares_express';
+  case CanariasExpress = 'canarias_express';
+  case CanariasAereo = 'canarias_aereo';
+  case CanariasMaritimo = 'canarias_maritimo';
 
   /**
    * Países que Correos Express considera nacionales.
@@ -75,6 +79,10 @@ enum ServicioCex: string {
       self::Paq24Oficina => '44',
       self::Paqpunto => '18',
       self::PaqEcommerce => '24',
+      self::BalearesExpress => '66',
+      self::CanariasExpress => '67',
+      self::CanariasAereo => '68',
+      self::CanariasMaritimo => '69',
     };
   }
 
@@ -100,6 +108,10 @@ enum ServicioCex: string {
       self::Paq24Oficina => 'Paq 24 Oficina Elegida',
       self::Paqpunto => 'PaqPunto',
       self::PaqEcommerce => 'PaqEcommerce',
+      self::BalearesExpress => 'Baleares Express',
+      self::CanariasExpress => 'Canarias Express',
+      self::CanariasAereo => 'Canarias Aéreo',
+      self::CanariasMaritimo => 'Canarias Marítimo',
     };
   }
 
@@ -119,7 +131,9 @@ enum ServicioCex: string {
    */
   public function bultosMaximos(): int {
     return match ($this) {
-      self::InternacionalExpress,
+      // La hoja oficial de códigos solo marca como monobulto el Internacional
+      // Estándar ("Siempre mono bulto"); el Express no lo es. PaqPunto y
+      // PaqEcommerce se dejan en uno por el tamaño de las taquillas.
       self::InternacionalEstandar,
       self::Paqpunto,
       self::PaqEcommerce => 1,
@@ -154,6 +168,15 @@ enum ServicioCex: string {
       // Nacionales que no se ofrecen a Portugal.
       self::IslasDocumentacion,
       self::PaqueteriaOptica => in_array($pais, ['ES', 'AD'], TRUE),
+
+      // Los de Tarifa Ibérica cubren trayectos con las islas españolas.
+      self::BalearesExpress,
+      self::CanariasExpress,
+      self::CanariasAereo,
+      self::CanariasMaritimo => $pais === 'ES',
+
+      // El Paq 24 llega además a Gibraltar, según la hoja oficial de códigos.
+      self::Paq24 => in_array($pais, ['ES', 'PT', 'AD', 'GI'], TRUE),
 
       // Internacional Express: cualquier destino fuera de la península ibérica.
       self::InternacionalExpress => !in_array($pais, ['ES', 'PT'], TRUE),

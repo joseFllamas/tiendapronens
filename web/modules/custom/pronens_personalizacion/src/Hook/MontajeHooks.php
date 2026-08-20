@@ -6,10 +6,12 @@ namespace Drupal\pronens_personalizacion\Hook;
 
 use Drupal\commerce_product\Entity\ProductInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\Entity\FieldableEntityInterface;
 use Drupal\Core\Field\EntityReferenceFieldItemListInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Hook\Attribute\Hook;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\file\FileInterface;
 use Drupal\image\ImageStyleInterface;
 use Drupal\media\MediaInterface;
@@ -58,6 +60,38 @@ final class MontajeHooks {
    * contra lo que medirse, y una rotación no lo tiene.
    */
   private const CAMPO_ROTACION = 'field_bordado_rotacion';
+
+  /**
+   * Foto sobre la que va el bordado, cuando no es la principal.
+   *
+   * La espalda de un body cuyo dibujo va delante: sin este campo la vista
+   * previa pintaría el nombre encima del dibujo. Vale para los dos modos, como
+   * la rotación: es colocación, no una decisión sobre la letra.
+   */
+  private const CAMPO_FOTO = 'field_bordado_foto';
+
+  /**
+   * Ancho del fondo del bordado, en % del ancho de la foto.
+   *
+   * Va con la colocación y no con las opciones del nombre porque es lo mismo
+   * que la posición: dónde y de qué tamaño va la nube sobre la prenda.
+   */
+  private const CAMPO_FONDO_TAMANO = 'field_fondo_tamano';
+
+  /**
+   * Fondos que ofrece el producto.
+   */
+  private const CAMPO_FONDOS = 'field_fondos_disponibles';
+
+  /**
+   * Ancho de partida del fondo, en % del ancho de la foto.
+   */
+  private const FONDO_DEFECTO = 34.0;
+
+  /**
+   * Caja de texto de un fondo sin medir, en % del propio fondo.
+   */
+  private const CAJA_DEFECTO = ['ancho' => 50.0, 'alto' => 34.0];
 
   /**
    * Campos que solo tienen sentido bordando un nombre.
@@ -136,29 +170,66 @@ final class MontajeHooks {
 
     if ($foto !== NULL) {
       $estilo = $this->estiloDeNombre($producto);
+      // La nube sobre la que va el nombre, si el producto la ofrece: se coloca
+      // arrastrando el conjunto entero, porque el nombre va dentro de ella y no
+      // se mueven por separado. Se dibuja el primero de los fondos declarados,
+      // que es el que sale elegido de entrada en la ficha.
+      $fondo = $inicial ? NULL : $this->fondoDeMontaje($producto);
+      $partes = [];
+      if ($fondo !== NULL) {
+        $partes[] = '--pro-montaje-fondo-ancho:' . $this->valor($producto, self::CAMPO_FONDO_TAMANO, self::FONDO_DEFECTO) . '%';
+        $partes[] = '--pro-montaje-caja-ancho:' . $fondo['ancho'] . '%';
+        $partes[] = '--pro-montaje-caja-alto:' . $fondo['alto'] . '%';
+      }
+      if ($estilo['color'] !== NULL) {
+        $partes[] = '--pro-montaje-color:' . $estilo['color'];
+      }
+      // El hilo del fondo va en su propia variable y no pisando la del
+      // producto: el selector de color de aquí abajo reescribe --pro-montaje-color
+      // en cada clic (montaje.js), así que un valor puesto aquí duraría hasta el
+      // primer repintado y la marca acabaría con un color que la tienda no usa.
+      // El CSS prefiere esta cuando existe, igual que la ficha.
+      if ($fondo !== NULL && $fondo['color'] !== NULL) {
+        $partes[] = '--pro-montaje-fondo-color:' . $fondo['color'];
+      }
+
       $form['pro_montaje']['lienzo'] = [
         '#type' => 'inline_template',
         '#template' => '<div class="pro-montaje__lienzo" data-pro-montaje-lienzo data-pro-montaje-modo="{{ modo }}">
             <img src="{{ foto }}" alt="">
             <span class="pro-montaje__marca {{ clases }}" data-pro-montaje-marca
-                  style="{{ estilo }}"><b>{{ muestra }}</b></span>
+                  style="{{ estilo }}">{% if fondo %}<img class="pro-montaje__fondo" src="{{ fondo }}" alt="">{% endif %}<span class="pro-montaje__caja" data-pro-montaje-caja><b data-pro-montaje-texto>{{ muestra }}</b></span></span>
           </div>
           <p class="pro-montaje__ayuda">{{ ayuda }}</p>',
         '#context' => [
           'foto' => $foto,
+          'fondo' => $fondo['foto'] ?? '',
           'modo' => $inicial ? 'inicial' : 'texto',
           'muestra' => $inicial ? 'A' : self::MUESTRA,
           'clases' => $inicial
             ? 'pro-montaje__marca--inicial'
             : 'pro-montaje__marca--nombre pro-montaje__marca--fuente-' . $estilo['fuente']
-              . ($estilo['mayusculas'] ? ' pro-montaje__marca--caps' : ''),
-          'estilo' => $estilo['color'] !== NULL ? '--pro-montaje-color:' . $estilo['color'] : '',
-          'ayuda' => $inicial
-            ? $this->t('Arrastra la letra hasta donde va el bordado y usa la barra para el tamaño. Los números de abajo se rellenan solos.')
-            : $this->t('Arrastra el nombre hasta donde va el bordado y usa la barra para la altura de la letra. Los números de abajo se rellenan solos, y la fuente, el color y las mayúsculas de aquí abajo se ven en el momento sobre la foto.'),
+              . ($estilo['mayusculas'] ? ' pro-montaje__marca--caps' : '')
+              . ($fondo !== NULL ? ' pro-montaje__marca--con-fondo' : ''),
+          'estilo' => implode(';', $partes),
+          'ayuda' => $this->ayuda($inicial, $fondo !== NULL),
         ],
         '#weight' => -10,
       ];
+      // Barra del ancho de la nube: como la del tamaño, arrastrar sobre la foto
+      // mueve el conjunto pero no lo agranda.
+      if ($fondo !== NULL && isset($form[self::CAMPO_FONDO_TAMANO])) {
+        $form['pro_montaje']['fondo_barra'] = [
+          '#type' => 'range',
+          '#title' => $this->t('Ancho del fondo'),
+          '#min' => 5,
+          '#max' => 100,
+          '#step' => 0.5,
+          '#default_value' => $this->valor($producto, self::CAMPO_FONDO_TAMANO, self::FONDO_DEFECTO),
+          '#attributes' => ['data-pro-montaje-barra-fondo' => TRUE],
+          '#weight' => -9.5,
+        ];
+      }
       // Barra de rotación: la inclinación es lo único del montaje que no se
       // puede arrastrar sobre la foto, así que la barra es la forma de ajustarla
       // mirando el resultado en vez de teclear grados a ciegas.
@@ -210,11 +281,40 @@ final class MontajeHooks {
       ];
     }
 
+    // La foto del bordado entra al grupo la primera: todo lo demás se mide
+    // sobre ella. Se pregunta en los dos modos, igual que la rotación. Elegirla
+    // o cambiarla pide guardar y volver para que el lienzo la enseñe, lo mismo
+    // que ya pasaba con la foto principal.
+    if (isset($form[self::CAMPO_FOTO])) {
+      $form['pro_montaje'][self::CAMPO_FOTO] = $form[self::CAMPO_FOTO];
+      unset($form[self::CAMPO_FOTO]);
+    }
     // Los campos se mueven dentro del grupo conservando su orden. La rotación va
     // con ellos: es colocación, así que se pregunta también en modo inicial.
     $colocacion = self::CAMPOS;
+    if (isset($form[self::CAMPO_FONDO_TAMANO])) {
+      $colocacion['fondo'] = self::CAMPO_FONDO_TAMANO;
+    }
     if (isset($form[self::CAMPO_ROTACION])) {
       $colocacion['rotacion'] = self::CAMPO_ROTACION;
+    }
+    // Qué fondos ofrece el producto se decide aquí y no en un rincón del
+    // formulario: es la misma decisión que dónde va el bordado, y encenderla o
+    // apagarla cambia lo que se ve en el lienzo de arriba. En modo inicial no
+    // se pregunta: la nube es el fondo de un NOMBRE, y una inicial es un parche
+    // que va sobre la tela.
+    if (isset($form[self::CAMPO_FONDOS])) {
+      if ($inicial) {
+        $form[self::CAMPO_FONDOS]['#access'] = FALSE;
+        unset($colocacion['fondo']);
+        if (isset($form[self::CAMPO_FONDO_TAMANO])) {
+          $form[self::CAMPO_FONDO_TAMANO]['#access'] = FALSE;
+        }
+      }
+      else {
+        $form['pro_montaje'][self::CAMPO_FONDOS] = $form[self::CAMPO_FONDOS];
+        unset($form[self::CAMPO_FONDOS]);
+      }
     }
     foreach ($colocacion as $clave => $campo) {
       $form[$campo]['#attributes']['data-pro-montaje-campo'] = $clave;
@@ -236,6 +336,91 @@ final class MontajeHooks {
       $form['pro_montaje'][$campo] = $form[$campo];
       unset($form[$campo]);
     }
+  }
+
+  /**
+   * Texto de ayuda del lienzo, según lo que se esté colocando.
+   */
+  private function ayuda(bool $inicial, bool $conFondo): TranslatableMarkup {
+    if ($inicial) {
+      return $this->t('Arrastra la letra hasta donde va el bordado y usa la barra para el tamaño. Los números de abajo se rellenan solos.');
+    }
+    if ($conFondo) {
+      return $this->t('Arrastra el fondo hasta donde va el bordado: el nombre viaja dentro y no se coloca por separado. Una barra da el ancho del fondo y la otra la altura de la letra, que se reduce sola cuando el nombre no cabe dentro. Los números de abajo se rellenan solos.');
+    }
+
+    return $this->t('Arrastra el nombre hasta donde va el bordado y usa la barra para la altura de la letra. Los números de abajo se rellenan solos, y la fuente, el color y las mayúsculas de aquí abajo se ven en el momento sobre la foto.');
+  }
+
+  /**
+   * Primer fondo que ofrece el producto, con lo que hace falta para dibujarlo.
+   *
+   * El primero y no todos: el widget coloca, no elige. En la ficha el cliente
+   * cambia de color y la nube es la misma forma, así que colocar sobre una vale
+   * para todas; si algún día un fondo tuviera otra silueta, se coloca sobre el
+   * primero y se afina mirando la ficha.
+   *
+   * @return array{foto: string, ancho: float, alto: float, color: string|null}|null
+   *   Los datos del fondo, o NULL si el producto no ofrece ninguno con foto.
+   */
+  private function fondoDeMontaje(ProductInterface $producto): ?array {
+    if (!$producto->hasField(self::CAMPO_FONDOS)) {
+      return NULL;
+    }
+    $lista = $producto->get(self::CAMPO_FONDOS);
+    if (!$lista instanceof EntityReferenceFieldItemListInterface) {
+      return NULL;
+    }
+
+    foreach ($lista->referencedEntities() as $termino) {
+      if (!$termino instanceof FieldableEntityInterface) {
+        continue;
+      }
+      $medias = $this->mediasDe($termino, 'field_imagen');
+      $media = reset($medias);
+      $foto = $media instanceof MediaInterface ? $this->url($media, 'pronens_fondo') : NULL;
+      if ($foto === NULL) {
+        continue;
+      }
+
+      return [
+        'foto' => $foto,
+        'ancho' => $this->numero($termino, 'field_caja_ancho', self::CAJA_DEFECTO['ancho']),
+        'alto' => $this->numero($termino, 'field_caja_alto', self::CAJA_DEFECTO['alto']),
+        'color' => $this->color($termino, 'field_color'),
+      ];
+    }
+
+    return NULL;
+  }
+
+  /**
+   * Valor numérico de un campo, o el que se pase por defecto.
+   */
+  private function numero(object $entidad, string $campo, float $defecto): float {
+    if (!$entidad instanceof FieldableEntityInterface
+      || !$entidad->hasField($campo)
+      || $entidad->get($campo)->isEmpty()) {
+      return $defecto;
+    }
+
+    return (float) $entidad->get($campo)->value;
+  }
+
+  /**
+   * Hexadecimal de un campo de color, o NULL.
+   *
+   * Solo hexadecimal: el valor acaba dentro de un atributo style.
+   */
+  private function color(object $entidad, string $campo): ?string {
+    if (!$entidad instanceof FieldableEntityInterface
+      || !$entidad->hasField($campo)
+      || $entidad->get($campo)->isEmpty()) {
+      return NULL;
+    }
+    $valor = (string) ($entidad->get($campo)->first()?->get('color')->getValue() ?? '');
+
+    return preg_match('/^#[0-9A-Fa-f]{6}$/', $valor) === 1 ? $valor : NULL;
   }
 
   /**
@@ -278,17 +463,22 @@ final class MontajeHooks {
   }
 
   /**
-   * Foto sobre la que se coloca la inicial.
+   * Foto sobre la que se coloca el bordado.
    *
-   * Se prefiere la principal del producto, que es la foto base de referencia; si
-   * no hay, la de una variación. Importa el orden: las fotos de las variaciones
-   * pueden venir recortadas distinto entre sí, y colocar la marca sobre un
-   * encuadre para pintarla sobre otro descuadra el montaje. La posición es una
-   * sola para todo el producto, así que conviene medirla siempre sobre la misma
-   * foto y que las fotos base de cada color compartan encuadre.
+   * Manda field_bordado_foto si está relleno (el bordado va en una cara que la
+   * foto principal no enseña: la espalda de un body con el dibujo delante);
+   * después la principal, y sin ninguna de las dos, la de una variación.
+   * Importa el orden: las fotos de las variaciones pueden venir recortadas
+   * distinto entre sí, y colocar la marca sobre un encuadre para pintarla sobre
+   * otro descuadra el montaje. La posición es una sola para todo el producto,
+   * así que conviene medirla siempre sobre la misma foto, la misma que va a
+   * usar la vista previa de la ficha (FichaHooks hace la misma elección).
    */
   private function fotoDeMontaje(ProductInterface $producto): ?string {
-    $medias = $this->mediasDe($producto, 'field_imagen_principal');
+    $medias = $this->mediasDe($producto, self::CAMPO_FOTO);
+    if ($medias === []) {
+      $medias = $this->mediasDe($producto, 'field_imagen_principal');
+    }
     if ($medias === []) {
       foreach ($producto->getVariations() as $variacion) {
         $medias = array_merge($medias, $this->mediasDe($variacion, 'field_imagenes'));
@@ -309,7 +499,7 @@ final class MontajeHooks {
    *   Los medias.
    */
   private function mediasDe(object $entidad, string $campo): array {
-    if (!$entidad instanceof \Drupal\Core\Entity\FieldableEntityInterface || !$entidad->hasField($campo)) {
+    if (!$entidad instanceof FieldableEntityInterface || !$entidad->hasField($campo)) {
       return [];
     }
     $lista = $entidad->get($campo);
@@ -324,9 +514,9 @@ final class MontajeHooks {
   }
 
   /**
-   * URL de la foto de un media, en el estilo de la ficha.
+   * URL de la foto de un media, en el estilo que se pida.
    */
-  private function url(MediaInterface $media): ?string {
+  private function url(MediaInterface $media, string $estilo_id = 'pronens_ficha_principal'): ?string {
     if (!$media->hasField('field_media_image')) {
       return NULL;
     }
@@ -336,7 +526,7 @@ final class MontajeHooks {
     if (!$fichero instanceof FileInterface) {
       return NULL;
     }
-    $estilo = $this->entityTypeManager->getStorage('image_style')->load('pronens_ficha_principal');
+    $estilo = $this->entityTypeManager->getStorage('image_style')->load($estilo_id);
 
     return $estilo instanceof ImageStyleInterface
       ? $estilo->buildUrl((string) $fichero->getFileUri())
