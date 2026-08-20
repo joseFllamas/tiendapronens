@@ -1,0 +1,1 @@
+open_basedir = "/var/www/tienaa-pronens-es.b476.odisean.com/:/var/tmp/:/tmp/"
