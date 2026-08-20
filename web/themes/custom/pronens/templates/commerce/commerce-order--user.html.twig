@@ -1,0 +1,115 @@
+{#
+/**
+ * @file
+ * La ficha de un pedido en el área de cliente.
+ *
+ * Mismo criterio que el recibo por correo: las líneas se pintan con el trait
+ * compartido (bordado, formato y extras incluidos) y los totales salen del
+ * servicio de Commerce, así que la ficha, el correo y el checkout enseñan
+ * exactamente los mismos números.
+ *
+ * El H1 va aquí (el bloque de título imprimiría el campo order_number
+ * renderizado dentro del h1).
+ *
+ * Variables del tema (CuentaHooks::buildPedido):
+ * - numero, fecha, estado, lineas, subtotal, ajustes, total.
+ * - envio: direccion, metodo, seguimiento, url_seguimiento, pasos (timeline).
+ * - facturacion, pago, url_pedidos.
+ */
+#}
+<article{{ attributes.addClass('pro-pedido-ficha') }}>
+
+  <a class="pro-pedido-ficha__volver" href="{{ url_pedidos }}">← {{ 'Back to my orders'|t }}</a>
+
+  <header class="pro-pedido-ficha__head">
+    <h1 class="pro-cuenta__title">{{ 'Order'|t }} #{{ numero }}</h1>
+    <p class="pro-pedido-ficha__meta">
+      {{ fecha|format_date('custom', 'j/n/Y') }}
+      <span class="pro-estado pro-estado--{{ estado.clave }}">{{ estado.etiqueta }}</span>
+    </p>
+  </header>
+
+  {% if envio and envio.pasos %}
+    <section class="pro-envio" aria-label="{{ 'Shipment tracking'|t }}">
+      <ol class="pro-envio__pasos">
+        {% for paso in envio.pasos %}
+          <li class="pro-envio__paso{{ paso.hecho ? ' is-done' }}{{ paso.actual ? ' is-current' }}">
+            <span class="pro-envio__punto" aria-hidden="true"></span>
+            <span class="pro-envio__etiqueta">{{ paso.etiqueta }}</span>
+            {% if paso.fecha %}
+              <span class="pro-envio__fecha">{{ paso.fecha|format_date('custom', 'j/n/Y') }}</span>
+            {% endif %}
+          </li>
+        {% endfor %}
+      </ol>
+      {% if envio.seguimiento %}
+        <div class="pro-envio__seguimiento">
+          <span class="pro-envio__codigo">{{ 'Tracking number'|t }}: <strong>{{ envio.seguimiento }}</strong></span>
+          <a class="pro-envio__btn" href="{{ envio.url_seguimiento }}" target="_blank" rel="noopener">
+            {{ 'Track my shipment'|t }}
+          </a>
+        </div>
+      {% endif %}
+    </section>
+  {% endif %}
+
+  <section class="pro-pedido-ficha__lineas" aria-label="{{ 'Order items'|t }}">
+    {% for linea in lineas %}
+      <div class="pro-cline">
+        <span class="pro-cline__thumb">{{ linea.foto }}</span>
+        <div class="pro-cline__info">
+          <p class="pro-cline__name">
+            {% if linea.url %}<a href="{{ linea.url }}">{{ linea.nombre }}</a>{% else %}{{ linea.nombre }}{% endif %}
+          </p>
+          {% if linea.opciones %}<p class="pro-cline__opts">{{ linea.opciones }}</p>{% endif %}
+          {% if linea.bordado %}
+            <p class="pro-cline__emb">{{ 'Embroidery'|t }}: <strong>{{ linea.bordado }}</strong></p>
+            {% if linea.fondo %}
+              <p class="pro-cline__emb">{{ 'Background'|t({}, {'context': 'Embroidery'}) }}: <strong>{{ linea.fondo }}</strong></p>
+            {% endif %}
+          {% endif %}
+          <p class="pro-cline__opts">{{ 'Quantity'|t }}: {{ linea.cantidad }}</p>
+          {% if linea.tiene_ajustes %}
+            <ul class="pro-cline__fees">
+              {% for ajuste in linea.ajustes %}
+                <li>{{ ajuste.etiqueta }} <span class="pro-cline__fee-amount">+{{ ajuste.importe }}</span></li>
+              {% endfor %}
+            </ul>
+          {% endif %}
+        </div>
+        <span class="pro-cline__total">{{ linea.importe }}</span>
+      </div>
+    {% endfor %}
+  </section>
+
+  <section class="pro-pedido-ficha__totales" aria-label="{{ 'Total'|t }}">
+    {% if subtotal %}
+      <p class="pro-pedido-ficha__linea"><span>{{ 'Subtotal'|t }}</span><span>{{ subtotal }}</span></p>
+    {% endif %}
+    {% for ajuste in ajustes %}
+      <p class="pro-pedido-ficha__linea{{ ajuste.incluido ? ' pro-pedido-ficha__linea--incluido' }}">
+        <span>{{ ajuste.etiqueta }}</span>
+        <span>{% if ajuste.incluido %}({{ ajuste.importe }}){% else %}{{ ajuste.importe }}{% endif %}</span>
+      </p>
+    {% endfor %}
+    <p class="pro-pedido-ficha__linea pro-pedido-ficha__linea--total"><span>{{ 'Total'|t }}</span><span>{{ total }}</span></p>
+  </section>
+
+  <div class="pro-pedido-ficha__cols">
+    {% if envio and envio.direccion %}
+      <section class="pro-pedido-ficha__col">
+        <h2 class="pro-pedido-ficha__subtitulo">{{ 'Shipping address'|t }}</h2>
+        {{ envio.direccion }}
+        {% if envio.metodo %}<p class="pro-pedido-ficha__detalle">{{ envio.metodo }}</p>{% endif %}
+      </section>
+    {% endif %}
+    {% if facturacion %}
+      <section class="pro-pedido-ficha__col">
+        <h2 class="pro-pedido-ficha__subtitulo">{{ 'Billing address'|t }}</h2>
+        {{ facturacion }}
+        {% if pago %}<p class="pro-pedido-ficha__detalle">{{ 'Payment method'|t }}: {{ pago }}</p>{% endif %}
+      </section>
+    {% endif %}
+  </div>
+
+</article>

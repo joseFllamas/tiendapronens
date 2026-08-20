@@ -31,6 +31,7 @@
         "drupal/core-recipe-unpack": "^11.4",
         "drupal/core-recommended": "^11.4",
         "drupal/facets": "^3.0",
+        "drupal/login_emailusername": "^3.0",
         "drupal/metatag": "^2.2",
         "drupal/migrate_plus": "^6.0",
         "drupal/migrate_tools": "^6.0",

@@ -1,0 +1,7 @@
+name: 'Pronens: cuenta'
+type: module
+description: 'Enlaza los pedidos de invitado con la cuenta de su correo: al realizarse el pedido si la cuenta ya existe, y al crearse la cuenta para los pedidos anteriores.'
+package: Pronens
+core_version_requirement: ^11
+dependencies:
+  - commerce:commerce_order

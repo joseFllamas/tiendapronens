@@ -49,6 +49,7 @@ class PronensHooks {
     protected RouteMatchInterface $routeMatch,
     protected FichaHooks $fichaHooks,
     protected EntityRepositoryInterface $entityRepository,
+    protected CuentaHooks $cuentaHooks,
   ) {
   }
 
@@ -91,6 +92,11 @@ class PronensHooks {
         }
       }
     }
+
+    // El área de cliente (login, mis pedidos, direcciones…) monta aquí su
+    // navegación lateral. Delegado porque un tema no puede implementar
+    // preprocess_page dos veces.
+    $this->cuentaHooks->buildShell($variables);
   }
 
   /**

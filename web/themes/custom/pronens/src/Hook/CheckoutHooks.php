@@ -190,6 +190,28 @@ class CheckoutHooks {
     $this->marcarGrupoRadios($form, ['payment_information', 'payment_method'], $this->t('Payment method'));
     $this->marcarGrupoRadios($form, ['shipping_information', 'shipments', 0, 'shipping_method'], $this->t('Shipping method'));
 
+    // El pane de registro de la pantalla de gracias (completion_register)
+    // construye sus campos con el form display "register" del usuario, que
+    // arrastra la foto de perfil: en una tienda no pinta nada. Las
+    // descripciones de core ("Se permiten varios caracteres especiales…",
+    // "Provide a password…") tampoco: la entradilla del pane ya lo dice todo.
+    if (isset($form['completion_register'])) {
+      $registro = &$form['completion_register'];
+      if (isset($registro['user_picture'])) {
+        $registro['user_picture']['#access'] = FALSE;
+      }
+      if (isset($registro['name'])) {
+        $registro['name']['#description'] = '';
+      }
+      if (isset($registro['pass'])) {
+        $registro['pass']['#description'] = '';
+      }
+      if (isset($registro['actions']['register'])) {
+        $registro['actions']['register']['#attributes']['class'][] = 'pro-co__registro-btn';
+      }
+      unset($registro);
+    }
+
     if (($form['#step_id'] ?? '') !== 'order_information') {
       return;
     }

@@ -1,0 +1,120 @@
+/**
+ * @file
+ * Pantallas de acceso: login y recuperación de contraseña.
+ *
+ * Una tarjeta centrada dentro del contenedor central de la página. Los
+ * formularios son los de core (con login_emailusername, que admite el correo);
+ * aquí solo se visten.
+ */
+
+.pro-acceso {
+  max-width: 440px;
+  margin: 24px auto 48px;
+}
+
+.pro-acceso__card {
+  background: #fff;
+  border: 1px solid var(--pro-border);
+  border-radius: var(--pro-radius-size);
+  padding: 32px 28px;
+}
+
+.pro-acceso__title {
+  font-family: var(--pro-font-display);
+  font-weight: 800;
+  font-size: 26px;
+  line-height: 1.2;
+  color: var(--pro-ink);
+  margin: 0 0 8px;
+}
+
+.pro-acceso__sub {
+  font-family: var(--pro-font-ui);
+  font-size: 15px;
+  line-height: 1.5;
+  color: var(--pro-text-2);
+  margin: 0 0 24px;
+}
+
+/* --- Campos. --- */
+.pro-acceso__form .form-item {
+  margin: 0 0 16px;
+}
+
+.pro-acceso__form label {
+  display: block;
+  font-family: var(--pro-font-ui);
+  font-weight: 700;
+  font-size: 14px;
+  color: var(--pro-ink-2);
+  margin-bottom: 6px;
+}
+
+.pro-acceso__form input[type="text"],
+.pro-acceso__form input[type="email"],
+.pro-acceso__form input[type="password"] {
+  width: 100%;
+  box-sizing: border-box;
+  font-family: var(--pro-font-ui);
+  font-size: 16px;
+  color: var(--pro-ink);
+  background: #fff;
+  border: 1px solid var(--pro-border-2);
+  border-radius: 10px;
+  padding: 12px 14px;
+}
+
+.pro-acceso__form input:focus-visible {
+  outline: 2px solid var(--pro-teal);
+  outline-offset: 1px;
+}
+
+/* --- CTA. --- */
+.pro-acceso__form .pro-acceso__submit {
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
+  font-family: var(--pro-font-ui);
+  font-weight: 700;
+  font-size: 17px;
+  color: #fff;
+  background: var(--pro-orange-cta);
+  border: 0;
+  border-radius: var(--pro-radius-pill);
+  padding: 15px 24px;
+  margin-top: 8px;
+  cursor: pointer;
+}
+
+.pro-acceso__form .pro-acceso__submit:hover,
+.pro-acceso__form .pro-acceso__submit:focus-visible {
+  background: var(--pro-ink-2);
+}
+
+/* --- Enlaces auxiliares. --- */
+.pro-acceso__aux {
+  text-align: center;
+  font-family: var(--pro-font-ui);
+  font-size: 14px;
+  margin: 18px 0 0;
+}
+
+.pro-acceso__aux a {
+  color: var(--pro-teal-ink);
+  text-decoration: none;
+  border-bottom: 1px solid currentColor;
+}
+
+.pro-acceso__aux a:hover,
+.pro-acceso__aux a:focus-visible {
+  color: var(--pro-ink-2);
+}
+
+.pro-acceso__nota {
+  text-align: center;
+  font-family: var(--pro-font-ui);
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--pro-mute);
+  margin: 16px 8px 0;
+}

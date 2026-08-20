@@ -13,6 +13,7 @@ dependencies:
     - file
     - filter
     - media
+    - profile
     - system
 _core:
   default_config_hash: wkW7P5A53YhGmsgamrmTbfwpZrqdnPYiJdoAZQtdmJg
@@ -24,9 +25,12 @@ permissions:
   - 'access checkout'
   - 'access content'
   - 'access site-wide contact form'
+  - 'create customer profile'
   - 'delete own files'
   - 'manage own commerce_payment_method'
+  - 'update own customer profile'
   - 'use text format basic_html'
   - 'view commerce_product'
   - 'view media'
   - 'view own commerce_order'
+  - 'view own customer profile'
