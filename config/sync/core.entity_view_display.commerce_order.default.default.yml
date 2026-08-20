@@ -124,6 +124,13 @@ content:
     third_party_settings: {  }
     weight: 3
     region: content
+  shipments:
+    type: commerce_shipping_information
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 14
+    region: content
   state:
     type: state_transition_form
     label: hidden
@@ -151,5 +158,6 @@ content:
 hidden:
   commerce_activity_log: true
   order_number: true
+  search_api_excerpt: true
   total_paid: true
   total_price: true

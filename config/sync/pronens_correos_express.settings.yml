@@ -1,11 +1,11 @@
 _core:
   default_config_hash: iBliGnvE79vmmp0fEiCW4o_GMaknQZ3IGX5COK5L894
-entorno: PRE
+entorno: PRO
 remitente:
-  nombre: ''
-  nif: ''
-  contacto: ''
-  telefono: ''
+  nombre: A58110001
+  nif: IA58110001
+  contacto: A58110001_WS
+  telefono: W8wwt
   correo: ''
 etiqueta:
   tipo: 1
@@ -16,7 +16,25 @@ etiqueta:
 peso:
   por_defecto_gramos: 300
   minimo_envio_gramos: 100
-  por_categoria: {  }
+  por_categoria:
+    180: 30
+    176: 250
+    204: 280
+    199: 180
+    177: 90
+    182: 120
+    181: 200
+    193: 700
+    198: 130
+    196: 60
+    194: 15
+    179: 400
+    202: 300
+    195: 150
+    175: 220
+    201: 450
+    178: 40
+    203: 25
 seguimiento:
   activo: true
   intervalo_horas: 6

@@ -86,6 +86,13 @@ content:
     third_party_settings: {  }
     weight: 3
     region: content
+  shipments:
+    type: commerce_shipping_information
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 10
+    region: content
   state:
     type: list_default
     label: inline
@@ -106,6 +113,7 @@ hidden:
   created: true
   customer_comments: true
   ip_address: true
+  search_api_excerpt: true
   store_id: true
   total_paid: true
   uid: true

@@ -38,6 +38,7 @@ hidden:
   ip_address: true
   order_items: true
   order_number: true
+  shipments: true
   state: true
   store_id: true
   uid: true
