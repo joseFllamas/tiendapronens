@@ -76,6 +76,12 @@ pronens_correos_express.settings:
       type: boolean
       label: 'Registrar el payload completo en el log'
 
+# La acción masiva no tiene configuración propia, pero la entidad de acción
+# exige que su clave "configuration" tenga esquema.
+action.configuration.pronens_cex_generar_expediciones:
+  type: action_configuration_default
+  label: 'Generar expediciones de Correos Express'
+
 # Configuración del plugin de método de envío. Sin este esquema, phpstan a nivel
 # 8 con configGetUnknownKeyRule falla, y la entidad no se puede traducir.
 commerce_shipping.commerce_shipping_method.plugin.correos_express:

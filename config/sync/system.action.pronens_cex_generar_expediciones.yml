@@ -1,0 +1,12 @@
+uuid: ac4c3727-136f-40ba-a164-bc812d3ad441
+langcode: es
+status: true
+dependencies:
+  module:
+    - pronens_correos_express
+id: pronens_cex_generar_expediciones
+label: 'Generar expediciones de Correos Express'
+type: commerce_order
+plugin: pronens_cex_generar_expediciones
+configuration: {  }
+

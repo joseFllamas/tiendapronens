@@ -17,9 +17,10 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 /**
  * Da de alta las expediciones de varios pedidos a la vez.
  *
- * Aparece sola en el desplegable de operaciones de /admin/commerce/orders: esa
- * vista ya trae el formulario masivo con todas las acciones habilitadas, así
- * que no hay que tocar su configuración.
+ * Para que aparezca en el desplegable de /admin/commerce/orders no basta el
+ * plugin: el formulario masivo de Views lista entidades de configuración de
+ * acción, así que hace falta la de config/install (y su copia en config/sync).
+ * La vista en sí no se toca: trae todas las acciones habilitadas.
  *
  * La acción no llama a la API: guarda la selección y lleva a un formulario de
  * confirmación donde se revisan pesos y bultos antes de crear nada. Dar de alta

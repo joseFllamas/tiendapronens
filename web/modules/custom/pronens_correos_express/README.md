@@ -45,7 +45,9 @@ las discrepancias encontradas están corregidas y anotadas en el código:
    «Generar expedición CEX». Viene todo prerrellenado.
 4. **Dar de alta varios**: en `/admin/commerce/orders`, se seleccionan pedidos y
    se elige «Generar expediciones de Correos Express» en el desplegable. Lleva a
-   una tabla con una fila por envío antes de crear nada.
+   una tabla con una fila por envío antes de crear nada. La opción existe porque
+   hay una entidad `system.action.pronens_cex_generar_expediciones`: el
+   formulario masivo de Views lista entidades de acción, no plugins.
 5. **Etiqueta**: operación «Etiqueta CEX». Cinco formatos en los ajustes: PDF de
    10x15, PDF térmico, ZPL para impresoras Zebra (se descarga un `.zpl` que se
    manda a la impresora tal cual), PDF adhesivo de tres por hoja y PDF de medio

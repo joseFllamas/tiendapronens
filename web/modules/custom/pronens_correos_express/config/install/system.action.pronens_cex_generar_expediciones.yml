@@ -1,0 +1,14 @@
+# Sin esta entidad, el plugin de acción no aparece en el desplegable de
+# operaciones masivas de /admin/commerce/orders: el formulario masivo de Views
+# lista entidades de configuración de acción, no plugins.
+langcode: es
+status: true
+dependencies:
+  module:
+    - commerce_order
+    - pronens_correos_express
+id: pronens_cex_generar_expediciones
+label: 'Generar expediciones de Correos Express'
+type: commerce_order
+plugin: pronens_cex_generar_expediciones
+configuration: {  }
