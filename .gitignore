@@ -54,3 +54,8 @@
 
 .ddev/
 **/*.gz
+.user.ini
+**/node_modules   
+/correosoficial/
+/design/
+
