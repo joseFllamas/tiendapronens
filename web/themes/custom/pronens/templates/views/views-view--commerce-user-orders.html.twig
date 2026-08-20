@@ -1,0 +1,58 @@
+{#
+/**
+ * @file
+ * "Mis pedidos": la lista de pedidos del cliente, como tarjetas.
+ *
+ * No se pintan las filas de la view (una tabla con número, fecha, total y el
+ * estado del workflow): las tarjetas salen de las entidades del resultado
+ * (CuentaHooks::buildPedidos), porque las miniaturas y el estado de cara al
+ * cliente (que se lee del ENVÍO, no del pedido) no existen como campos de
+ * Views.
+ *
+ * El H1 va aquí y no en el bloque de título: el título de la view solo existe
+ * en castellano y así sale por traducción de interfaz en los cinco idiomas.
+ *
+ * Variables del tema:
+ * - pedidos: tarjetas con número, url, fecha, estado, total, fotos, artículos.
+ * - url_tienda: portada, para el estado vacío.
+ */
+#}
+<div class="pro-pedidos">
+  <h1 class="pro-cuenta__title">{{ 'My orders'|t }}</h1>
+
+  {% if pedidos %}
+    <ul class="pro-pedidos__list">
+      {% for pedido in pedidos %}
+        <li class="pro-pedidos__item">
+          <a class="pro-pedido" href="{{ pedido.url }}">
+            <span class="pro-pedido__thumbs" aria-hidden="true">
+              {% for foto in pedido.fotos %}
+                <span class="pro-pedido__thumb">{{ foto }}</span>
+              {% else %}
+                <span class="pro-pedido__thumb pro-pedido__thumb--empty"></span>
+              {% endfor %}
+            </span>
+            <span class="pro-pedido__info">
+              <span class="pro-pedido__num">{{ 'Order'|t }} #{{ pedido.numero }}</span>
+              <span class="pro-pedido__meta">
+                {{ pedido.fecha|format_date('custom', 'j/n/Y') }}
+                · {% trans with {'context': 'order card'} %}1 item{% plural pedido.articulos %}@count items{% endtrans %}
+              </span>
+              <span class="pro-estado pro-estado--{{ pedido.estado.clave }}">{{ pedido.estado.etiqueta }}</span>
+            </span>
+            <span class="pro-pedido__right">
+              <span class="pro-pedido__total">{{ pedido.total }}</span>
+              <span class="pro-pedido__ver">{{ 'View order'|t }} →</span>
+            </span>
+          </a>
+        </li>
+      {% endfor %}
+    </ul>
+    {{ pager }}
+  {% else %}
+    <div class="pro-pedidos__empty">
+      <p class="pro-pedidos__empty-msg">{{ 'You have not placed any orders yet.'|t }}</p>
+      <a class="pro-cuenta__cta" href="{{ url_tienda }}">{{ 'Explore the shop'|t }}</a>
+    </div>
+  {% endif %}
+</div>

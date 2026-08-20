@@ -99,6 +99,6 @@ configuration:
       wrapper_element: fieldset
     completion_register:
       display_label: null
-      step: _disabled
-      weight: 11
+      step: complete
+      weight: 8
       wrapper_element: null

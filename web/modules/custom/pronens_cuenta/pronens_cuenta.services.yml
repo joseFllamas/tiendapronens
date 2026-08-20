@@ -1,0 +1,16 @@
+services:
+  logger.channel.pronens_cuenta:
+    parent: logger.channel_base
+    arguments: ['pronens_cuenta']
+
+  Drupal\pronens_cuenta\EnlazadorDePedidos:
+    arguments:
+      - '@entity_type.manager'
+      - '@commerce_order.order_assignment'
+      - '@logger.channel.pronens_cuenta'
+
+  Drupal\pronens_cuenta\EventSubscriber\PedidoInvitadoSubscriber:
+    arguments:
+      - '@Drupal\pronens_cuenta\EnlazadorDePedidos'
+    tags:
+      - { name: event_subscriber }

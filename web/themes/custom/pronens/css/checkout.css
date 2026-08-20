@@ -666,3 +666,89 @@
   font-size: 14px;
   color: var(--pro-text-2);
 }
+
+/* --- Crear cuenta en la pantalla de gracias (completion_register). --- */
+.commerce-checkout-completion-register {
+  max-width: 480px;
+  margin: 28px 0 8px;
+  padding: 24px;
+  background: #fff;
+  border: 1px solid var(--pro-border);
+  border-radius: var(--pro-radius-size);
+}
+
+.commerce-checkout-completion-register__text h2 {
+  font-family: var(--pro-font-display);
+  font-weight: 800;
+  font-size: 20px;
+  color: var(--pro-ink);
+  margin: 0 0 6px;
+}
+
+.commerce-checkout-completion-register__text p {
+  font-family: var(--pro-font-ui);
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--pro-text-2);
+  margin: 0 0 18px;
+}
+
+.commerce-checkout-completion-register__form .form-item {
+  margin: 0 0 14px;
+}
+
+.commerce-checkout-completion-register__form label {
+  display: block;
+  font-family: var(--pro-font-ui);
+  font-weight: 700;
+  font-size: 14px;
+  color: var(--pro-ink-2);
+  margin-bottom: 6px;
+}
+
+.commerce-checkout-completion-register__form input[type="text"],
+.commerce-checkout-completion-register__form input[type="password"] {
+  width: 100%;
+  box-sizing: border-box;
+  font-family: var(--pro-font-ui);
+  font-size: 16px;
+  color: var(--pro-ink);
+  background: #fff;
+  border: 1px solid var(--pro-border-2);
+  border-radius: 10px;
+  padding: 11px 14px;
+}
+
+.commerce-checkout-completion-register__form input:focus-visible {
+  outline: 2px solid var(--pro-teal);
+  outline-offset: 1px;
+}
+
+/* El medidor de contraseña de core, en discreto. */
+.commerce-checkout-completion-register__form .password-strength,
+.commerce-checkout-completion-register__form .password-confirm-message {
+  font-family: var(--pro-font-ui);
+  font-size: 13px;
+  color: var(--pro-text-2);
+}
+
+.commerce-checkout-completion-register__form .pro-co__registro-btn {
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
+  font-family: var(--pro-font-ui);
+  font-weight: 700;
+  font-size: 16px;
+  color: #fff;
+  background: var(--pro-orange-cta);
+  border: 0;
+  border-radius: var(--pro-radius-pill);
+  padding: 14px 24px;
+  margin-top: 6px;
+  cursor: pointer;
+}
+
+.commerce-checkout-completion-register__form .pro-co__registro-btn:hover,
+.commerce-checkout-completion-register__form .pro-co__registro-btn:focus-visible {
+  background: var(--pro-ink-2);
+}

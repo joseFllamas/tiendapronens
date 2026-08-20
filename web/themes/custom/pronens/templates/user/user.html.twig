@@ -1,23 +1,68 @@
 {#
 /**
  * @file
- * Theme override to present all user data.
+ * El resumen de la cuenta del cliente.
  *
- * This template is used when viewing a registered user's page,
- * e.g., example.com/user/123. 123 being the user's ID.
+ * Sustituye a la ficha de usuario de core ("Miembro desde…"), que en una
+ * tienda no dice nada: saludo, accesos a las secciones y el último pedido.
+ * El H1 va aquí (el título de la ruta es el nombre de usuario).
  *
- * Available variables:
- * - content: A list of content items. Use 'content' to print all content, or
- *   print a subset such as 'content.field_example'. Fields attached to a user
- *   such as 'user_picture' are available as 'content.user_picture'.
- * - attributes: HTML attributes for the container element.
- * - user: A Drupal User entity.
- *
- * @see \Drupal\user\UserThemeHooks::preprocessUser()
+ * Variables del tema (CuentaHooks::preprocessUser):
+ * - resumen: nombre, correo, total_pedidos, ultimo (tarjeta de pedido o null),
+ *   pedidos_url, direcciones_url, datos_url, url_tienda.
  */
 #}
 <article{{ attributes.addClass('profile') }}>
-  {% if content %}
+  {% if resumen %}
+    <div class="pro-resumen">
+      <h1 class="pro-cuenta__title">{{ 'My account'|t }}</h1>
+      <p class="pro-resumen__saludo">{{ 'Hello, @nombre'|t({'@nombre': resumen.nombre}) }} · <span class="pro-resumen__correo">{{ resumen.correo }}</span></p>
+
+      {% if resumen.ultimo %}
+        <h2 class="pro-resumen__subtitulo">{{ 'Your latest order'|t }}</h2>
+        <a class="pro-pedido" href="{{ resumen.ultimo.url }}">
+          <span class="pro-pedido__thumbs" aria-hidden="true">
+            {% for foto in resumen.ultimo.fotos %}
+              <span class="pro-pedido__thumb">{{ foto }}</span>
+            {% endfor %}
+          </span>
+          <span class="pro-pedido__info">
+            <span class="pro-pedido__num">{{ 'Order'|t }} #{{ resumen.ultimo.numero }}</span>
+            <span class="pro-pedido__meta">{{ resumen.ultimo.fecha|format_date('custom', 'j/n/Y') }}</span>
+            <span class="pro-estado pro-estado--{{ resumen.ultimo.estado.clave }}">{{ resumen.ultimo.estado.etiqueta }}</span>
+          </span>
+          <span class="pro-pedido__right">
+            <span class="pro-pedido__total">{{ resumen.ultimo.total }}</span>
+            <span class="pro-pedido__ver">{{ 'View order'|t }} →</span>
+          </span>
+        </a>
+      {% endif %}
+
+      <div class="pro-resumen__accesos">
+        <a class="pro-resumen__acceso" href="{{ resumen.pedidos_url }}">
+          <span class="pro-resumen__acceso-titulo">{{ 'My orders'|t }}</span>
+          <span class="pro-resumen__acceso-desc">
+            {% trans with {'context': 'account'} %}1 order placed{% plural resumen.total_pedidos %}@count orders placed{% endtrans %}
+          </span>
+        </a>
+        <a class="pro-resumen__acceso" href="{{ resumen.direcciones_url }}">
+          <span class="pro-resumen__acceso-titulo">{{ 'Addresses'|t }}</span>
+          <span class="pro-resumen__acceso-desc">{{ 'Your shipping and billing details.'|t }}</span>
+        </a>
+        <a class="pro-resumen__acceso" href="{{ resumen.datos_url }}">
+          <span class="pro-resumen__acceso-titulo">{{ 'Account details'|t }}</span>
+          <span class="pro-resumen__acceso-desc">{{ 'Email address and password.'|t }}</span>
+        </a>
+      </div>
+
+      {% if not resumen.ultimo %}
+        <div class="pro-pedidos__empty">
+          <p class="pro-pedidos__empty-msg">{{ 'You have not placed any orders yet.'|t }}</p>
+          <a class="pro-cuenta__cta" href="{{ resumen.url_tienda }}">{{ 'Explore the shop'|t }}</a>
+        </div>
+      {% endif %}
+    </div>
+  {% elseif content %}
     {{- content -}}
   {% endif %}
 </article>

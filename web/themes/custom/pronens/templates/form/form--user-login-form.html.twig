@@ -1,0 +1,24 @@
+{#
+/**
+ * @file
+ * La pantalla de acceso, como tarjeta centrada.
+ *
+ * El H1 vive aquí (CuentaHooks::buildShell quita el bloque de título en las
+ * rutas de acceso): la tarjeta es la pantalla entera y el título forma parte
+ * de ella. El enlace de recuperación va dentro de la tarjeta, debajo del
+ * formulario, que es donde se busca cuando falla la contraseña.
+ */
+#}
+<div class="pro-acceso">
+  <div class="pro-acceso__card">
+    <h1 class="pro-acceso__title">{{ 'Log in'|t }}</h1>
+    <p class="pro-acceso__sub">{{ 'Access your account to check your orders and their tracking.'|t }}</p>
+    <form{{ attributes }}>
+      {{ children }}
+    </form>
+    <p class="pro-acceso__aux">
+      <a href="{{ path('user.pass') }}">{{ 'Forgot your password?'|t }}</a>
+    </p>
+  </div>
+  <p class="pro-acceso__nota">{{ 'New at Pronens? You can buy without an account: we ask for your details at checkout.'|t }}</p>
+</div>

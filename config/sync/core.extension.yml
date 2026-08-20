@@ -57,6 +57,7 @@ module:
   layout_discovery: 0
   link: 0
   locale: 0
+  login_emailusername: 0
   mailer_override: 0
   mailer_policy: 0
   mailer_transport: 0
@@ -83,6 +84,7 @@ module:
   pronens_carrito: 0
   pronens_comision_pago: 0
   pronens_correos_express: 0
+  pronens_cuenta: 0
   pronens_mail: 0
   pronens_migrate: 0
   pronens_personalizacion: 0

@@ -5,7 +5,6 @@ namespace Drupal\pronens\Hook;
 use Drupal\commerce_order\Entity\OrderInterface;
 use Drupal\commerce_order\OrderTotalSummaryInterface;
 use Drupal\Core\Cache\CacheableMetadata;
-use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityRepositoryInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Hook\Attribute\Hook;
@@ -13,6 +12,7 @@ use Drupal\Core\Language\LanguageInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\Url;
+use Drupal\profile\Entity\ProfileInterface;
 use Drupal\pronens\LineaPedidoTrait;
 use Drupal\symfony_mailer\EmailInterface;
 
@@ -61,6 +61,7 @@ class CorreoHooks {
     protected EntityTypeManagerInterface $entityTypeManager,
     protected EntityRepositoryInterface $entityRepository,
     protected LanguageManagerInterface $languageManager,
+    protected CuentaHooks $cuentaHooks,
   ) {
   }
 
@@ -111,6 +112,13 @@ class CorreoHooks {
    */
   #[Hook('preprocess_commerce_order')]
   public function preprocessCommerceOrder(array &$variables): void {
+    // La ficha del pedido en el área de cliente la monta CuentaHooks; el
+    // despacho vive aquí porque un tema no puede implementar el mismo
+    // preprocess dos veces.
+    if (($variables['elements']['#view_mode'] ?? '') === 'user') {
+      $this->cuentaHooks->buildPedido($variables);
+      return;
+    }
     if (($variables['elements']['#view_mode'] ?? '') !== 'email') {
       return;
     }
@@ -198,7 +206,7 @@ class CorreoHooks {
    * @return array<string, mixed>|null
    *   Render array de la dirección, o NULL si no hay.
    */
-  protected function direccion(?EntityInterface $perfil): ?array {
+  protected function direccion(?ProfileInterface $perfil): ?array {
     if ($perfil === NULL || !$perfil->hasField('address') || $perfil->get('address')->isEmpty()) {
       return NULL;
     }

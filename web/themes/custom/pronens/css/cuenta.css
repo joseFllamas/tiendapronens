@@ -1,0 +1,735 @@
+/**
+ * @file
+ * Área de cliente: cáscara con navegación, "Mis pedidos", la ficha de un
+ * pedido con la línea de tiempo del envío, y el resumen de la cuenta.
+ *
+ * Las líneas de pedido de la ficha reutilizan .pro-cline de cesta.css (la
+ * library pronens/cuenta depende de pronens/cesta), igual que la franja de
+ * tarjetas reutiliza pronens/grid en otras pantallas.
+ */
+
+/* --- Cáscara: navegación lateral + contenido. --- */
+.pro-cuenta {
+  display: grid;
+  gap: 24px;
+}
+
+@media (min-width: 900px) {
+  .pro-cuenta {
+    grid-template-columns: 210px minmax(0, 1fr);
+    column-gap: 56px;
+    align-items: start;
+  }
+
+  .pro-cuenta__aside {
+    position: sticky;
+    top: calc(var(--pro-header-height) + 24px);
+  }
+}
+
+.pro-cuenta__menu {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.pro-cuenta__link {
+  display: block;
+  font-family: var(--pro-font-ui);
+  font-size: 15px;
+  color: var(--pro-text-2);
+  text-decoration: none;
+  padding: 9px 12px;
+  border-left: 2px solid transparent;
+  border-radius: 0 8px 8px 0;
+}
+
+.pro-cuenta__link:hover,
+.pro-cuenta__link:focus-visible {
+  color: var(--pro-ink-2);
+  background: var(--pro-cream-2);
+}
+
+.pro-cuenta__link.is-active {
+  color: var(--pro-ink);
+  font-weight: 700;
+  border-left-color: var(--pro-teal);
+  background: var(--pro-teal-bg);
+}
+
+.pro-cuenta__salir {
+  display: inline-block;
+  font-family: var(--pro-font-ui);
+  font-size: 13px;
+  color: var(--pro-mute);
+  text-decoration: none;
+  border-bottom: 1px solid currentColor;
+  margin: 18px 0 0 14px;
+}
+
+.pro-cuenta__salir:hover,
+.pro-cuenta__salir:focus-visible {
+  color: var(--pro-orange-ink);
+}
+
+/* En móvil el menú pasa a píldoras deslizables bajo el título. */
+@media (max-width: 899px) {
+  .pro-cuenta__menu {
+    flex-direction: row;
+    overflow-x: auto;
+    gap: 8px;
+    padding-bottom: 4px;
+  }
+
+  .pro-cuenta__link {
+    white-space: nowrap;
+    border: 1px solid var(--pro-border-2);
+    border-radius: var(--pro-radius-pill);
+    padding: 8px 16px;
+  }
+
+  .pro-cuenta__link.is-active {
+    border-color: var(--pro-teal);
+  }
+
+  .pro-cuenta__salir {
+    display: none;
+  }
+}
+
+/* --- Piezas comunes. --- */
+.pro-cuenta__title {
+  font-family: var(--pro-font-display);
+  font-weight: 800;
+  font-size: 28px;
+  line-height: 1.2;
+  color: var(--pro-ink);
+  margin: 0 0 18px;
+}
+
+.pro-cuenta__cta {
+  display: inline-block;
+  font-family: var(--pro-font-ui);
+  font-weight: 700;
+  font-size: 15px;
+  color: #fff;
+  background: var(--pro-orange-cta);
+  border-radius: var(--pro-radius-pill);
+  padding: 12px 28px;
+  text-decoration: none;
+}
+
+.pro-cuenta__cta:hover,
+.pro-cuenta__cta:focus-visible {
+  background: var(--pro-ink-2);
+}
+
+/* --- Chip de estado (de cara al cliente: sale del envío). --- */
+.pro-estado {
+  display: inline-block;
+  font-family: var(--pro-font-ui);
+  font-weight: 700;
+  font-size: 12px;
+  line-height: 1;
+  padding: 6px 10px;
+  border-radius: var(--pro-radius-pill);
+}
+
+.pro-estado--preparacion {
+  background: var(--pro-cream-2);
+  border: 1px solid var(--pro-border-cream);
+  color: var(--pro-ink-2);
+}
+
+.pro-estado--enviado {
+  background: var(--pro-teal-bg);
+  color: var(--pro-teal-ink);
+}
+
+.pro-estado--entregado {
+  background: #e8f3ea;
+  color: #23663a;
+}
+
+.pro-estado--cancelado,
+.pro-estado--devuelto {
+  background: var(--pro-orange-bg);
+  color: var(--pro-orange-ink);
+}
+
+/* --- "Mis pedidos": tarjetas. --- */
+.pro-pedidos__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.pro-pedido {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 18px;
+  background: #fff;
+  border: 1px solid var(--pro-border);
+  border-radius: var(--pro-radius-size);
+  padding: 16px 20px;
+  text-decoration: none;
+  color: inherit;
+}
+
+.pro-pedido:hover,
+.pro-pedido:focus-visible {
+  border-color: var(--pro-border-2);
+  box-shadow: var(--pro-shadow-panel);
+}
+
+.pro-pedido__thumbs {
+  display: flex;
+}
+
+.pro-pedido__thumb {
+  width: 56px;
+  height: 56px;
+  border-radius: 10px;
+  overflow: hidden;
+  background: var(--pro-img-bg);
+  border: 2px solid #fff;
+  flex: none;
+}
+
+.pro-pedido__thumb + .pro-pedido__thumb {
+  margin-left: -18px;
+}
+
+.pro-pedido__thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.pro-pedido__info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  align-items: flex-start;
+}
+
+.pro-pedido__num {
+  font-family: var(--pro-font-ui);
+  font-weight: 700;
+  font-size: 16px;
+  color: var(--pro-ink-2);
+}
+
+.pro-pedido__meta {
+  font-family: var(--pro-font-ui);
+  font-size: 13px;
+  color: var(--pro-text-2);
+}
+
+.pro-pedido__right {
+  text-align: right;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  align-items: flex-end;
+}
+
+.pro-pedido__total {
+  font-family: var(--pro-font-display);
+  font-weight: 700;
+  font-size: 17px;
+  color: var(--pro-ink);
+}
+
+.pro-pedido__ver {
+  font-family: var(--pro-font-ui);
+  font-size: 13px;
+  color: var(--pro-teal-ink);
+}
+
+.pro-pedido:hover .pro-pedido__ver {
+  text-decoration: underline;
+}
+
+@media (max-width: 619px) {
+  .pro-pedido {
+    grid-template-columns: auto minmax(0, 1fr);
+  }
+
+  .pro-pedido__right {
+    grid-column: 2;
+    flex-direction: row;
+    align-items: baseline;
+    gap: 12px;
+  }
+}
+
+/* --- Estado vacío. --- */
+.pro-pedidos__empty {
+  text-align: center;
+  padding: 40px 0 24px;
+}
+
+.pro-pedidos__empty-msg {
+  font-family: var(--pro-font-ui);
+  font-size: 16px;
+  color: var(--pro-text-2);
+  margin: 0 0 20px;
+}
+
+/* --- Ficha de un pedido. --- */
+.pro-pedido-ficha__volver {
+  display: inline-block;
+  font-family: var(--pro-font-ui);
+  font-size: 14px;
+  color: var(--pro-text-2);
+  text-decoration: none;
+  margin-bottom: 14px;
+}
+
+.pro-pedido-ficha__volver:hover,
+.pro-pedido-ficha__volver:focus-visible {
+  color: var(--pro-ink-2);
+  text-decoration: underline;
+}
+
+.pro-pedido-ficha__head {
+  margin-bottom: 24px;
+}
+
+.pro-pedido-ficha__head .pro-cuenta__title {
+  margin-bottom: 8px;
+}
+
+.pro-pedido-ficha__meta {
+  font-family: var(--pro-font-ui);
+  font-size: 14px;
+  color: var(--pro-text-2);
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+/* --- Línea de tiempo del envío. --- */
+.pro-envio {
+  background: #fff;
+  border: 1px solid var(--pro-border);
+  border-radius: var(--pro-radius-size);
+  padding: 24px 20px 20px;
+  margin-bottom: 28px;
+}
+
+.pro-envio__pasos {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+}
+
+.pro-envio__paso {
+  flex: 1;
+  position: relative;
+  text-align: center;
+  padding-top: 24px;
+  min-width: 0;
+}
+
+/* El tramo que une cada paso con el anterior. */
+.pro-envio__paso::before {
+  content: "";
+  position: absolute;
+  top: 7px;
+  right: 50%;
+  width: 100%;
+  height: 2px;
+  background: var(--pro-border-cream);
+}
+
+.pro-envio__paso:first-child::before {
+  display: none;
+}
+
+.pro-envio__paso.is-done::before {
+  background: var(--pro-teal);
+}
+
+.pro-envio__punto {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 16px;
+  height: 16px;
+  box-sizing: border-box;
+  border-radius: 50%;
+  background: #fff;
+  border: 2px solid var(--pro-border-2);
+  z-index: 1;
+}
+
+.pro-envio__paso.is-done .pro-envio__punto {
+  background: var(--pro-teal);
+  border-color: var(--pro-teal);
+}
+
+.pro-envio__paso.is-current .pro-envio__punto {
+  box-shadow: 0 0 0 4px var(--pro-teal-bg);
+}
+
+.pro-envio__etiqueta {
+  display: block;
+  font-family: var(--pro-font-ui);
+  font-size: 13px;
+  line-height: 1.3;
+  color: var(--pro-text-2);
+  padding: 0 4px;
+}
+
+.pro-envio__paso.is-done .pro-envio__etiqueta {
+  color: var(--pro-ink-2);
+}
+
+.pro-envio__paso.is-current .pro-envio__etiqueta {
+  font-weight: 700;
+  color: var(--pro-ink);
+}
+
+.pro-envio__fecha {
+  display: block;
+  font-family: var(--pro-font-ui);
+  font-size: 12px;
+  color: var(--pro-mute);
+  margin-top: 2px;
+}
+
+.pro-envio__seguimiento {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  border-top: 1px solid var(--pro-border);
+  margin-top: 20px;
+  padding-top: 16px;
+}
+
+.pro-envio__codigo {
+  font-family: var(--pro-font-ui);
+  font-size: 14px;
+  color: var(--pro-text-2);
+}
+
+.pro-envio__codigo strong {
+  color: var(--pro-ink-2);
+}
+
+.pro-envio__btn {
+  display: inline-block;
+  font-family: var(--pro-font-ui);
+  font-weight: 700;
+  font-size: 14px;
+  color: var(--pro-teal-ink);
+  background: var(--pro-teal-bg);
+  border: 1px solid var(--pro-teal);
+  border-radius: var(--pro-radius-pill);
+  padding: 10px 20px;
+  text-decoration: none;
+}
+
+.pro-envio__btn:hover,
+.pro-envio__btn:focus-visible {
+  color: #fff;
+  background: var(--pro-teal-ink);
+  border-color: var(--pro-teal-ink);
+}
+
+@media (max-width: 619px) {
+  /* En estrecho la línea de tiempo pasa a vertical. */
+  .pro-envio__pasos {
+    flex-direction: column;
+    gap: 18px;
+  }
+
+  .pro-envio__paso {
+    text-align: left;
+    padding-top: 0;
+    padding-left: 30px;
+  }
+
+  .pro-envio__punto {
+    left: 0;
+    top: 1px;
+    transform: none;
+  }
+
+  .pro-envio__paso::before {
+    top: -14px;
+    left: 7px;
+    right: auto;
+    width: 2px;
+    height: 14px;
+  }
+}
+
+/* --- Totales de la ficha. --- */
+.pro-pedido-ficha__totales {
+  max-width: 360px;
+  margin: 24px 0 28px auto;
+  padding: 20px;
+  background: var(--pro-cream-2);
+  border: 1px solid var(--pro-border-cream);
+  border-radius: var(--pro-radius-size);
+}
+
+@media (max-width: 619px) {
+  .pro-pedido-ficha__totales {
+    max-width: none;
+  }
+}
+
+.pro-pedido-ficha__linea {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px;
+  font-family: var(--pro-font-ui);
+  font-size: 15px;
+  color: var(--pro-ink-2);
+  margin: 0 0 8px;
+}
+
+.pro-pedido-ficha__linea--incluido {
+  color: var(--pro-text-2);
+  font-size: 14px;
+}
+
+.pro-pedido-ficha__linea--total {
+  padding-top: 12px;
+  margin: 4px 0 0;
+  border-top: 1px solid var(--pro-border-cream);
+  font-family: var(--pro-font-display);
+  font-weight: 700;
+  font-size: 20px;
+  color: var(--pro-ink);
+}
+
+/* --- Direcciones y pago. --- */
+.pro-pedido-ficha__cols {
+  display: grid;
+  gap: 20px;
+}
+
+@media (min-width: 620px) {
+  .pro-pedido-ficha__cols {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.pro-pedido-ficha__col {
+  background: #fff;
+  border: 1px solid var(--pro-border);
+  border-radius: var(--pro-radius-size);
+  padding: 20px;
+  font-family: var(--pro-font-ui);
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--pro-ink-2);
+}
+
+.pro-pedido-ficha__subtitulo {
+  font-family: var(--pro-font-display);
+  font-weight: 700;
+  font-size: 16px;
+  color: var(--pro-ink);
+  margin: 0 0 10px;
+}
+
+.pro-pedido-ficha__col .address {
+  margin: 0;
+}
+
+.pro-pedido-ficha__detalle {
+  color: var(--pro-text-2);
+  margin: 10px 0 0;
+}
+
+/* --- Resumen de la cuenta. --- */
+.pro-resumen__saludo {
+  font-family: var(--pro-font-ui);
+  font-size: 15px;
+  color: var(--pro-text-2);
+  margin: -8px 0 24px;
+}
+
+.pro-resumen__correo {
+  color: var(--pro-mute);
+}
+
+.pro-resumen__subtitulo {
+  font-family: var(--pro-font-display);
+  font-weight: 700;
+  font-size: 18px;
+  color: var(--pro-ink);
+  margin: 0 0 12px;
+}
+
+.pro-resumen__accesos {
+  display: grid;
+  gap: 14px;
+  margin-top: 24px;
+}
+
+@media (min-width: 620px) {
+  .pro-resumen__accesos {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.pro-resumen__acceso {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  background: #fff;
+  border: 1px solid var(--pro-border);
+  border-radius: var(--pro-radius-size);
+  padding: 18px;
+  text-decoration: none;
+}
+
+.pro-resumen__acceso:hover,
+.pro-resumen__acceso:focus-visible {
+  border-color: var(--pro-border-2);
+  box-shadow: var(--pro-shadow-panel);
+}
+
+.pro-resumen__acceso-titulo {
+  font-family: var(--pro-font-ui);
+  font-weight: 700;
+  font-size: 15px;
+  color: var(--pro-teal-ink);
+}
+
+.pro-resumen__acceso-desc {
+  font-family: var(--pro-font-ui);
+  font-size: 13px;
+  color: var(--pro-text-2);
+}
+
+/* --- Libreta de direcciones (address book de Commerce). --- */
+.pro-cuenta__content .address-book__container {
+  background: #fff;
+  border: 1px solid var(--pro-border);
+  border-radius: var(--pro-radius-size);
+  padding: 20px;
+  font-family: var(--pro-font-ui);
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--pro-ink-2);
+  margin-bottom: 16px;
+}
+
+.pro-cuenta__content .address-book__empty-text {
+  color: var(--pro-text-2);
+  margin: 4px 0 12px;
+}
+
+.pro-cuenta__content .address-book__add-link {
+  display: inline-block;
+  font-family: var(--pro-font-ui);
+  font-weight: 700;
+  font-size: 14px;
+  color: var(--pro-teal-ink);
+  background: var(--pro-teal-bg);
+  border: 1px solid var(--pro-teal);
+  border-radius: var(--pro-radius-pill);
+  padding: 10px 20px;
+  text-decoration: none;
+  margin-bottom: 12px;
+}
+
+.pro-cuenta__content .address-book__add-link:hover,
+.pro-cuenta__content .address-book__add-link:focus-visible {
+  color: #fff;
+  background: var(--pro-teal-ink);
+  border-color: var(--pro-teal-ink);
+}
+
+.pro-cuenta__content .address-book__profile {
+  border-top: 1px solid var(--pro-border);
+  padding-top: 14px;
+  margin-top: 14px;
+}
+
+.pro-cuenta__content .address-book__profile .address {
+  margin: 0 0 8px;
+}
+
+/* --- Formularios del área (datos de la cuenta, direcciones). --- */
+.pro-cuenta__content .form-item {
+  margin: 0 0 16px;
+}
+
+.pro-cuenta__content label {
+  display: block;
+  font-family: var(--pro-font-ui);
+  font-weight: 700;
+  font-size: 14px;
+  color: var(--pro-ink-2);
+  margin-bottom: 6px;
+}
+
+.pro-cuenta__content .form-item .description {
+  font-family: var(--pro-font-ui);
+  font-size: 13px;
+  color: var(--pro-mute);
+  margin-top: 4px;
+}
+
+.pro-cuenta__content input[type="text"],
+.pro-cuenta__content input[type="email"],
+.pro-cuenta__content input[type="password"],
+.pro-cuenta__content input[type="tel"],
+.pro-cuenta__content select {
+  box-sizing: border-box;
+  max-width: 480px;
+  width: 100%;
+  font-family: var(--pro-font-ui);
+  font-size: 16px;
+  color: var(--pro-ink);
+  background: #fff;
+  border: 1px solid var(--pro-border-2);
+  border-radius: 10px;
+  padding: 11px 14px;
+}
+
+.pro-cuenta__content input:focus-visible,
+.pro-cuenta__content select:focus-visible {
+  outline: 2px solid var(--pro-teal);
+  outline-offset: 1px;
+}
+
+.pro-cuenta__content .form-submit {
+  font-family: var(--pro-font-ui);
+  font-weight: 700;
+  font-size: 15px;
+  color: #fff;
+  background: var(--pro-orange-cta);
+  border: 0;
+  border-radius: var(--pro-radius-pill);
+  padding: 12px 28px;
+  cursor: pointer;
+}
+
+.pro-cuenta__content .form-submit:hover,
+.pro-cuenta__content .form-submit:focus-visible {
+  background: var(--pro-ink-2);
+}

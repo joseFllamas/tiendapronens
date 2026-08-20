@@ -1004,6 +1004,71 @@ Donde este documento y la realidad del repo discrepan, manda esta lista (decidid
   - **Pendiente**: el SMTP de producción (host `smtp.odisean.net`, puerto 587 con STARTTLS, usuario
     `pronens.com@c.odisean.net`, contraseña en `settings.local.php` vía `getenv()`, nunca en
     `config/sync`), y comprobar SPF/DKIM/DMARC de `pronens.com` autorizando a `odisean.net`.
+- **Área de cliente montada (2026-08-20)**: login, "Mis pedidos", ficha de pedido con línea de
+  tiempo del envío, resumen de cuenta y navegación lateral común (`CuentaHooks`, libraries
+  `pronens/cuenta` y `pronens/login`, cadenas en `scripts/traducir-cuenta.php`). Lo que conviene no
+  reinventar:
+  - **Se entra con el correo**: contrib `login_emailusername` 3.0.1 (D11, estable). Imprescindible
+    porque solo 118 de los 1578 usuarios migrados tienen el correo como nombre de usuario; el resto
+    son `victor1`, `educoland`… que nadie recuerda. La etiqueta del campo la pone el tema con el
+    correo por delante ("Correo electrónico o nombre de usuario").
+  - **El estado de cara al cliente sale del ENVÍO, no del pedido**: el workflow `order_default`
+    pasa a `completed` en el momento de comprar, así que todos los pedidos dirían "Completado" con
+    la caja aún en el taller. `CuentaHooks::estadoDelPedido()` mira el estado del shipment y la
+    situación del seguimiento de Correos Express (`cex_ultimo_estado`, que escribe el
+    sincronizador): En preparación → Enviado → Entregado (y Devuelto/Cancelado). La ficha pinta la
+    línea de tiempo con esas mismas fuentes y enlaza el seguimiento público
+    (`https://s.correosexpress.com/c?n=…`, la misma URL que el correo de expedición).
+  - **Un tema no puede implementar el mismo preprocess dos veces** (ya documentado en la view del
+    catálogo): `preprocess_page` despacha desde PronensHooks, `preprocess_views_view` desde
+    CatalogoHooks y `preprocess_commerce_order` desde CorreoHooks hacia CuentaHooks.
+  - **Las líneas y los totales son los del trait compartido** (`LineaPedidoTrait` + el servicio de
+    totales), así que la ficha del pedido enseña exactamente lo mismo que el flyout, la cesta, el
+    checkout y el recibo por correo: bordado, formato, extras y recargos incluidos.
+  - **La lista de pedidos no pinta los campos de la view** `commerce_user_orders`: las tarjetas se
+    montan desde las entidades del resultado (miniaturas y estado no existen como campos de Views).
+    El H1 "Mis pedidos" va por traducción de interfaz porque el título de la view solo existe en
+    castellano.
+  - **Permisos nuevos del rol autenticado**: `view/update own customer profile` y
+    `create customer profile` — sin ellos la libreta de direcciones de Commerce daba 403. En
+    `config/sync` van ese cambio y el alta del módulo en `core.extension`.
+  - **El bloque de título y las pestañas de core se quitan solo en la cuenta PROPIA** (y en el
+    login): las pestañas ("Ver", "Editar", "Agenda de direcciones", "Medios de pago") duplican la
+    navegación lateral con etiquetas de backoffice. Un administrador mirando a otro usuario las
+    conserva. Los H1 de editar (salía el nombre de usuario) y direcciones se realinean en
+    `preprocess_page_title`, con contexto de caché `user` porque el mismo H1 cambia según quién
+    mira.
+  - **La URL de logout lleva token CSRF de sesión**: la cáscara añade el contexto `session` para
+    que otra sesión del mismo usuario no herede un token ajeno de la Dynamic Page Cache.
+  - **"Medios de pago" queda fuera del menú lateral a propósito**: con Redsys y PayPal en modo
+    redirect no hay tarjetas guardadas que gestionar. La ruta sigue existiendo.
+  - **Decidido con el cliente (2026-08-20)**: (1) se crea cuenta desde la pantalla de gracias
+    (ver la resolución siguiente); (2) la libreta se queda con UNA dirección (`allow_multiple: 0`),
+    es suficiente; (3) los pedidos de invitado SÍ se enlazan por correo (módulo `pronens_cuenta`,
+    resolución siguiente); (4) "Medios de pago" sigue fuera del menú lateral.
+  - **Datos de prueba**: usuario `cliente-prueba` (uid 1590, cliente@pronens.test) con los pedidos
+    47, 69 y 70 asignados y el envío 5 simulado como entregado (tracking `PRUEBA1234567890`).
+    Son datos de desarrollo: limpiar antes del volcado a producción.
+- **Cuenta nueva desde la pantalla de gracias y pedidos de invitado enlazados (2026-08-20,
+  cliente)**: el registro del sitio sigue en `admin_only` (no hay /user/register público) y lo que
+  se activa es el pane `completion_register` del checkout, que NO mira esa opción: quien acaba de
+  comprar puede ponerse contraseña en la pantalla de gracias, sin tocar el embudo de compra. El
+  pane se esconde solo si el correo ya tiene cuenta, que encaja con el enlazado. Detalles:
+  - El pane construye sus campos con el form display `register` del usuario y arrastraba la FOTO
+    DE PERFIL; la esconde `CheckoutHooks::formCheckoutAlter`, que también quita las descripciones
+    de core y alinea el copy con el tuteo de la tienda ("Crea tu cuenta", pisando el "Cree su
+    cuenta" de la traducción de Commerce, en `scripts/traducir-cuenta.php`).
+  - **Los pedidos de invitado se enlazan con la cuenta de su correo** (módulo `pronens_cuenta`):
+    al REALIZARSE el pedido si la cuenta ya existe (subscriber en el `pre_transition` de place, a
+    propósito: ahí basta `OrderAssignment::assign(..., FALSE)` sin save, el de la transición lo
+    persiste, y el AddressBookSubscriber de Commerce y el recibo ya ven el pedido asignado), y al
+    CREARSE una cuenta para los pedidos anteriores (`hook_user_insert`, carritos draft excluidos:
+    los gobierna la sesión de commerce_cart). Probado en los dos sentidos y que el carrito no se
+    toca. Para lo ya existente en producción: `scripts/enlazar-pedidos-invitado.php`, idempotente.
+  - **Ojo al probar el paso `complete` a mano**: colocar el pedido por drush y abrir
+    /checkout/N/complete vale UNA vez por sesión anónima (la visita invalida el id de carrito de
+    la sesión y no lo pasa a completado, eso solo lo hace el flujo real de pago). La compra entera
+    con registro queda por probarse con la tarjeta de test de Redsys.
 - **Chrome headless no baja de 500px de ancho** en macOS: `--window-size=390` da `innerWidth=500` y
   el recorte parece un desbordamiento horizontal que no existe. Antes de dar por buena una captura
   estrecha, comprobar el viewport real (`innerWidth`) o mirar en el navegador de verdad.

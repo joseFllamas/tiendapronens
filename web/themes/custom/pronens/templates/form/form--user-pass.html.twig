@@ -1,0 +1,22 @@
+{#
+/**
+ * @file
+ * La recuperación de contraseña, con la misma tarjeta que el login.
+ *
+ * El H1 lo pinta la tarjeta (el bloque de título se quita en las rutas de
+ * acceso): el título de la ruta de core, "Reinicializar su contraseña", ni es
+ * el tono de la tienda ni existe en los cinco idiomas del sitio.
+ */
+#}
+<div class="pro-acceso">
+  <div class="pro-acceso__card">
+    <h1 class="pro-acceso__title">{{ 'Recover your password'|t }}</h1>
+    <p class="pro-acceso__sub">{{ 'Tell us your email address and we will send you a link to choose a new one.'|t }}</p>
+    <form{{ attributes }}>
+      {{ children }}
+    </form>
+    <p class="pro-acceso__aux">
+      <a href="{{ path('user.login') }}">{{ 'Back to log in'|t }}</a>
+    </p>
+  </div>
+</div>

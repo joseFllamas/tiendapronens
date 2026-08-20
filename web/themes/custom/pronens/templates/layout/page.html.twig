@@ -52,7 +52,30 @@
 
   <main class="pro-page__main{{ main_boxed ? ' pro-page__main--boxed' }}">
     <a id="main-content" tabindex="-1"></a>{# link is in html.html.twig #}
-    {{ page.content }}
+    {% if cuenta %}
+      {# Área de cliente: navegación lateral común a resumen, pedidos,
+         direcciones y datos (CuentaHooks::buildShell). #}
+      <div class="pro-cuenta">
+        <aside class="pro-cuenta__aside">
+          <nav class="pro-cuenta__nav" aria-label="{{ 'My account'|t }}">
+            <ul class="pro-cuenta__menu">
+              {% for item in cuenta.nav %}
+                <li class="pro-cuenta__item">
+                  <a class="pro-cuenta__link{{ item.activa ? ' is-active' }}"
+                     href="{{ item.url }}"{% if item.activa %} aria-current="page"{% endif %}>{{ item.etiqueta }}</a>
+                </li>
+              {% endfor %}
+            </ul>
+            <a class="pro-cuenta__salir" href="{{ cuenta.salir }}">{{ 'Log out'|t }}</a>
+          </nav>
+        </aside>
+        <div class="pro-cuenta__content">
+          {{ page.content }}
+        </div>
+      </div>
+    {% else %}
+      {{ page.content }}
+    {% endif %}
   </main>
 
   <footer class="pro-footer">

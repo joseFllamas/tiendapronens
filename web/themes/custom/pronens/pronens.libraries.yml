@@ -148,6 +148,23 @@ cesta:
     component:
       css/cesta.css: {}
 
+# Área de cliente: cáscara, "Mis pedidos", ficha de pedido y resumen. Depende
+# de cesta por .pro-cline, la línea de pedido compartida.
+cuenta:
+  version: VERSION
+  css:
+    component:
+      css/cuenta.css: {}
+  dependencies:
+    - pronens/cesta
+
+# Pantallas de acceso (login y recuperación de contraseña).
+login:
+  version: VERSION
+  css:
+    component:
+      css/acceso.css: {}
+
 grid:
   css:
     component:

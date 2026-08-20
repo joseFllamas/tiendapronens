@@ -47,6 +47,7 @@ class CatalogoHooks {
     protected RouteMatchInterface $routeMatch,
     protected RequestStack $requestStack,
     protected CarritoHooks $carritoHooks,
+    protected CuentaHooks $cuentaHooks,
   ) {
   }
 
@@ -87,6 +88,10 @@ class CatalogoHooks {
     }
     if ($view->id() === 'commerce_cart_form') {
       $this->carritoHooks->buildCesta($variables);
+      return;
+    }
+    if ($view->id() === 'commerce_user_orders') {
+      $this->cuentaHooks->buildPedidos($variables);
       return;
     }
     if ($view->id() !== self::VIEW_ID) {
