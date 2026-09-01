@@ -85,6 +85,15 @@ field_settings:
     dependencies:
       module:
         - commerce_product
+  sku:
+    label: SKU
+    datasource_id: 'entity:commerce_product'
+    property_path: 'variations:entity:sku'
+    type: text
+    boost: 8.0
+    dependencies:
+      module:
+        - commerce_product
   status:
     label: Publicado
     datasource_id: 'entity:commerce_product'
@@ -141,6 +150,7 @@ processor_settings:
   ignorecase:
     all_fields: false
     fields:
+      - sku
       - titulo
   language_with_fallback: {  }
   rendered_item: {  }
@@ -153,6 +163,7 @@ processor_settings:
   transliteration:
     all_fields: false
     fields:
+      - sku
       - titulo
 tracker_settings:
   default:

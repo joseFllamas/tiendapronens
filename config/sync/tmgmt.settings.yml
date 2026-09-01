@@ -3,6 +3,8 @@ _core:
 quick_checkout: false
 anonymous_access: true
 purge_finished: _never
+purge_continuous: _never
+purge_continuous_aborted: false
 respect_text_format: true
 allowed_formats:
   - basic_html
@@ -11,6 +13,8 @@ allowed_formats:
   - plain_text
 word_count_exclude_tags: true
 source_list_limit: 20
+field_length_overflow_policy: needs_review
 submit_job_item_on_cron: false
 job_items_cron_limit: 50
 file_mimetypes: {  }
+purge_stale: false

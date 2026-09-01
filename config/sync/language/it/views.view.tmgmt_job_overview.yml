@@ -16,6 +16,8 @@ display:
           separator: ', '
         translator:
           label: 'Fonte esterna'
+        progress:
+          label: Progreso
         word_count:
           label: Parole
         tags_count:

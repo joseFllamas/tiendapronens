@@ -444,7 +444,8 @@ display:
         - url
         - url.query_args
         - user.permissions
-      tags: {  }
+      tags:
+        - deepl_ml_glossary_dictionary_list
   page_1:
     id: page_1
     display_title: Página
@@ -461,4 +462,5 @@ display:
         - url
         - url.query_args
         - user.permissions
-      tags: {  }
+      tags:
+        - deepl_ml_glossary_dictionary_list

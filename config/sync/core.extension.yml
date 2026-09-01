@@ -81,6 +81,7 @@ module:
   phpass: 0
   physical: 0
   profile: 0
+  pronens_buscador: 0
   pronens_carrito: 0
   pronens_comision_pago: 0
   pronens_correos_express: 0
@@ -108,7 +109,6 @@ module:
   tmgmt_language_combination: 0
   tmgmt_locale: 0
   token: 0
-  update: 0
   user: 0
   views_ui: 0
   pathauto: 1

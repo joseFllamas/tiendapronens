@@ -1,0 +1,150 @@
+uuid: 086de73a-bb25-4be9-a090-95a5ea4c15a0
+langcode: es
+status: true
+dependencies:
+  config:
+    - search_api.index.catalogo
+    - taxonomy.vocabulary.tipo_de_producto
+  module:
+    - search_api
+id: buscar
+label: Buscar
+module: views
+description: 'Resultados del buscador de la tienda: por nombre o por SKU.'
+tag: default
+base_table: search_api_index_catalogo
+base_field: search_api_id
+display:
+  default:
+    id: default
+    display_title: Predeterminado
+    display_plugin: default
+    position: 0
+    display_options:
+      title: Buscar
+      pager:
+        type: full
+        options:
+          offset: 0
+          items_per_page: 24
+      exposed_form:
+        type: basic
+        options:
+          submit_button: Buscar
+          reset_button: false
+          expose_sort_order: false
+      access:
+        type: none
+        options: {  }
+      cache:
+        type: search_api_tag
+        options: {  }
+      empty: {  }
+      sorts:
+        search_api_relevance:
+          id: search_api_relevance
+          table: search_api_index_catalogo
+          field: search_api_relevance
+          plugin_id: search_api
+          order: DESC
+          exposed: false
+        created:
+          id: created
+          table: search_api_index_catalogo
+          field: created
+          plugin_id: search_api
+          order: DESC
+          exposed: false
+      arguments: {  }
+      filters:
+        search_api_fulltext:
+          id: search_api_fulltext
+          table: search_api_index_catalogo
+          field: search_api_fulltext
+          plugin_id: search_api_fulltext
+          operator: and
+          value: ''
+          exposed: true
+          expose:
+            operator_id: texto_op
+            label: Buscar
+            operator: texto_op
+            identifier: texto
+            required: false
+            remember: false
+            multiple: false
+            placeholder: ''
+          parse_mode: terms
+          min_length: 3
+          fields:
+            - sku
+            - titulo
+        tipo:
+          id: tipo
+          table: search_api_index_catalogo
+          field: tipo
+          plugin_id: search_api_term
+          operator: 'not empty'
+          value: {  }
+          exposed: false
+        search_api_language:
+          id: search_api_language
+          table: search_api_index_catalogo
+          field: search_api_language
+          plugin_id: search_api_language
+          operator: in
+          value:
+            - '***LANGUAGE_language_content***'
+          exposed: false
+      style:
+        type: default
+        options:
+          grouping: {  }
+          row_class: pro-grid__cell
+          default_row_class: false
+          uses_fields: false
+      row:
+        type: search_api
+        options:
+          view_modes:
+            'entity:commerce_product':
+              ':default': tarjeta
+              default: tarjeta
+      query:
+        type: search_api_query
+        options:
+          bypass_access: false
+          skip_access: false
+          preserve_facet_query_args: false
+      relationships: {  }
+      css_class: pro-buscar
+      header: {  }
+      footer: {  }
+      rendering_language: '***LANGUAGE_language_content***'
+      display_extenders: {  }
+    cache_metadata:
+      max-age: -1
+      contexts:
+        - 'languages:language_interface'
+        - url
+        - url.query_args
+      tags:
+        - 'config:search_api.index.catalogo'
+        - 'search_api_list:catalogo'
+  page_1:
+    id: page_1
+    display_title: Página
+    display_plugin: page
+    position: 1
+    display_options:
+      display_extenders: {  }
+      path: buscar
+    cache_metadata:
+      max-age: -1
+      contexts:
+        - 'languages:language_interface'
+        - url
+        - url.query_args
+      tags:
+        - 'config:search_api.index.catalogo'
+        - 'search_api_list:catalogo'

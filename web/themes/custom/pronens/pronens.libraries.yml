@@ -184,6 +184,20 @@ catalogo:
     - core/drupal.announce
     - pronens/grid
 
+# Buscador: overlay del header con sugerencias en vivo y página /buscar.
+buscador:
+  version: VERSION
+  css:
+    component:
+      css/buscador.css: {}
+  js:
+    js/buscador.js: {}
+  dependencies:
+    - core/drupal
+    - core/drupalSettings
+    - core/once
+    - core/drupal.announce
+
 ficha:
   version: VERSION
   css:

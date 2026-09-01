@@ -94,6 +94,15 @@ class CatalogoHooks {
       $this->cuentaHooks->buildPedidos($variables);
       return;
     }
+    if ($view->id() === 'buscar') {
+      // La página de resultados del buscador: término y recuento para la
+      // cabecera del template. Mismo criterio de total que el catálogo.
+      $variables['buscar'] = [
+        'termino' => trim((string) ($view->getExposedInput()['texto'] ?? '')),
+        'total' => $view->total_rows > 0 ? $view->total_rows : \count($view->result),
+      ];
+      return;
+    }
     if ($view->id() !== self::VIEW_ID) {
       return;
     }

@@ -1,0 +1,336 @@
+uuid: 2bcf038e-3587-4dcc-88da-4c203c9b6bc9
+langcode: es
+status: true
+dependencies:
+  config:
+    - system.menu.main
+  module:
+    - commerce_price
+    - commerce_product
+    - user
+id: pronens_variaciones
+label: 'Variaciones de producto'
+module: views
+description: 'Todas las variaciones del catálogo con su SKU, para localizar una referencia concreta.'
+tag: commerce
+base_table: commerce_product_variation_field_data
+base_field: variation_id
+display:
+  default:
+    id: default
+    display_title: Predeterminado
+    display_plugin: default
+    position: 0
+    display_options:
+      title: 'Variaciones de producto'
+      fields:
+        sku:
+          id: sku
+          table: commerce_product_variation_field_data
+          field: sku
+          entity_type: commerce_product_variation
+          entity_field: sku
+          plugin_id: field
+          label: SKU
+          alter:
+            alter_text: false
+          click_sort_column: value
+          type: string
+          settings:
+            link_to_entity: true
+        title:
+          id: title
+          table: commerce_product_variation_field_data
+          field: title
+          entity_type: commerce_product_variation
+          entity_field: title
+          plugin_id: field
+          label: Variación
+          alter:
+            alter_text: false
+          click_sort_column: value
+          type: string
+          settings:
+            link_to_entity: false
+        title_1:
+          id: title_1
+          table: commerce_product_field_data
+          field: title
+          relationship: product_id
+          entity_type: commerce_product
+          entity_field: title
+          plugin_id: field
+          label: Producto
+          alter:
+            alter_text: false
+          click_sort_column: value
+          type: string
+          settings:
+            link_to_entity: true
+        price__number:
+          id: price__number
+          table: commerce_product_variation_field_data
+          field: price__number
+          entity_type: commerce_product_variation
+          entity_field: price
+          plugin_id: field
+          label: Precio
+          alter:
+            alter_text: false
+          click_sort_column: number
+          type: commerce_price_default
+          settings:
+            strip_trailing_zeroes: false
+            currency_display: symbol
+        status:
+          id: status
+          table: commerce_product_variation_field_data
+          field: status
+          entity_type: commerce_product_variation
+          entity_field: status
+          plugin_id: field
+          label: Estado
+          alter:
+            alter_text: false
+          click_sort_column: value
+          type: boolean
+          settings:
+            format: custom
+            format_custom_false: 'No publicada'
+            format_custom_true: Publicada
+        changed:
+          id: changed
+          table: commerce_product_variation_field_data
+          field: changed
+          entity_type: commerce_product_variation
+          entity_field: changed
+          plugin_id: field
+          label: Actualizada
+          alter:
+            alter_text: false
+          click_sort_column: value
+          type: timestamp
+          settings:
+            date_format: short
+            custom_date_format: ''
+            timezone: ''
+        operations:
+          id: operations
+          table: commerce_product_variation
+          field: operations
+          plugin_id: entity_operations
+          label: Operaciones
+          alter:
+            alter_text: false
+          destination: true
+      pager:
+        type: full
+        options:
+          offset: 0
+          items_per_page: 50
+      exposed_form:
+        type: basic
+        options:
+          submit_button: Filtrar
+          reset_button: true
+          reset_button_label: Restablecer
+      access:
+        type: perm
+        options:
+          perm: 'access commerce_product overview'
+      cache:
+        type: none
+        options: {  }
+      empty:
+        area_text_custom:
+          id: area_text_custom
+          table: views
+          field: area_text_custom
+          plugin_id: text_custom
+          empty: true
+          content: 'No hay variaciones que coincidan con el filtro.'
+      sorts:
+        changed:
+          id: changed
+          table: commerce_product_variation_field_data
+          field: changed
+          entity_type: commerce_product_variation
+          entity_field: changed
+          plugin_id: date
+          order: DESC
+          exposed: false
+      filters:
+        sku:
+          id: sku
+          table: commerce_product_variation_field_data
+          field: sku
+          entity_type: commerce_product_variation
+          entity_field: sku
+          plugin_id: string
+          operator: contains
+          value: ''
+          exposed: true
+          expose:
+            operator_id: sku_op
+            label: SKU
+            operator: sku_op
+            identifier: sku
+            required: false
+            remember: false
+            multiple: false
+        title:
+          id: title
+          table: commerce_product_variation_field_data
+          field: title
+          entity_type: commerce_product_variation
+          entity_field: title
+          plugin_id: string
+          operator: contains
+          value: ''
+          exposed: true
+          expose:
+            operator_id: title_op
+            label: Variación
+            operator: title_op
+            identifier: titulo
+            required: false
+            remember: false
+            multiple: false
+        title_1:
+          id: title_1
+          table: commerce_product_field_data
+          field: title
+          relationship: product_id
+          entity_type: commerce_product
+          entity_field: title
+          plugin_id: string
+          operator: contains
+          value: ''
+          exposed: true
+          expose:
+            operator_id: title_1_op
+            label: Producto
+            operator: title_1_op
+            identifier: producto
+            required: false
+            remember: false
+            multiple: false
+        status:
+          id: status
+          table: commerce_product_variation_field_data
+          field: status
+          entity_type: commerce_product_variation
+          entity_field: status
+          plugin_id: boolean
+          operator: '='
+          value: All
+          exposed: true
+          expose:
+            operator_id: ''
+            label: Estado
+            operator: status_op
+            identifier: status
+            required: false
+            remember: false
+            multiple: false
+        default_langcode_producto:
+          id: default_langcode_producto
+          table: commerce_product_field_data
+          field: default_langcode
+          relationship: product_id
+          entity_type: commerce_product
+          entity_field: default_langcode
+          plugin_id: boolean
+          operator: '='
+          value: '1'
+          exposed: false
+        default_langcode:
+          id: default_langcode
+          table: commerce_product_variation_field_data
+          field: default_langcode
+          entity_type: commerce_product_variation
+          entity_field: default_langcode
+          plugin_id: boolean
+          operator: '='
+          value: '1'
+          exposed: false
+      style:
+        type: table
+        options:
+          grouping: {  }
+          row_class: ''
+          default_row_class: true
+          columns: {  }
+          default: changed
+          info:
+            sku:
+              sortable: true
+              default_sort_order: asc
+            title:
+              sortable: true
+              default_sort_order: asc
+            title_1:
+              sortable: true
+              default_sort_order: asc
+            price__number:
+              sortable: true
+              default_sort_order: asc
+            status:
+              sortable: true
+              default_sort_order: asc
+            changed:
+              sortable: true
+              default_sort_order: desc
+          override: true
+          sticky: true
+          empty_table: true
+      row:
+        type: fields
+      query:
+        type: views_query
+        options:
+          distinct: false
+      relationships:
+        product_id:
+          id: product_id
+          table: commerce_product_variation_field_data
+          field: product_id
+          admin_label: Producto
+          entity_type: commerce_product_variation
+          entity_field: product_id
+          plugin_id: standard
+          required: true
+      display_extenders: {  }
+    cache_metadata:
+      max-age: -1
+      contexts:
+        - 'languages:language_content'
+        - 'languages:language_interface'
+        - url
+        - url.query_args
+        - user.permissions
+      tags: {  }
+  page_1:
+    id: page_1
+    display_title: Página
+    display_plugin: page
+    position: 1
+    display_options:
+      display_extenders: {  }
+      path: admin/commerce/variaciones
+      menu:
+        type: normal
+        title: 'Variaciones de producto'
+        description: 'Buscar una variación concreta por SKU, título o producto.'
+        weight: -8
+        expanded: false
+        parent: commerce.admin_commerce
+    cache_metadata:
+      max-age: -1
+      contexts:
+        - 'languages:language_content'
+        - 'languages:language_interface'
+        - url
+        - url.query_args
+        - user.permissions
+      tags: {  }

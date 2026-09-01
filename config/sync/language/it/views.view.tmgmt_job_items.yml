@@ -27,6 +27,8 @@ display:
           label: Etichetta
         type:
           label: Tipo
+        progress:
+          label: Progreso
         word_count:
           label: Parole
           separator: ', '

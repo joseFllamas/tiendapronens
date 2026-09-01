@@ -567,6 +567,25 @@ display:
             default_group: All
             default_group_multiple: {  }
             group_items: {  }
+        sku:
+          id: sku
+          table: commerce_product_variation_field_data
+          field: sku
+          relationship: variations_target_id
+          entity_type: commerce_product_variation
+          entity_field: sku
+          plugin_id: string
+          operator: contains
+          value: ''
+          exposed: true
+          expose:
+            operator_id: sku_op
+            label: SKU
+            operator: sku_op
+            identifier: sku
+            required: false
+            remember: false
+            multiple: false
       style:
         type: table
         options:
@@ -629,10 +648,19 @@ display:
         options:
           query_comment: ''
           disable_sql_rewrite: false
-          distinct: false
+          distinct: true
           replica: false
           query_tags: {  }
-      relationships: {  }
+      relationships:
+        variations_target_id:
+          id: variations_target_id
+          table: commerce_product__variations
+          field: variations_target_id
+          admin_label: Variaciones
+          entity_type: commerce_product
+          entity_field: variations
+          plugin_id: standard
+          required: false
       header: {  }
       footer: {  }
       display_extenders: {  }

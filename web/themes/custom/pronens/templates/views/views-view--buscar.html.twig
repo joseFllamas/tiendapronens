@@ -1,0 +1,36 @@
+{#
+/**
+ * @file
+ * Página de resultados del buscador (/buscar).
+ *
+ * buscar (termino, total) viene de CatalogoHooks::preprocessViewsView(). El
+ * H1 lo pone el bloque de título de página (el título de la view, traducido
+ * por override de config); aquí van el formulario expuesto, el recuento y el
+ * grid de tarjetas, el mismo componente que el catálogo.
+ */
+#}
+{{ attach_library('pronens/buscador') }}
+{{ attach_library('pronens/grid') }}
+{% set term = buscar.termino %}
+<div{{ attributes.addClass('pro-buscar') }}>
+  {{ exposed }}
+
+  {% if term %}
+    <header class="pro-buscar__head">
+      <p class="pro-buscar__count">
+        {% trans %}1 result for "{{ term }}"{% plural buscar.total %}@count results for "{{ term }}"{% endtrans %}
+      </p>
+    </header>
+  {% endif %}
+
+  {% if rows %}
+    {{ rows }}
+  {% elseif term %}
+    <p class="pro-buscar__empty">{{ 'No results for "@term". Try the product name or its reference (SKU).'|t({'@term': term}) }}</p>
+  {% else %}
+    <p class="pro-buscar__empty">{{ 'Type what you are looking for: a product name or its reference (SKU).'|t }}</p>
+  {% endif %}
+
+  {{ pager }}
+  {{ feed_icons }}
+</div>

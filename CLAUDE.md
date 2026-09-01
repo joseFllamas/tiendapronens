@@ -1072,6 +1072,63 @@ Donde este documento y la realidad del repo discrepan, manda esta lista (decidid
 - **Chrome headless no baja de 500px de ancho** en macOS: `--window-size=390` da `innerWidth=500` y
   el recorte parece un desbordamiento horizontal que no existe. Antes de dar por buena una captura
   estrecha, comprobar el viewport real (`innerWidth`) o mirar en el navegador de verdad.
+- **La BBDD local es un import de producción (2026-09-01)**: la tienda ya está viva y el volcado
+  vino de vuelta para depurar con datos reales (4 pedidos, el nº 4 = id 79 con bordados y nubes).
+  Consecuencias: los productos basura 5, 6 y 7 ya no existen (los borraron en producción; 260 y 359
+  siguen), producción desinstaló el módulo `update` (exportado en `config/sync`, es su realidad), y
+  el transporte de correo por defecto ES el SMTP de Odisean con credenciales (el override de
+  Mailpit de `settings.local.php` sigue mandando en local). Datos de prueba de esta sesión
+  limpiados: pedido 80 borrado, su transacción de stock revertida y la secuencia de numeración
+  devuelta al 4.
+- **La ficha admin del pedido enseña el detalle de cada línea (2026-09-01, cliente)**: la view
+  `commerce_order_item_table_admin` que Commerce embebe en /admin/commerce/orders/N solo daba
+  título, cantidad y precios: no había forma de ver el bordado, la nube ni el SKU comprado.
+  `PedidoAdminHooks` (en `pronens_personalizacion`, que es quien posee esos campos) lo añade bajo
+  el título vía preprocess del campo `title`: SKU enlazado a la ficha con `?v=ID` (preselecciona la
+  variación, el mismo patrón de los chips), enlace "Editar variación", los campos de
+  personalización de la línea (texto, formato, fondo/nube, extras, con la etiqueta de la definición
+  de campo, que sigue los renombres del cliente) y el desglose de recargos `fee` (las columnas de
+  precio de la tabla NO los incluyen). No vale el `LineaPedidoTrait` del tema: el backoffice se
+  pinta con el tema de administración, que no ejecuta los hooks del tema de la tienda. Ni columnas
+  nuevas: cinco campos más dejarían la tabla inusable.
+- **Variaciones buscables por SKU en el backoffice (2026-09-01, cliente)**: view nueva
+  `pronens_variaciones` (/admin/commerce/variaciones, en el menú de Commerce) con las 1123+
+  variaciones filtrables por SKU, título, producto y estado, y además filtro de SKU en
+  /admin/commerce/products (relación `variations` + DISTINCT, o cada producto sale una vez por
+  variación coincidente). Ojo con la relación variación→producto: `commerce_product_field_data`
+  tiene una fila por idioma y sin el filtro `default_langcode` del producto cada variación salía
+  5 veces. Script: `scripts/admin-variaciones.php`.
+- **El buscador de la lupa existe (2026-09-01, cliente)**: /buscar era un enlace muerto del tema.
+  Ahora la lupa abre un `<dialog>` con sugerencias en vivo (foto, precio "desde", SKU coincidente y
+  enlace con `?v=ID`) y Enter lleva a /buscar, la página completa; sin JS la lupa va directa a
+  /buscar. La referencia funcional es el `activity_search_pro` del D10 (overlay + nombre O
+  referencia), corrigiendo lo que allí estaba mal: aquí filtra publicados (entity_status del
+  índice), por idioma, con límite y cacheable. Piezas y trampas:
+  - **Misma consulta en los dos sitios**: la view `buscar` (índice `catalogo`, fulltext expuesto
+    sobre `titulo` + `sku`) y el endpoint `/buscar/sugerencias` del módulo nuevo `pronens_buscador`
+    usan los mismos campos, idioma y matching, así que sugerencias y resultados no discrepan.
+  - **El parámetro expuesto es `texto`, no `q`**: Views descarta `q` de la exposed input a
+    propósito (el viejo parámetro de ruta de Drupal). Con identifier `q` el filtro no aplicaba y
+    /buscar devolvía el catálogo entero.
+  - **El `sku` del índice (`variations:entity:sku`) tiene que estar en los procesadores
+    `ignorecase` y `transliteration`**: la consulta se lowercasea entera (porque `titulo` está en
+    ignorecase) y el SKU indexado en mayúsculas no lo encontraba nadie (la columna `word` es
+    case-sensitive). Y el tokenizer ya descarta `. _ -`, así que BG.OSOTRIB.PEQ se indexa
+    `bgosotribpeq` y "bg osotrib" también lo encuentra.
+  - **`matching: partial` en el server**: sin ello un fragmento de referencia ("OSOTRIB") no
+    encuentra nada. Solo afecta a consultas fulltext; el catálogo no las usa.
+  - **Excluye los productos sin categoría** (filtro `tipo` not empty en la view y en el endpoint):
+    la basura del D7 ("Test sudadera" 260, "Pedido 7682" 359) está publicada y saldría. Esto
+    también deja fuera los 19 productos de escuela, que hoy no tienen ninguna ruta de navegación
+    (decisión de negocio pendiente, ya documentada).
+  - Título de la view traducido por override de config por idioma (como los patrones de pathauto),
+    cadenas de interfaz en `scripts/traducir-buscador.php` (incluye las dos del detalle de pedido
+    admin), montaje en `scripts/buscador.php`. Tras tocar el índice: `sapi-c && sapi-i`.
+- **El aviso de pedido a la tienda también sale en el "place" manual (2026-09-01, verificado)**:
+  `PedidoAdminSubscriber` escucha la transición, no el checkout, así que colocar un pedido desde el
+  backoffice dispara el mismo "Pedido nuevo #N" a pronens@pronens.com además del recibo al cliente
+  (comprobado en Mailpit con un pedido de prueba). Si en producción no llega, lo que hay que mirar
+  es el buzón/spam y el SPF/DKIM de pronens.com, no el código.
 
 ## Orden de trabajo
 1. **Tema `pronens`**: tokens CSS (custom properties con los colores/tipos del README), fuentes

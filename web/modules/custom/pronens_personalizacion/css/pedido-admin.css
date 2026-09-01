@@ -1,0 +1,38 @@
+/**
+ * Detalle de línea en la ficha del pedido del backoffice.
+ *
+ * Se pinta con el tema de administración (Claro/Gin), así que nada de tokens
+ * del tema de la tienda: grises neutros que funcionan sobre cualquiera.
+ */
+
+.pronens-linea-detalle {
+  margin-top: 0.35em;
+  font-size: 0.875em;
+  color: #55565b;
+}
+
+.pronens-linea-detalle__etiqueta {
+  font-weight: 600;
+  color: #222330;
+}
+
+.pronens-linea-detalle__sku {
+  margin-bottom: 0.2em;
+}
+
+.pronens-linea-detalle__editar {
+  margin-left: 0.75em;
+  font-size: 0.9em;
+}
+
+.pronens-linea-detalle__lista {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.pronens-linea-detalle__lista li {
+  margin: 0 0 0.15em;
+  padding: 0;
+  list-style: none;
+}

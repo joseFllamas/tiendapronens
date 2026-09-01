@@ -9,4 +9,3 @@ label: 'Generar expediciones de Correos Express'
 type: commerce_order
 plugin: pronens_cex_generar_expediciones
 configuration: {  }
-

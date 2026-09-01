@@ -1,0 +1,9 @@
+name: 'Pronens: buscador'
+type: module
+description: 'Sugerencias en vivo del buscador de la tienda, sobre el índice del catálogo.'
+package: Pronens
+core_version_requirement: ^11
+dependencies:
+  - search_api:search_api
+  - commerce:commerce_product
+  - drupal:image

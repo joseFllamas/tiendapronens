@@ -16,6 +16,8 @@ display:
           separator: ', '
         translator:
           label: Proveïdor
+        progress:
+          label: Progreso
         tags_count:
           label: Etiquetes
         file_count:

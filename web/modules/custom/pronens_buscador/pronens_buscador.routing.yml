@@ -1,0 +1,9 @@
+# Sugerencias del buscador del header. Público a propósito: es la misma
+# información que la página /buscar, que tampoco pide permiso. La respuesta es
+# cacheable (Dynamic Page Cache) con contexto por término e idioma.
+pronens_buscador.sugerencias:
+  path: '/buscar/sugerencias'
+  defaults:
+    _controller: '\Drupal\pronens_buscador\Controller\SugerenciasController::json'
+  requirements:
+    _access: 'TRUE'

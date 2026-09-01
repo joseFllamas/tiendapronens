@@ -1,3 +1,9 @@
+pedido_admin:
+  version: VERSION
+  css:
+    theme:
+      css/pedido-admin.css: {}
+
 montaje:
   version: VERSION
   css:

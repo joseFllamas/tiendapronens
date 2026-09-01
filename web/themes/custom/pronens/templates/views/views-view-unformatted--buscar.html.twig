@@ -1,0 +1,14 @@
+{#
+/**
+ * @file
+ * Grid de tarjetas de los resultados de búsqueda.
+ *
+ * El mismo componente .pro-grid del catálogo, con 4 columnas fijas: aquí no
+ * hay toggle Vista 2/4.
+ */
+#}
+<div class="pro-grid" data-pro-grid data-pro-cols="4">
+  {% for row in rows %}
+    <div class="pro-grid__cell">{{ row.content }}</div>
+  {% endfor %}
+</div>
