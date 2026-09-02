@@ -18,6 +18,8 @@ display:
           label: Proveïdor
         progress:
           label: Progreso
+        word_count:
+          label: Palabras
         tags_count:
           label: Etiquetes
         file_count:
@@ -56,3 +58,8 @@ display:
             label: Proveïdor
   page_1:
     display_title: Pàgina
+    display_options:
+      menu:
+        title: Empleos
+      tab_options:
+        title: Empleos

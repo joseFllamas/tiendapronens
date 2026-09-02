@@ -58,3 +58,8 @@ display:
             label: 'Fonte esterna'
   page_1:
     display_title: Pagina
+    display_options:
+      menu:
+        title: Empleos
+      tab_options:
+        title: Empleos

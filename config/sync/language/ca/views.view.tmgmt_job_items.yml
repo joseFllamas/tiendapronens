@@ -30,6 +30,7 @@ display:
         progress:
           label: Progreso
         word_count:
+          label: Palabras
           separator: ', '
         tags_count:
           label: Etiquetes
@@ -51,6 +52,7 @@ display:
         type:
           label: Tipus
         word_count:
+          label: Palabras
           separator: ', '
         changed:
           label: Canviat
