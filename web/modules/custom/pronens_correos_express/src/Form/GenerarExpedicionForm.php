@@ -92,6 +92,16 @@ final class GenerarExpedicionForm extends FormBase {
       $this->messenger()->addWarning($this->t('Estás en producción: al continuar se crea un envío real que Correos Express factura, y la API no permite anularlo.'));
     }
 
+    // El tipo de paquete no se elige aquí, viene del envío, así que si es el
+    // que no sirve hay que decirlo antes de crear una expedición que Correos
+    // Express factura y no deja anular.
+    if ($this->gestorExpediciones->medidasInsuficientes($envio)) {
+      $paquete = $envio->getPackageType();
+      $this->messenger()->addWarning($this->t('El tipo de paquete del envío (@paquete) no llega al mínimo de Correos Express, 15x10x1 cm, así que el bulto irá sin medidas. Cámbialo en el envío antes de continuar.', [
+        '@paquete' => $paquete !== NULL ? (string) $paquete->getLabel() : $this->t('ninguno'),
+      ]));
+    }
+
     $servicio = $this->gestorExpediciones->servicioPorDefecto($envio);
     $destinatario = $envio->getShippingProfile();
     $pais = '';

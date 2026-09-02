@@ -359,7 +359,8 @@ final class ConstructorPayloadEnvioTest extends UnitTestCase {
 
     $this->assertSame('1', $payload['numBultos']);
     $this->assertCount(1, $payload['listaBultos']);
-    $this->assertSame('0', $payload['listaBultos'][0]['alto']);
+    // Cero, pero con los dos decimales del formato 99999.99 que valida la API.
+    $this->assertSame('0.00', $payload['listaBultos'][0]['alto']);
   }
 
   /**

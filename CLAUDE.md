@@ -1129,6 +1129,36 @@ Donde este documento y la realidad del repo discrepan, manda esta lista (decidid
   backoffice dispara el mismo "Pedido nuevo #N" a pronens@pronens.com además del recibo al cliente
   (comprobado en Mailpit con un pedido de prueba). Si en producción no llega, lo que hay que mirar
   es el buzón/spam y el SPF/DKIM de pronens.com, no el código.
+- **El tipo de paquete tiene que estar en TODOS los métodos de envío (2026-09-02)**: la primera
+  expedición real de la tienda (pedido 4) la rechazó Correos Express con **«ALTO BULTO: FORMATO
+  INCORRECTO. FORMATO VALIDO - 99999.99»**. La causa no estaba en el alto: los cinco métodos de
+  Correos Express llevaban `pronens_bolsa`, pero ese pedido pasó de 60 € y se envió con **«Envío
+  gratuito desde 60 €», que es un `flat_rate`** y se había quedado con el `custom_box` de contrib,
+  de **1x1x1 milímetros** (le pasaba lo mismo a «Recoger en Pronens»). Con eso el bulto salía con
+  `alto: 0.001` y el campo solo admite dos decimales. Tres cambios, y los tres hacen falta:
+  - **Los dos métodos que faltaban ya llevan `pronens_bolsa`**, con
+    `scripts/cex-tipo-paquete.php`, que además repara los envíos pendientes que se quedaron con el
+    `custom_box` (`setPackageType()` recalcula el peso solo, porque suma la tara). Los métodos de
+    envío son **contenido, no configuración**: no viajan en `config/sync`, así que el script hay
+    que ejecutarlo (o cambiarlo a mano) en cada entorno.
+  - **`Normalizador::metros()` escribe siempre dos decimales**, que es el formato del campo. Antes
+    redondeaba a tres, y con medidas normales (0,25 m) no se notaba: solo reventaba con
+    milímetros. Por debajo de un centímetro manda `0.00`, que es lo que la API acepta cuando no se
+    conoce la medida y lo que hace la integración oficial.
+  - **`GestorExpediciones::medidasInsuficientes()` avisa antes de crear nada**, en el formulario de
+    alta y en el masivo, cuando el paquete no llega al mínimo de Correos Express (15x10x1 cm). El
+    mensaje de la API no nombraba el tipo de paquete por ningún lado, y una expedición **no se
+    puede anular**: el aviso vale más que el diagnóstico a posteriori.
+  - **Y el `custom_box` ya no se puede elegir**: `CorreosExpressHooks::escondeElPaqueteDeRelleno()`
+    lo quita del campo «Package Type» del envío y del «Default package type» del método de envío.
+    **El plugin no se borra, y no es por dejadez**: `PackageTypeManager` no llama a `alterInfo()`,
+    así que los tipos de paquete **no tienen hook de alteración**, y
+    `ShippingMethodBase::defaultConfiguration()` devuelve `custom_box` a fuego, de modo que sin el
+    plugin reventaría la creación de cualquier método de envío. La opción se deja visible cuando es
+    el valor ya guardado (el envío 5, expedido con él): quitarla haría que el formulario cambiara
+    el valor solo al abrirlo. Se busca por el contenido de `#options` y no por la ruta, porque en
+    el envío cuelga de la raíz del formulario y en el método está seis niveles dentro, en la
+    configuración del plugin.
 
 ## Orden de trabajo
 1. **Tema `pronens`**: tokens CSS (custom properties con los colores/tipos del README), fuentes

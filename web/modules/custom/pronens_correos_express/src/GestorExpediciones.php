@@ -9,6 +9,9 @@ use Drupal\commerce_shipping\Entity\ShipmentInterface;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Lock\LockBackendInterface;
+use Drupal\physical\Calculator;
+use Drupal\physical\Length;
+use Drupal\physical\LengthUnit;
 use Drupal\physical\WeightUnit;
 use Drupal\pronens_correos_express\Api\CorreosExpressClientInterface;
 use Drupal\pronens_correos_express\Api\CorreosExpressException;
@@ -39,6 +42,18 @@ final class GestorExpediciones {
    * lista de pedidos pendientes de expedir.
    */
   public const CLAVE_EXPEDICION = 'cex_expedicion';
+
+  /**
+   * Medidas mínimas de un bulto que acepta Correos Express, en centímetros.
+   *
+   * Son las de la documentación oficial: 15x10x1. El único tipo de paquete que
+   * trae contrib, `custom_box`, mide 1x1x1 milímetros y se queda muy por
+   * debajo; los tipos propios de la tienda están en
+   * `pronens_correos_express.commerce_package_types.yml` justo por esto.
+   */
+  public const MINIMO_LARGO_CM = '15';
+  public const MINIMO_ANCHO_CM = '10';
+  public const MINIMO_ALTO_CM = '1';
   public const CLAVE_BULTOS = 'cex_bultos';
   public const CLAVE_PRODUCTO = 'cex_producto';
   public const CLAVE_SERVICIO = 'cex_servicio';
@@ -201,6 +216,44 @@ final class GestorExpediciones {
     $valor = $envio->getData(self::CLAVE_EXPEDICION);
 
     return is_string($valor) && $valor !== '' ? $valor : NULL;
+  }
+
+  /**
+   * Indica si el bulto declarado no llega al mínimo de Correos Express.
+   *
+   * El mínimo son 15x10x1 cm. Por debajo, las medidas no describen ningún
+   * paquete real y el payload las manda a cero, así que la etiqueta sale sin
+   * dimensiones y Correos Express factura por lo que mida de verdad.
+   *
+   * Esto existe porque pasó: el pedido 4, el primero que se expidió de verdad,
+   * se envió con «Envío gratuito desde 60 €», que es un flat_rate y se había
+   * quedado con el `custom_box` de contrib, de 1x1x1 MILÍMETROS. La API lo
+   * rechazó con «ALTO BULTO: FORMATO INCORRECTO» y el mensaje no decía en
+   * ningún sitio que el problema fuera el tipo de paquete.
+   */
+  public function medidasInsuficientes(ShipmentInterface $envio): bool {
+    $paquete = $envio->getPackageType();
+    if ($paquete === NULL) {
+      return TRUE;
+    }
+
+    $minimos = [
+      'getLength' => self::MINIMO_LARGO_CM,
+      'getWidth' => self::MINIMO_ANCHO_CM,
+      'getHeight' => self::MINIMO_ALTO_CM,
+    ];
+    foreach ($minimos as $metodo => $minimo) {
+      $medida = $paquete->$metodo();
+      if (!$medida instanceof Length) {
+        return TRUE;
+      }
+      $centimetros = $medida->convert(LengthUnit::CENTIMETER)->getNumber();
+      if (Calculator::compare($centimetros, $minimo) < 0) {
+        return TRUE;
+      }
+    }
+
+    return FALSE;
   }
 
   /**

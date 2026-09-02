@@ -164,16 +164,26 @@ final class NormalizadorTest extends UnitTestCase {
    */
   public static function proveedorMetros(): array {
     return [
-      'sin medida se manda cero' => [NULL, '0'],
+      'sin medida se manda cero' => [NULL, '0.00'],
       '35 centímetros son 0,35 metros' => [new Length('35', LengthUnit::CENTIMETER), '0.35'],
       // La integración oficial hace intval() de los centímetros, así que aquí
       // convertiría 12,5 en 0,12. Este es el caso que arregla no copiarla.
-      '12,5 centímetros son 0,125 metros y no 0,12' => [
-        new Length('12.5', LengthUnit::CENTIMETER), '0.125',
+      '12,5 centímetros se redondean a 0,13 y no se truncan a 0,12' => [
+        new Length('12.5', LengthUnit::CENTIMETER), '0.13',
       ],
-      'un metro se queda en uno' => [new Length('1', LengthUnit::METER), '1'],
-      'los milímetros se redondean a tres decimales' => [
-        new Length('4', LengthUnit::MILLIMETER), '0.004',
+      // El campo tiene formato 99999.99: un entero sin decimales no lo cumple.
+      'un metro se escribe con sus dos decimales' => [new Length('1', LengthUnit::METER), '1.00'],
+      // El caso que tiró la primera expedición real de la tienda: el envío
+      // llevaba el custom_box de contrib, de 1x1x1 mm, y el tercer decimal hizo
+      // que la API respondiera «ALTO BULTO: FORMATO INCORRECTO».
+      'el milímetro del custom_box de contrib va a cero, no a 0,001' => [
+        new Length('1', LengthUnit::MILLIMETER), '0.00',
+      ],
+      'cuatro milímetros tampoco llegan a un centímetro' => [
+        new Length('4', LengthUnit::MILLIMETER), '0.00',
+      ],
+      'un centímetro es la medida más pequeña que se puede escribir' => [
+        new Length('1', LengthUnit::CENTIMETER), '0.01',
       ],
     ];
   }

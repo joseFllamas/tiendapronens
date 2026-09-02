@@ -65,6 +65,15 @@ final class Normalizador {
   public const MINIMO_KILOS = '0.01';
 
   /**
+   * Medida a cero, en el formato exacto que valida la API.
+   *
+   * El campo de cada dimensión tiene el formato 99999.99, así que son SIEMPRE
+   * dos decimales: nada por debajo de un centímetro se puede escribir y va
+   * como cero, que es lo que la API acepta cuando no se conoce la medida.
+   */
+  public const CERO_METROS = '0.00';
+
+  /**
    * Reparte un código postal entre el campo nacional y el internacional.
    *
    * La API tiene dos campos y espera exactamente uno relleno según el país:
@@ -182,21 +191,30 @@ final class Normalizador {
   /**
    * Convierte una medida a metros, que es la unidad que espera la API.
    *
-   * Devuelve "0" cuando no hay medida: la API acepta las dimensiones vacías y
-   * la propia integración oficial las manda a cero en todos los productos a
-   * domicilio.
+   * Siempre con DOS decimales, que es el formato del campo (99999.99). Esto no
+   * es un detalle de estilo: la primera expedición real de la tienda se rechazó
+   * con «ALTO BULTO: FORMATO INCORRECTO. FORMATO VALIDO - 99999.99» porque el
+   * envío llevaba el tipo de paquete `custom_box` de contrib, que mide 1x1x1
+   * milímetros, y aquí se redondeaba a tres decimales: el payload iba con
+   * `alto: 0.001` y la API no admite el tercer decimal.
+   *
+   * Cero cuando no hay medida o cuando es tan pequeña que no se puede escribir
+   * con dos decimales: la API acepta las dimensiones a cero, y la propia
+   * integración oficial las manda así en todos los productos a domicilio. Un
+   * paquete de un milímetro no es una medida, es un tipo de paquete mal puesto,
+   * y eso se avisa en el formulario de alta en vez de inventar un número.
    *
    * No se replica el intval() de centímetros de la integración oficial, que
-   * convierte 12,5 cm en 0,12 m.
+   * convierte 12,5 cm en 0,12 m: aquí se redondea, o sea 0,13.
    */
   public function metros(?Length $medida): string {
     if ($medida === NULL) {
-      return '0';
+      return self::CERO_METROS;
     }
 
-    $metros = $medida->convert(LengthUnit::METER)->getNumber();
+    $metros = Calculator::round($medida->convert(LengthUnit::METER)->getNumber(), 2);
 
-    return Calculator::trim(Calculator::round($metros, 3));
+    return number_format((float) $metros, 2, '.', '');
   }
 
   /**

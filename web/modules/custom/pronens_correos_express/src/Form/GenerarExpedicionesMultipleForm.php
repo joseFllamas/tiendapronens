@@ -126,6 +126,19 @@ final class GenerarExpedicionesMultipleForm extends ConfirmFormBase {
       $this->messenger()->addWarning($this->t('Estás en preproducción: las expediciones que se creen no son reales.'));
     }
 
+    // Un aviso por lote y no uno por fila: con veinte pedidos mal configurados
+    // serían veinte mensajes iguales y no se leería ninguno.
+    $sinMedidas = array_filter($envios, fn ($envio) => $this->gestorExpediciones->medidasInsuficientes($envio));
+    if ($sinMedidas !== []) {
+      $this->messenger()->addWarning($this->t('@numero de estos envíos llevan un tipo de paquete que no llega al mínimo de Correos Express, 15x10x1 cm, así que sus bultos irán sin medidas: @pedidos.', [
+        '@numero' => count($sinMedidas),
+        '@pedidos' => implode(', ', array_map(
+          fn ($envio) => (string) ($envio->getOrder()?->getOrderNumber() ?? $envio->id()),
+          $sinMedidas,
+        )),
+      ]));
+    }
+
     $filas = [];
     foreach ($envios as $id => $envio) {
       $pedido = $envio->getOrder();

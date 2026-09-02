@@ -9,6 +9,7 @@ use Drupal\Core\Cache\CacheableMetadata;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Extension\Requirement\RequirementSeverity;
+use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Hook\Attribute\Hook;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
@@ -25,6 +26,22 @@ use Drupal\pronens_correos_express\SincronizadorSeguimiento;
 final class CorreosExpressHooks {
 
   use StringTranslationTrait;
+
+  /**
+   * El tipo de paquete de relleno que trae Commerce Shipping.
+   *
+   * Mide 1x1x1 MILÍMETROS y es un marcador de posición: contrib no sabe qué
+   * cajas usa la tienda, así que declara una de tamaño nulo para que un método
+   * de envío recién creado tenga algo con lo que arrancar. Está muy por debajo
+   * del mínimo de Correos Express (15x10x1 cm).
+   *
+   * No se puede borrar: PackageTypeManager no llama a alterInfo(), o sea que
+   * los tipos de paquete no tienen hook de alteración, y ShippingMethodBase
+   * lo devuelve codificado a fuego en defaultConfiguration(), así que sin el
+   * plugin reventaría la creación de cualquier método de envío. Lo que sí se
+   * puede es quitarlo de los desplegables donde alguien lo elegiría sin querer.
+   */
+  private const PAQUETE_RELLENO = 'custom_box';
 
   public function __construct(
     private readonly GestorExpediciones $gestorExpediciones,
@@ -180,6 +197,58 @@ final class CorreosExpressHooks {
     }
 
     return $requisitos;
+  }
+
+  /**
+   * Esconde el tipo de paquete de relleno de contrib.
+   *
+   * Se quita de los dos sitios donde una persona lo puede elegir: el campo
+   * «Package Type» del envío y el «Default package type» del método de envío,
+   * que es de donde salió el problema. La primera expedición real de la tienda
+   * se rechazó por llevarlo, y una expedición no se puede anular.
+   *
+   * Se deja visible cuando es el valor guardado: si se quitara la opción, el
+   * formulario perdería el valor al abrirlo y lo cambiaría sin avisar.
+   *
+   * @param array<string, mixed> $form
+   *   El formulario.
+   * @param \Drupal\Core\Form\FormStateInterface $form_state
+   *   Estado del formulario.
+   * @param string $form_id
+   *   Identificador del formulario.
+   */
+  #[Hook('form_alter')]
+  public function escondeElPaqueteDeRelleno(array &$form, FormStateInterface $form_state, string $form_id): void {
+    if (!str_starts_with($form_id, 'commerce_shipment_') && !str_starts_with($form_id, 'commerce_shipping_method_')) {
+      return;
+    }
+
+    $this->quitaOpcionDeRelleno($form);
+  }
+
+  /**
+   * Recorre el formulario quitando la opción del paquete de relleno.
+   *
+   * Se busca por el contenido de #options y no por la ruta del elemento porque
+   * los dos formularios lo colocan en sitios muy distintos: en el envío cuelga
+   * de la raíz, y en el método de envío está seis niveles dentro, en la
+   * configuración del plugin.
+   *
+   * @param array<string, mixed> $elemento
+   *   Rama del formulario.
+   */
+  private function quitaOpcionDeRelleno(array &$elemento): void {
+    foreach ($elemento as $clave => &$hijo) {
+      if (!is_array($hijo) || str_starts_with((string) $clave, '#')) {
+        continue;
+      }
+      $opciones = $hijo['#options'] ?? NULL;
+      $esElValorGuardado = ($hijo['#default_value'] ?? NULL) === self::PAQUETE_RELLENO;
+      if (is_array($opciones) && isset($opciones[self::PAQUETE_RELLENO]) && !$esElValorGuardado) {
+        unset($hijo['#options'][self::PAQUETE_RELLENO]);
+      }
+      $this->quitaOpcionDeRelleno($hijo);
+    }
   }
 
 }

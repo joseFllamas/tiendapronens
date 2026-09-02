@@ -127,6 +127,43 @@ alta, de modo que el peso hay que estimarlo. Tres capas:
    línea del empaquetador de Commerce que pone cero gramos cuando la variación no
    tiene peso.
 
+## El tipo de paquete tiene que estar en TODOS los métodos de envío
+
+La primera expedición real de la tienda, la del pedido 4, la rechazó la API con
+**«ALTO BULTO: FORMATO INCORRECTO. FORMATO VALIDO - 99999.99»**, y el mensaje no
+decía en ningún sitio cuál era el problema de verdad.
+
+Lo era el tipo de paquete. Los cinco métodos de Correos Express llevaban
+`pronens_bolsa`, pero ese pedido pasó de 60 € y se envió con **«Envío gratuito
+desde 60 €», que es un `flat_rate`** y se había quedado con el `custom_box` de
+contrib, de 1x1x1 **milímetros**. El bulto salía con `alto: 0.001` y el campo
+solo admite dos decimales. Lo mismo le pasaba a «Recoger en Pronens».
+
+Tres cosas cambiaron a la vez, y las tres hacen falta:
+
+- **Los métodos que faltaban ya llevan `pronens_bolsa`**
+  (`scripts/cex-tipo-paquete.php`, que además arregla los envíos pendientes que
+  se habían quedado con el `custom_box`). Los métodos de envío son contenido, no
+  configuración: **esto no viaja en `config/sync`** y hay que ejecutarlo o
+  cambiarlo a mano en cada entorno.
+- **`Normalizador::metros()` escribe siempre dos decimales**, que es el formato
+  del campo (99999.99). Antes redondeaba a tres, y con medidas normales (0,25 m)
+  no se notaba: solo reventaba con milímetros.
+- **`GestorExpediciones::medidasInsuficientes()` avisa antes de crear nada**, en
+  el formulario de alta y en el masivo, cuando el paquete no llega al mínimo de
+  15x10x1 cm. Es lo que habría convertido este incidente en diez segundos.
+- **El `custom_box` ya no sale en los desplegables**
+  (`CorreosExpressHooks::escondeElPaqueteDeRelleno()`): ni en el campo «Package
+  Type» del envío ni en el «Default package type» del método de envío, que es
+  de donde salió el problema. **El plugin sigue existiendo**, y no por
+  descuido: `PackageTypeManager` no llama a `alterInfo()`, o sea que los tipos
+  de paquete **no tienen hook de alteración**, y `ShippingMethodBase::defaultConfiguration()`
+  devuelve `custom_box` codificado a fuego, así que sin el plugin reventaría la
+  creación de cualquier método de envío. La opción se deja visible cuando es el
+  valor ya guardado: quitarla haría que el formulario cambiara el valor solo al
+  abrirlo. Efecto comprobado: un método de envío nuevo ya arranca con una caja
+  de verdad en vez de con la de un milímetro.
+
 **Lo que hay que pedir al taller**: que pese una unidad de cada uno de los 18
 tipos de producto con una balanza de cocina. Media hora y el problema
 desaparece. Correos Express factura por peso medido, así que subestimar no
