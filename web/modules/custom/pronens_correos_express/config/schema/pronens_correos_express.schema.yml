@@ -75,6 +75,12 @@ pronens_correos_express.settings:
     registro_detallado:
       type: boolean
       label: 'Registrar el payload completo en el log'
+    metodos_sin_expedicion:
+      type: sequence
+      label: 'Métodos de envío que no generan expedición'
+      sequence:
+        type: string
+        label: 'Id del método de envío'
 
 # La acción masiva no tiene configuración propia, pero la entidad de acción
 # exige que su clave "configuration" tenga esquema.

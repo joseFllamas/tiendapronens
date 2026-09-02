@@ -7,6 +7,7 @@ namespace Drupal\pronens_correos_express\Hook;
 use Drupal\commerce_shipping\Entity\ShipmentInterface;
 use Drupal\Core\Cache\CacheableMetadata;
 use Drupal\Core\Config\ConfigFactoryInterface;
+use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Extension\Requirement\RequirementSeverity;
 use Drupal\Core\Form\FormStateInterface;
@@ -73,6 +74,10 @@ final class CorreosExpressHooks {
     }
     $pedido = $entity->getOrder();
     if ($pedido === NULL) {
+      return [];
+    }
+    // La recogida en tienda no se expide: no hay nada que mandar.
+    if (!$this->gestorExpediciones->seExpide($entity)) {
       return [];
     }
 
@@ -249,6 +254,66 @@ final class CorreosExpressHooks {
       }
       $this->quitaOpcionDeRelleno($hijo);
     }
+  }
+
+  /**
+   * Pone las acciones de Correos Express en la ficha del pedido.
+   *
+   * El módulo ya las ofrecía en la lista de envíos, pero para expedir había que
+   * salir del pedido, ir a la pestaña «Envíos» y volver. Aquí salen dentro de
+   * la tarjeta «Información de envío» que Commerce pinta en la propia ficha,
+   * que es donde está mirando quien prepara el pedido.
+   *
+   * Las acciones son EXACTAMENTE las mismas que las de la lista: se reutiliza
+   * operacionesDeEnvio(), así que no hay dos sitios que decidir cuándo se puede
+   * expedir y cuándo hay que ofrecer la etiqueta.
+   *
+   * No se añade `destination`: al crear la expedición el formulario lleva a la
+   * etiqueta, que es lo siguiente que se hace, y un destino la pisaría.
+   *
+   * Ojo: la tarjeta de Commerce solo pinta el PRIMER envío
+   * (ShippingInformationFormatter::viewElements), así que en un pedido con
+   * varios estos botones son los del primero. Para el resto está el enlace
+   * «Manage shipments» de la propia tarjeta.
+   *
+   * @param array<string, mixed> $build
+   *   El render array del envío.
+   * @param \Drupal\commerce_shipping\Entity\ShipmentInterface $envio
+   *   El envío que se está pintando.
+   * @param \Drupal\Core\Entity\Display\EntityViewDisplayInterface $display
+   *   El modo de vista con el que se pinta.
+   */
+  #[Hook('commerce_shipment_view_alter')]
+  public function accionesEnLaFichaDelPedido(array &$build, ShipmentInterface $envio, EntityViewDisplayInterface $display): void {
+    if ($display->getMode() !== 'admin') {
+      return;
+    }
+
+    $metadatos = new CacheableMetadata();
+    $operaciones = $this->operacionesDeEnvio($envio, $metadatos);
+    if ($operaciones === []) {
+      return;
+    }
+
+    $enlaces = [];
+    foreach ($operaciones as $clave => $operacion) {
+      $enlaces[$clave] = [
+        'title' => $operacion['title'],
+        'url' => $operacion['url'],
+        'attributes' => ['class' => ['button', 'button--small']],
+      ];
+    }
+
+    $build['pronens_cex_acciones'] = [
+      '#theme' => 'links',
+      '#links' => $enlaces,
+      '#attributes' => ['class' => ['pronens-cex-acciones']],
+      '#weight' => 100,
+    ];
+    // El permiso y el estado del envío deciden qué se ofrece, así que la
+    // tarjeta no se puede cachear como si fuera igual para todos.
+    $metadatos->addCacheableDependency($envio);
+    $metadatos->applyTo($build['pronens_cex_acciones']);
   }
 
 }

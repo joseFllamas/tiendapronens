@@ -1149,6 +1149,22 @@ Donde este documento y la realidad del repo discrepan, manda esta lista (decidid
     alta y en el masivo, cuando el paquete no llega al mínimo de Correos Express (15x10x1 cm). El
     mensaje de la API no nombraba el tipo de paquete por ningún lado, y una expedición **no se
     puede anular**: el aviso vale más que el diagnóstico a posteriori.
+  - **El alta se puede lanzar desde la ficha del pedido (2026-09-02, cliente)**:
+    `CorreosExpressHooks::accionesEnLaFichaDelPedido()` pone los botones de Correos Express dentro
+    de la tarjeta «Información de envío» de `/admin/commerce/orders/N`, reutilizando
+    `operacionesDeEnvio()` para no tener dos sitios donde decidir qué acción toca. Tres cosas que
+    costaron encontrar: **`links` es un theme hook, no un tipo de elemento**, así que el render
+    array lleva `#theme` y no `#type` (con `#type` no pinta nada y no da ningún error); la tarjeta
+    de Commerce **solo pinta el primer envío** (`ShippingInformationFormatter::viewElements`), de
+    modo que en un pedido con varios hay que seguir yendo a la pestaña; y **no se añade
+    `destination`** porque el formulario ya redirige a la etiqueta al crear la expedición, que es
+    lo siguiente que se hace, y un destino la pisaría.
+  - **La recogida en tienda no ofrece el botón**: `GestorExpediciones::seExpide()` mira la lista
+    `metodos_sin_expedicion` de los ajustes, que es **configuración y no código**, porque los ids
+    de los métodos son de cada tienda y mañana puede haber otro punto de recogida. Se marca en
+    `/admin/commerce/config/correos-express`; aquí está marcado «Recoger en Pronens» (id 6). El
+    filtro vive en `operacionesDeEnvio()`, así que desaparece a la vez de la ficha del pedido y de
+    la pestaña de envíos.
   - **Y el `custom_box` ya no se puede elegir**: `CorreosExpressHooks::escondeElPaqueteDeRelleno()`
     lo quita del campo «Package Type» del envío y del «Default package type» del método de envío.
     **El plugin no se borra, y no es por dejadez**: `PackageTypeManager` no llama a `alterInfo()`,

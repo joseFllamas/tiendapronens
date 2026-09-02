@@ -219,6 +219,29 @@ final class GestorExpediciones {
   }
 
   /**
+   * Indica si un envío sale de verdad por Correos Express.
+   *
+   * No todos los métodos de envío son un envío: «Recoger en Pronens» es que el
+   * cliente pasa por la tienda, y ahí no hay nada que expedir. Ofrecer el botón
+   * solo serviría para crear una expedición real, facturable y que la API no
+   * deja anular.
+   *
+   * Los métodos excluidos se marcan en /admin/commerce/config/correos-express y
+   * no se escriben aquí: sus ids son de cada tienda, y mañana puede haber otro
+   * punto de recogida.
+   */
+  public function seExpide(ShipmentInterface $envio): bool {
+    $metodo = $envio->getShippingMethod();
+    if ($metodo === NULL) {
+      return TRUE;
+    }
+    $excluidos = $this->configFactory->get('pronens_correos_express.settings')
+      ->get('metodos_sin_expedicion') ?? [];
+
+    return !in_array((string) $metodo->id(), array_map('strval', $excluidos), TRUE);
+  }
+
+  /**
    * Indica si el bulto declarado no llega al mínimo de Correos Express.
    *
    * El mínimo son 15x10x1 cm. Por debajo, las medidas no describen ningún

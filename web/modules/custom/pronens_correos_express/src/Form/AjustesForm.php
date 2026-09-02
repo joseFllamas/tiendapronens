@@ -323,6 +323,14 @@ final class AjustesForm extends ConfigFormBase {
       '#description' => $this->t('Cada envío es una llamada a la API, así que conviene no pasarse.'),
     ];
 
+    $form['metodos_sin_expedicion'] = [
+      '#type' => 'checkboxes',
+      '#title' => $this->t('Métodos de envío que no se expiden'),
+      '#options' => $this->metodosDeEnvio(),
+      '#default_value' => $config->get('metodos_sin_expedicion') ?? [],
+      '#description' => $this->t('Marca los que no salen por Correos Express, como la recogida en tienda. En sus pedidos no se ofrece generar expedición: crearla sería un envío real y facturable que la API no deja anular.'),
+    ];
+
     $form['registro_detallado'] = [
       '#type' => 'checkbox',
       '#title' => $this->t('Registrar las peticiones completas en el log'),
@@ -388,6 +396,9 @@ final class AjustesForm extends ConfigFormBase {
         'intervalo_horas' => (int) ($seguimiento['intervalo_horas'] ?? 6),
         'envios_por_ejecucion' => (int) ($seguimiento['envios_por_ejecucion'] ?? 25),
       ])
+      ->set('metodos_sin_expedicion', array_values(array_filter(
+        (array) $form_state->getValue('metodos_sin_expedicion'),
+      )))
       ->set('registro_detallado', (bool) $form_state->getValue('registro_detallado'))
       ->save();
 
@@ -470,6 +481,22 @@ final class AjustesForm extends ConfigFormBase {
       $opciones[(int) $termino->id()] = (string) $termino->label();
     }
     asort($opciones);
+
+    return $opciones;
+  }
+
+  /**
+   * Los métodos de envío de la tienda, para las casillas.
+   *
+   * @return array<string, string>
+   *   Etiqueta de cada método, por id.
+   */
+  private function metodosDeEnvio(): array {
+    $opciones = [];
+    $almacen = $this->entityTypeManager->getStorage('commerce_shipping_method');
+    foreach ($almacen->loadMultiple() as $metodo) {
+      $opciones[(string) $metodo->id()] = (string) $metodo->label();
+    }
 
     return $opciones;
   }

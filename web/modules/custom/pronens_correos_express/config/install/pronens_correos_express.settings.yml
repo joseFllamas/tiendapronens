@@ -38,6 +38,13 @@ seguimiento:
   intervalo_horas: 6
   envios_por_ejecucion: 25
 
+# Métodos de envío que no salen por Correos Express, típicamente la recogida en
+# tienda: ahí no hay nada que expedir y ofrecer el botón solo lleva a crear una
+# expedición real, facturable y que la API no deja anular. Se marcan en
+# /admin/commerce/config/correos-express. Vacío de fábrica porque los ids de los
+# métodos son de cada tienda.
+metodos_sin_expedicion: {}
+
 # Registra el payload completo en el canal de log, con teléfono, correo y
 # dirección redactados. Solo para depurar un error de la API.
 registro_detallado: false

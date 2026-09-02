@@ -41,8 +41,21 @@ las discrepancias encontradas están corregidas y anotadas en el código:
 2. **Ajustes**: `/admin/commerce/config/correos-express`. Entorno, datos del
    remitente que la tienda no guarda (NIF, contacto, teléfono), formato de
    etiqueta, pesos estimados y sincronización del seguimiento.
-3. **Dar de alta un envío**: en el pedido, en la lista de envíos, operación
-   «Generar expedición CEX». Viene todo prerrellenado.
+3. **Dar de alta un envío**: hay dos caminos al mismo formulario, que viene todo
+   prerrellenado. El corto es el botón **«Generar expedición CEX»** de la
+   tarjeta «Información de envío» de la propia ficha del pedido; el largo, la
+   operación del mismo nombre en la pestaña «Envíos». Los botones de la tarjeta
+   los pone `CorreosExpressHooks::accionesEnLaFichaDelPedido()` reutilizando
+   `operacionesDeEnvio()`, así que no hay dos sitios donde decidir cuándo se
+   puede expedir. Dos avisos: la tarjeta de Commerce **solo pinta el primer
+   envío**, de modo que en un pedido con varios hay que ir a la pestaña; y
+   `links` es un theme hook, no un tipo de elemento, así que ese render array
+   lleva `#theme` y no `#type` (con `#type` no pinta nada y no avisa).
+   **Los métodos que no se expiden no ofrecen el botón**: la recogida en tienda
+   no es un envío, y crear la expedición sería un envío real, facturable y que
+   la API no deja anular. Se marcan en los ajustes
+   («Métodos de envío que no se expiden»), no se codifican: los ids son de cada
+   tienda y mañana puede haber otro punto de recogida.
 4. **Dar de alta varios**: en `/admin/commerce/orders`, se seleccionan pedidos y
    se elige «Generar expediciones de Correos Express» en el desplegable. Lleva a
    una tabla con una fila por envío antes de crear nada. La opción existe porque

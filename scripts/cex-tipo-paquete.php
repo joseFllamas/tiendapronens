@@ -30,6 +30,8 @@
 
 declare(strict_types=1);
 
+use Drupal\pronens_correos_express\GestorExpediciones;
+
 $paquete = 'pronens_bolsa';
 
 $almacen = \Drupal::entityTypeManager()->getStorage('commerce_shipping_method');
@@ -55,12 +57,22 @@ foreach ($almacen->loadMultiple() as $metodo) {
   printf("  %-42s custom_box -> %s\n", $metodo->label(), $paquete);
 }
 
-// El envío que se quedó a medias con el custom_box, para poder reintentar el
-// alta sin tener que editarlo a mano.
+// Los envíos que se quedaron a medias con el custom_box, para poder reintentar
+// el alta sin tener que editarlos a mano.
+$gestor = \Drupal::service(GestorExpediciones::class);
 $envios = \Drupal::entityTypeManager()->getStorage('commerce_shipment')
   ->loadByProperties(['package_type' => 'custom_box']);
 
 foreach ($envios as $envio) {
+  // No basta con mirar si está «shipped»: generar() deja el envío en «ready»
+  // porque la mercancía sigue en el almacén, y a esas alturas la expedición ya
+  // está creada y la etiqueta impresa. Cambiarle el paquete ahora solo serviría
+  // para que el peso guardado dejara de cuadrar con el que se declaró.
+  if ($gestor->estaExpedido($envio)) {
+    printf("  envío %d ya tiene expedición (%s), no se toca\n",
+      $envio->id(), (string) $gestor->expedicion($envio));
+    continue;
+  }
   if ($envio->getState()->getId() === 'shipped') {
     printf("  envío %d ya expedido, no se toca\n", $envio->id());
     continue;
