@@ -1,0 +1,18 @@
+uuid: 87a9f8a7-4968-45e6-9541-003e7f6bde08
+langcode: es
+status: true
+dependencies: {  }
+_core:
+  default_config_hash: ccmJnYDefjjUJ1_S8QUpDMgN41yZcLULtiTOdR1sJmo
+id: default
+label: Factura
+traits: {  }
+numberPattern: invoice_default
+logo: null
+dueDays: null
+paymentTerms: ''
+footerText: "<p><strong>María Elisa Moreno Iglesias</strong> · NIF 36928020W<br>C/ Alcúdia 100, 08016 Barcelona<br>pronens@pronens.com · tienda.pronens.com</p>"
+workflow: invoice_default
+sendConfirmation: true
+confirmationBcc: ''
+privateSubdirectory: facturas

@@ -1,0 +1,36 @@
+display:
+  default:
+    display_title: Principal
+    display_options:
+      exposed_form:
+        options:
+          submit_button: Appliquer
+          reset_button_label: Réinitialiser
+          exposed_sorts_label: 'Trier par'
+          sort_asc_label: Asc
+          sort_desc_label: Desc
+      fields:
+        invoice_number:
+          label: Nombre
+          separator: ', '
+        invoice_date:
+          label: Date
+          separator: ', '
+        langcode:
+          label: Langue
+          separator: ', '
+        state:
+          label: État
+          separator: ', '
+        total_price__number:
+          label: Total
+          separator: ', '
+        operations:
+          label: Actions
+      title: Factures
+      arguments:
+        orders_target_id:
+          exception:
+            title: Tout
+  page_1:
+    display_title: Factures

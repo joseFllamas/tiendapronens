@@ -1,0 +1,18 @@
+uuid: e14466ea-d24e-4b9f-8264-e83558875f45
+langcode: es
+status: true
+dependencies:
+  enforced:
+    module:
+      - commerce_invoice
+_core:
+  default_config_hash: hp6r3xzLGwrIIC_hKth1N8BqtO9EasSw-VWXGQkkwO4
+id: invoice_default
+label: Factura
+targetEntityType: commerce_invoice
+plugin: yearly
+configuration:
+  pattern: '[pattern:year]-[pattern:number]'
+  initial_number: 1
+  padding: 0
+  per_store_sequence: true

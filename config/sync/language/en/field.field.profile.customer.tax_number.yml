@@ -1,1 +1,2 @@
-label: 'Tax number'
+label: 'Tax ID (NIF / VAT number)'
+description: "Only if you need a full invoice in your name or your company's."

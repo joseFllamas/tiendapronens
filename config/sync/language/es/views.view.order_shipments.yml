@@ -21,6 +21,7 @@ display:
           separator: ', '
         tracking_code:
           separator: ', '
+          label: 'Enlace de seguimiento'
         state:
           label: Estado
           separator: ', '

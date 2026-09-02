@@ -9,6 +9,7 @@ dependencies:
     - profile.type.customer
   module:
     - address
+    - commerce_tax
   enforced:
     module:
       - commerce_order
@@ -25,7 +26,12 @@ content:
     region: content
     settings: {  }
     third_party_settings: {  }
+  tax_number:
+    type: commerce_tax_number_default
+    weight: 1
+    region: content
+    settings: {  }
+    third_party_settings: {  }
 hidden:
   field_telefono: true
   is_default: true
-  tax_number: true

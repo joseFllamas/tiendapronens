@@ -3,10 +3,14 @@ langcode: es
 status: true
 dependencies:
   module:
+    - commerce_invoice
     - commerce_shipping
 third_party_settings:
   commerce_shipping:
     shipment_type: default
+  commerce_invoice:
+    invoice_type: default
+    order_placed_generation: true
 _core:
   default_config_hash: jn2Hj-04qG6O3dTtK8EaBB13jVPplONDb9L0Fat-0pI
 id: default

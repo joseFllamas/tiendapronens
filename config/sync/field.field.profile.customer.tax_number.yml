@@ -16,8 +16,8 @@ id: profile.customer.tax_number
 field_name: tax_number
 entity_type: profile
 bundle: customer
-label: 'Tax number'
-description: ''
+label: 'NIF / CIF'
+description: 'Solo si necesitas factura completa a tu nombre o al de tu empresa.'
 required: false
 translatable: false
 default_value:
@@ -25,6 +25,6 @@ default_value:
 default_value_callback: ''
 settings:
   countries: {  }
-  verify: true
+  verify: false
   allow_unverified: true
 field_type: commerce_tax_number

@@ -6,6 +6,7 @@ dependencies:
     - filter.format.basic_html
   module:
     - commerce_checkout
+    - commerce_invoice
     - commerce_order
     - commerce_payment
     - commerce_product
@@ -32,5 +33,6 @@ permissions:
   - 'use text format basic_html'
   - 'view commerce_product'
   - 'view media'
+  - 'view own commerce_invoice'
   - 'view own commerce_order'
   - 'view own customer profile'

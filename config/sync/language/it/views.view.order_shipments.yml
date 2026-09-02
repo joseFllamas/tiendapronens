@@ -20,6 +20,7 @@ display:
           label: Importo
           separator: ', '
         tracking_code:
+          label: 'Link di tracciamento'
           separator: ', '
         state:
           label: Stato

@@ -1,0 +1,118 @@
+{#
+/**
+ * @file
+ * La factura en PDF (entity_print + dompdf).
+ *
+ * Variables de commerce_invoice (template_preprocess_commerce_invoice):
+ * - invoice_entity, totals, footer_text, payment_terms, logo_url.
+ *
+ * Variables de pronens_factura (FacturaHooks::preprocessCommerceInvoice):
+ * - numero, fecha, pedidos: [{numero, fecha}], tienda (datos fiscales del
+ *   emisor, el "texto del pie" del tipo de factura, que aquí va arriba).
+ * - cliente: nombre, empresa, direccion (lista de líneas), nif, correo.
+ * - lineas: [{titulo, opciones, bordado, fondo, cantidad, unitario, total, ajustes}].
+ * - base_imponible, otros [{etiqueta, importe}], impuestos [{etiqueta, importe}],
+ *   total, pago.
+ *
+ * Vive en el módulo y no en el tema a propósito: entity_print renderiza con el
+ * tema ACTIVO, y una factura regenerada desde el backoffice saldría con la
+ * plantilla de fábrica si esta estuviera solo en el tema de la tienda. La hoja
+ * de estilo sí es del tema (clave `entity_print` de pronens.info.yml), porque
+ * entity_print la toma siempre del tema por defecto.
+ *
+ * Maquetación para dompdf: tablas, CSS 2.1, nada de flex ni de grid.
+ */
+#}
+<div class="fac">
+
+  <table class="fac__cabecera" cellpadding="0" cellspacing="0">
+    <tr>
+      <td class="fac__marca">
+        <span class="fac__wordmark">pronens<span class="fac__punto">.</span></span>
+        {% if tienda %}<div class="fac__emisor">{{ tienda }}</div>{% endif %}
+      </td>
+      <td class="fac__datos">
+        <div class="fac__titulo">{{ 'Invoice'|t }}</div>
+        <table class="fac__meta" cellpadding="0" cellspacing="0">
+          <tr><th>{{ 'Invoice number'|t }}</th><td>{{ numero }}</td></tr>
+          <tr><th>{{ 'Invoice date'|t }}</th><td>{{ fecha|format_date('custom', 'd/m/Y') }}</td></tr>
+          {% for pedido in pedidos %}
+            <tr><th>{{ 'Order'|t }}</th><td>{{ pedido.numero }}{% if pedido.fecha %} · {{ pedido.fecha|format_date('custom', 'd/m/Y') }}{% endif %}</td></tr>
+          {% endfor %}
+        </table>
+      </td>
+    </tr>
+  </table>
+
+  {% if cliente %}
+    <div class="fac__cliente">
+      <div class="fac__rotulo">{{ 'Bill to'|t }}</div>
+      {% if cliente.empresa %}<div class="fac__nombre">{{ cliente.empresa }}</div>{% endif %}
+      {% if cliente.nombre %}<div class="{{ cliente.empresa ? 'fac__linea' : 'fac__nombre' }}">{{ cliente.nombre }}</div>{% endif %}
+      {% if cliente.nif %}<div class="fac__linea">{{ 'Tax ID'|t }}: {{ cliente.nif }}</div>{% endif %}
+      {% for linea in cliente.direccion %}<div class="fac__linea">{{ linea }}</div>{% endfor %}
+      {% if cliente.correo %}<div class="fac__linea fac__mute">{{ cliente.correo }}</div>{% endif %}
+    </div>
+  {% endif %}
+
+  <table class="fac__lineas" cellpadding="0" cellspacing="0">
+    <thead>
+      <tr>
+        <th class="fac__col-desc">{{ 'Description'|t }}</th>
+        <th class="fac__col-num">{{ 'Quantity'|t }}</th>
+        <th class="fac__col-num">{{ 'Unit price'|t }}</th>
+        <th class="fac__col-num">{{ 'Total'|t }}</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for linea in lineas %}
+        <tr class="fac__linea-item">
+          <td class="fac__col-desc">
+            <div class="fac__item">{{ linea.titulo }}</div>
+            {% if linea.opciones %}<div class="fac__detalle">{{ linea.opciones }}</div>{% endif %}
+            {% if linea.bordado %}
+              <div class="fac__detalle">{{ 'Embroidery'|t }}: {{ linea.bordado }}{% if linea.fondo %} · {{ 'Background'|t({}, {'context': 'Embroidery'}) }}: {{ linea.fondo }}{% endif %}</div>
+            {% endif %}
+          </td>
+          <td class="fac__col-num">{{ linea.cantidad }}</td>
+          <td class="fac__col-num">{{ linea.unitario }}</td>
+          <td class="fac__col-num">{{ linea.total }}</td>
+        </tr>
+        {% for ajuste in linea.ajustes %}
+          <tr class="fac__linea-ajuste">
+            <td class="fac__col-desc fac__detalle">{{ ajuste.etiqueta }}</td>
+            <td class="fac__col-num fac__detalle">{{ linea.cantidad }}</td>
+            <td class="fac__col-num fac__detalle">{{ ajuste.unitario }}</td>
+            <td class="fac__col-num fac__detalle">{{ ajuste.importe }}</td>
+          </tr>
+        {% endfor %}
+      {% endfor %}
+    </tbody>
+  </table>
+
+  <table class="fac__totales-wrap" cellpadding="0" cellspacing="0">
+    <tr>
+      <td class="fac__pago">
+        {% if pago %}<div class="fac__rotulo">{{ 'Payment method'|t }}</div><div class="fac__linea">{{ pago }}</div>{% endif %}
+        {% if payment_terms %}<div class="fac__terminos">{{ payment_terms }}</div>{% endif %}
+      </td>
+      <td class="fac__totales-col">
+        <table class="fac__totales" cellpadding="0" cellspacing="0">
+          {% for ajuste in otros %}
+            <tr><th>{{ ajuste.etiqueta }}</th><td>{{ ajuste.importe }}</td></tr>
+          {% endfor %}
+          <tr><th>{{ 'Taxable base'|t }}</th><td>{{ base_imponible }}</td></tr>
+          {% for impuesto in impuestos %}
+            <tr><th>{{ impuesto.etiqueta }}</th><td>{{ impuesto.importe }}</td></tr>
+          {% endfor %}
+          <tr class="fac__total"><th>{{ 'Total'|t }}</th><td>{{ total }}</td></tr>
+        </table>
+      </td>
+    </tr>
+  </table>
+
+  {% if footer_text %}
+    <div class="fac__pie">{{ footer_text }}</div>
+  {% endif %}
+
+</div>

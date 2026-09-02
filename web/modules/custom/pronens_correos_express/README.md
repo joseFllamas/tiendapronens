@@ -66,7 +66,18 @@ las discrepancias encontradas están corregidas y anotadas en el código:
    manda a la impresora tal cual), PDF adhesivo de tres por hoja y PDF de medio
    folio. Con más de un bulto en PDF se descarga un ZIP con una etiqueta por
    bulto; en ZPL, un único fichero con todas.
-6. **Seguimiento**: se sincroniza por cron. El enlace público aparece solo en la
+6. **Marcar como enviado**: no suele hacerse a mano. Al generar la expedición el
+   envío pasa solo a «Preparado» (el paquete sigue en el taller), y es el
+   seguimiento quien lo pasa a «Enviado» cuando el transportista lo recoge. El
+   botón manual está en la columna **Estado** de la pestaña «Envíos», que no es
+   texto sino las transiciones disponibles desde el estado actual: en Borrador
+   salen «Marcar como preparado» y «Cancelar el envío», y en Preparado, «Marcar
+   como enviado». No hay selector de estado en «Editar» porque state_machine no
+   deja fijarlo como un campo más: se llega por transiciones. Las etiquetas de
+   esa pantalla las traduce `scripts/traducir-envios.php`, con el contexto que
+   pide state_machine (`workflow state` y `workflow transition`); sin contexto
+   no se aplican y la pantalla se queda en inglés sin avisar.
+7. **Seguimiento**: se sincroniza por cron. El enlace público aparece solo en la
    ficha del envío y en la página del pedido del cliente. Cuando el seguimiento
    detecta que el transportista ha recogido el paquete, el envío pasa a
    «enviado» y esa transición dispara el correo «Tu pedido ya está en camino»

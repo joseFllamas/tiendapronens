@@ -452,6 +452,11 @@
   border-color: var(--pro-teal-ink);
 }
 
+/* La descarga de la factura, en la cabecera de la ficha del pedido. */
+.pro-pedido-ficha__factura {
+  margin-top: 10px;
+}
+
 @media (max-width: 619px) {
   /* En estrecho la línea de tiempo pasa a vertical. */
   .pro-envio__pasos {

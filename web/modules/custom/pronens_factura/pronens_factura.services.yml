@@ -1,0 +1,30 @@
+services:
+  _defaults:
+    autowire: true
+
+  # MailerPass descubre el correo por la clase (ComponentMailerInterface más el
+  # atributo MailerInfo) y le inyecta él mismo el argumento $baseTag: de ahí el
+  # hueco vacío, igual que en pronens_mail.
+  Drupal\pronens_factura\Component\FacturaMailerInterface:
+    class: Drupal\pronens_factura\Component\FacturaMailer
+    autowire: false
+    arguments:
+      - '@Drupal\symfony_mailer\MailerPlusInterface'
+      - '@Drupal\symfony_mailer\MailerLookupInterface'
+      - ''
+      - '@Drupal\pronens_mail\IdiomaPedido'
+      - '@commerce_invoice.invoice_file_manager'
+      - '@file_system'
+      - '@commerce_price.currency_formatter'
+      - '@date.formatter'
+      - '@language_manager'
+
+  # El CSS del PDF en línea: dompdf no debe descargar nada por HTTP.
+  Drupal\pronens_factura\EventSubscriber\CssIncrustadoSubscriber:
+    tags:
+      - { name: event_subscriber }
+
+  # La subcarpeta privada de los PDF, que entity_print no crea.
+  Drupal\pronens_factura\EventSubscriber\CarpetaPdfSubscriber:
+    tags:
+      - { name: event_subscriber }

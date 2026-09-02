@@ -20,6 +20,7 @@ display:
           label: Montant
           separator: ', '
         tracking_code:
+          label: 'Lien de suivi'
           separator: ', '
         state:
           label: État

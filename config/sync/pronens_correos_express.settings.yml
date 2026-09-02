@@ -41,3 +41,5 @@ seguimiento:
   intervalo_horas: 6
   envios_por_ejecucion: 25
 registro_detallado: false
+metodos_sin_expedicion:
+  - '6'

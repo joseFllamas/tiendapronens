@@ -16,6 +16,7 @@ module:
   commerce: 0
   commerce_cart: 0
   commerce_checkout: 0
+  commerce_invoice: 0
   commerce_log: 0
   commerce_number_pattern: 0
   commerce_order: 0
@@ -42,6 +43,7 @@ module:
   dynamic_page_cache: 0
   editor: 0
   entity: 0
+  entity_print: 0
   entity_reference_revisions: 0
   facets: 0
   field: 0
@@ -86,6 +88,7 @@ module:
   pronens_comision_pago: 0
   pronens_correos_express: 0
   pronens_cuenta: 0
+  pronens_factura: 0
   pronens_mail: 0
   pronens_migrate: 0
   pronens_personalizacion: 0

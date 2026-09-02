@@ -3,5 +3,6 @@ _core:
 override:
   commerce_order: 1
   contact: 1
+  pronens_factura: 1
   update: 2
   user: 1

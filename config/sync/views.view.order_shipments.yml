@@ -230,7 +230,7 @@ display:
           entity_type: commerce_shipment
           entity_field: tracking_code
           plugin_id: field
-          label: 'Tracking link'
+          label: 'Enlace de seguimiento'
           exclude: false
           alter:
             alter_text: false

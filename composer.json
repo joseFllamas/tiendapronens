@@ -22,6 +22,7 @@
         "drupal/ai_tmgmt": "^1.0@beta",
         "drupal/color_field": "^3.0",
         "drupal/commerce": "^3",
+        "drupal/commerce_invoice": "^2.2",
         "drupal/commerce_paypal": "^2.1",
         "drupal/commerce_sermepa": "^2.4",
         "drupal/commerce_shipping": "^3.0",

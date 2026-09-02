@@ -1165,6 +1165,25 @@ Donde este documento y la realidad del repo discrepan, manda esta lista (decidid
     `/admin/commerce/config/correos-express`; aquí está marcado «Recoger en Pronens» (id 6). El
     filtro vive en `operacionesDeEnvio()`, así que desaparece a la vez de la ficha del pedido y de
     la pestaña de envíos.
+  - **La pantalla de envíos ya no está en inglés (2026-09-02)**: Commerce Shipping no traduce ni
+    sus estados ni sus transiciones, así que la pestaña «Envíos» decía «Draft» y ofrecía «Finalize
+    shipment» y «Cancel shipment», que son justo los botones que mueven un envío hasta «Enviado» y
+    disparan el aviso al cliente. Lo arregla `scripts/traducir-envios.php`. Tres cosas que hay que
+    saber para tocarlo:
+    - **Los contextos son obligatorios**: `WorkflowTransition::getLabel()` pide la cadena con
+      contexto `workflow transition` y `WorkflowState::getLabel()` con `workflow state`.
+      Traducidas sin contexto no las mira nadie, y no da ningún aviso: la pantalla sigue en inglés.
+    - **«Tracking link» no es una cadena de interfaz**, es la etiqueta de un campo de la vista
+      `order_shipments`, o sea configuración: va como override por idioma
+      (`config/sync/language/<lc>/views.view.order_shipments.yml`), igual que los prefijos de
+      pathauto. El valor base se queda en inglés y hay override en los cinco idiomas.
+    - **Las transiciones no se traducen literalmente**: «Finalize shipment» sería «Finalizar el
+      envío», que suena a terminarlo cuando lo que hace es marcar que el paquete está preparado.
+      Se traducen por lo que hacen y con el vocabulario de los estados: «Marcar como preparado» →
+      «Preparado», «Marcar como enviado» → «Enviado».
+    - **«Shipment #1» se queda en inglés a propósito**: no es interfaz, es el TÍTULO del envío que
+      escriben los empaquetadores de Commerce y se guarda en la entidad, en el idioma en que
+      navegaba quien compró. Traducirla llenaría el backoffice de títulos en cuatro idiomas.
   - **Y el `custom_box` ya no se puede elegir**: `CorreosExpressHooks::escondeElPaqueteDeRelleno()`
     lo quita del campo «Package Type» del envío y del «Default package type» del método de envío.
     **El plugin no se borra, y no es por dejadez**: `PackageTypeManager` no llama a `alterInfo()`,
@@ -1175,6 +1194,98 @@ Donde este documento y la realidad del repo discrepan, manda esta lista (decidid
     el valor solo al abrirlo. Se busca por el contenido de `#options` y no por la ruta, porque en
     el envío cuelga de la raíz del formulario y en el método está seis niveles dentro, en la
     configuración del plugin.
+
+- **Numeración de pedidos y facturas (2026-09-02, cliente)**: en el D7 el número visible del pedido
+  ERA el número de factura: commerce_billy lo sobreescribía al completarse con el patrón
+  `[date:custom:Y]-{id}` y reinicio anual (1530 facturas, 2014-1 … 2026-11 en el dump del 26/07;
+  la tienda antigua pudo facturar después, así que **el último número real hay que leerlo del D7
+  vivo** antes de tocar producción). Los carritos se quedaban con el `order_id`. Aquí las dos series
+  van separadas y la decisión está tomada:
+  - **Pedidos: `P-AÑO-NNNN`** (`order_default`, plugin `yearly`, relleno 4, por tienda). Los cuatro
+    pedidos que habían salido como «1, 2, 3, 4» se renumeraron con `scripts/renumerar-pedidos.php`
+    (P-2026-0001 … 0004), que además deja la fila de `commerce_number_pattern_sequence` en el último
+    número dado: sin eso el siguiente pedido repetiría número. Redsys no usa el número de pedido (manda
+    el id) y la referencia de Correos Express admite 30 caracteres, así que el prefijo no rompe nada.
+    **Los números y la secuencia son contenido**: el script hay que ejecutarlo en producción.
+  - **Facturas: `AÑO-N`, la misma serie del D7**, con `commerce_invoice` 2.2 (+ `entity_print` y
+    dompdf) como **puente hasta Verifactu**: la autónoma está obligada desde el **01/07/2027** (RD
+    1007/2023 aplazado por RDL 15/2025) y la norma cubre también las facturas simplificadas B2C. Un
+    Drupal que emita facturas pasa a ser «sistema informático de facturación» (huella encadenada, QR,
+    remisión a la AEAT) y no hay módulo Drupal para eso, así que **antes de esa fecha se apaga
+    `order_placed_generation` en el tipo de pedido y la factura pasa al programa homologado de la
+    gestoría, continuando la misma serie**. La Crea y Crece (RD 238/2026) es solo B2B y no afecta.
+  - **La continuidad NO se hace con `initial_number`**: el plugin yearly vuelve a ese número cada
+    enero (un 12 daría 2027-12). `scripts/facturas.php -- <último del D7>` **siembra la fila de
+    secuencia** de `invoice_default` (number = último del D7, generated = ahora): la siguiente sale
+    2026-12 y en enero 2027-1. Con `--generar` factura lo ya vendido sin factura, en orden de compra,
+    marcándolas pagadas (por `isPaid()` O estado `completed`: el pedido 4 real no tiene pago
+    registrado porque el retorno de Redsys falló con «Bad feedback response» y se colocó a mano) y
+    **sin correo al cliente** salvo `--con-correo`. Pendiente del cliente: confirmar que los 4 pedidos
+    no se facturaron ya por otra vía antes de lanzarlo en producción.
+  - **La factura se genera al realizarse el pedido** (`third_party_settings.commerce_invoice` del tipo
+    `default`), el equivalente exacto de la Rule «Invoice order on completion» del D7. Ojo: el módulo
+    marca la factura pagada solo si el evento `order.paid` llega DESPUÉS de crearla; con las pasarelas
+    de redirección el pago entra antes del `place`, así que las facturas nacen `pending` aunque el
+    pedido esté cobrado. Es un estado interno del módulo, no cambia el PDF ni el correo.
+  - **Módulo `pronens_factura`**, no el tema, por dos motivos medidos: los `hook_mailer_*` no llegan
+    a un tema, y **entity_print renderiza con el tema ACTIVO** (una factura regenerada desde el
+    backoffice saldría con la plantilla de fábrica si la nuestra viviera solo en el tema). Así que
+    la plantilla `commerce-invoice--default.html.twig` y su preprocess (`FacturaHooks`) van en el
+    módulo, registrados con `hook_theme` como sugerencia por bundle; la hoja `css/factura.css` sí es
+    del tema, porque entity_print la toma **siempre del tema por defecto** (clave `entity_print` de
+    `pronens.info.yml`). Sin `var()` ni fuentes del sitio: dompdf usa DejaVu Sans.
+  - **dompdf descarga el CSS por HTTP desde la propia web**, con el host de la petición: desde drush
+    el host es «default» y la primera prueba estuvo cinco minutos colgada con la transacción abierta,
+    bloqueando la caché de configuración del resto de peticiones. `CssIncrustadoSubscriber` resuelve
+    las mismas libraries que entity_print (sin agregar: el agregado se genera bajo demanda y puede no
+    existir en disco), las lee del disco y las mete en un `<style>`; el PDF no necesita red. Y
+    entity_print **no crea la subcarpeta privada** del tipo de factura (`private://facturas`):
+    `CarpetaPdfSubscriber` la prepara en PRE_SEND; sin eso el correo salía sin adjunto.
+  - **Ficheros privados**: `private://` no estaba configurado. En ddev va en `settings.local.php`
+    (`DRUPAL_ROOT . '/../private'`, carpeta `private/` en la raíz, ignorada en git). **En producción
+    hay que crearla fuera del docroot y declararla igual**; sin ella no hay PDF.
+  - **El correo de la factura es de Mailer Plus, no el de commerce_invoice**: `FacturaOverride`
+    (plugin `Override` con id `pronens_factura`, que tiene que coincidir con el `base_tag` del
+    `FacturaMailer`) intercepta `commerce.invoice_confirmation` y manda la política
+    `pronens_factura.confirmacion` (asunto y cuerpo editables, envoltorio de la tienda, PDF adjunto,
+    idioma del pedido vía `IdiomaPedido`, enlaces de descarga solo si el cliente tiene cuenta). **El
+    override está apagado hasta que se enciende en `mailer_override.settings`** (`override.
+    pronens_factura: 1`, ya en config/sync): con el plugin solo, el correo seguía saliendo por el
+    camino legacy.
+  - **NIF opcional en el checkout**: el perfil `customer` ya traía `tax_number` oculto; ahora sale en
+    la información de pago como «NIF / CIF», con ayuda «Solo si necesitas factura completa…», en los
+    cinco idiomas (overrides de idioma del campo). **Sin verificación VIES** (`verify: false`): un
+    NIF de particular no está en el VIES y el checkout habría fallado; sí valida el formato, y ojo,
+    Commerce exige el prefijo de país (`ES12345678Z`). Por debajo de 400 € sin NIF vale la factura
+    simplificada; con NIF sale completa, y la dirección pinta la provincia por su nombre.
+  - **Descarga desde la cuenta**: botón «Descargar factura (PDF)» en la ficha del pedido
+    (`CuentaHooks::urlDeFactura`, ruta `entity.commerce_invoice.download`, permiso `view own
+    commerce_invoice` añadido al rol autenticado). El acceso lo comprueba el módulo: propia 200,
+    ajena 403, anónimo 403. Cadenas en `scripts/traducir-factura.php`.
+  - **Datos fiscales del emisor** en el «Texto del pie» del tipo de factura
+    (/admin/commerce/config/invoice-types): el D7 decía «c/Alcúdia 199» en la cabecera y «C/Alcúdia
+    100» en el pie; **la buena es Alcúdia 100** (cliente, 2026-09-02). Copias previas: snapshots
+    `pre-numeracion-pedidos` y `pre-facturas`. Las 4 facturas y los correos de la prueba local se
+    borraron. **El último número real del D7 vivo es 2026-20** (cliente, 2026-09-02): la serie local
+    está sembrada en el 20 y en producción el script se lanza con `-- 20`, así que la primera
+    factura de la tienda nueva será la **2026-21**.
+  - **Pendiente de producción, en este orden**: crear la carpeta privada y `file_private_path`;
+    `composer install` + `drush cim`; `scripts/renumerar-pedidos.php`; `scripts/facturas.php -- 20`
+    (con `--generar` si el cliente lo confirma);
+    `scripts/traducir-factura.php`.
+  - **Por qué Redsys no registró el pago del pedido 4 (2026-09-02, cliente)**: producción vive
+    todavía en la URL temporal `https://tienda-pronens-es.b476.odisean.com/` y el TPV está dado de
+    alta para `tienda.pronens.es`. El watchdog lo confirma: el retorno llegó a
+    `/checkout/79/payment/return` del dominio temporal a las 18:20:57 **sin los parámetros de
+    Redsys** («Bad feedback response, missing feedback parameter») y **no hay ni una entrada de la
+    notificación servidor a servidor**, así que no se creó ningún `commerce_payment` y el pedido se
+    colocó a mano. `commerce_sermepa` manda `UrlOK`, `UrlKO` y `MerchantURL` construidas con el
+    dominio de la petición (`SermepaForm.php`), de modo que **no hay nada que cambiar en Drupal**: al
+    pasar al dominio definitivo hay que comprobar en el panel del TPV que las URL de respuesta y
+    notificación no estén fijadas a otro dominio, que «parámetros en las URL» esté activado (el
+    módulo necesita `Ds_MerchantParameters` en el retorno) y que la notificación llegue a
+    `/payment/notify/redsys` (debe aparecer en el watchdog). Sin pago registrado el pedido figura
+    sin cobrar y la factura se queda en `pending`.
 
 ## Orden de trabajo
 1. **Tema `pronens`**: tokens CSS (custom properties con los colores/tipos del README), fuentes

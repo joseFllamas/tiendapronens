@@ -59,3 +59,7 @@
 /correosoficial/
 /design/
 
+
+# Ficheros privados de Drupal (facturas PDF). La ruta la fija settings.local.php.
+/private/*
+!/private/.gitkeep

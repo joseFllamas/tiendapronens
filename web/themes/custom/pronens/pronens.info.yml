@@ -19,6 +19,12 @@ libraries-override:
   symfony_mailer/commerce_order: false
   symfony_mailer/contact: false
 
+# Hoja de estilo de los PDF (facturas). entity_print la lee SIEMPRE del tema por
+# defecto, sea cual sea el tema activo al generar el fichero.
+entity_print:
+  all:
+    - pronens/factura
+
 libraries-extend:
   user/drupal.user:
     - pronens/user

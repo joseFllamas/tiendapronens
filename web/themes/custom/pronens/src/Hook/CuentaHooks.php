@@ -217,9 +217,44 @@ class CuentaHooks {
     $variables['url_pedidos'] = Url::fromRoute('view.commerce_user_orders.order_page', [
       'user' => $pedido->getCustomerId(),
     ])->toString();
+    $variables['url_factura'] = $this->urlDeFactura($pedido, $metadatos);
 
     $variables['#attached']['library'][] = 'pronens/cuenta';
     $this->anotaCache($variables, $metadatos);
+  }
+
+  /**
+   * La descarga del PDF de la factura del pedido, si ya existe.
+   *
+   * commerce_invoice la genera al realizarse el pedido, así que lo normal es
+   * que esté. Se enlaza la ruta de descarga del módulo, que comprueba que quien
+   * mira es el dueño de la factura. Las facturas en borrador no se enseñan: la
+   * misma ruta las rechaza. Si el módulo no está instalado (el tema no depende
+   * de él) no se pinta nada.
+   */
+  protected function urlDeFactura(OrderInterface $pedido, CacheableMetadata $metadatos): ?string {
+    if (!$this->entityTypeManager->hasDefinition('commerce_invoice')) {
+      return NULL;
+    }
+    // Una factura nueva para este pedido tiene que invalidar la ficha.
+    $metadatos->addCacheTags(['commerce_invoice_list']);
+    $ids = $this->entityTypeManager->getStorage('commerce_invoice')->getQuery()
+      ->accessCheck(FALSE)
+      ->condition('orders', $pedido->id())
+      ->condition('state', 'draft', '<>')
+      ->sort('invoice_id', 'DESC')
+      ->range(0, 1)
+      ->execute();
+    if ($ids === []) {
+      return NULL;
+    }
+    $factura = $this->entityTypeManager->getStorage('commerce_invoice')->load(reset($ids));
+    if ($factura === NULL) {
+      return NULL;
+    }
+    $metadatos->addCacheableDependency($factura);
+
+    return Url::fromRoute('entity.commerce_invoice.download', ['commerce_invoice' => $factura->id()])->toString();
   }
 
   /**

@@ -1,0 +1,241 @@
+/**
+ * @file
+ * La factura en PDF (entity_print + dompdf).
+ *
+ * Misma regla que css/email: NADA de var(--pro-*), dompdf no las entiende. Los
+ * valores salen de css/tokens.css (ink #10222b, text-2 #5b7078, mute #8aa0a6,
+ * border #ece7de, teal #2e9daa, teal-ink #1e6e77, cream #f3eee6). Tampoco
+ * fuentes del sitio: dompdf solo trae las suyas y DejaVu Sans es la que tiene
+ * los acentos y el símbolo del euro garantizados.
+ *
+ * entity_print la carga por la clave `entity_print` de pronens.info.yml, del
+ * tema por defecto, sea cual sea el tema activo al generar el PDF.
+ */
+
+@page {
+  margin: 18mm 16mm 20mm;
+}
+
+body {
+  margin: 0;
+  font-family: "DejaVu Sans", Arial, Helvetica, sans-serif;
+  font-size: 10.5pt;
+  line-height: 1.45;
+  color: #10222b;
+}
+
+.fac {
+  width: 100%;
+}
+
+/* --- Cabecera: marca a la izquierda, datos de la factura a la derecha. --- */
+.fac__cabecera {
+  width: 100%;
+  margin-bottom: 26px;
+  border-bottom: 2px solid #10222b;
+  padding-bottom: 14px;
+}
+
+.fac__cabecera td {
+  vertical-align: top;
+}
+
+.fac__marca {
+  width: 50%;
+}
+
+.fac__wordmark {
+  display: block;
+  font-size: 26pt;
+  font-weight: bold;
+  letter-spacing: -0.5pt;
+  line-height: 1;
+  margin-bottom: 10px;
+}
+
+.fac__punto {
+  color: #2e9daa;
+}
+
+.fac__emisor {
+  font-size: 9pt;
+  color: #5b7078;
+}
+
+.fac__emisor p {
+  margin: 0;
+}
+
+.fac__datos {
+  text-align: right;
+}
+
+.fac__titulo {
+  font-size: 18pt;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 1.5pt;
+  color: #1e6e77;
+  margin-bottom: 6px;
+}
+
+.fac__meta {
+  margin-left: auto;
+  font-size: 9.5pt;
+}
+
+.fac__meta th {
+  text-align: right;
+  font-weight: normal;
+  white-space: nowrap;
+  color: #5b7078;
+  padding: 1px 10px 1px 0;
+}
+
+.fac__meta td {
+  text-align: right;
+  font-weight: bold;
+  white-space: nowrap;
+  padding: 1px 0;
+}
+
+/* --- Cliente. --- */
+.fac__cliente {
+  margin-bottom: 22px;
+}
+
+.fac__rotulo {
+  font-size: 8pt;
+  text-transform: uppercase;
+  letter-spacing: 1pt;
+  color: #8aa0a6;
+  margin-bottom: 3px;
+}
+
+.fac__nombre {
+  font-weight: bold;
+}
+
+.fac__linea {
+  margin: 0;
+}
+
+.fac__mute {
+  color: #5b7078;
+}
+
+.fac__direccion p,
+.fac__direccion .address {
+  margin: 0;
+}
+
+/* --- Líneas. --- */
+.fac__lineas {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 18px;
+}
+
+.fac__lineas th {
+  text-align: left;
+  font-size: 8pt;
+  text-transform: uppercase;
+  letter-spacing: 0.8pt;
+  color: #5b7078;
+  border-bottom: 1px solid #10222b;
+  padding: 0 6px 6px;
+}
+
+.fac__lineas td {
+  vertical-align: top;
+  padding: 7px 6px;
+  border-bottom: 1px solid #ece7de;
+}
+
+.fac__linea-ajuste td {
+  border-bottom: 1px solid #ece7de;
+  padding-top: 0;
+  color: #5b7078;
+}
+
+.fac__linea-item + .fac__linea-ajuste td {
+  border-top: 0;
+}
+
+.fac__lineas .fac__linea-item td {
+  border-bottom-color: #ece7de;
+}
+
+.fac__col-num {
+  text-align: right;
+  white-space: nowrap;
+  width: 16%;
+}
+
+.fac__item {
+  font-weight: bold;
+}
+
+.fac__detalle {
+  font-size: 9pt;
+  color: #5b7078;
+}
+
+/* --- Totales. --- */
+.fac__totales-wrap {
+  width: 100%;
+  margin-bottom: 26px;
+}
+
+.fac__totales-wrap td {
+  vertical-align: top;
+}
+
+.fac__pago {
+  width: 55%;
+  font-size: 9.5pt;
+}
+
+.fac__terminos {
+  margin-top: 8px;
+  color: #5b7078;
+}
+
+.fac__totales {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.fac__totales th {
+  text-align: left;
+  font-weight: normal;
+  color: #5b7078;
+  padding: 4px 6px;
+}
+
+.fac__totales td {
+  text-align: right;
+  white-space: nowrap;
+  padding: 4px 6px;
+}
+
+.fac__totales .fac__total th,
+.fac__totales .fac__total td {
+  font-weight: bold;
+  font-size: 12.5pt;
+  color: #10222b;
+  border-top: 2px solid #10222b;
+  padding-top: 8px;
+}
+
+/* --- Pie: datos fiscales del emisor. --- */
+.fac__pie {
+  border-top: 1px solid #ece7de;
+  padding-top: 10px;
+  font-size: 8.5pt;
+  color: #5b7078;
+}
+
+.fac__pie p {
+  margin: 0;
+}

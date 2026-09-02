@@ -15,6 +15,7 @@
  * - numero, fecha, estado, lineas, subtotal, ajustes, total.
  * - envio: direccion, metodo, seguimiento, url_seguimiento, pasos (timeline).
  * - facturacion, pago, url_pedidos.
+ * - url_factura: descarga del PDF de la factura, o vacío si aún no hay.
  */
 #}
 <article{{ attributes.addClass('pro-pedido-ficha') }}>
@@ -27,6 +28,9 @@
       {{ fecha|format_date('custom', 'j/n/Y') }}
       <span class="pro-estado pro-estado--{{ estado.clave }}">{{ estado.etiqueta }}</span>
     </p>
+    {% if url_factura %}
+      <a class="pro-envio__btn pro-pedido-ficha__factura" href="{{ url_factura }}">{{ 'Download invoice (PDF)'|t }}</a>
+    {% endif %}
   </header>
 
   {% if envio and envio.pasos %}

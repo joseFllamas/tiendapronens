@@ -352,3 +352,11 @@ email-commerce:
   css:
     theme:
       css/email/email-commerce.css: {}
+
+# La factura en PDF. La carga entity_print por la clave `entity_print` de
+# pronens.info.yml, no una plantilla: dompdf recibe el HTML con esta hoja.
+factura:
+  version: VERSION
+  css:
+    theme:
+      css/factura.css: {}

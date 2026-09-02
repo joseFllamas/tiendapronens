@@ -1,0 +1,10 @@
+name: 'Pronens: facturas'
+type: module
+description: 'Factura en PDF de cada pedido con la serie fiscal de la tienda antigua (AÑO-N), su correo con la marca de la tienda y la descarga desde el área de cliente. Puente hasta que Verifactu obligue a emitirlas fuera (01/07/2027).'
+package: Pronens
+core_version_requirement: ^11
+dependencies:
+  - commerce_invoice:commerce_invoice
+  - symfony_mailer:symfony_mailer
+  - symfony_mailer:mailer_override
+  - pronens_mail:pronens_mail
