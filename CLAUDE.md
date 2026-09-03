@@ -1456,6 +1456,61 @@ Donde este documento y la realidad del repo discrepan, manda esta lista (decidid
     flotante presente y `pro-klaro` en el CSS agregado.
 
 
+- **Rescatadas con 301 las URLs del D7 que quedaban en 404 (2026-09-03)**: la tienda se puso
+  online conservando los alias migrados, pero no todos, y había URLs con tráfico real cayendo en
+  404. El diagnóstico usó dos fuentes: el export de GA4 de `tienda.pronens.es` del 01/06 al
+  02/09/2026 (`salida_unificacion/Páginas_y_pantallas_…csv`, 268 rutas) y, sobre todo, **la tabla
+  `url_alias` del dump del D7**, que es el conjunto completo y cubre los enlaces externos que GA4
+  no ve. Probadas una a una: de las 171 rutas útiles del CSV (se descartan 97 de `/checkout`,
+  `/user`, `/admin`) **131 ya daban 200 y 15 ya redirigían**, así que los 404 reales eran 24
+  rutas; y de los **707 alias del D7** (sin los 1578 de usuario) 367 daban 200 y **311 daban
+  404**. `scripts/redirecciones-d7.php` crea **266 redirecciones** que rescatan **162 visitas**.
+  Lo que conviene no reinventar:
+  - **En el D7 las traducciones eran entidades independientes**, y ahí estaba el grueso del
+    problema: «TABLIER ÉCOLE SAKURA» era un NODO distinto de «Bata escolar Sakura», y cada
+    categoría traducida un TÉRMINO distinto. Los mapas de la migración solo cubren el castellano
+    (`migrate_map_pronens_producto` mapea **NID del D7 → product_id del D11**, no product_id a
+    product_id), así que los traducidos se resuelven por otras dos vías: los nodos de producto
+    **comparten variación** con el castellano migrado (68 de 68) y los términos comparten
+    **`i18n_tsid`** (37). Sin eso, 105 de las 266 se habrían dado por perdidas.
+  - **`setRedirect()` espera una RUTA, no una URI**: le añade el esquema él mismo, así que
+    pasarle `internal:/product/18` guarda `internal:/internal:/product/18` y produce un 301 a un
+    404. Se detectó porque la primera pasada dejó 266 redirecciones que redirigían a ninguna
+    parte. Los destinos son la **ruta interna** (`/product/N`, `/taxonomy/term/N`) y no el alias,
+    de modo que siguen valiendo si el alias cambia, y son la entidad final: ninguna cadena.
+  - **El origen se guarda sin el prefijo de idioma** y el idioma va en la columna `language` de
+    la redirección (`und` para los alias que el D7 no tradujo). Con eso el destino sale en el
+    idioma que toca: una `ca` acaba en `/ca/productes/…` y una `en` en `/en/products/…`.
+  - **El script no tapa páginas vivas**: antes de crear cada una comprueba
+    `path_alias.repository->lookupByAlias()`, y por eso **14 de las 280 filas se saltan solas** y
+    no es un error: son términos de `escuelas`, `tablas-tallas`, `color_letra` y recomendaciones
+    de lavado cuyo alias sigue vivo aunque su página dé 404 (la view del catálogo se quedó con
+    `entity.taxonomy_term.canonical`). Redirigirlos sería más amable, pero taparía el alias, y en
+    `escuelas` está pendiente decidir si esas páginas listarán los 19 productos de uniforme.
+    Ninguna de las 14 tuvo visitas.
+  - **El 404 más visitado era `/productos/batas-guardería`** (33 visitas): al unificar las batas
+    de guardería se creó la redirección con el slug transliterado (`batas-guarderia`) y el alias
+    real del D7 llevaba tilde, porque allí pathauto tenía la transliteración apagada. Ojo con
+    esto en cualquier redirección futura sobre contenido migrado: el slug del D7 lleva tildes.
+  - **147 de las 266 son alias de vocabularios de atributo → `/buscar`** (color, talla, tamaño,
+    lavado, color_letra, tablas de tallas), que en el D11 no tienen página. Entre las 147 sumaban
+    UNA visita, así que es solo para que quien llegue por un enlace viejo vea productos; `/buscar`
+    lleva `noindex, follow`, de modo que **no transfieren autoridad al índice**. Si algún día se
+    quiere que también posicionen, hace falta una página de catálogo global indexable.
+  - **Siete redirecciones ocupan rutas `node/N`** (117-131, visitas en francés a la ruta interna
+    sin alias). Si algún día existiera el nodo 117, la redirección ganaría sobre él, porque el
+    subscriber de redirect actúa antes del enrutado. El D11 tiene 7 nodos, así que hay margen.
+  - **Se dejan en 404 a propósito** 46 alias sin ninguna visita: nodos de producto de prueba o
+    borrados del D7 (`prueba-camiseta`, `bolsa-recambio-*`), las páginas de Commerce Kickstart
+    (`/about`, `/terms-use`, `/403-error`), los banners (no eran páginas) y el
+    `/product-category/` de Kickstart. Y `//contacto/` (2 visitas), que con la doble barra Drupal
+    no normaliza y `redirect` no puede tomar.
+  - **Redirect ya estaba instalado y encendido** (1.13, con `auto_redirect` y 301 por defecto), y
+    se comprobó que resuelve orígenes con tildes. Las redirecciones son **contenido**: no viajan
+    en `config/sync` y el script hay que ejecutarlo en producción. Verificado que las 266 dan 301
+    a un destino 200 en un solo salto y que **las 403 URLs que ya funcionaban siguen igual** (cero
+    regresiones). Copia previa: snapshot `pre-redirecciones-d7`.
+
 ## Orden de trabajo
 1. **Tema `pronens`**: tokens CSS (custom properties con los colores/tipos del README), fuentes
    self-hosted WOFF2 (Archivo, Nunito Sans, Caveat), layout base, header sticky + marquee + footer.
