@@ -79,6 +79,9 @@
         "patches": {
             "drupal/tmgmt": {
                 "#3134922: TMGMT crea traducciones de paragraph, pero paragraphs_asymmetric_translation_widgets espera duplicados independientes por idioma; sin esto las traducciones automáticas de la Home comparten target_id y se muestra el idioma equivocado. Sigue en Needs review, no está en ninguna release. https://www.drupal.org/project/tmgmt/issues/3134922#comment-158624172": "patches/tmgmt-3134922-46-paragraphs-asimetricos.patch"
+            },
+            "drupal/commerce_sermepa": {
+                "Registrar en el watchdog las notificaciones de Redsys que fallan: onNotify se tragaba la excepción y una notificación que llegaba y fallaba no se distinguía de una que no llegaba (pedido P-2026-0004). Parche local, sin issue en drupal.org.": "patches/commerce_sermepa-onnotify-log.patch"
             }
         },
         "drupal-scaffold": {

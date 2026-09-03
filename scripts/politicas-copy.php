@@ -56,6 +56,31 @@ foreach ($beneficios as $id => $texto) {
   }
 }
 
+// 2b. Paso 2 de la personalización: prometía elegir la fuente, y la fuente y el
+// color los fija el taller por producto desde 2026-08-13. En los 5 idiomas,
+// porque la home ya está traducida.
+$paso2 = [
+  'es' => 'Hasta 30 caracteres, o una sola inicial. Míralo en la vista previa sobre la prenda antes de comprar.',
+  'ca' => 'Fins a 30 caràcters, o una sola inicial. Mira-ho a la vista prèvia sobre la peça abans de comprar.',
+  'en' => 'Up to 30 characters, or a single initial. See it in the preview on the garment before you buy.',
+  'fr' => 'Jusqu’à 30 caractères, ou une seule initiale. Visualisez le résultat sur le vêtement avant d’acheter.',
+  'it' => 'Fino a 30 caratteri, o una sola iniziale. Guardalo nell’anteprima sul capo prima di comprare.',
+];
+$parrafo = Paragraph::load(10);
+if ($parrafo !== NULL) {
+  foreach ($paso2 as $idioma => $texto) {
+    if (!$parrafo->hasTranslation($idioma)) {
+      continue;
+    }
+    $traduccion = $parrafo->getTranslation($idioma);
+    if ($traduccion->get('field_texto')->value !== $texto) {
+      $traduccion->set('field_texto', $texto);
+    }
+  }
+  $parrafo->save();
+  echo "Paso 2 actualizado.\n";
+}
+
 // 3. Pie: la dirección postal visible (E-E-A-T; hasta ahora solo estaba en el
 // Aviso legal). La misma que la Organization del JSON-LD.
 $pie = BlockContent::load(2);

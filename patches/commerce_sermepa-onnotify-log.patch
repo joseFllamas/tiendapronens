@@ -1,0 +1,19 @@
+--- a/src/Plugin/Commerce/PaymentGateway/Sermepa.php
++++ b/src/Plugin/Commerce/PaymentGateway/Sermepa.php
+@@ -310,8 +310,14 @@
+       $this->processRequest($request);
+     }
+     catch (\Exception $exception) {
+-      // Nothing to do. ::processRequest throws exceptions if the payment can
+-      // not be processed, and returns an error 500 to Sermepa/Redsýs.
++      // ::processRequest throws exceptions if the payment can not be
++      // processed. Log them: otherwise a notification that reaches the site
++      // and fails (bad signature, unknown order, lock) leaves no trace and is
++      // indistinguishable from a notification that never arrived.
++      $this->logger->error('Sermepa/Redsýs notification could not be processed: @message. Ds_MerchantParameters: @parameters', [
++        '@message' => $exception->getMessage(),
++        '@parameters' => (string) $request->get('Ds_MerchantParameters'),
++      ]);
+     }
+   }
+ 

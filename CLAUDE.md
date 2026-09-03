@@ -1400,6 +1400,29 @@ Donde este documento y la realidad del repo discrepan, manda esta lista (decidid
     Organization espera la URL de Google Business (el enlace share.google no se resuelve sin JS);
     "Bordado a mano" cuando el taller borda a máquina; el módulo de reseñas (AggregateRating); y
     traducir la home (el cliente lo hace con los literales ya alineados).
+- **Bizum revisado a nivel de código (2026-09-03)**: la pasarela `bizum` es el mismo plugin
+  `commerce_sermepa` que la de tarjeta, con los mismos FUC 329583926, terminal 001 y clave
+  SHA-256 (verificado que la clave coincide byte a byte con la de `redsys`), y con
+  `merchant_paymethods: z`. Simulado el formulario de redirección para un carrito: manda
+  `Ds_Merchant_PayMethods: z`, importe en céntimos, moneda 978, `MerchantURL` a
+  `/payment/notify/bizum` y las URL OK/KO del checkout, firmado con HMAC_SHA256_V1, que es
+  exactamente lo que pide la guía de Bizum de Redsys. El retorno y la notificación se procesan por
+  el mismo `processRequest()` que la tarjeta (firma, `Ds_Response` ≤ 99, pago por
+  `Ds_AuthorisationCode`), así que si la tarjeta funciona Bizum funciona: **no hay nada que tocar en
+  Drupal**, solo activar la pasarela. Lo que sí hay que mirar es el panel de Redsys, que es donde
+  falló el pedido P-2026-0004: «Parámetros en las URLs» activado (sin eso el retorno llega sin
+  `Ds_MerchantParameters` y el módulo lanza «Bad feedback response») y la notificación HTTP online
+  apuntando a la `MerchantURL` que manda el módulo, no a una URL fija de otro dominio.
+  - **Parche local a commerce_sermepa** (`patches/commerce_sermepa-onnotify-log.patch`): `onNotify()`
+    se tragaba cualquier excepción sin registrarla, así que una notificación que **llegaba y
+    fallaba** (firma mala, pedido desconocido, bloqueo) no se distinguía de una que no llegaba. La
+    afirmación de que en el pedido 4 «no hay ni una entrada de la notificación» hay que leerla con
+    eso en mente. Ahora cada fallo queda en el watchdog con el mensaje y los `Ds_MerchantParameters`.
+    Probado con una notificación con firma falsa: entrada `commerce_sermepa` y ningún pago creado.
+  - Ojo con `payment_method_types: ["Tarjeta de crédito"]` en las dos pasarelas de Redsys: es una
+    etiqueta, no el id `credit_card`. Para pasarelas offsite Commerce no lo usa (el checkout lista
+    la pasarela entera), así que no rompe nada; en PayPal el mismo error sí ocultaba la opción.
+
 
 ## Orden de trabajo
 1. **Tema `pronens`**: tokens CSS (custom properties con los colores/tipos del README), fuentes
