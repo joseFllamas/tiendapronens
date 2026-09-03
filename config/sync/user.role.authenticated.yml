@@ -13,6 +13,7 @@ dependencies:
     - contact
     - file
     - filter
+    - klaro
     - media
     - profile
     - system
@@ -30,6 +31,7 @@ permissions:
   - 'delete own files'
   - 'manage own commerce_payment_method'
   - 'update own customer profile'
+  - 'use klaro'
   - 'use text format basic_html'
   - 'view commerce_product'
   - 'view media'

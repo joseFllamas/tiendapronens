@@ -360,3 +360,9 @@ factura:
   css:
     theme:
       css/factura.css: {}
+
+klaro:
+  version: VERSION
+  css:
+    component:
+      css/components/klaro.css: {}

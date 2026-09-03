@@ -1,0 +1,10 @@
+uuid: 67905f01-9b4c-4181-9eb6-d2572e5cefef
+langcode: es
+status: true
+dependencies: {  }
+_core:
+  default_config_hash: zb5fw3XvVMA3iaOX1CO7qm1YLv0IzThvz3HQvDcsLA8
+id: styling
+label: 'Aplicando estilo'
+description: ''
+weight: 5

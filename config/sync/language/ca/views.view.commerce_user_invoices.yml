@@ -36,7 +36,12 @@ display:
         state:
           label: Estat
           separator: ', '
+      title: Facturas
       arguments:
         uid:
           exception:
             title: Tot
+  invoice_page:
+    display_options:
+      menu:
+        title: Facturas

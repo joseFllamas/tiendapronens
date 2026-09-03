@@ -26,6 +26,9 @@ entity_print:
     - pronens/factura
 
 libraries-extend:
+  # El aviso de cookies con la piel de la tienda; ver css/components/klaro.css.
+  klaro/klaro:
+    - pronens/klaro
   user/drupal.user:
     - pronens/user
   core/drupal.dropbutton:

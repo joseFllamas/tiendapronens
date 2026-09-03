@@ -1,0 +1,2 @@
+label: Mastodon
+description: "Le module Drupal Mastodon se connecte au serveur Mastodon donné et stocke les publications dans le navigateur de l'utilisateur. Des données personnelles telles que les adresses IP sont traitées."

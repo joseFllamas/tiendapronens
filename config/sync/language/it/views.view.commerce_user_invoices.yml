@@ -36,7 +36,12 @@ display:
         state:
           label: Stato
           separator: ', '
+      title: Facturas
       arguments:
         uid:
           exception:
             title: Tutti
+  invoice_page:
+    display_options:
+      menu:
+        title: Facturas

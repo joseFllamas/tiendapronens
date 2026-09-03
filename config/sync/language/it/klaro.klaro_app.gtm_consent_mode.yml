@@ -1,0 +1,2 @@
+label: 'Google Tag Manager'
+description: 'Gestore di tag. Si carica sempre; finché non accetti, Google Analytics riceve solo segnali anonimi senza cookie (Consent Mode v2).'

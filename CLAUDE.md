@@ -1423,6 +1423,38 @@ Donde este documento y la realidad del repo discrepan, manda esta lista (decidid
     etiqueta, no el id `credit_card`. Para pasarelas offsite Commerce no lo usa (el checkout lista
     la pasarela entera), así que no rompe nada; en PayPal el mismo error sí ocultaba la opción.
 
+- **Cookies y Consent Mode v2 con Klaro (2026-09-03)**: antes no había ni banner ni consent mode y GTM
+  cargaba sin pedir permiso. Ahora `drupal/klaro` 3.1 con la receta que trae el propio módulo para
+  google_tag 2.x, montada en `scripts/cookies-klaro.php` (idempotente; configuración + nodo y enlace):
+  - **`gtm_consent_mode` es un servicio obligatorio**: corre siempre, fija en `onInit` el `consent
+    default` con los cuatro permisos denegados (más `wait_for_update: 500`) ANTES de gtm.js, y al
+    aceptar empuja `klaro-<servicio>-accepted` al dataLayer. **`ga_consent_mode`** (opt-in, apagado
+    por defecto) manda el `consent update` de `analytics_storage`. Klaro decora los scripts de
+    google_tag (`type="text/plain" data-name="gtm_consent_mode"`) y los reactiva él mismo al
+    arrancar: en el DOM renderizado gtm.js carga con GTM-KQMTNQ9S. El contenedor google_tag lleva
+    además `consent_mode: true` (cinturón y tirantes). **Modo AVANZADO (cliente)**: en GTM la etiqueta
+    GA4 dispara en todas las páginas (Initialization / All pages) y es el consent mode quien decide:
+    sin consentimiento, pings anónimos sin cookies; con él, medición completa. Por eso la política de
+    cookies y la descripción del servicio dicen «señales anónimas sin cookies», no «no recibe nada».
+  - **Aviso, no modal** (`dialog_mode: notice`, abajo a la izquierda), con Aceptar y Rechazar al mismo
+    nivel y tamaño (AEPD), «Configurar» al modal por finalidades, y **botón flotante** para volver a
+    decidir. Solo dos finalidades visibles: «Funcionamiento de la tienda» (cms + klaro, obligatorias)
+    y «Analítica». vimeo/youtube/gtm/ga legacy apagados. Textos, servicios y finalidades en los 5
+    idiomas por override de configuración (`language/<lc>/klaro.*`); las dos cadenas del JS
+    («Gestionar cookies», «Abrir las preferencias…») por locale con contexto `klaro`.
+  - **Sin el permiso «Use Klaro! UI» el módulo no adjunta nada**: concedido a anónimo y autenticado.
+    Fue lo primero que falló.
+  - **Página «Política de cookies»** (nodo 9, 5 idiomas, alias por pathauto **traducción a
+    traducción**, que solo genera el del idioma guardado) y enlace en el menú `footer` junto al Aviso
+    legal. Es el `privacyPolicy.url` del aviso.
+  - **Piel del banner**: `css/components/klaro.css` (library `pronens/klaro`, enganchada con
+    `libraries-extend: klaro/klaro`) sobre las variables CSS de Klaro con los tokens del tema; Klaro
+    añade la clase `pro-klaro` (opción «additional class»).
+  - **El `<noscript>` de GTM va vacío** (`templates/misc/google-tag-gtm-iframe.html.twig`): sin JS no
+    hay aviso de cookies, así que el iframe a ns.html habría disparado GTM sin consentimiento.
+  - Verificado con Chrome headless: aviso pintado con los textos de la tienda, gtm.js cargado, botón
+    flotante presente y `pro-klaro` en el CSS agregado.
+
 
 ## Orden de trabajo
 1. **Tema `pronens`**: tokens CSS (custom properties con los colores/tipos del README), fuentes

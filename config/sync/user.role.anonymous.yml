@@ -9,6 +9,7 @@ dependencies:
     - commerce_product
     - contact
     - filter
+    - klaro
     - media
     - system
 _core:
@@ -21,6 +22,7 @@ permissions:
   - 'access checkout'
   - 'access content'
   - 'access site-wide contact form'
+  - 'use klaro'
   - 'use text format restricted_html'
   - 'view commerce_product'
   - 'view media'

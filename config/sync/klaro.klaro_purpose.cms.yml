@@ -1,0 +1,10 @@
+uuid: 138af4f2-709a-43e3-9f6d-31e6b1a22673
+langcode: es
+status: true
+dependencies: {  }
+_core:
+  default_config_hash: 3j5wXqDkwDxjQzmBncu4QboNV0z9hzVwJug3j5IpigQ
+id: cms
+label: 'Funcionamiento de la tienda'
+description: ''
+weight: -1

@@ -1,0 +1,35 @@
+consentModal:
+  title: 'Cookies at Pronens'
+  description: 'Choose which services you allow. Necessary cookies cannot be switched off because the shop does not work without them.'
+  privacyPolicy:
+    name: 'cookie policy'
+    text: 'Read more in our {privacyPolicy}.'
+    url: 'entity:node/9'
+consentNotice:
+  title: 'Cookies at Pronens'
+  changeDescription: 'Things have changed since your last visit: please review your choice.'
+  description: 'We use our own cookies so the shop works and, if you allow it, Google Analytics to learn how it is used and improve it. You can change your decision at any time. {purposes}.'
+  learnMore: Settings
+ok: Accept
+save: Save
+decline: Decline
+close: Close
+acceptAll: 'Accept all'
+acceptSelected: 'Accept selected'
+service:
+  disableAll:
+    title: 'All services'
+    description: 'Switch all services on or off at once.'
+  optOut:
+    title: '(on by default)'
+    description: 'This service loads by default; you can switch it off.'
+  required:
+    title: '(always on)'
+    description: 'This service is required and cannot be switched off.'
+  purposes: Purposes
+  purpose: Purpose
+contextualConsent:
+  acceptAlways: Always
+  acceptOnce: 'Yes, this time'
+  description: 'Load external content from {title}?'
+poweredBy: ''

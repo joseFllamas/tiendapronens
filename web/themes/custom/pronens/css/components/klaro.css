@@ -1,0 +1,130 @@
+/**
+ * Aviso de cookies (Klaro) con la piel de la tienda.
+ *
+ * Klaro pinta con sus propias variables CSS; aquí se le dan los tokens del
+ * tema y se afinan tres cosas que el tema "light" no resuelve: aceptar y
+ * rechazar al mismo nivel visual (AEPD), la tipografía de la tienda y el
+ * botón flotante para volver a decidir. El selector .pro-klaro lo añade la
+ * opción "additional class" de la configuración de Klaro.
+ */
+.klaro.pro-klaro {
+  --font-family: var(--pro-font-ui);
+  --border-radius: 12px;
+  --light1: var(--pro-ink);
+  --light2: var(--pro-ink-dark);
+  --light3: #3b4f57;
+  --dark1: var(--pro-bg);
+  --dark2: var(--pro-cream);
+  --dark3: #e4ded4;
+  --green1: var(--pro-teal-ink);
+  --green2: var(--pro-teal);
+  --green3: var(--pro-teal-bg);
+  --blue1: var(--pro-teal-ink);
+  --blue2: var(--pro-teal);
+  --blue3: var(--pro-teal-bg);
+  --red1: var(--pro-orange-ink);
+  --red2: var(--pro-orange-cta);
+  --red3: var(--pro-orange-bg);
+  --button-text-color: #fff;
+  --notice-max-width: 420px;
+  --notice-left: 20px;
+  --notice-bottom: 20px;
+  font-family: var(--pro-font-ui);
+}
+
+.klaro.pro-klaro .cookie-notice {
+  box-shadow: 0 12px 40px rgba(16, 34, 43, 0.18);
+  border: 1px solid var(--pro-cream);
+}
+
+.klaro.pro-klaro .cn-body {
+  padding: 22px 24px;
+}
+
+.klaro.pro-klaro .cn-body .title {
+  font-family: var(--pro-font-display);
+  font-weight: 700;
+  font-size: 1.05rem;
+  letter-spacing: -0.01em;
+  margin-bottom: 8px;
+}
+
+.klaro.pro-klaro .cn-body p {
+  font-size: 0.9375rem;
+  line-height: 1.5;
+}
+
+/* Botones: aceptar y rechazar con el mismo tamaño y peso; rechazar en
+   contorno, no en rojo, que leía como error. */
+.klaro.pro-klaro .cm-btn {
+  font-family: var(--pro-font-ui);
+  font-weight: 700;
+  font-size: 0.9375rem;
+  padding: 10px 18px;
+  border-radius: 999px;
+  min-height: 44px;
+}
+
+.klaro.pro-klaro .cm-btn.cm-btn-success,
+.klaro.pro-klaro .cm-btn.cm-btn-accept-all {
+  background: var(--pro-teal-ink);
+  color: #fff;
+}
+
+.klaro.pro-klaro .cm-btn.cm-btn-danger,
+.klaro.pro-klaro .cm-btn.cm-btn-decline {
+  background: transparent;
+  color: var(--pro-ink);
+  border: 2px solid var(--pro-ink);
+}
+
+.klaro.pro-klaro .cm-btn:focus-visible,
+.klaro.pro-klaro a:focus-visible {
+  outline: 3px solid var(--pro-orange-cta);
+  outline-offset: 2px;
+}
+
+.klaro.pro-klaro .cn-learn-more {
+  color: var(--pro-teal-ink);
+  font-weight: 600;
+}
+
+/* El modal de detalle. */
+.klaro.pro-klaro .cookie-modal .cm-modal {
+  border-radius: 16px;
+}
+
+.klaro.pro-klaro .cookie-modal .cm-header h1 {
+  font-family: var(--pro-font-display);
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+/* Botón flotante para volver a las preferencias (show_toggle_button). */
+.klaro_toggle_dialog_override {
+  position: fixed;
+  left: 16px;
+  bottom: 16px;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: 0;
+  background: var(--pro-ink) url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23fff' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M12 2a10 10 0 1 0 10 10c0-1-.5-1.5-1.5-1.5S18 10 18 8.5 16.5 6 15 6s-2-1.5-2-3-1-1-1-1z'/><circle cx='8' cy='10' r='1'/><circle cx='9' cy='15' r='1'/><circle cx='14' cy='14' r='1'/></svg>") center/22px no-repeat;
+  box-shadow: 0 6px 18px rgba(16, 34, 43, 0.25);
+  cursor: pointer;
+  z-index: 998;
+}
+
+.klaro_toggle_dialog_override:hover,
+.klaro_toggle_dialog_override:focus-visible {
+  background-color: var(--pro-teal-ink);
+  outline: 3px solid var(--pro-orange-cta);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .klaro.pro-klaro * {
+    transition: none !important;
+    animation: none !important;
+  }
+}

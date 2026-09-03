@@ -1,3 +1,4 @@
+label: Facturas
 display:
   default:
     display_title: Mestre
@@ -49,5 +50,6 @@ display:
         state:
           expose:
             label: Estat
+      title: Facturas
   page_1:
     display_title: Pàgina

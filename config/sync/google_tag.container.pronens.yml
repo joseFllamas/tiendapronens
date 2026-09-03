@@ -10,7 +10,7 @@ weight: 0
 tag_container_ids:
   - GTM-KQMTNQ9S
 advanced_settings:
-  consent_mode: false
+  consent_mode: true
   gtm:
     GTM-KQMTNQ9S:
       data_layer: dataLayer

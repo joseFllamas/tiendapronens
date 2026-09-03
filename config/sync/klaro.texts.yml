@@ -1,0 +1,38 @@
+_core:
+  default_config_hash: FHr6psQnRtYvXa9wwVyQsT3ytUtv2w9OvbvbdMDq4a0
+langcode: es
+consentModal:
+  title: 'Cookies en Pronens'
+  description: 'Elige qué servicios permites. Las cookies necesarias no se pueden desactivar porque sin ellas la tienda no funciona.'
+  privacyPolicy:
+    name: 'política de cookies'
+    text: 'Más información en nuestra {privacyPolicy}.'
+    url: 'entity:node/9'
+consentNotice:
+  title: 'Cookies en Pronens'
+  changeDescription: 'Hay cambios desde tu última visita: revisa tu elección.'
+  description: 'Usamos cookies propias para que la tienda funcione y, si nos lo permites, Google Analytics para saber cómo se usa y mejorarla. Puedes cambiar tu decisión cuando quieras. {purposes}.'
+  learnMore: Configurar
+ok: Aceptar
+save: Guardar
+decline: Rechazar
+close: Cerrar
+acceptAll: 'Aceptar todo'
+acceptSelected: 'Aceptar selección'
+service:
+  disableAll:
+    title: 'Todos los servicios'
+    description: 'Activa o desactiva todos los servicios a la vez.'
+  optOut:
+    title: '(activado por defecto)'
+    description: 'Este servicio se carga por defecto; puedes desactivarlo.'
+  required:
+    title: '(siempre activo)'
+    description: 'Este servicio es necesario y no se puede desactivar.'
+  purposes: Finalidades
+  purpose: Finalidad
+contextualConsent:
+  acceptAlways: Siempre
+  acceptOnce: 'Sí, esta vez'
+  description: '¿Cargar el contenido externo de {title}?'
+poweredBy: ''

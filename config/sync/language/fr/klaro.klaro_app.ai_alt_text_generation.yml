@@ -1,0 +1,1 @@
+description: "Ce service génère des textes alternatifs (alt) pour les images à l'aide de modèles de vision IA. L'image et les métadonnées sont envoyées au service IA sélectionné."

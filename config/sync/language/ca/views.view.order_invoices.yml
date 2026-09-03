@@ -27,7 +27,10 @@ display:
           separator: ', '
         operations:
           label: Operacions
+      title: Facturas
       arguments:
         orders_target_id:
           exception:
             title: Tot
+  page_1:
+    display_title: Facturas

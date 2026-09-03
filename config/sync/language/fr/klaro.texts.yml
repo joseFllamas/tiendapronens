@@ -1,0 +1,35 @@
+consentModal:
+  privacyPolicy:
+    name: 'politique de cookies'
+    text: 'En savoir plus dans notre {privacyPolicy}.'
+    url: 'entity:node/9'
+  title: 'Cookies chez Pronens'
+  description: 'Choisissez les services que vous autorisez. Les cookies nécessaires ne peuvent pas être désactivés : sans eux, la boutique ne fonctionne pas.'
+consentNotice:
+  changeDescription: 'Des changements ont eu lieu depuis votre dernière visite : vérifiez votre choix.'
+  description: 'Nous utilisons nos propres cookies pour que la boutique fonctionne et, si vous l’acceptez, Google Analytics pour comprendre son utilisation et l’améliorer. Vous pouvez changer d’avis à tout moment. {purposes}.'
+  learnMore: Paramétrer
+  title: 'Cookies chez Pronens'
+ok: Accepter
+save: Enregistrer
+decline: Refuser
+close: Fermer
+acceptAll: 'Tout accepter'
+acceptSelected: 'Accepter la sélection'
+service:
+  required:
+    title: '(toujours actif)'
+    description: 'Ce service est nécessaire et ne peut pas être désactivé.'
+  purposes: Finalités
+  purpose: Finalité
+  disableAll:
+    title: 'Tous les services'
+    description: 'Activer ou désactiver tous les services d’un coup.'
+  optOut:
+    title: '(activé par défaut)'
+    description: 'Ce service est chargé par défaut ; vous pouvez le désactiver.'
+contextualConsent:
+  acceptAlways: Toujours
+  acceptOnce: 'Oui, cette fois'
+  description: 'Charger le contenu externe de {title} ?'
+poweredBy: ''

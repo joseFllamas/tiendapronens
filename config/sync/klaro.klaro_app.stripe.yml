@@ -1,0 +1,29 @@
+uuid: 8c6445e6-f2d1-4c08-98a1-135a613e8006
+langcode: es
+status: false
+dependencies: {  }
+_core:
+  default_config_hash: MJjsbqXicMVCBcsZutPlhZ3xOEVsra5WjX38rujhwcI
+id: stripe
+label: Franja
+description: 'Stripe payment provider integration.'
+default: true
+purposes:
+  - cms
+cookies: {  }
+required: true
+opt_out: true
+only_once: false
+contextual_consent_only: false
+contextual_consent_text: ''
+info_url: 'https://stripe.com'
+privacy_policy_url: 'https://stripe.com/privacy'
+javascripts:
+  - stripe.com
+callback_code: ''
+on_init: ''
+on_accept: ''
+on_decline: ''
+wrapper_identifier: {  }
+attachments: {  }
+weight: 0

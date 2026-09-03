@@ -1,3 +1,4 @@
+label: Facturas
 display:
   default:
     display_title: Principale
@@ -49,5 +50,6 @@ display:
         state:
           expose:
             label: Stato
+      title: Facturas
   page_1:
     display_title: Pagina

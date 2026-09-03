@@ -1,0 +1,32 @@
+uuid: d76deaa1-a11c-482c-86bc-2286745b57ca
+langcode: es
+status: true
+dependencies: {  }
+_core:
+  default_config_hash: rrSeECmRTHSq5ndTWg2FAj_DNC_IxbpKaLbqGORp7xY
+id: cms
+label: 'Tienda Pronens'
+description: 'Cookies técnicas de la propia tienda: sesión, cesta y seguridad de los formularios.'
+default: true
+purposes:
+  - cms
+cookies:
+  -
+    regex: '^[SESS|SSESS]'
+    path: ''
+    domain: ''
+required: true
+opt_out: false
+only_once: false
+contextual_consent_only: null
+contextual_consent_text: null
+info_url: 'https://www.drupal.org'
+privacy_policy_url: ''
+javascripts: {  }
+callback_code: ''
+on_init: ''
+on_accept: ''
+on_decline: ''
+wrapper_identifier: {  }
+attachments: {  }
+weight: 0

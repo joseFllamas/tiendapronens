@@ -1,0 +1,2 @@
+label: 'Google Tag Manager'
+description: 'Gestor d’etiquetes. Carrega sempre; fins que ho acceptis, Google Analytics només rep senyals anònims sense cookies (Consent Mode v2).'
