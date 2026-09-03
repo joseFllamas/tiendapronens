@@ -9,6 +9,7 @@ use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\Url;
 use Drupal\facets\FacetInterface;
 use Drupal\facets\FacetManager\DefaultFacetManager;
+use Drupal\pronens\PrimeraFila;
 use Drupal\taxonomy\TermInterface;
 use Drupal\views\ViewExecutable;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -118,6 +119,29 @@ class CatalogoHooks {
       'reset' => $this->enlaceQuitarFiltros(),
     ];
     $variables['#attached']['library'][] = 'pronens/catalogo';
+  }
+
+  /**
+   * Implements hook_preprocess_views_view_unformatted().
+   *
+   * Primera fila del catálogo en carga inmediata (ver PrimeraFila). Solo en
+   * la primera página: las que trae "cargar más" ya están por debajo.
+   *
+   * @param array<string, mixed> $variables
+   *   Variables del template de filas.
+   */
+  #[Hook('preprocess_views_view_unformatted')]
+  public function preprocessViewsViewUnformatted(array &$variables): void {
+    $view = $variables['view'] ?? NULL;
+    if (!$view instanceof ViewExecutable || $view->id() !== self::VIEW_ID || $view->getCurrentPage() > 0) {
+      return;
+    }
+    foreach (array_slice(array_keys($variables['rows']), 0, PrimeraFila::TARJETAS) as $i) {
+      $variables['rows'][$i]['content'] = [
+        'tarjeta' => $variables['rows'][$i]['content'],
+        '#post_render' => [[PrimeraFila::class, 'eager']],
+      ];
+    }
   }
 
   /**

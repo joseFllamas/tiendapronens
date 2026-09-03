@@ -145,7 +145,7 @@ $fija('global', 'Global', [
     'email' => 'pronens@pronens.com',
     'contactType' => 'customer service',
     'availableLanguage' => 'es,ca,fr,en,it',
-    'areaServed' => 'ES,PT,FR',
+    'areaServed' => 'ES,PT,Unión Europea',
   ],
   // sameAs: perfiles sociales. Vacío a propósito: no hay ninguno enlazado en
   // la web y no se inventan. Se rellena en /admin/config/search/metatag/global.
@@ -483,7 +483,7 @@ echo "robots.txt configurado.\n";
 $llms = <<<'LLMS'
 # Pronens
 
-> Ropa y complementos infantiles y escolares personalizados con bordado (nombre o inicial), hechos en un taller familiar de Barcelona desde 1986. Bordado en 72 h. Envío gratis a España, Portugal y la UE desde 60 €. Tienda en español, catalán, francés, inglés e italiano.
+> Ropa y complementos infantiles y escolares personalizados con bordado (nombre o inicial), hechos en un taller familiar de Barcelona desde 1986. Bordado en 72 h. Envío gratis en España peninsular desde 60 €; también se envía a Baleares, Canarias, Portugal y el resto de la UE. Tienda en español, catalán, francés, inglés e italiano.
 
 ## Categorías
 
@@ -499,6 +499,7 @@ $llms = <<<'LLMS'
 
 - Se elige el nombre (hasta 30 caracteres) o la inicial en la ficha del producto y se ve la vista previa sobre la prenda.
 - El nombre bordado cuesta 5 € por prenda; la inicial va incluida.
+- Devoluciones en 30 días para prendas sin personalizar; las bordadas no se cambian.
 - El bordado se hace en el taller de Pronens en Barcelona y sale en 72 horas.
 
 ## Información de compra

@@ -1374,14 +1374,32 @@ Donde este documento y la realidad del repo discrepan, manda esta lista (decidid
     usa (la galería numera a partir de la segunda). Los 144 que quedan no los referencia nadie.
   - **Todo lo de configuración está en `config/sync` y en `scripts/seo-base.php`** (idempotente); lo
     de contenido (alt, sitemap generado) hay que ejecutarlo en producción.
-  - **Pendiente y de decisión del cliente**, detectado por la auditoría: la home dice devoluciones en
-    **10 días**, la ficha **30** y la página de envíos **7 días hábiles**; el marquee promete envío
-    gratis a "España, Portugal y UE" y la ficha a "España, Francia y Portugal"; "Rebajas" y el CTA de
-    la home llevan al Outlet vacío; el H1 de la home es "Rebajas verano" bajo un eyebrow "AW26"; los
-    enlaces "Novedades" del mega menú van a la misma URL que "Ver todo"; no hay dirección postal
-    visible en el pie; no hay perfiles sociales (para `sameAs`); y "Bordado a mano" cuando el taller
-    borda a máquina. Además falta decidir el módulo de reseñas (AggregateRating) y añadir
-    `shippingDetails`/`hasMerchantReturnPolicy` al Product cuando la política esté unificada.
+  - **Los literales de envío y devolución dicen lo mismo en toda la tienda (2026-09-03, cliente)**:
+    la verdad la fija la configuración de Commerce, no el copy. El método «Envío gratuito desde 60 €»
+    (id 7) solo aplica a **España peninsular** (excluye 07, 35, 38, 51 y 52); Baleares (7,95 €),
+    Canarias/Ceuta/Melilla (12 €), Portugal (9,95 €) y el resto de la UE (15 €) van con coste, y
+    fuera de la UE no se envía. El marquee decía "España, Portugal y UE" y la ficha "España, Francia y
+    Portugal. Enviamos a todo el mundo": las dos falsas. Y los plazos son **dos conceptos**: 30 días
+    para **iniciar** la devolución (ficha y ahora home, que decía 10) y unos 7 días hábiles para
+    recibir el abono (la página de envíos, cuyo texto del D7 sigue hablando de 7 días para pedirla y
+    de que "no se realizarán abonos": **pendiente de que el cliente apruebe la redacción nueva**).
+    `scripts/politicas-copy.php` (contenido + cadenas: ejecutar en producción) alinea marquee (y le
+    añade la traducción italiana que faltaba), beneficios de la home, acordeón de la ficha y llms.txt,
+    y pone la **dirección postal en el pie**, la misma de la Organization. Sigue pendiente
+    `hasMerchantReturnPolicy`/`shippingDetails` en el JSON-LD: schema_metatag 3.0 no trae esos tipos
+    de propiedad, habría que aportar un plugin propio.
+  - **La primera fila del catálogo carga eager** (`PrimeraFila`, 2026-09-03): la tarjeta se cachea por
+    producto y no sabe en qué posición sale, así que no se decide en ella: un `#post_render` en el
+    envoltorio de cada una de las 4 primeras filas de la **primera página** (no en las de «cargar
+    más») cambia el `loading="lazy"` de su primera foto por `eager` + `fetchpriority="high"`. El
+    envoltorio no lleva `#cache keys`, así que la tarjeta cacheada sigue lazy y no contamina otras
+    listas.
+  - **Pendiente y de decisión del cliente**: "Rebajas" y el CTA de la home llevan al Outlet vacío (el
+    cliente lo irá llenando); el H1 de la home es "Rebajas verano" bajo un eyebrow "AW26"; los
+    enlaces "Novedades" del mega menú van a la misma URL que "Ver todo"; el `sameAs` de la
+    Organization espera la URL de Google Business (el enlace share.google no se resuelve sin JS);
+    "Bordado a mano" cuando el taller borda a máquina; el módulo de reseñas (AggregateRating); y
+    traducir la home (el cliente lo hace con los literales ya alineados).
 
 ## Orden de trabajo
 1. **Tema `pronens`**: tokens CSS (custom properties con los colores/tipos del README), fuentes
