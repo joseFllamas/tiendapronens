@@ -1,0 +1,106 @@
+_core:
+  default_config_hash: ceCx5XZ_ay1Mxcv-sB95U_fBKoVkpvo8RaQiwutSZLI
+content: |-
+  #
+  # robots.txt de la tienda Pronens (generado por el módulo robotstxt).
+  #
+
+  User-agent: *
+  # CSS, JS, Images
+  Allow: /core/*.css$
+  Allow: /core/*.css?
+  Allow: /core/*.js$
+  Allow: /core/*.js?
+  Allow: /core/*.avif
+  Allow: /core/*.gif
+  Allow: /core/*.jpg
+  Allow: /core/*.jpeg
+  Allow: /core/*.png
+  Allow: /core/*.svg
+  Allow: /core/*.webp
+  Allow: /profiles/*.css$
+  Allow: /profiles/*.css?
+  Allow: /profiles/*.js$
+  Allow: /profiles/*.js?
+  Allow: /profiles/*.avif
+  Allow: /profiles/*.gif
+  Allow: /profiles/*.jpg
+  Allow: /profiles/*.jpeg
+  Allow: /profiles/*.png
+  Allow: /profiles/*.svg
+  Allow: /profiles/*.webp
+  # Directories
+  Disallow: /core/
+  Disallow: /profiles/
+  # Files
+  Disallow: /README.md
+  Disallow: /composer/Metapackage/README.txt
+  Disallow: /composer/Plugin/ProjectMessage/README.md
+  Disallow: /composer/Plugin/Scaffold/README.md
+  Disallow: /composer/Plugin/VendorHardening/README.txt
+  Disallow: /composer/Template/README.txt
+  Disallow: /modules/README.txt
+  Disallow: /sites/README.txt
+  Disallow: /themes/README.txt
+  # Paths (clean URLs)
+  Disallow: /admin/
+  Disallow: /comment/reply/
+  Disallow: /filter/tips
+  Disallow: /node/add/
+  Disallow: /search/
+  Disallow: /search?
+  Disallow: /user/register
+  Disallow: /user/password
+  Disallow: /user/login
+  Disallow: /user/logout
+  Disallow: /media/oembed
+  Disallow: /*/media/oembed
+  # Tienda: resultados del buscador, cesta, checkout y cuenta no se indexan.
+  Disallow: /buscar
+  Disallow: /*/buscar
+  Disallow: /cart
+  Disallow: /*/cart
+  Disallow: /checkout/
+  Disallow: /*/checkout/
+  Disallow: /user/
+  Disallow: /*/user/
+  Disallow: /pronens-carrito/
+  Disallow: /*/pronens-carrito/
+  # Paths (no clean URLs)
+  Disallow: /index.php/admin/
+  Disallow: /index.php/comment/reply/
+  Disallow: /index.php/filter/tips
+  Disallow: /index.php/node/add/
+  Disallow: /index.php/search/
+  Disallow: /index.php/search?
+  Disallow: /index.php/user/password
+  Disallow: /index.php/user/register
+  Disallow: /index.php/user/login
+  Disallow: /index.php/user/logout
+  Disallow: /index.php/media/oembed
+  Disallow: /index.php/*/media/oembed
+
+  # Rastreadores de IA: el catálogo es público y queremos que lo citen. Se
+  # nombran para que la decisión quede escrita; heredan las mismas exclusiones.
+  User-agent: GPTBot
+  User-agent: OAI-SearchBot
+  User-agent: ChatGPT-User
+  User-agent: ClaudeBot
+  User-agent: Claude-SearchBot
+  User-agent: Claude-User
+  User-agent: PerplexityBot
+  User-agent: Perplexity-User
+  User-agent: Google-Extended
+  User-agent: Applebot-Extended
+  User-agent: CCBot
+  User-agent: Bytespider
+  Allow: /
+  Disallow: /admin/
+  Disallow: /buscar
+  Disallow: /*/buscar
+  Disallow: /cart
+  Disallow: /*/cart
+  Disallow: /checkout/
+  Disallow: /*/checkout/
+  Disallow: /user/
+  Disallow: /*/user/

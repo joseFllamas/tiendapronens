@@ -131,12 +131,10 @@ class PronensHooks {
   /**
    * Implements hook_preprocess_breadcrumb().
    *
-   * Core no incluye la página actual, y para un producto de Commerce solo
-   * devuelve "Inicio" porque no hay constructor de migas por taxonomía. El
-   * prototipo enseña el recorrido completo: Inicio / Categoría / Producto.
-   *
-   * No vale hook_system_breadcrumb_alter: BreadcrumbManager lo invoca por
-   * ModuleHandler, que no llama a los temas.
+   * La miga de categoría y ficha la construye pronens_seo
+   * (CatalogoBreadcrumbBuilder), que es lo que hace que la miga visible y el
+   * BreadcrumbList del JSON-LD salgan de la misma fuente; aquí solo se quita
+   * en el checkout.
    *
    * @param array<string, mixed> $variables
    *   Variables del template de la miga de pan.
@@ -152,44 +150,7 @@ class PronensHooks {
     // /checkout, y las dos rutas se titulan "Checkout".
     if (str_starts_with((string) $ruta, 'commerce_checkout.')) {
       $variables['breadcrumb'] = [];
-      return;
     }
-
-    // Categoría: core ya trae los ancestros, falta el término abierto.
-    if ($this->routeMatch->getParameter('view_id') === 'catalogo') {
-      $termino = $this->routeMatch->getParameter('taxonomy_term');
-      if (is_scalar($termino)) {
-        $termino = $this->entityTypeManager->getStorage('taxonomy_term')->load((int) $termino);
-      }
-      if ($termino instanceof TermInterface) {
-        $variables['breadcrumb'][] = ['text' => $this->traducido($termino)->label()];
-      }
-      return;
-    }
-
-    // Ficha: se reconstruye entera desde el término del producto.
-    if ($ruta !== 'entity.commerce_product.canonical') {
-      return;
-    }
-    $producto = $this->routeMatch->getParameter('commerce_product');
-    if (!$producto instanceof ProductInterface) {
-      return;
-    }
-    $termino = $this->termFromField($producto, 'field_tipo_de_producto');
-    if ($termino !== NULL) {
-      $storage = $this->entityTypeManager->getStorage('taxonomy_term');
-      // De la raíz hacia abajo, como el recorrido que hizo quien navega.
-      /** @var array<int, \Drupal\taxonomy\TermInterface> $ancestros */
-      $ancestros = array_reverse($storage->loadAllParents((int) $termino->id()));
-      foreach ($ancestros as $ancestro) {
-        $traducido = $this->traducido($ancestro);
-        $variables['breadcrumb'][] = [
-          'text' => $traducido->label(),
-          'url' => $traducido->toUrl()->toString(),
-        ];
-      }
-    }
-    $variables['breadcrumb'][] = ['text' => $producto->label()];
   }
 
   /**
@@ -717,37 +678,6 @@ class PronensHooks {
 
 
 
-
-  /**
-   * Añade el preload de la imagen hero (LCP) al head.
-   *
-   * @param array<string, mixed> $variables
-   *   Variables del template (se anota #attached).
-   */
-  protected function attachImagePreload(array &$variables, ?MediaInterface $media, string $style_name): void {
-    if ($media === NULL || !$media->hasField('field_media_image')) {
-      return;
-    }
-    $field = $media->get('field_media_image');
-    $files = $field instanceof EntityReferenceFieldItemListInterface ? $field->referencedEntities() : [];
-    $file = reset($files);
-    if (!$file instanceof FileInterface) {
-      return;
-    }
-    $style = $this->entityTypeManager->getStorage('image_style')->load($style_name);
-    $uri = $file->getFileUri();
-    if (!$style instanceof \Drupal\image\ImageStyleInterface || $uri === NULL) {
-      return;
-    }
-    $variables['#attached']['html_head_link'][] = [
-      [
-        'rel' => 'preload',
-        'as' => 'image',
-        'href' => $style->buildUrl($uri),
-        'fetchpriority' => 'high',
-      ],
-    ];
-  }
 
   /**
    * Convierte un campo link en ['url' => string, 'title' => string].

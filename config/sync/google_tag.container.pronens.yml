@@ -1,0 +1,46 @@
+uuid: 4f604972-0c70-41e6-8a08-86c5a5f0daa5
+langcode: es
+status: true
+dependencies:
+  module:
+    - system
+id: pronens
+label: 'Tienda Pronens'
+weight: 0
+tag_container_ids:
+  - GTM-KQMTNQ9S
+advanced_settings:
+  consent_mode: false
+  gtm:
+    GTM-KQMTNQ9S:
+      data_layer: dataLayer
+      include_classes: false
+      allowlist_classes: ''
+      blocklist_classes: ''
+      include_environment: false
+      environment_id: ''
+      environment_token: ''
+dimensions_metrics: {  }
+conditions:
+  request_path:
+    id: request_path
+    negate: true
+    pages: |-
+      /admin
+      /admin/*
+      /user/*
+      /*/user/*
+      /batch
+      /batch/*
+events:
+  commerce_view_item: {  }
+  commerce_view_item_list: {  }
+  commerce_add_to_cart: {  }
+  commerce_remove_from_cart: {  }
+  commerce_begin_checkout: {  }
+  commerce_add_shipping_info: {  }
+  commerce_add_payment_info: {  }
+  commerce_purchase: {  }
+  commerce_refund: {  }
+  login: {  }
+  sign_up: {  }

@@ -1,3 +1,14 @@
 services:
   Drupal\pronens_seo\CanonicalCalculator:
     class: Drupal\pronens_seo\CanonicalCalculator
+  Drupal\pronens_seo\Ofertas:
+    class: Drupal\pronens_seo\Ofertas
+    # commerce_stock no publica alias de su interfaz, así que sin autowire.
+    arguments: ['@commerce_stock.service_manager', '@entity.repository']
+  pronens_seo.breadcrumb.catalogo:
+    class: Drupal\pronens_seo\Breadcrumb\CatalogoBreadcrumbBuilder
+    autowire: true
+    tags:
+      # Por encima de taxonomy.breadcrumb (1002), que se aplica a la misma
+      # ruta del término y solo trae los ancestros.
+      - { name: breadcrumb_builder, priority: 1010 }

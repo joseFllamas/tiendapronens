@@ -1,0 +1,13 @@
+uuid: 682b9572-7f4a-4085-8ad5-2b546d7e75d6
+langcode: es
+status: true
+dependencies:
+  module:
+    - llms_txt
+_core:
+  default_config_hash: a5BppVij-MVGe3CICmKqaTv-PNWki8Erh73k4oI6NC4
+id: llms_txt_section_delete_action
+label: 'Delete llms.txt sections'
+type: llms_txt_section
+plugin: 'entity:delete_action:llms_txt_section'
+configuration: {  }

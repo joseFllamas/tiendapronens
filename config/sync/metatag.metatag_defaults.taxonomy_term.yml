@@ -10,3 +10,14 @@ tags:
   canonical_url: '[term:url]'
   description: '[term:description]'
   title: '[term:name] | [site:name]'
+  og_type: website
+  og_title: '[term:name]'
+  og_description: '[term:description]'
+  og_url: '[term:url]'
+  og_image: '[term:field_imagen:entity:field_media_image:pronens_og]'
+  og_image_alt: '[term:name]'
+  twitter_cards_title: '[term:name]'
+  twitter_cards_description: '[term:description]'
+  twitter_cards_image: '[term:field_imagen:entity:field_media_image:pronens_og]'
+  schema_web_page_type: CollectionPage
+  schema_web_page_breadcrumb: 'Yes'

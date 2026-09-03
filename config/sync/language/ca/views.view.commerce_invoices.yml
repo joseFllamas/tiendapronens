@@ -20,6 +20,7 @@ display:
             next: ››
       fields:
         invoice_number:
+          label: 'Número de factura'
           separator: ', '
         invoice_date:
           label: Data
@@ -39,6 +40,9 @@ display:
         operations:
           label: Operacions
       filters:
+        invoice_number:
+          expose:
+            label: 'Número de factura'
         type:
           expose:
             label: Tipus

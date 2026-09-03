@@ -25,6 +25,7 @@ display:
           label: ID
           separator: ', '
         invoice_number:
+          label: 'Numero di fattura'
           separator: ', '
         invoice_date:
           label: Data

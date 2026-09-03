@@ -1,10 +1,39 @@
 _core:
   default_config_hash: xF-yd0bqa4S5zWER0Kasv-BK0-xGEegxnFERohs2QTs
-entity_type_groups: {  }
+entity_type_groups:
+  commerce_product:
+    default:
+      basic: basic
+      advanced: advanced
+      open_graph: open_graph
+      twitter_cards: twitter_cards
+      schema_product: schema_product
+      schema_web_page: schema_web_page
+  taxonomy_term:
+    tipo_de_producto:
+      basic: basic
+      advanced: advanced
+      open_graph: open_graph
+      twitter_cards: twitter_cards
+      schema_web_page: schema_web_page
+  node:
+    page:
+      basic: basic
+      advanced: advanced
+      open_graph: open_graph
+      twitter_cards: twitter_cards
+    home:
+      basic: basic
+      advanced: advanced
+      open_graph: open_graph
+      twitter_cards: twitter_cards
 separator: ''
 tag_trim_method: beforeValue
 use_maxlength: true
-tag_trim_maxlength: {  }
+tag_trim_maxlength:
+  metatag_maxlength_description: 160
+  metatag_maxlength_og_description: 300
+  metatag_maxlength_twitter_cards_description: 200
 tag_scroll_max_height: ''
 tag_trim_end: '|.,-:;/+&([{"'''
 trim_suffix: ''

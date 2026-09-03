@@ -35,11 +35,12 @@
 <html{{ html_attributes }}>
   <head>
     <head-placeholder token="{{ placeholder_token }}">
-    {# base_path viene vacío en este template, así que el preload se montaba
-       relativo y en rutas anidadas (/productos/…) daba 404. #}
-    <link rel="preload" href="{{ url('<front>') }}{{ directory }}/fonts/archivo-v25-latin-800.woff2" as="font" type="font/woff2" crossorigin>
-    <link rel="preload" href="{{ url('<front>') }}{{ directory }}/fonts/nunito-sans-v19-latin-regular.woff2" as="font" type="font/woff2" crossorigin>
-    <link rel="preload" href="{{ url('<front>') }}{{ directory }}/fonts/nunito-sans-v19-latin-700.woff2" as="font" type="font/woff2" crossorigin>
+    {# base_path viene vacío en este template y url('<front>') lleva el prefijo
+       de idioma (/ca + themes/… daba /cathemes/…, 404 en cuatro idiomas), así
+       que la ruta del fichero la resuelve file_url(), que es lo que hace core. #}
+    <link rel="preload" href="{{ file_url(directory ~ '/fonts/archivo-v25-latin-800.woff2') }}" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href="{{ file_url(directory ~ '/fonts/nunito-sans-v19-latin-regular.woff2') }}" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href="{{ file_url(directory ~ '/fonts/nunito-sans-v19-latin-700.woff2') }}" as="font" type="font/woff2" crossorigin>
     <title>{{ head_title|safe_join(' | ') }}</title>
     <css-placeholder token="{{ placeholder_token }}">
     <js-placeholder token="{{ placeholder_token }}">

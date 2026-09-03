@@ -26,6 +26,7 @@ dependencies:
     - field.field.commerce_product.default.field_inicial_x
     - field.field.commerce_product.default.field_inicial_y
     - field.field.commerce_product.default.field_lavado
+    - field.field.commerce_product.default.field_metatag
     - field.field.commerce_product.default.field_modo_personalizacion
     - field.field.commerce_product.default.field_personalizable
     - field.field.commerce_product.default.field_recargo
@@ -39,6 +40,9 @@ content: {  }
 hidden:
   body: true
   created: true
+  entity_print_view_epub: true
+  entity_print_view_pdf: true
+  entity_print_view_word_docx: true
   field_bordado_color: true
   field_bordado_foto: true
   field_bordado_fuente: true
@@ -59,6 +63,7 @@ hidden:
   field_inicial_x: true
   field_inicial_y: true
   field_lavado: true
+  field_metatag: true
   field_modo_personalizacion: true
   field_personalizable: true
   field_recargo: true

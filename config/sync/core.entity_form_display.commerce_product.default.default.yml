@@ -25,6 +25,7 @@ dependencies:
     - field.field.commerce_product.default.field_inicial_x
     - field.field.commerce_product.default.field_inicial_y
     - field.field.commerce_product.default.field_lavado
+    - field.field.commerce_product.default.field_metatag
     - field.field.commerce_product.default.field_modo_personalizacion
     - field.field.commerce_product.default.field_personalizable
     - field.field.commerce_product.default.field_recargo
@@ -35,6 +36,7 @@ dependencies:
     - commerce
     - commerce_price
     - media_library
+    - metatag
     - path
     - text
 _core:
@@ -196,6 +198,14 @@ content:
     weight: 19
     region: content
     settings: {  }
+    third_party_settings: {  }
+  field_metatag:
+    type: metatag_firehose
+    weight: 90
+    region: content
+    settings:
+      sidebar: true
+      use_details: true
     third_party_settings: {  }
   field_modo_personalizacion:
     type: options_select

@@ -11,7 +11,7 @@ numberPattern: invoice_default
 logo: null
 dueDays: null
 paymentTerms: ''
-footerText: "<p><strong>María Elisa Moreno Iglesias</strong> · NIF 36928020W<br>C/ Alcúdia 100, 08016 Barcelona<br>pronens@pronens.com · tienda.pronens.com</p>"
+footerText: '<p><strong>María Elisa Moreno Iglesias</strong> · NIF 36928020W<br>C/ Alcúdia 100, 08016 Barcelona<br>pronens@pronens.com · tienda.pronens.com</p>'
 workflow: invoice_default
 sendConfirmation: true
 confirmationBcc: ''

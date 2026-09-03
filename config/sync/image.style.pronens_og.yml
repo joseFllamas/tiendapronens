@@ -1,0 +1,15 @@
+uuid: 70cb486a-aef5-4be1-b91c-0505f9574929
+langcode: es
+status: true
+dependencies: {  }
+name: pronens_og
+label: 'Pronens: tarjeta social (1200, sin recorte)'
+effects:
+  cb4b7194-970a-42e9-92a6-1b696944337f:
+    uuid: cb4b7194-970a-42e9-92a6-1b696944337f
+    id: image_scale
+    weight: 1
+    data:
+      width: 1200
+      height: 1200
+      upscale: false

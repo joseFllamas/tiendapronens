@@ -9,3 +9,25 @@ label: Global
 tags:
   canonical_url: '[current-page:url]'
   title: '[current-page:title] | [site:name]'
+  og_site_name: Pronens
+  og_type: website
+  og_url: '[current-page:url]'
+  og_title: '[current-page:title]'
+  twitter_cards_type: summary_large_image
+  twitter_cards_title: '[current-page:title]'
+  schema_organization_type: OnlineStore
+  schema_organization_id: '[site:url]#organization'
+  schema_organization_name: Pronens
+  schema_organization_url: '[site:url]'
+  schema_organization_logo: 'a:2:{s:5:"@type";s:11:"ImageObject";s:3:"url";s:40:"[site:url]themes/custom/pronens/logo.svg";}'
+  schema_organization_description: 'Ropa y complementos infantiles y escolares personalizados con bordado. Taller familiar en Barcelona desde 1986.'
+  schema_organization_telephone: '+34 932 762 975'
+  schema_organization_address: 'a:6:{s:5:"@type";s:13:"PostalAddress";s:13:"streetAddress";s:15:"C/ Alcúdia 100";s:15:"addressLocality";s:9:"Barcelona";s:13:"addressRegion";s:9:"Barcelona";s:10:"postalCode";s:5:"08016";s:14:"addressCountry";s:2:"ES";}'
+  schema_organization_contact_point: 'a:6:{s:5:"@type";s:12:"ContactPoint";s:9:"telephone";s:15:"+34 932 762 975";s:5:"email";s:19:"pronens@pronens.com";s:11:"contactType";s:16:"customer service";s:17:"availableLanguage";s:14:"es,ca,fr,en,it";s:10:"areaServed";s:8:"ES,PT,FR";}'
+  schema_web_site_type: WebSite
+  schema_web_site_id: '[site:url]#website'
+  schema_web_site_name: Pronens
+  schema_web_site_url: '[site:url]'
+  schema_web_site_in_language: '[language:langcode]'
+  schema_web_site_publisher: 'a:3:{s:5:"@type";s:12:"Organization";s:3:"@id";s:23:"[site:url]#organization";s:4:"name";s:7:"Pronens";}'
+  schema_web_site_potential_action: 'a:3:{s:5:"@type";s:12:"SearchAction";s:6:"target";a:2:{s:5:"@type";s:10:"EntryPoint";s:11:"urlTemplate";s:43:"[site:url]buscar?texto={search_term_string}";}s:11:"query-input";s:32:"required name=search_term_string";}'

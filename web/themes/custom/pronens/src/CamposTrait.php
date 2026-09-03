@@ -113,4 +113,35 @@ trait CamposTrait {
     ];
   }
 
+  /**
+   * Añade al head el preload de la imagen que va a ser el LCP (hero, foto principal de la ficha).
+   *
+   * @param array<string, mixed> $variables
+   *   Variables del template (se anota #attached).
+   */
+  protected function attachImagePreload(array &$variables, ?MediaInterface $media, string $style_name): void {
+    if ($media === NULL || !$media->hasField('field_media_image')) {
+      return;
+    }
+    $field = $media->get('field_media_image');
+    $files = $field instanceof EntityReferenceFieldItemListInterface ? $field->referencedEntities() : [];
+    $file = reset($files);
+    if (!$file instanceof FileInterface) {
+      return;
+    }
+    $style = $this->entityTypeManager->getStorage('image_style')->load($style_name);
+    $uri = $file->getFileUri();
+    if (!$style instanceof \Drupal\image\ImageStyleInterface || $uri === NULL) {
+      return;
+    }
+    $variables['#attached']['html_head_link'][] = [
+      [
+        'rel' => 'preload',
+        'as' => 'image',
+        'href' => $style->buildUrl($uri),
+        'fetchpriority' => 'high',
+      ],
+    ];
+  }
+
 }

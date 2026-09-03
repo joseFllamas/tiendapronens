@@ -1315,6 +1315,74 @@ Donde este documento y la realidad del repo discrepan, manda esta lista (decidid
     ("Personalización" → /productos/iniciales), y la cadena "@count products" sin traducir al
     italiano (la categoría italiana dice "9 products"; afecta a todas las categorías, no a esta).
 
+- **SEO y GEO montados sobre contrib (2026-09-03)**: auditoría con el plugin claude-seo-ai (36/100 en
+  búsqueda y 36/100 en visibilidad IA, las dos F) y remedio con módulos de la comunidad más un
+  poco de código en `pronens_seo`. Lo que hay ahora y lo que conviene no reinventar:
+  - **Metatag con Open Graph y Twitter Cards activados**: el `og_type: product` de la config del
+    producto llevaba meses sin salir porque el submódulo no estaba instalado y metatag descarta en
+    silencio las etiquetas sin plugin. Tarjeta social con la foto principal del producto, la foto
+    del término y el hero de la home, todas por el estilo nuevo `pronens_og` (1200, sin recorte y
+    **sin convertir a WebP**, que WhatsApp y Facebook no siempre previsualizan). Campo
+    `field_metatag` en producto, categoría y páginas para sobreescribir por entidad.
+  - **La meta description la limpia `pronens_seo`** (`Descripcion`, con pruebas): metatag hace
+    `strip_tags` a secas y dos párrafos salían pegados ("…la letra.Disponible…"); las de las
+    categorías del D7 medían 551 caracteres. Ahora se corta en la última frase que cabe en 160 (o en
+    palabra) y el JSON-LD lleva el texto entero con los párrafos separados. Los textos de las
+    categorías siguen siendo el copy repetitivo del D7: **reescribirlos es tarea de contenido**.
+  - **JSON-LD con schema_metatag**: OnlineStore (con la dirección del Aviso legal, C/ Alcúdia 100,
+    08016 Barcelona, y `sameAs` **vacío a propósito**, no hay perfil social enlazado en la web) y
+    WebSite con SearchAction a `/buscar?texto=` en todas las páginas; Product en la ficha y
+    WebPage+BreadcrumbList en ficha y categoría. **Una Offer por variación con stock real**: los
+    tokens de entidad solo llegan a la primera variación, así que `TokenHooks` publica
+    `[commerce_product:pronens-ofertas-precio|url|disponibilidad]` como listas separadas por comas
+    y el bloque `offers` va con `pivot`, que es lo que schema_metatag convierte en N objetos. La
+    disponibilidad sale de `commerce_stock` (lo mismo que mira el botón de comprar). Sin
+    AggregateRating: no hay reseñas y no se inventan.
+  - **La miga la construye ahora el módulo** (`CatalogoBreadcrumbBuilder`, prioridad 1010 sobre la de
+    taxonomy), no el preprocess del tema: con el patrón de alias de tres tramos, core deducía
+    "Mochilas" del alias y el tema añadía los ancestros otra vez ("Inicio / Mochilas / Complementos /
+    Mochilas / Ficha"). Y el BreadcrumbList del JSON-LD lee el servicio `breadcrumb`, así que con
+    la miga en el tema habría publicado otra distinta. El tema solo la pinta (y la quita en el
+    checkout).
+  - **simple_sitemap 4.2**: productos, `tipo_de_producto` y páginas en los cinco idiomas con
+    alternates hreflang dentro (1941 URLs). `skip_untranslated` deja la home solo en `es`, que es lo
+    que existe. Los productos basura 260 y 359 van excluidos por instancia mientras sigan
+    publicados. Se regenera por cron; a mano, `drush simple-sitemap:generate`.
+  - **robots.txt lo sirve el módulo robotstxt** (`web/robots.txt` borrado y excluido del scaffold en
+    composer.json). Añade `Disallow` de buscador, cesta, checkout y cuenta, y nombra los bots de IA
+    (GPTBot, OAI-SearchBot, ClaudeBot, PerplexityBot, Google-Extended, CCBot…) con permiso explícito.
+    **La línea `Sitemap:` la pone `SeoHooks::robotstxt()`** con el host de la petición: así vale en
+    ddev, en la URL temporal y en `tienda.pronens.es` sin tocar nada. El buscador lleva además
+    `noindex, follow` por `hook_metatags_alter`.
+  - **hreflang 2.0 con `defer_to_content_translation`**: aporta el `x-default` (al castellano) y deja
+    a core los alternates de las entidades, que solo emite para las traducciones que existen. Por
+    eso **la home sigue con solo `es` + `x-default`: el nodo 5 no está traducido**, y `/ca`, `/fr`…
+    enseñan la home en castellano con la interfaz traducida. Traducirla es la tarea SEO pendiente
+    de más peso.
+  - **llms.txt** (módulo llms_txt, texto en `scripts/seo-base.php`) con las categorías reales y los
+    tres datos que se repiten en toda la web (1986, 72 h, 60 €), idénticos al marquee.
+  - **GTM `GTM-KQMTNQ9S` con google_tag 2.0**: fuera de `/admin`, `/user` y `/batch`, y con los
+    eventos de comercio GA4 en el dataLayer (view_item, add_to_cart, remove_from_cart,
+    begin_checkout, add_shipping_info, add_payment_info, purchase, refund, login, sign_up). **GA4 no va
+    en Drupal**: se inyecta desde GTM. No había ningún GA anterior que quitar.
+  - **Bug del tema corregido**: los `preload` de las fuentes se montaban con `url('<front>')` +
+    `directory`, que en los idiomas con prefijo daba `/cathemes/…` (404): en cuatro de cinco idiomas
+    las fuentes no se precargaban. Ahora `file_url()`. Y la ficha precarga la foto principal (LCP)
+    como ya hacía la home con el hero.
+  - **Alt de las fotos** (`scripts/alt-fotos.php`, contenido: ejecutar en producción): 864 medias
+    con el nombre del fichero como alt pasan al nombre del producto, categoría, color o fondo que las
+    usa (la galería numera a partir de la segunda). Los 144 que quedan no los referencia nadie.
+  - **Todo lo de configuración está en `config/sync` y en `scripts/seo-base.php`** (idempotente); lo
+    de contenido (alt, sitemap generado) hay que ejecutarlo en producción.
+  - **Pendiente y de decisión del cliente**, detectado por la auditoría: la home dice devoluciones en
+    **10 días**, la ficha **30** y la página de envíos **7 días hábiles**; el marquee promete envío
+    gratis a "España, Portugal y UE" y la ficha a "España, Francia y Portugal"; "Rebajas" y el CTA de
+    la home llevan al Outlet vacío; el H1 de la home es "Rebajas verano" bajo un eyebrow "AW26"; los
+    enlaces "Novedades" del mega menú van a la misma URL que "Ver todo"; no hay dirección postal
+    visible en el pie; no hay perfiles sociales (para `sameAs`); y "Bordado a mano" cuando el taller
+    borda a máquina. Además falta decidir el módulo de reseñas (AggregateRating) y añadir
+    `shippingDetails`/`hasMerchantReturnPolicy` al Product cuando la política esté unificada.
+
 ## Orden de trabajo
 1. **Tema `pronens`**: tokens CSS (custom properties con los colores/tipos del README), fuentes
    self-hosted WOFF2 (Archivo, Nunito Sans, Caveat), layout base, header sticky + marquee + footer.

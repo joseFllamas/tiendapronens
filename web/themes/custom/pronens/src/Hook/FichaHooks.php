@@ -541,6 +541,12 @@ class FichaHooks {
 
     $fotos = [];
     foreach ($this->mediasFromFields($producto, ['field_imagen_principal', 'field_galeria']) as $media) {
+      // La primera foto es el LCP de la ficha: se anuncia en el head como ya
+      // hace la home con el hero, para que el navegador la pida antes de
+      // haber leído el HTML hasta la galería.
+      if ($fotos === []) {
+        $this->attachImagePreload($variables, $media, 'pronens_ficha_principal');
+      }
       $foto = $this->foto($variables, $media, $fotos === [], $id_bordado);
       if ($foto !== NULL) {
         $fotos[] = $foto;

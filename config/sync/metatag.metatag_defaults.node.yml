@@ -10,3 +10,9 @@ tags:
   title: '[node:title] | [site:name]'
   description: '[node:summary]'
   canonical_url: '[node:url:absolute]'
+  og_type: website
+  og_title: '[node:title]'
+  og_description: '[node:summary]'
+  og_url: '[node:url:absolute]'
+  twitter_cards_title: '[node:title]'
+  twitter_cards_description: '[node:summary]'
