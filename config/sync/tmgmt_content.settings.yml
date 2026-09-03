@@ -3,4 +3,6 @@ _core:
 embedded_fields:
   node:
     field_secciones: true
+  paragraph:
+    field_items: true
 default_moderation_states: {  }
