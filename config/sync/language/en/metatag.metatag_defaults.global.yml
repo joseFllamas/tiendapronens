@@ -1,4 +1,5 @@
 label: Global
 tags:
+  og_locale: en_GB
   canonical_url: '[current-page:url]'
   title: '[current-page:title] | [site:name]'

@@ -110,6 +110,13 @@
   gap: 12px;
 }
 
+/* El h3 solo aporta semántica: hereda el hueco que tenía el enlace suelto. */
+.pro-card__title {
+  margin: 0;
+  font: inherit;
+  min-width: 0;
+}
+
 .pro-card__name {
   font-weight: 800;
   font-size: 14px;

@@ -12,6 +12,7 @@ use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\Url;
 use Drupal\pronens_seo\CanonicalCalculator;
 use Drupal\pronens_seo\Descripcion;
+use Drupal\pronens_seo\ResultadosCatalogo;
 use Drupal\taxonomy\TermInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 
@@ -67,6 +68,7 @@ final class SeoHooks {
     private readonly EntityRepositoryInterface $entityRepository,
     private readonly RequestStack $requestStack,
     private readonly CanonicalCalculator $calculator,
+    private readonly ResultadosCatalogo $resultados,
   ) {
   }
 
@@ -86,6 +88,7 @@ final class SeoHooks {
     }
 
     $this->descripciones($metatags, $context);
+    $this->fotoDeReserva($metatags, $context);
 
     if ($this->routeMatch->getParameter('view_id') !== self::VIEW_ID) {
       return;
@@ -165,6 +168,14 @@ final class SeoHooks {
       $termino = $this->entityRepository->getTranslationFromContext($entidad);
       \assert($termino instanceof TermInterface);
       $html = (string) ($termino->getDescription() ?? '');
+      if (trim($html) === '') {
+        // 8 de los 30 términos llegaron de la migración sin descripción, entre
+        // ellos Iniciales, que es la puerta de la línea de bordado. Sin texto
+        // no hay meta description y Google se inventa el fragmento con lo que
+        // pilla, normalmente el menú. Esto da uno correcto y en el idioma de
+        // la página mientras el cliente no escriba el suyo, que siempre manda.
+        $html = $this->descripcionDeReserva($termino);
+      }
     }
     if ($html === NULL || trim($html) === '') {
       return;
@@ -180,6 +191,60 @@ final class SeoHooks {
     if ($schema !== NULL && isset($metatags[$schema])) {
       $metatags[$schema] = Descripcion::texto($html);
     }
+  }
+
+  /**
+   * Foto de reserva para una categoría sin imagen propia.
+   *
+   * Los tokens de og_image y twitter_cards_image apuntan a field_imagen del
+   * término, y 8 de los 30 no lo tienen relleno: esas categorías se compartían
+   * sin ninguna vista previa. Se usa la foto del primer producto que ha pintado
+   * la view, que representa la categoría mejor que un logo.
+   *
+   * @param array<string, mixed> $metatags
+   *   Las etiquetas.
+   * @param array<string, mixed> $context
+   *   Contexto de metatag.
+   */
+  private function fotoDeReserva(array &$metatags, array $context): void {
+    $termino = $context['entity'] ?? NULL;
+    if (!$termino instanceof TermInterface) {
+      return;
+    }
+    // Aquí las etiquetas todavía llevan el token dentro, así que no se puede
+    // mirar si el valor está vacío: hay que preguntarle al término si tiene
+    // foto. Si la tiene, manda la suya y no se toca nada.
+    $tiene = $termino->hasField('field_imagen') && !$termino->get('field_imagen')->isEmpty();
+    if ($tiene) {
+      return;
+    }
+    $foto = $this->resultados->foto();
+    if ($foto === NULL) {
+      return;
+    }
+    foreach (['og_image', 'twitter_cards_image'] as $etiqueta) {
+      $metatags[$etiqueta] = $foto;
+    }
+  }
+
+  /**
+   * Texto de reserva para una categoría sin descripción propia.
+   *
+   * Solo datos que ya dice el resto de la tienda (taller de Barcelona, 72 h,
+   * envío gratis desde 60 € en España peninsular), así que no introduce
+   * ninguna promesa nueva. Se traduce con la interfaz, de modo que sale en los
+   * cinco idiomas sin escribir un texto por término y por idioma.
+   *
+   * @param \Drupal\taxonomy\TermInterface $termino
+   *   El término, ya traducido al idioma de la página.
+   */
+  private function descripcionDeReserva(TermInterface $termino): string {
+    // El origen va en inglés como el resto de cadenas del proyecto: Drupal da
+    // por hecho que el texto del código ES el inglés, así que una cadena
+    // escrita en castellano no se traduce nunca al inglés.
+    return (string) $this->t("@categoria by Pronens: personalised kids and school wear, embroidered with a name or initial at our Barcelona workshop. Embroidered in 72 h, free shipping in mainland Spain from €60.", [
+      '@categoria' => $termino->label(),
+    ]);
   }
 
   /**

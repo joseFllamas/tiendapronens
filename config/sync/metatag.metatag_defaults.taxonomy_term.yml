@@ -7,6 +7,8 @@ _core:
 id: taxonomy_term
 label: 'Término de taxonomía'
 tags:
+  schema_web_page_id: '[term:url:absolute]#webpage'
+  schema_web_page_description: '[term:description]'
   canonical_url: '[term:url]'
   description: '[term:description]'
   title: '[term:name] | [site:name]'

@@ -43,6 +43,50 @@
     <link rel="preload" href="{{ file_url(directory ~ '/fonts/nunito-sans-v19-latin-700.woff2') }}" as="font" type="font/woff2" crossorigin>
     <title>{{ head_title|safe_join(' | ') }}</title>
     <css-placeholder token="{{ placeholder_token }}">
+    {# Los 311 KB de Google Tag Manager se descargan DESPUÉS del LCP.
+
+       Medido con Lighthouse móvil sobre producción: con GTM, Performance 76 y
+       LCP 6,3 s; con googletagmanager.com bloqueado, 100 y 1,7 s. GTM (126 KB)
+       encadena gtag.js (184 KB) y entre los dos son el 38 % del peso de la
+       página, en el camino crítico, porque el consent mode va en modo avanzado
+       y Klaro reactiva los dos scripts nada más arrancar.
+
+       Aquí NO se toca el consentimiento: Klaro, su aviso y el `consent default`
+       con los cuatro permisos denegados siguen ejecutándose igual y en el mismo
+       orden. Lo único que se retrasa es la descarga de los ficheros remotos, que
+       se sueltan al terminar la carga (o antes, en cuanto el usuario interactúa,
+       para no perder el evento de nadie que haga clic enseguida).
+
+       Va inline y no como library porque tiene que correr ANTES que el JS del
+       módulo google_tag, y el orden de las libraries entre tema y contrib no lo
+       garantiza nada. Es la excepción al «defer siempre» de las reglas del tema. #}
+    <script>
+      (function () {
+        var cola = [], soltado = false, head = document.head;
+        var insertar = head.appendChild.bind(head);
+        var esTag = function (n) {
+          return n && n.tagName === 'SCRIPT' && /googletagmanager\.com/.test(n.src || '');
+        };
+        head.appendChild = function (n) {
+          if (!soltado && esTag(n)) { cola.push(n); return n; }
+          return insertar(n);
+        };
+        function soltar() {
+          if (soltado) { return; }
+          soltado = true;
+          head.appendChild = insertar;
+          while (cola.length) { insertar(cola.shift()); }
+        }
+        function programar() {
+          (window.requestIdleCallback || function (f) { setTimeout(f, 200); })(soltar, { timeout: 3000 });
+        }
+        if (document.readyState === 'complete') { programar(); }
+        else { addEventListener('load', programar, { once: true }); }
+        ['pointerdown', 'keydown', 'touchstart', 'scroll'].forEach(function (e) {
+          addEventListener(e, soltar, { once: true, passive: true });
+        });
+      })();
+    </script>
     <js-placeholder token="{{ placeholder_token }}">
   </head>
   <body{{ attributes.addClass(body_classes) }}>

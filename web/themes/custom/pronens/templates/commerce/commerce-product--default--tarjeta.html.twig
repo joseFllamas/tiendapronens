@@ -18,7 +18,13 @@
   </a>
   <div class="pro-card__info">
     <div class="pro-card__row">
-      <a class="pro-card__name" href="{{ card.url }}">{{ card.title }}</a>
+      {# El nombre es un encabezado, no un enlace suelto: en una categoría de
+         24 tarjetas era el único texto sin nivel, así que ni un lector de
+         pantalla ni un motor de respuestas sabían dónde empieza cada producto.
+         h3 porque cuelga del h1 de la categoría. #}
+      <h3 class="pro-card__title">
+        <a class="pro-card__name" href="{{ card.url }}">{{ card.title }}</a>
+      </h3>
       {% if card.price %}
         <span class="pro-card__price">{{ card.price }}</span>
       {% endif %}

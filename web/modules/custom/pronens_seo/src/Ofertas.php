@@ -55,6 +55,30 @@ final class Ofertas {
   }
 
   /**
+   * Los SKU de las variaciones, en el MISMO orden que las Offer del pivot.
+   *
+   * schema_metatag pivota las listas por posición, así que el SKU de la Offer
+   * i tiene que salir del mismo recorrido y con el mismo filtro que listas():
+   * publicadas y con precio. Si los dos métodos se desincronizaran, cada Offer
+   * llevaría el SKU de otra variación.
+   *
+   * @return array<int, string>
+   *   Los SKU, alineados con las listas de listas().
+   */
+  public function skus(ProductInterface $producto, ?LanguageInterface $idioma = NULL): array {
+    $producto = $this->traducido($producto, $idioma);
+    $skus = [];
+    foreach ($producto->getVariations() as $variacion) {
+      if (!$variacion->isPublished() || $variacion->getPrice() === NULL) {
+        continue;
+      }
+      $skus[] = (string) $variacion->getSku();
+    }
+
+    return $skus;
+  }
+
+  /**
    * SKU de la variación por defecto, la que enseña la ficha al abrirse.
    */
   public function sku(ProductInterface $producto): string {

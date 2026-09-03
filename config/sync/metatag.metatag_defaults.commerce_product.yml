@@ -24,8 +24,10 @@ tags:
   schema_product_url: '[commerce_product:url:absolute]'
   schema_product_sku: '[commerce_product:pronens-sku]'
   schema_product_category: '[commerce_product:field_tipo_de_producto:0:entity:name]'
-  schema_product_image: 'a:3:{s:5:"@type";s:11:"ImageObject";s:20:"representativeOfPage";s:4:"True";s:3:"url";s:77:"[commerce_product:field_imagen_principal:entity:field_media_image:pronens_og]";}'
+  schema_product_image: 'a:3:{s:5:"@type";s:11:"ImageObject";s:20:"representativeOfPage";b:1;s:3:"url";s:77:"[commerce_product:field_imagen_principal:entity:field_media_image:pronens_og]";}'
   schema_product_brand: 'a:2:{s:5:"@type";s:5:"Brand";s:4:"name";s:7:"Pronens";}'
   schema_product_offers: 'a:7:{s:5:"pivot";i:1;s:5:"@type";s:5:"Offer";s:5:"price";s:41:"[commerce_product:pronens-ofertas-precio]";s:13:"priceCurrency";s:3:"EUR";s:3:"url";s:38:"[commerce_product:pronens-ofertas-url]";s:12:"availability";s:49:"[commerce_product:pronens-ofertas-disponibilidad]";s:13:"itemCondition";s:31:"https://schema.org/NewCondition";}'
   schema_web_page_type: ItemPage
   schema_web_page_breadcrumb: 'Yes'
+  schema_web_page_id: '[commerce_product:url:absolute]#webpage'
+  schema_web_page_description: '[commerce_product:body]'

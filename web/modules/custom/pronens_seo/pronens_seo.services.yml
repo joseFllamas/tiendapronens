@@ -5,6 +5,14 @@ services:
     class: Drupal\pronens_seo\Ofertas
     # commerce_stock no publica alias de su interfaz, así que sin autowire.
     arguments: ['@commerce_stock.service_manager', '@entity.repository']
+  Drupal\pronens_seo\PoliticasComerciales:
+    class: Drupal\pronens_seo\PoliticasComerciales
+    autowire: true
+  # Guarda los productos que pinta la view del catálogo para el ItemList de la
+  # categoría. Tiene estado, pero el contenedor da una instancia por petición.
+  Drupal\pronens_seo\ResultadosCatalogo:
+    class: Drupal\pronens_seo\ResultadosCatalogo
+    autowire: true
   pronens_seo.breadcrumb.catalogo:
     class: Drupal\pronens_seo\Breadcrumb\CatalogoBreadcrumbBuilder
     autowire: true

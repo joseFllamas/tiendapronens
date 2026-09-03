@@ -1511,6 +1511,167 @@ Donde este documento y la realidad del repo discrepan, manda esta lista (decidid
     a un destino 200 en un solo salto y que **las 403 URLs que ya funcionaban siguen igual** (cero
     regresiones). Copia previa: snapshot `pre-redirecciones-d7`.
 
+- **Re-auditoría SEO/GEO (2026-09-03)**: segunda pasada con claude-seo-ai sobre producción, ya con
+  todo lo de `seo-base.php` aplicado. **Búsqueda 36 → 67 → 83** (banda B) y **visibilidad IA
+  36 → 39 → 52**. La lectura importante: el trabajo de agosto arregló la parte técnica
+  (indexabilidad 83, datos estructurados 79, internacional 100, imágenes 83), y lo que queda es
+  **contenido**, que es justo de lo que vive el GEO (extractabilidad y densidad de datos siguen a 0
+  porque no hay preguntas frecuentes ni texto propio en las categorías). Ojo al comparar cifras: los
+  36/36 de julio y estos no se midieron con el mismo detalle, y una lista de hallazgos centrada en
+  "lo que falta" hunde la nota si no se recuentan como aprobados los controles que sí pasan.
+  - **GTM era el 100 % del problema de rendimiento, medido**: con GTM, Performance 76 y **LCP 6,3 s**;
+    con `googletagmanager.com` bloqueado, **100 y 1,7 s**. GTM (126 KB) encadena `gtag.js` (184 KB) y
+    entre los dos son el 38 % de los 811 KB de la página, en el camino crítico, porque el consent mode
+    va en modo avanzado y Klaro reactiva los dos scripts nada más arrancar. La imagen del LCP
+    descargaba en 168-355 ms: el 81 % del LCP era **render delay**, no red. Lo resuelve un script
+    **inline en `html.html.twig`** que encola los `<script>` de googletagmanager y los suelta en el
+    `load` (o antes, a la primera interacción). **No toca el consentimiento**: Klaro, su aviso y el
+    `consent default` con los cuatro permisos denegados siguen igual y en el mismo orden. Va inline y
+    no como library porque tiene que correr ANTES que el JS de google_tag y el orden entre libraries
+    de tema y contrib no lo garantiza nada: es la excepción al «defer siempre» de las reglas del tema.
+    Verificado que GTM arranca después del evento `load` y que sigue cargando (cero errores de consola).
+  - **Los patrones de Klaro nunca funcionaron** (bug preexistente, encontrado en una captura): Klaro
+    compone el patrón como `'/' . $valor . '/'`, así que `/admin` daba `//admin/`, con el delimitador
+    vacío y `admin/` leído como modificadores. Los cinco `disable_urls` devolvían `false`, o sea que
+    `onDisabledUri()` **era siempre FALSE y el aviso de cookies se cargaba también en el backoffice**.
+    Ahora son expresiones regulares de verdad (`^\/admin(\/|$)`…), con las variantes de prefijo de
+    idioma. `scripts/klaro-rutas.php` las escribe y comprueba siete casos.
+  - **El JSON-LD se enriquece después de schema_metatag**, no con plugins nuevos: la versión 3.0 no
+    trae etiqueta para `legalName`, `taxID`, `foundingDate`, `currenciesAccepted`,
+    `hasMerchantReturnPolicy`, `shippingDetails` ni `ItemList`, y tampoco ofrece un alter del
+    documento final (solo `hook_metatags_alter`, que corre con los tokens aún dentro y descarta las
+    claves sin plugin). `JsonLdHooks` engancha en `hook_page_attachments_alter` con `OrderAfter` sobre
+    schema_metatag, busca el elemento de clave `schema_metatag`, decodifica y reescribe.
+    `GrafoCalculator` es la lógica pura con sus pruebas. **Lo que ya venga de la configuración de
+    metatag manda**, para que el cliente pueda corregir un dato desde el backoffice.
+  - **Las tarifas de envío del JSON-LD se leen de Commerce**, no se escriben
+    (`PoliticasComerciales`): 5,95 € península, 7,95 € Baleares, 12 € Canarias/Ceuta/Melilla, 9,95 €
+    Portugal y 15 € resto de la UE, con las provincias declaradas a mano porque `DefinedRegion` no
+    entiende de códigos postales y "España peninsular" en Commerce es España menos los prefijos 07,
+    35, 38, 51 y 52. **Se publica la tarifa estándar, no la promoción**: schema.org no sabe expresar
+    "gratis desde 60 €" dentro de un `shippingRate`, y anunciar 0 € sería una condición de envío
+    engañosa para Merchant Center. La página caduca con `config:commerce_shipping_method_list`.
+  - **`Product` con 20 `Offer` es correcto, no un defecto**: Google pide `ProductGroup` + `hasVariant`
+    solo cuando cada variante tiene su propia página indexable, y aquí las 20 comparten canónica
+    (`?v=ID` solo preselecciona). No "corregirlo" en una auditoría futura. Lo que sí faltaba era el
+    **SKU por Offer**: `Ofertas::skus()` recorre las variaciones con **el mismo filtro y en el mismo
+    orden** que `listas()`, porque schema_metatag pivota por posición y desincronizarlos pondría en
+    cada Offer el SKU de otra variación.
+  - **El ItemList de la categoría sale de la view, no del DOM** (`ResultadosCatalogo`): el contenido
+    principal se renderiza antes de recoger los attachments, así que basta anotar lo que la view ya
+    resolvió. El nombre se toma de la **entidad**: hay productos del D7 con el alias cruzado (la
+    sudadera blanca sirve en la URL de la rosa) y leer la tarjeta llevaría ese cruce a los datos
+    estructurados. Numera desde la posición real del paginador.
+  - **La portada se duplicaba en el sitemap**: salía como `/` (enlace manual) y como `/node/5` (la
+    entidad), las dos con prioridad 1.0, y su `og:url` apuntaba a `/node/5` mientras la canónica era
+    `/`. Ahora el nodo no se indexa y queda una sola entrada con sus cinco alternates. Su `<title>`
+    era «Inicio | Tienda Pronens», 23 caracteres sin una palabra de lo que vende: los títulos nuevos
+    de los cinco idiomas **no son traducción nueva**, son la primera frase de la meta description que
+    ya estaba aprobada en cada idioma, recortada a 60 caracteres.
+  - **8 de los 30 términos no tienen descripción ni foto** (Iniciales, Outlet, Packs, Juegos, Otros,
+    Delantales, Baño y test), así que sus páginas salían sin meta description (Google se inventaba el
+    fragmento con el menú) y sin vista previa al compartirlas. `SeoHooks` pone un texto de reserva que
+    solo repite datos que ya dice el resto de la tienda, y como `og:image` la foto del primer producto
+    de la categoría. **En cuanto el cliente escriba la descripción del término, la suya manda.** Ojo:
+    en `hook_metatags_alter` las etiquetas aún llevan el token dentro, así que no vale mirar si el
+    valor está vacío, hay que preguntarle al término si tiene el campo relleno.
+  - **La cadena de origen de un `t()` va en INGLÉS**: escrita en castellano, Drupal da por hecho que
+    el texto del código ya es el inglés y la página inglesa nunca se traduce. Se detectó porque la
+    descripción de reserva salía en castellano en `/en`.
+  - **El nombre de la tarjeta es ahora un `h3`**: en una categoría de 24 tarjetas era el único texto
+    sin nivel de encabezado. El `h3` solo aporta semántica (`font: inherit`) y el diseño no cambia.
+  - **El grupo de bots de IA del robots.txt no heredaba las exclusiones del comodín**: por la RFC 9309
+    un bot que hace match con un `User-agent` nombrado ignora el grupo `*` entero, así que le faltaban
+    la ruta de acción del carrito y el buscador de core. Añadidos, más Amazonbot, meta-externalagent,
+    Diffbot, cohere-ai y Timpibot.
+  - **Verificado que el WAF no bloquea a ningún bot de IA**: GPTBot, ClaudeBot, PerplexityBot,
+    OAI-SearchBot y Googlebot reciben 200 en producción. Era la duda de mayor apalancamiento, porque
+    un bloqueo en Cloudflare anularía en silencio todo el trabajo de robots.txt, llms.txt y JSON-LD.
+  - **Dos notas del CLAUDE.md estaban obsoletas y llevaron a error a los agentes**: la home **sí está
+    traducida** a los cinco idiomas (texto de secciones incluido, no solo la interfaz), y **ningún
+    producto dice «bordado a mano»** (0 de 342). Lo que hay son 104 con «hecho/hecha a mano», que
+    habla de la confección y no del bordado, y 43 con «lavable a mano», que es correcto.
+- **Lo que queda pendiente y es decisión del cliente (2026-09-03)**, por orden de gravedad:
+  - **La página de envíos y devoluciones sigue con el texto del D7** y contradice al resto de la
+    tienda en la misma sesión de compra: dice 6 €/7 €/9 €/10 € cuando se cobra 5,95/7,95/12/9,95/15,
+    «7 días» frente a los 30 de la ficha y la home, «no se realizarán abonos económicos», y **niega
+    toda devolución «mientras dure la pandemia del COVID19»**. Además no menciona el derecho de
+    desistimiento de 14 días naturales. Es riesgo de cumplimiento, no solo de copy.
+  - **Bizum está ACTIVO** y la página de formas de pago no lo nombra (solo tarjeta y PayPal).
+  - **Las 4 fotos de «Quiénes somos» son generadas por IA** (XMP `trainedAlgorithmicMedia`) en la
+    página que sostiene el relato de taller familiar real. Sustituirlas por fotos del taller.
+  - **`sameAs` solo tiene pronens.com**: faltan por confirmar Google Business Profile, Instagram,
+    Facebook y Amazon, si existen.
+  - Sin módulo de reseñas no hay `AggregateRating` (correcto no inventarlo), faltan `gtin`/`mpn`
+    (Commerce no tiene el campo), las categorías no tienen texto propio ni hay preguntas frecuentes
+    (que es lo que mantiene la nota de IA baja), y siguen los 19 productos de escuela sin ruta de
+    navegación y el Outlet vacío.
+- **La tienda y pronens.com son la misma empresa con dos públicos (2026-09-03, cliente)**:
+  `pronens.com` es la web del fabricante (venta a colegios y empresas) y `tienda.pronens.es` la
+  tienda para familias. El vínculo iba en una sola dirección: pronens.com ya enlazaba aquí («Tienda
+  familias», *Tienda para usuarios particulares*), pero la tienda no enlazaba de vuelta y su
+  `Organization` no tenía ningún `sameAs`, de modo que para un buscador o un motor de respuestas eran
+  dos entidades sin relación. Ahora hay las dos mitades: el `sameAs` del JSON-LD (`JsonLdHooks`) y el
+  enlace visible en el pie, «Venta a colegios y empresas» en los cinco idiomas
+  (`scripts/enlace-fabricante.php`, es contenido: ejecutar también en producción). **Pendiente en
+  pronens.com**, que no se ha tocado: no tiene JSON-LD, ni meta description, ni H1, así que le falta
+  su `Organization` con el `sameAs` recíproco.
+
+- **Envíos, devoluciones y formas de pago reescritos (2026-09-03, cliente)**: los nodos 1 y 2 seguían
+  con el texto del D7 y contradecían al resto de la tienda en la misma sesión de compra. Lo que
+  decían: tarifas de 6/7/9/10 € (Francia 9 €) cuando Commerce cobra 5,95 / 7,95 / 12 / 9,95 / 15 €,
+  envíos «a cualquier otra población mundial» cuando fuera de la UE no se envía, «siete días» para
+  devolver frente a los 30 de la ficha y la home, «No se realizarán abonos económicos» (solo cambio o
+  saldo a favor) y **«mientras dure la pandemia del COVID19 no se admitirá ningún tipo de
+  devolución»**, texto de 2020 todavía publicado. Las tres últimas chocaban además con el derecho de
+  desistimiento del art. 71 del TRLGDCU. Y la de pagos no nombraba **Bizum, que está ACTIVO**.
+  `scripts/politicas-envios-pagos.php` los reescribe; los textos van en `scripts/textos/envios-*.html`.
+  - **Se reescriben los CINCO idiomas**, no solo el castellano: los dos nodos están traducidos y dejar
+    el francés o el italiano con el texto viejo sería peor que no tocar nada.
+  - **El nodo 1 se reescribe entero y el 2 solo en una frase**: la página de pagos es correcta salvo
+    la enumeración de medios de pago, así que se sustituye esa sola frase y se conserva todo lo demás
+    (moneda, impuestos, seguridad de la pasarela y motivos de rechazo de una tarjeta).
+  - **Decisiones del cliente que el texto da por firmes**: 30 días naturales para devolver (la ley
+    pide 14 como mínimo), el envío de vuelta lo paga el cliente salvo defecto, se devuelve el dinero
+    por el mismo medio de pago y no un vale, y las prendas bordadas siguen sin devolución salvo
+    defecto. Conviene que un asesor legal lea el texto final.
+  - **El correo de contacto era `victor@pronens.com`** en las tres secciones de devoluciones: pasa al
+    remitente único `pronens@pronens.com` que se fijó al montar el correo.
+  - Los textos anteriores quedan en la **revisión previa** de cada nodo.
+- **pronens.com tiene ahora su ficha de empresa (2026-09-03)**: módulo `pronens_seo` en el proyecto
+  `pronensd10.test` (Drupal 10, tema `stablechild`, 4 idiomas es/ca/en/fr). La web no tenía **ni
+  JSON-LD, ni meta description, ni H1**. Lo que hace y lo que conviene no reinventar:
+  - **`Organization` en todas las páginas públicas** con `sameAs` a `https://tienda.pronens.es/`, que
+    es la mitad que faltaba del vínculo entre las dos webs. Mismo formato de dirección, teléfono y
+    correo que la tienda, para que los dos JSON-LD describan el mismo negocio sin discrepancias.
+  - **Descripción de reserva en los 4 idiomas** por `hook_metatags_alter`, para las páginas que no
+    traen una propia (que eran todas): sin ella Google componía el fragmento con el menú.
+  - **NO se declara `foundingDate`, a propósito**: conviven **tres años** en los contenidos de las dos
+    webs. «desde 1980» en el hero de pronens.com y en sus cuatro idiomas (párrafos 9, 280, 345 y 410),
+    «todo empezó en 1984» y «la primera fábrica en Barcelona en 1984» en otros dos párrafos de esa
+    misma web (141 y 196), y «desde 1986» en toda la tienda (marquee, portada, llms.txt, Quiénes
+    somos y su propio JSON-LD). **Es decisión del cliente cuál es el bueno**; hasta entonces publicarlo
+    como dato estructurado fijaría en el grafo de conocimiento un año que la empresa se contradice.
+  - **El H1 de la portada se pone al RENDERIZAR, no en el contenido** (`Titular::aH1`): el titular lo
+    escribió el editor dentro del cuerpo de un párrafo y quedó como `<h3>`, con un `<h3>&nbsp;</h3>`
+    vacío delante. No se corrige en el contenido porque el formato `basic_html` no admite `<h1>` ni
+    `class` (filter_html los borra) y, aunque se ampliara, **CKEditor volvería a convertirlo en h3**
+    la próxima vez que alguien abriera el párrafo. Tres cosas que costaron:
+    - **Tiene que ser `#post_render`, no un preprocess**: el texto pasa por `filter_html` DESPUÉS del
+      preprocess, así que un `<h1>` puesto antes se pierde por el camino (se veía como el titular
+      saliendo sin ninguna etiqueta).
+    - **`#post_render` exige `TrustedCallbackInterface`**: con una función suelta del .module, Drupal
+      lanza `UntrustedCallbackException` y la portada da un 500. De ahí la clase `Titular`.
+    - **`<h1 class="h3">`**, porque esa clase ya existe en el CSS del tema con los estilos del
+      elemento h3 (22px/28px) y, al ser clase, gana por especificidad sobre la regla de elemento h1
+      (32px): el aspecto no cambia y no hace falta tocar el SCSS ni el CSS.
+    - Y el mismo bug de delimitador que el de Klaro: el patrón llevaba `&#160;` con delimitador `#`,
+      que lo cerraba antes de tiempo («Unknown modifier»). Va con `~`.
+  - **Ojo al exportar config en ese proyecto**: `drush cex` arrastra `system.performance.yml` y
+    `http_cache_control.settings.yml` con la deriva del entorno local (caché de página a 0, CSS sin
+    agregar). **Desplegarlos apagaría la caché en producción**: hay que revertirlos y dejar solo el
+    alta del módulo en `core.extension.yml`.
+
 ## Orden de trabajo
 1. **Tema `pronens`**: tokens CSS (custom properties con los colores/tipos del README), fuentes
    self-hosted WOFF2 (Archivo, Nunito Sans, Caveat), layout base, header sticky + marquee + footer.
