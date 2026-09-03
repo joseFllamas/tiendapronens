@@ -1287,6 +1287,34 @@ Donde este documento y la realidad del repo discrepan, manda esta lista (decidid
     `/payment/notify/redsys` (debe aparecer en el watchdog). Sin pago registrado el pedido figura
     sin cobrar y la factura se queda en `pending`.
 
+- **"Producto Personalizado" (185) pasa a ser "Iniciales" (2026-09-03, cliente)**: el término
+  llevaba desde la migración con 0 productos y dos enlaces apuntándole (la barra "Personaliza" y el
+  pie "Personalización"), además de los dos botones de la home ("Empezar a personalizar" y
+  "Personalizar"), que llevaban a una página vacía. Ahora es la puerta de la línea de inicial
+  bordada: `scripts/categoria-iniciales.php` renombra el término y el enlace 21 de la barra en los
+  5 idiomas (Iniciales / Inicials / Initials / Initiales / Iniziali), y **añade** el 185 a
+  `field_tipo_de_producto` de todos los productos de modo `inicial` (9: las 8 sudaderas del 201 y
+  la mochila 373). Se resuelve así la pendiente "Personaliza lleva a 0 productos" del menú. Lo que
+  conviene no reinventar:
+  - **Se añade DETRÁS de la categoría que ya tenían**, no se sustituye: la miga, el patrón de alias
+    de pathauto y "También te puede gustar" leen el **primer** término (`termFromField()`), así que
+    las sudaderas siguen siendo de "Sudaderas con iniciales" y la mochila de "Mochilas", y ningún
+    alias de producto se mueve (verificado el 373, que está en pathauto automático).
+  - **Entran los de modo `inicial`, no los personalizables**: el criterio es el campo
+    `field_modo_personalizacion`, no una lista de ids, así que al pasar otro producto a *inicial*
+    basta relanzar el script (idempotente) o añadirle la categoría a mano.
+  - **Pathauto no recorre las traducciones al guardar un término**: `updateEntityAlias()` solo
+    regenera el idioma del objeto guardado. El script lo llama traducción a traducción; los 5 alias
+    viejos (`/productos/producto-personalizado`…) quedaron como 301 automáticos de `redirect`
+    (rids 200-204), y los 4 del D7 con prefijo cruzado (`/ca/productos/producte-personalitzat`,
+    rids 126-129) siguen funcionando porque apuntan a la entidad.
+  - **La página lee del índice**: sin el `indexItems()` final la categoría seguiría diciendo 0.
+  - **Todo es contenido** (término, enlace, productos, alias, redirecciones): el script hay que
+    ejecutarlo en producción. Copia previa: snapshot `pre-categoria-iniciales`.
+  - **Se deja sin tocar, a decisión del cliente**: la etiqueta del enlace 29 del pie
+    ("Personalización" → /productos/iniciales), y la cadena "@count products" sin traducir al
+    italiano (la categoría italiana dice "9 products"; afecta a todas las categorías, no a esta).
+
 ## Orden de trabajo
 1. **Tema `pronens`**: tokens CSS (custom properties con los colores/tipos del README), fuentes
    self-hosted WOFF2 (Archivo, Nunito Sans, Caveat), layout base, header sticky + marquee + footer.
