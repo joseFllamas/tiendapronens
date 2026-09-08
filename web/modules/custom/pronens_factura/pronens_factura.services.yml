@@ -2,6 +2,10 @@ services:
   _defaults:
     autowire: true
 
+  logger.channel.pronens_factura:
+    parent: logger.channel_base
+    arguments: ['pronens_factura']
+
   # MailerPass descubre el correo por la clase (ComponentMailerInterface más el
   # atributo MailerInfo) y le inyecta él mismo el argumento $baseTag: de ahí el
   # hueco vacío, igual que en pronens_mail.
@@ -28,3 +32,35 @@ services:
   Drupal\pronens_factura\EventSubscriber\CarpetaPdfSubscriber:
     tags:
       - { name: event_subscriber }
+
+  # Registro de descargas de factura: qué facturas ya se ha llevado el taller.
+  # Se guarda como actividad del pedido (commerce_log) y no en un campo nuevo,
+  # así se ve en la pestaña de actividad y se puede filtrar en la lista.
+  Drupal\pronens_factura\RegistroDescargas:
+    class: Drupal\pronens_factura\RegistroDescargas
+    arguments:
+      - '@entity_type.manager'
+      - '@database'
+      - '@current_user'
+      - '@logger.channel.pronens_factura'
+
+  Drupal\pronens_factura\ResumenFacturas:
+    class: Drupal\pronens_factura\ResumenFacturas
+    arguments:
+      - '@entity_type.manager'
+      - '@Drupal\pronens_factura\RegistroDescargas'
+
+  # Apunta la descarga cuando el PDF sale de verdad, no cuando se pide la ruta.
+  Drupal\pronens_factura\EventSubscriber\DescargaFacturaSubscriber:
+    class: Drupal\pronens_factura\EventSubscriber\DescargaFacturaSubscriber
+    arguments:
+      - '@current_route_match'
+      - '@Drupal\pronens_factura\RegistroDescargas'
+    tags:
+      - { name: event_subscriber }
+
+  Drupal\pronens_factura\Hook\ViewsHooks:
+    class: Drupal\pronens_factura\Hook\ViewsHooks
+    calls:
+      - [setStringTranslation, ['@string_translation']]
+

@@ -53,9 +53,14 @@
 
        Aquí NO se toca el consentimiento: Klaro, su aviso y el `consent default`
        con los cuatro permisos denegados siguen ejecutándose igual y en el mismo
-       orden. Lo único que se retrasa es la descarga de los ficheros remotos, que
-       se sueltan al terminar la carga (o antes, en cuanto el usuario interactúa,
-       para no perder el evento de nadie que haga clic enseguida).
+       orden, así que el Consent Mode sigue siendo el avanzado. Lo único que se
+       retrasa es la descarga de los ficheros remotos.
+
+       Cuándo se sueltan: al PRIMER GESTO del usuario (scroll, clic o toque) o,
+       si no hay ninguno, 3 segundos después del evento load, lo que ocurra
+       antes. El respaldo temporal es lo que mantiene medidas las visitas que no
+       llegan a interactuar; los 3 segundos son suficientes para que la carga
+       haya terminado y GTM no compita con el primer pintado.
 
        Va inline y no como library porque tiene que correr ANTES que el JS del
        módulo google_tag, y el orden de las libraries entre tema y contrib no lo
@@ -78,7 +83,12 @@
           while (cola.length) { insertar(cola.shift()); }
         }
         function programar() {
-          (window.requestIdleCallback || function (f) { setTimeout(f, 200); })(soltar, { timeout: 3000 });
+          // El respaldo: 3 s desde load. Se pide además un hueco ocioso para no
+          // arrancar en mitad de otra tarea, pero con timeout para que el
+          // navegador lo ejecute sí o sí aunque nunca esté del todo quieto.
+          setTimeout(function () {
+            (window.requestIdleCallback || function (f) { f(); })(soltar, { timeout: 1000 });
+          }, 3000);
         }
         if (document.readyState === 'complete') { programar(); }
         else { addEventListener('load', programar, { once: true }); }

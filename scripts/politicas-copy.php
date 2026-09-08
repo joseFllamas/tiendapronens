@@ -27,11 +27,11 @@ use Drupal\paragraphs\Entity\Paragraph;
 // traducción italiana entera, que faltaba (la home italiana lo enseñaba en
 // castellano).
 $marquee = [
-  'es' => ['Envío gratis en España peninsular desde 60€', 'Personalización bordada en 72h', 'Hecho en España desde 1986'],
-  'ca' => ['Enviament gratuït a Espanya peninsular des de 60€', 'Personalització brodada en 72h', 'Fet a Espanya des de 1986'],
-  'en' => ['Free shipping in mainland Spain over 60€', 'Embroidered personalisation in 72h', 'Made in Spain since 1986'],
-  'fr' => ['Livraison gratuite en Espagne continentale dès 60€', 'Personnalisation brodée en 72h', 'Fabriqué en Espagne depuis 1986'],
-  'it' => ['Spedizione gratuita in Spagna continentale da 60€', 'Personalizzazione ricamata in 72h', 'Fatto in Spagna dal 1986'],
+  'es' => ['Envío gratis en España peninsular desde 60€', 'Personalización bordada en 72h', 'Hecho en España desde 1984'],
+  'ca' => ['Enviament gratuït a Espanya peninsular des de 60€', 'Personalització brodada en 72h', 'Fet a Espanya des de 1984'],
+  'en' => ['Free shipping in mainland Spain over 60€', 'Embroidered personalisation in 72h', 'Made in Spain since 1984'],
+  'fr' => ['Livraison gratuite en Espagne continentale dès 60€', 'Personnalisation brodée en 72h', 'Fabriqué en Espagne depuis 1984'],
+  'it' => ['Spedizione gratuita in Spagna continentale da 60€', 'Personalizzazione ricamata in 72h', 'Fatto in Spagna dal 1984'],
 ];
 $bloque = BlockContent::load(1);
 if ($bloque !== NULL) {

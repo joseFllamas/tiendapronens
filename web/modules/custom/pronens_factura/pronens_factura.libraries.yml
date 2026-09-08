@@ -1,0 +1,5 @@
+pedidos_admin:
+  version: VERSION
+  css:
+    theme:
+      css/pedidos-admin.css: {}

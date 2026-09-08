@@ -32,6 +32,9 @@ services:
   Drupal\pronens_correos_express\Catalogo\MapaEstados:
     class: Drupal\pronens_correos_express\Catalogo\MapaEstados
 
+  Drupal\pronens_correos_express\Catalogo\CalculadoraSituacion:
+    class: Drupal\pronens_correos_express\Catalogo\CalculadoraSituacion
+
   # Pesos. TablaPesos y EstimadorPeso no se declaran como servicios: dependen de
   # la configuración en el momento de usarlos, así que las construye
   # ResolutorPesos, que es el único que cruza la frontera con las entidades.
@@ -86,10 +89,23 @@ services:
       - '@datetime.time'
       - '@logger.channel.pronens_correos_express'
 
+  # Lo que la lista de pedidos necesita saber del envío de cada fila. Es la
+  # frontera entre las reglas puras de CalculadoraSituacion y las entidades.
+  Drupal\pronens_correos_express\ResumenEnvios:
+    class: Drupal\pronens_correos_express\ResumenEnvios
+    arguments:
+      - '@Drupal\pronens_correos_express\GestorExpediciones'
+      - '@Drupal\pronens_correos_express\Catalogo\CalculadoraSituacion'
+      - '@entity_type.manager'
+      - '@entity.repository'
+
   Drupal\pronens_correos_express\SincronizadorSeguimiento:
     class: Drupal\pronens_correos_express\SincronizadorSeguimiento
     arguments:
       - '@entity_type.manager'
+      # Para descartar al encolar los envíos cuyo seguimiento ya ha terminado:
+      # eso vive en el campo `data` y no se puede filtrar en la consulta.
+      - '@Drupal\pronens_correos_express\GestorExpediciones'
       - '@queue'
       - '@state'
       - '@config.factory'
@@ -105,5 +121,10 @@ services:
       - '@Drupal\pronens_correos_express\Peso\RellenadorPesos'
       - '@current_user'
       - '@config.factory'
+    calls:
+      - [setStringTranslation, ['@string_translation']]
+
+  Drupal\pronens_correos_express\Hook\ViewsHooks:
+    class: Drupal\pronens_correos_express\Hook\ViewsHooks
     calls:
       - [setStringTranslation, ['@string_translation']]

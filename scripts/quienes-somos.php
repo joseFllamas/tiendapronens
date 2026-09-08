@@ -11,7 +11,7 @@
  * - El prototipo pone "3 países con envío gratis" y el marquee real dice
  *   "España, Portugal y UE desde 60 €", así que esa cifra se cambia por las
  *   "72 h" del bordado, que sí están en el marquee.
- * - El año de fundación (1986) también sale del marquee, no del prototipo.
+ * - El año de fundación (1984) también sale del marquee, no del prototipo.
  * - El segundo botón del cierre no puede ir a la categoría "Personaliza"
  *   (185): está vacía. Lleva a la ficha de la mochila con inicial (373), que
  *   es el producto que mejor enseña el bordado.
@@ -115,7 +115,7 @@ $secciones = [];
 // 1. Hero con la foto de fondo.
 $secciones[] = Paragraph::create([
   'type' => 'hero',
-  'field_eyebrow' => 'Desde 1986',
+  'field_eyebrow' => 'Desde 1984',
   'field_titulo' => 'Nosotras',
   'field_subtitulo' => 'Empresa líder en la fabricación de prendas escolares que lleva su experiencia y su colección de moda infantil directamente a las familias.',
   'field_imagen_media' => ['target_id' => $foto_hero],

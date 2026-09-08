@@ -43,13 +43,19 @@ display:
           label: Email
           separator: ', '
         state:
-          label: State
+          label: 'Order status'
           separator: ', '
         total_price__number:
           label: Total
           separator: ', '
         operations:
           label: Operations
+        pronens_envio_pedido:
+          label: Shipping
+        pronens_expedicion_pedido:
+          label: Tracking
+        pronens_factura_pedido:
+          label: Invoice
       filters:
         order_number:
           expose:
@@ -59,7 +65,13 @@ display:
             label: Type
         state:
           expose:
-            label: State
+            label: 'Order status'
+        pronens_situacion_envio:
+          expose:
+            label: Shipping
+        pronens_factura_descargada:
+          expose:
+            label: Invoice
       title: Orders
       empty:
         area_text_custom:

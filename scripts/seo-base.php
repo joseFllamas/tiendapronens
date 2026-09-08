@@ -129,7 +129,7 @@ $fija('global', 'Global', [
     '@type' => 'ImageObject',
     'url' => '[site:url]themes/custom/pronens/logo.svg',
   ],
-  'schema_organization_description' => 'Ropa y complementos infantiles y escolares personalizados con bordado. Taller familiar en Barcelona desde 1986.',
+  'schema_organization_description' => 'Ropa y complementos infantiles y escolares personalizados con bordado. Taller familiar en Barcelona desde 1984.',
   'schema_organization_telephone' => '+34 932 762 975',
   'schema_organization_address' => [
     '@type' => 'PostalAddress',
@@ -175,7 +175,7 @@ $fija('front', 'Página de Inicio', [
   'canonical_url' => '[site:url]',
   'shortlink' => '',
   // 153 caracteres: metatag recorta a 160 y la versión anterior perdía el "€".
-  'description' => 'Ropa infantil y escolar personalizada con bordado: batas, bodys, baberos y mochilas. Hecha en España desde 1986. Bordado en 72 h, envío gratis desde 60 €.',
+  'description' => 'Ropa infantil y escolar personalizada con bordado: batas, bodys, baberos y mochilas. Hecha en España desde 1984. Bordado en 72 h, envío gratis desde 60 €.',
   'og_type' => 'website',
   'og_description' => '[current-page:metatag:description]',
   'og_image' => '[node:field_secciones:0:entity:field_imagen_media:entity:field_media_image:pronens_og]',
@@ -188,10 +188,10 @@ $fija('front', 'Página de Inicio', [
 // tenía overrides por idioma (solo con canonical); sin esto la home catalana
 // anunciaría la tienda en castellano en Google.
 $descripciones_home = [
-  'ca' => 'Roba infantil i escolar personalitzada amb brodat: bates, bodis, pitets i motxilles. Feta a Espanya des de 1986. Brodat en 72 h, enviament gratuït des de 60 €.',
-  'fr' => 'Vêtements enfants et scolaires brodés à votre nom : blouses, bodies, bavoirs, sacs à dos. Faits en Espagne depuis 1986. Brodés en 72 h, port offert dès 60 €.',
-  'en' => 'Personalised embroidered kids and school wear: smocks, bodysuits, bibs and backpacks. Made in Spain since 1986. Embroidered in 72 h, free shipping from 60 €.',
-  'it' => 'Abbigliamento bambini e scuola con ricamo del nome: grembiuli, body, bavaglini, zaini. Fatto in Spagna dal 1986. Ricamo in 72 h, spedizione gratis da 60 €.',
+  'ca' => 'Roba infantil i escolar personalitzada amb brodat: bates, bodis, pitets i motxilles. Feta a Espanya des de 1984. Brodat en 72 h, enviament gratuït des de 60 €.',
+  'fr' => 'Vêtements enfants et scolaires brodés à votre nom : blouses, bodies, bavoirs, sacs à dos. Faits en Espagne depuis 1984. Brodés en 72 h, port offert dès 60 €.',
+  'en' => 'Personalised embroidered kids and school wear: smocks, bodysuits, bibs and backpacks. Made in Spain since 1984. Embroidered in 72 h, free shipping from 60 €.',
+  'it' => 'Abbigliamento bambini e scuola con ricamo del nome: grembiuli, body, bavaglini, zaini. Fatto in Spagna dal 1984. Ricamo in 72 h, spedizione gratis da 60 €.',
 ];
 foreach ($descripciones_home as $idioma => $texto) {
   \Drupal::languageManager()->getLanguageConfigOverride($idioma, 'metatag.metatag_defaults.front')
@@ -483,7 +483,7 @@ echo "robots.txt configurado.\n";
 $llms = <<<'LLMS'
 # Pronens
 
-> Ropa y complementos infantiles y escolares personalizados con bordado (nombre o inicial), hechos en un taller familiar de Barcelona desde 1986. Bordado en 72 h. Envío gratis en España peninsular desde 60 €; también se envía a Baleares, Canarias, Portugal y el resto de la UE. Tienda en español, catalán, francés, inglés e italiano.
+> Ropa y complementos infantiles y escolares personalizados con bordado (nombre o inicial), hechos en un taller familiar de Barcelona desde 1984. Bordado en 72 h. Envío gratis en España peninsular desde 60 €; también se envía a Baleares, Canarias, Portugal y el resto de la UE. Tienda en español, catalán, francés, inglés e italiano.
 
 ## Categorías
 

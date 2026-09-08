@@ -42,13 +42,19 @@ display:
           label: 'Correu electrònic'
           separator: ', '
         state:
-          label: Estat
+          label: 'Estat de la comanda'
           separator: ', '
         total_price__number:
           label: Total
           separator: ', '
         operations:
           label: Operacions
+        pronens_envio_pedido:
+          label: Enviament
+        pronens_expedicion_pedido:
+          label: Expedició
+        pronens_factura_pedido:
+          label: Factura
       filters:
         order_number:
           expose:
@@ -58,7 +64,13 @@ display:
             label: Tipus
         state:
           expose:
-            label: Estat
+            label: 'Estat de la comanda'
+        pronens_situacion_envio:
+          expose:
+            label: Enviament
+        pronens_factura_descargada:
+          expose:
+            label: Factura
       title: Comandes
   page_1:
     display_title: Pàgina

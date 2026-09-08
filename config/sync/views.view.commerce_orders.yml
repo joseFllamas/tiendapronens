@@ -2,12 +2,16 @@ uuid: e68f6c02-0c64-4ca8-894e-4ba351a02a6f
 langcode: es
 status: true
 dependencies:
+  config:
+    - pronens_correos_express.settings
   module:
     - commerce
     - commerce_order
     - commerce_price
     - commerce_store
     - options
+    - pronens_correos_express
+    - pronens_factura
     - state_machine
     - user
 _core:
@@ -484,7 +488,7 @@ display:
           entity_type: commerce_order
           entity_field: status
           plugin_id: field
-          label: Estado
+          label: 'Estado del pedido'
           exclude: false
           alter:
             alter_text: false
@@ -538,6 +542,153 @@ display:
           multi_type: separator
           separator: ', '
           field_api_classes: false
+        pronens_envio_pedido:
+          id: pronens_envio_pedido
+          table: commerce_order
+          field: pronens_envio_pedido
+          relationship: none
+          group_type: group
+          admin_label: ''
+          plugin_id: pronens_envio_pedido
+          label: Envío
+          exclude: false
+          alter:
+            alter_text: false
+            text: ''
+            make_link: false
+            path: ''
+            absolute: false
+            external: false
+            replace_spaces: false
+            path_case: none
+            trim_whitespace: false
+            alt: ''
+            rel: ''
+            link_class: ''
+            prefix: ''
+            suffix: ''
+            target: ''
+            nl2br: false
+            max_length: 0
+            word_boundary: true
+            ellipsis: true
+            more_link: false
+            more_link_text: ''
+            more_link_path: ''
+            strip_tags: false
+            trim: false
+            preserve_tags: ''
+            html: false
+          element_type: ''
+          element_class: ''
+          element_label_type: ''
+          element_label_class: ''
+          element_label_colon: false
+          element_wrapper_type: ''
+          element_wrapper_class: ''
+          element_default_classes: true
+          empty: ''
+          hide_empty: false
+          empty_zero: false
+          hide_alter_empty: true
+        pronens_expedicion_pedido:
+          id: pronens_expedicion_pedido
+          table: commerce_order
+          field: pronens_expedicion_pedido
+          relationship: none
+          group_type: group
+          admin_label: ''
+          plugin_id: pronens_expedicion_pedido
+          label: Expedición
+          exclude: false
+          alter:
+            alter_text: false
+            text: ''
+            make_link: false
+            path: ''
+            absolute: false
+            external: false
+            replace_spaces: false
+            path_case: none
+            trim_whitespace: false
+            alt: ''
+            rel: ''
+            link_class: ''
+            prefix: ''
+            suffix: ''
+            target: ''
+            nl2br: false
+            max_length: 0
+            word_boundary: true
+            ellipsis: true
+            more_link: false
+            more_link_text: ''
+            more_link_path: ''
+            strip_tags: false
+            trim: false
+            preserve_tags: ''
+            html: false
+          element_type: ''
+          element_class: ''
+          element_label_type: ''
+          element_label_class: ''
+          element_label_colon: false
+          element_wrapper_type: ''
+          element_wrapper_class: ''
+          element_default_classes: true
+          empty: ''
+          hide_empty: true
+          empty_zero: false
+          hide_alter_empty: true
+        pronens_factura_pedido:
+          id: pronens_factura_pedido
+          table: commerce_order
+          field: pronens_factura_pedido
+          relationship: none
+          group_type: group
+          admin_label: ''
+          plugin_id: pronens_factura_pedido
+          label: Factura
+          exclude: false
+          alter:
+            alter_text: false
+            text: ''
+            make_link: false
+            path: ''
+            absolute: false
+            external: false
+            replace_spaces: false
+            path_case: none
+            trim_whitespace: false
+            alt: ''
+            rel: ''
+            link_class: ''
+            prefix: ''
+            suffix: ''
+            target: ''
+            nl2br: false
+            max_length: 0
+            word_boundary: true
+            ellipsis: true
+            more_link: false
+            more_link_text: ''
+            more_link_path: ''
+            strip_tags: false
+            trim: false
+            preserve_tags: ''
+            html: false
+          element_type: ''
+          element_class: ''
+          element_label_type: ''
+          element_label_class: ''
+          element_label_colon: false
+          element_wrapper_type: ''
+          element_wrapper_class: ''
+          element_default_classes: true
+          empty: ''
+          hide_empty: true
+          empty_zero: false
+          hide_alter_empty: true
         total_price__number:
           id: total_price__number
           table: commerce_order
@@ -804,12 +955,88 @@ display:
           exposed: true
           expose:
             operator_id: state_op
-            label: Estado
+            label: 'Estado del pedido'
             description: ''
             use_operator: false
             operator: state_op
             operator_limit_selection: false
             identifier: state
+            required: false
+            remember: false
+            multiple: false
+            remember_roles:
+              authenticated: authenticated
+            reduce: false
+          is_grouped: false
+          group_info:
+            label: ''
+            description: ''
+            identifier: ''
+            optional: true
+            widget: select
+            multiple: false
+            remember: false
+            default_group: All
+            default_group_multiple: {  }
+            group_items: {  }
+        pronens_situacion_envio:
+          id: pronens_situacion_envio
+          table: commerce_order
+          field: pronens_situacion_envio
+          relationship: none
+          group_type: group
+          admin_label: ''
+          plugin_id: pronens_situacion_envio
+          operator: in
+          value: {  }
+          group: 1
+          exposed: true
+          expose:
+            operator_id: pronens_situacion_envio_op
+            label: Envío
+            description: ''
+            use_operator: false
+            operator: pronens_situacion_envio_op
+            operator_limit_selection: false
+            identifier: envio
+            required: false
+            remember: false
+            multiple: false
+            remember_roles:
+              authenticated: authenticated
+            reduce: false
+          is_grouped: false
+          group_info:
+            label: ''
+            description: ''
+            identifier: ''
+            optional: true
+            widget: select
+            multiple: false
+            remember: false
+            default_group: All
+            default_group_multiple: {  }
+            group_items: {  }
+        pronens_factura_descargada:
+          id: pronens_factura_descargada
+          table: commerce_order
+          field: pronens_factura_descargada
+          relationship: none
+          group_type: group
+          admin_label: ''
+          plugin_id: pronens_factura_descargada
+          operator: in
+          value: {  }
+          group: 1
+          exposed: true
+          expose:
+            operator_id: pronens_factura_descargada_op
+            label: Factura
+            description: ''
+            use_operator: false
+            operator: pronens_factura_descargada_op
+            operator_limit_selection: false
+            identifier: factura
             required: false
             remember: false
             multiple: false
@@ -846,6 +1073,9 @@ display:
             uid: uid
             mail: uid
             state: state
+            pronens_envio_pedido: pronens_envio_pedido
+            pronens_expedicion_pedido: pronens_expedicion_pedido
+            pronens_factura_pedido: pronens_factura_pedido
             total_price__number: total_price__number
             operations: operations
           default: placed
@@ -894,6 +1124,27 @@ display:
               responsive: ''
             state:
               sortable: true
+              default_sort_order: asc
+              align: ''
+              separator: ''
+              empty_column: false
+              responsive: ''
+            pronens_envio_pedido:
+              sortable: false
+              default_sort_order: asc
+              align: ''
+              separator: ''
+              empty_column: false
+              responsive: ''
+            pronens_expedicion_pedido:
+              sortable: false
+              default_sort_order: asc
+              align: ''
+              separator: ''
+              empty_column: true
+              responsive: ''
+            pronens_factura_pedido:
+              sortable: false
               default_sort_order: asc
               align: ''
               separator: ''

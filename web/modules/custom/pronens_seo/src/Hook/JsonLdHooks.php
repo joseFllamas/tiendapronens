@@ -62,7 +62,7 @@ final class JsonLdHooks {
   private const EMPRESA = [
     'legalName' => 'Maria-Elisa Moreno Iglesias',
     'taxID' => 'ES36928020W',
-    'foundingDate' => '1986',
+    'foundingDate' => '1984',
     'currenciesAccepted' => 'EUR',
     'sameAs' => [self::WEB_FABRICANTE],
   ];

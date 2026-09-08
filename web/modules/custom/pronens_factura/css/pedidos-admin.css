@@ -1,0 +1,55 @@
+/**
+ * Columna de factura en la lista de pedidos del backoffice.
+ *
+ * Tema de administración (Claro): colores literales y texto oscuro sobre fondo
+ * claro, el mismo criterio que las columnas de envío.
+ */
+
+.pronens-factura__boton {
+  display: inline-block;
+  padding: 0.2em 0.7em;
+  border: 1px solid #d3d4d9;
+  border-radius: 2px;
+  background: #fff;
+  color: #0036b1;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.pronens-factura__boton::before {
+  /* Flecha hacia abajo: dice «esto se descarga» sin gastar una palabra. */
+  content: "⤓ ";
+}
+
+.pronens-factura__boton:hover,
+.pronens-factura__boton:focus {
+  border-color: #0036b1;
+  background: #f0f4ff;
+  text-decoration: underline;
+}
+
+.pronens-factura__marca {
+  margin-top: 0.3em;
+  font-size: 0.8125rem;
+  line-height: 1.3;
+}
+
+/* Ya impresa: informativo, para que no compita con lo que queda pendiente. */
+.pronens-factura__marca--si {
+  color: #14562a;
+}
+
+/* Lo que queda por hacer, que es lo que se viene a buscar a esta columna. */
+.pronens-factura__marca--no {
+  color: #8a4b00;
+  font-weight: 600;
+}
+
+.views-table .views-field-pronens-factura-pedido {
+  width: 8em;
+  hyphens: none;
+  overflow-wrap: normal;
+  word-break: normal;
+}

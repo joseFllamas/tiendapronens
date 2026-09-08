@@ -10,7 +10,7 @@ tags:
   og_url: '[site:url]'
   title: 'Ropa infantil y escolar personalizada con bordado | Pronens'
   canonical_url: '[site:url]'
-  description: 'Ropa infantil y escolar personalizada con bordado: batas, bodys, baberos y mochilas. Hecha en España desde 1986. Bordado en 72 h, envío gratis desde 60 €.'
+  description: 'Ropa infantil y escolar personalizada con bordado: batas, bodys, baberos y mochilas. Hecha en España desde 1984. Bordado en 72 h, envío gratis desde 60 €.'
   og_type: website
   og_description: '[current-page:metatag:description]'
   og_image: '[node:field_secciones:0:entity:field_imagen_media:entity:field_media_image:pronens_og]'

@@ -24,7 +24,7 @@ final class GrafoCalculatorTest extends TestCase {
    */
   private function datos(): array {
     return [
-      'empresa' => ['legalName' => 'Quien Sea', 'foundingDate' => '1986'],
+      'empresa' => ['legalName' => 'Quien Sea', 'foundingDate' => '1984'],
       'vendedor' => 'https://ejemplo.test/#organization',
       'devolucion' => ['@type' => 'MerchantReturnPolicy', '@id' => 'https://ejemplo.test/#dev', 'merchantReturnDays' => 30],
       'devolucionRef' => 'https://ejemplo.test/#dev',
@@ -43,7 +43,7 @@ final class GrafoCalculatorTest extends TestCase {
     $salida = GrafoCalculator::enriquecer($grafo, $this->datos());
 
     self::assertSame('Quien Sea', $salida[0]['legalName']);
-    self::assertSame('1986', $salida[0]['foundingDate']);
+    self::assertSame('1984', $salida[0]['foundingDate']);
     self::assertSame(30, $salida[0]['hasMerchantReturnPolicy']['merchantReturnDays']);
   }
 

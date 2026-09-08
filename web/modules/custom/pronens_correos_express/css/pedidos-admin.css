@@ -1,0 +1,141 @@
+/**
+ * Columnas de envío en la lista de pedidos del backoffice.
+ *
+ * Se pinta con el tema de administración (Claro), así que nada de tokens del
+ * tema de la tienda: colores literales, elegidos con texto oscuro sobre fondo
+ * claro para que todos los chips pasen AA sobre cualquier fila (las filas
+ * alternas de Claro son blancas y grises muy claros).
+ */
+
+.pronens-envio__chip {
+  display: inline-block;
+  padding: 0.15em 0.6em;
+  border-radius: 1em;
+  background: #eef0f2;
+  color: #4a4d55;
+  font-size: 0.875rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+/* Lo único que pide trabajo hoy: es el chip que tiene que saltar a la vista. */
+.pronens-envio__chip--por-expedir {
+  background: #fdf0d5;
+  color: #6b4200;
+  box-shadow: inset 3px 0 0 #c07600;
+}
+
+/* Alta hecha y etiqueta lista; el paquete sigue en el taller. */
+.pronens-envio__chip--expedido {
+  background: #e8f1fb;
+  color: #10457e;
+}
+
+.pronens-envio__chip--enviado {
+  background: #e6f4f4;
+  color: #0b5c5c;
+}
+
+.pronens-envio__chip--recoge-en-tienda {
+  background: #f1ebfa;
+  color: #4b2a7b;
+}
+
+.pronens-envio__chip--entregado {
+  background: #e8f6ec;
+  color: #14562a;
+}
+
+/* Excepción que alguien tiene que resolver. */
+.pronens-envio__chip--devuelto {
+  background: #fdecea;
+  color: #8b1a10;
+  box-shadow: inset 3px 0 0 #b3261e;
+}
+
+.pronens-envio__metodo {
+  margin-top: 0.3em;
+  color: #55565b;
+  font-size: 0.8125rem;
+  line-height: 1.3;
+}
+
+.pronens-expedicion {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.pronens-expedicion li {
+  margin: 0 0 0.3em;
+  padding: 0;
+  list-style: none;
+}
+
+.pronens-expedicion li:last-child {
+  margin-bottom: 0;
+}
+
+/* El número se copia y se pega en la web de Correos Express: monoespaciado y
+   sin partirse a mitad de línea. */
+.pronens-expedicion__codigo {
+  font-family: ui-monospace, "SFMono-Regular", "Menlo", "Consolas", monospace;
+  font-size: 0.8125rem;
+  white-space: nowrap;
+}
+
+/* Debajo del código y no al lado: en la misma línea la columna se iba a lo
+   ancho y empujaba al resto de la tabla. */
+.pronens-expedicion__etiqueta {
+  display: inline-block;
+  margin-top: 0.15em;
+  font-size: 0.8125rem;
+}
+
+/**
+ * Anchos de las dos columnas nuevas.
+ *
+ * Sin esto la tabla se queda sin sitio y Claro parte las palabras por sílabas:
+ * los encabezados salían como «Esta-do» y «To-tal» y el estado como
+ * «Comple-ted». Se reserva lo que necesitan las dos y se deja de apretar al
+ * resto.
+ */
+.views-table .views-field-pronens-envio-pedido {
+  width: 9.5em;
+}
+
+.views-table .views-field-pronens-expedicion-pedido {
+  width: 9em;
+}
+
+/* Los códigos y los encabezados no se cortan a mitad de palabra. */
+.views-table .views-field-pronens-envio-pedido,
+.views-table .views-field-pronens-expedicion-pedido {
+  hyphens: none;
+  overflow-wrap: normal;
+  word-break: normal;
+}
+
+/**
+ * Guionado y saltos: apagados donde estorban, no en toda la tabla.
+ *
+ * Con tres columnas más Claro se queda sin sitio y parte por sílabas: salían
+ * «To-tal», «Esta-do» y el número de pedido en dos líneas. Se apaga en los
+ * encabezados, en el número y en el importe, y NO en la celda del cliente: ahí
+ * el correo es la celda más ancha de la fila y dejar que se parta es lo que
+ * permite que la tabla quepa. La hoja solo se carga en las pantallas que llevan
+ * estas columnas.
+ */
+.view-commerce-orders .views-table th,
+.view-commerce-orders .views-field-order-number,
+.view-commerce-orders .views-field-state,
+.view-commerce-orders .views-field-total-price {
+  hyphens: none;
+  overflow-wrap: normal;
+  word-break: normal;
+}
+
+.view-commerce-orders .views-field-order-number,
+.view-commerce-orders .views-field-total-price {
+  white-space: nowrap;
+}

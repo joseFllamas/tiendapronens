@@ -1,0 +1,19 @@
+# Rastro de auditoría de las descargas de factura, en la pestaña de actividad
+# del pedido. Es el mecanismo nativo de Commerce, así que no hace falta ningún
+# registro propio para saber quién se llevó el PDF y cuándo.
+#
+# Son DOS plantillas y no una a propósito: la misma ruta de descarga la usan el
+# taller (desde la lista de pedidos y desde la ficha) y el cliente (desde su
+# área). El indicador «¿ya está descargada?» de la lista de pedidos tiene que
+# mirar solo las descargas del taller, porque lo que pregunta es si alguien de
+# Pronens ya imprimió esa factura. Una descarga del cliente se registra igual,
+# para tenerlo apuntado, pero no marca la casilla.
+pronens_factura_descargada:
+  category: commerce_order
+  label: 'Factura descargada por la tienda'
+  template: '<p>Factura <strong>{{ numero }}</strong> descargada.</p>'
+
+pronens_factura_descargada_cliente:
+  category: commerce_order
+  label: 'Factura descargada por el cliente'
+  template: '<p>El cliente descargó la factura <strong>{{ numero }}</strong>.</p>'

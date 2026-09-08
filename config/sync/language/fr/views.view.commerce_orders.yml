@@ -42,13 +42,19 @@ display:
           label: Courriel
           separator: ', '
         state:
-          label: État
+          label: 'Statut de la commande'
           separator: ', '
         total_price__number:
           label: Total
           separator: ', '
         operations:
           label: Actions
+        pronens_envio_pedido:
+          label: Livraison
+        pronens_expedicion_pedido:
+          label: Suivi
+        pronens_factura_pedido:
+          label: Facture
       filters:
         order_number:
           expose:
@@ -58,7 +64,13 @@ display:
             label: Type
         state:
           expose:
-            label: État
+            label: 'Statut de la commande'
+        pronens_situacion_envio:
+          expose:
+            label: Livraison
+        pronens_factura_descargada:
+          expose:
+            label: Facture
       title: Commandes
   page_1:
     display_title: Page

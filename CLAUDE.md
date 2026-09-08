@@ -1646,12 +1646,7 @@ Donde este documento y la realidad del repo discrepan, manda esta lista (decidid
     correo que la tienda, para que los dos JSON-LD describan el mismo negocio sin discrepancias.
   - **Descripción de reserva en los 4 idiomas** por `hook_metatags_alter`, para las páginas que no
     traen una propia (que eran todas): sin ella Google componía el fragmento con el menú.
-  - **NO se declara `foundingDate`, a propósito**: conviven **tres años** en los contenidos de las dos
-    webs. «desde 1980» en el hero de pronens.com y en sus cuatro idiomas (párrafos 9, 280, 345 y 410),
-    «todo empezó en 1984» y «la primera fábrica en Barcelona en 1984» en otros dos párrafos de esa
-    misma web (141 y 196), y «desde 1986» en toda la tienda (marquee, portada, llms.txt, Quiénes
-    somos y su propio JSON-LD). **Es decisión del cliente cuál es el bueno**; hasta entonces publicarlo
-    como dato estructurado fijaría en el grafo de conocimiento un año que la empresa se contradice.
+  - **`foundingDate` es 1984** (ver la resolución del año de fundación).
   - **El H1 de la portada se pone al RENDERIZAR, no en el contenido** (`Titular::aH1`): el titular lo
     escribió el editor dentro del cuerpo de un párrafo y quedó como `<h3>`, con un `<h3>&nbsp;</h3>`
     vacío delante. No se corrige en el contenido porque el formato `basic_html` no admite `<h1>` ni
@@ -1671,6 +1666,122 @@ Donde este documento y la realidad del repo discrepan, manda esta lista (decidid
     `http_cache_control.settings.yml` con la deriva del entorno local (caché de página a 0, CSS sin
     agregar). **Desplegarlos apagaría la caché en producción**: hay que revertirlos y dejar solo el
     alta del módulo en `core.extension.yml`.
+
+- **El año de fundación es 1984, y se unificó en las dos webs (2026-09-03, cliente)**: convivían
+  **tres**. «desde 1980» en pronens.com (hero, y el copy comercial de 29 fichas de producto y 6
+  categorías en cuatro idiomas), «todo empezó en 1984» y «nuestros orígenes se remontan al año 1984»
+  en la propia página de quiénes somos de esa misma web, y «desde 1986» en toda la tienda (marquee,
+  eyebrow del hero, sección de historia, meta descriptions, llms.txt y JSON-LD). Lo corrigen dos
+  scripts homónimos, `scripts/anyo-fundacion.php`, uno en cada proyecto. Lo que conviene no
+  reinventar:
+  - **Se sustituye la cifra DETRÁS DE LA PREPOSICIÓN, no el número suelto**: de las 163 apariciones
+    de «1980» en pronens.com, 25 son ids hexadecimales de los atributos `data-list-item-id` que deja
+    CKEditor y que contienen esa secuencia por casualidad. Un reemplazo a ciegas habría roto el
+    marcado de esas fichas. El patrón cubre `desde|des de|des del|since|depuis|dal`; **«des del» hubo
+    que añadirlo aparte**, es la variante catalana con artículo y se escapaba del primer patrón.
+  - **Sin revisión nueva en los párrafos**: se referencian desde su padre por revisión concreta
+    (`entity_reference_revisions`), así que crear una deja al nodo apuntando a la vieja y **el cambio
+    no se ve en la página** aunque el script diga que lo hizo. Pasó en la tienda con el eyebrow del
+    hero y la sección de historia, y se detectó porque la home seguía diciendo 1986 después de
+    ejecutar el script.
+  - **Queda pendiente y no se puede tocar por código**: el año está también **incrustado en alguna
+    imagen del carrusel del hero de pronens.com** («Pronens® desde 1980», visto en una captura). Hay
+    que reexportar esa pieza desde el diseño. Los cinco banners de `sites/default/files/2026-02/` que
+    se revisaron no lo llevan, así que es otra del slider.
+  - **Aparte, el banner «escuelas» dice «en 2025 hemos trabajado con 1637 escuelas»**, dato de
+    campaña que caduca y que ya está vencido.
+
+- **La lista de pedidos dice ahora en qué punto está cada uno (2026-09-08, cliente)**: la queja era
+  «una vez el pedido se completa pone "completado", y eso no cambia aunque procese el envío». Es
+  cierto y no era un fallo: `order_default` pasa a `completed` al pagar y ahí se queda, así que esa
+  columna habla del pedido (¿pagado? ¿anulado?) y no de la caja. /admin/commerce/orders no decía en
+  ninguna parte qué quedaba por expedir, qué ya tenía número de expedición ni quién había elegido
+  recoger en tienda. Tres columnas nuevas (**Envío**, **Expedición**, **Factura**), tres filtros
+  expuestos y los estados por fin en castellano. Lo que conviene no reinventar:
+  - **Los pseudocampos de Views sacan el dato de la ENTIDAD de la fila, no de la consulta**:
+    `query()` está vacío a propósito y `preRender()` precarga los envíos y las facturas de la página
+    entera. Se descartó la relación de Views hacia `shipments`, que es multivalor y habría duplicado
+    la fila de un pedido con dos cajas: es el mismo pisotón que ya dio el idioma en el catálogo y en
+    la lista de variaciones.
+  - **Los filtros van con subconsultas EXISTS** por lo mismo (`SituacionDelEnvio`,
+    `FacturaDescargada`). Los nombres de tabla entre llaves para que la conexión ponga el prefijo, y
+    dentro del SQL solo hay enteros de configuración pasados por `intval` y literales de estado
+    escritos en el código: ningún dato de la petición.
+  - **La vista `commerce_orders` tiene override de configuración en los CINCO idiomas**, así que la
+    etiqueta de la config base NO SE VE NUNCA. Se descubrió cambiando «Estado» por «Estado del
+    pedido»: el script guardaba bien y la pantalla seguía igual. Las etiquetas van en
+    `scripts/pedidos-admin-etiquetas.php`, como los prefijos de pathauto y «Tracking link».
+  - **«Enviado» y no «En tránsito»** (cliente): el mismo estado del envío (`shipped`) sale en la
+    pestaña de envíos, en el correo de expedición y en «Mis pedidos», y tiene que llamarse igual en
+    los cuatro sitios.
+  - **La situación es lógica pura con sus pruebas** (`CalculadoraSituacion` + `SituacionPedido`, 19
+    casos). La regla de fondo: un pedido con varias cajas dice **lo que le queda por hacer**, no lo
+    más adelantado, y una devolución manda sobre todo lo demás porque pide atención. El vocabulario
+    del cliente sigue aparte en `CuentaHooks::estadoDelPedido` del tema, que es más grueso a
+    propósito (cuatro pasos) y no depende de este módulo.
+  - **El chip de la columna es más fino que el filtro, y es deliberado**: el seguimiento de Correos
+    Express vive en el campo `data` del envío, que es un blob serializado, así que «Entregado» y
+    «Devuelto» se VEN pero no se FILTRAN (caen bajo «Enviado o entregado»). Las dos opciones de
+    trabajo diario, «Por expedir» y «Expedido», coinciden exactamente con lo que dice el chip.
+  - **El código sale de `tracking_code` y no solo de los datos de la expedición**: hay envíos con
+    seguimiento puesto a mano y el cliente quiere verlos. Que venga de Correos Express es lo que
+    decide si hay enlace de seguimiento y enlace a la etiqueta.
+  - **El enlace a la etiqueta está en la columna a propósito**: la acción masiva «Generar
+    expediciones» ya estaba en esta pantalla y devuelve aquí, así que lo siguiente que se hace es
+    imprimir. Sin el enlace había que entrar en cada pedido y pasar por su pestaña de envíos.
+  - **Ojo con el ancho**: con tres columnas más Claro se queda sin sitio y parte por sílabas hasta
+    los encabezados («To-tal», «Esta-do»). El `hyphens: none` va en los encabezados, el número y el
+    importe, y NO en la celda del cliente, donde el correo es lo más ancho de la fila y dejar que se
+    parta es lo que permite que quepa. A 1440 px con la barra lateral de Claro abierta se sale
+    «Operaciones»: se pliega la barra con el botón « y entra. Si hiciera falta más, lo natural es
+    fundir Expedición dentro de Envío, que es un cambio de una línea en el script.
+- **La sincronización de Correos Express no se enteraba nunca de las entregas (2026-09-08)**:
+  `enviosPendientes()` filtraba `state = 'ready'`, pero en cuanto el seguimiento detecta que el
+  paquete se mueve aplica la transición `ship` y el envío pasa a **`shipped`**, con lo que dejaba de
+  entrar en la consulta **para siempre**. Se vio en el pedido P-2026-0004, clavado en «EN REPARTO»
+  del 4 de septiembre cuatro días después. Ahora entran `ready` y `shipped`, y los que ya han
+  terminado su recorrido se descartan **en PHP** con `seguimientoTerminado()` (que ya usaba el
+  trabajador de la cola) sobre una ventana de cuatro candidatos por hueco: el seguimiento vive en el
+  blob `data` y no se puede filtrar en la consulta. El filtro en PHP no es un lujo: un envío
+  entregado deja su `changed` quieto el día de la entrega mientras el de los vivos avanza con cada
+  consulta, así que sin él los entregados ocuparían la cabeza de `changed ASC` para siempre. Si algún
+  día la ventana entera son entregados, queda un aviso en el registro en vez de un silencio.
+- **La lista de pedidos dice si la factura ya se ha descargado, y se descarga desde ahí
+  (2026-09-08, cliente)**: «la logística se encalla en la descarga de factura». Había que entrar en
+  cada pedido, abrir su pestaña de facturas, bajar el PDF y volver, sin constancia de cuáles estaban
+  hechas. Columna **Factura** con el botón de descarga y debajo «Sin descargar» o «Descargada 8 Sep»
+  (con el número de veces si se repitió), más el filtro «Sin descargar», que es la lista de trabajo.
+  Lo que conviene no reinventar:
+  - **El registro es una entrada de `commerce_log`, no un campo nuevo**: sale gratis en la actividad
+    del pedido con fecha y usuario, tiene columnas de verdad (`template_id`, `source_entity_id`) para
+    poder filtrar, y no hay nada que migrar. Un pedido antiguo sin registro sale «Sin descargar», que
+    es lo correcto.
+  - **Dos plantillas, no una**: la misma ruta la usan el taller y el cliente desde su área. La
+    descarga del cliente se apunta con `pronens_factura_descargada_cliente` y **no marca la
+    casilla**, porque lo que se pregunta es si alguien de Pronens ya la imprimió. Se distingue por el
+    permiso `access commerce_order overview`.
+  - **Se apunta en la RESPUESTA, no en la petición**: esa ruta puede acabar en 404 (si el PDF no se
+    pudo generar, `InvoiceController` lanza `NotFoundHttpException`), y una factura que no se ha
+    llevado nadie no se puede marcar como descargada. El subscriber comprueba que la respuesta es un
+    `BinaryFileResponse` correcto.
+  - **`$factura->label()` devuelve «Factura #2026-21»**, no el número: en el botón repetía la palabra
+    de la columna y en el registro salía «Factura Factura #2026-21 descargada». Va
+    `getInvoiceNumber()`.
+  - **La factura NO cuelga del pedido**: la referencia va al contrario (`orders` en la factura), así
+    que `ResumenFacturas::precargar()` resuelve la página con una consulta al almacén en vez de una
+    por fila. Las facturas en borrador se dejan fuera: la ruta de descarga las rechaza y el botón
+    daría un 404.
+- **Los estados del pedido, del pago y de la factura salían en INGLÉS (2026-09-08)**: la lista decía
+  «Completed» en todas las filas, la pestaña de facturas «Paid» y la de pagos «Completed» y «New».
+  Commerce no traduce sus workflows. Lo arregla `scripts/traducir-pedidos-admin.php`, hermano de
+  `traducir-envios.php`, con las mismas trampas: **los contextos son obligatorios** (`workflow state`
+  y `workflow transition`, si no no las mira nadie y no avisa), **una cadena la comparten todos los
+  workflows** (así que las etiquetas no concuerdan con el género de nada: son chips sueltos), y las
+  transiciones se traducen **por lo que hacen**, que son botones. «Refunded» va como «Reembolsado» y
+  no «Devuelto» a propósito: aquí «Devuelto» es el paquete que Correos Express trae de vuelta.
+  - **Y `traducir-envios.php` NO se había ejecutado en esta base de datos** (import de producción),
+    así que la pestaña de envíos seguía diciendo «Draft», «Finalize shipment» y «Cancel shipment».
+    Se lanzó también: 41 traducciones. **Conviene lanzarlo en producción igualmente.**
 
 ## Orden de trabajo
 1. **Tema `pronens`**: tokens CSS (custom properties con los colores/tipos del README), fuentes

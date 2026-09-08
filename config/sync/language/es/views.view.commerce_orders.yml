@@ -34,13 +34,19 @@ display:
           label: 'Correo electrónico'
           separator: ', '
         state:
-          label: Estado
+          label: 'Estado del pedido'
           separator: ', '
         total_price__number:
           label: Total
           separator: ', '
         operations:
           label: Operaciones
+        pronens_envio_pedido:
+          label: Envío
+        pronens_expedicion_pedido:
+          label: Expedición
+        pronens_factura_pedido:
+          label: Factura
       filters:
         order_number:
           expose:
@@ -50,7 +56,13 @@ display:
             label: Tipo
         state:
           expose:
-            label: Estado
+            label: 'Estado del pedido'
+        pronens_situacion_envio:
+          expose:
+            label: Envío
+        pronens_factura_descargada:
+          expose:
+            label: Factura
       title: Pedidos
   page_1:
     display_title: Página
