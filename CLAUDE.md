@@ -1835,6 +1835,15 @@ Donde este documento y la realidad del repo discrepan, manda esta lista (decidid
     y reindexa. Simula por defecto y escribe con `--crear`; es idempotente por SKU y el clon nace
     **despublicado y sin destacar**. Es contenido: **ejecutarlo en producción**, no viaja en
     `config/sync`.
+  - **Cada encargo es un fichero de `scripts/tandas/`** que devuelve el array de productos a
+    clonar y se le pasa al script como argumento (sin argumento, los lista). El script es solo la
+    maquinaria, así que la tanda queda como registro de lo que se hizo. Hechas: `269-colores.php`
+    (el blusón de educadora en rojo y blanco, producción 2026-09-09) y `269-estampado.php` (el
+    mismo con el estampado «Teachers are the real influencers» en blanco, pistacho, rojo y lila,
+    los cuatro clonados del 269 porque es el único origen con el mismo id en todos los entornos).
+    Cuando la tanda es un producto en varios colores, el fichero monta el array con un bucle sobre
+    una tabla de colores y los nombres de foto salen de un patrón: una errata en el nombre del
+    fichero se corrige una vez y no ocho.
   - **No hay módulo y se descartaron los tres que hay**: `commerce_product_clone` es de 2014 (D7),
     `commerce_quick_node_clone` tiene unos 84 sitios y ninguna cobertura de seguridad, y
     `entity_clone` (unos 41.500 sitios, sin release estable) por defecto **referencia** las

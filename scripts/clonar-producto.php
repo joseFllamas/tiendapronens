@@ -60,10 +60,16 @@
  * Idempotente: si los SKU nuevos ya existen, la tanda se da por hecha y se
  * salta. Si existen solo algunos, se para y lo dice (clonado a medias).
  *
+ * Los encargos NO viven aquí: cada uno es un fichero de scripts/tandas/ que
+ * devuelve el array de productos a clonar. Así la maquinaria es una sola y
+ * cada tanda queda como registro de lo que se hizo, igual que el resto de
+ * scripts del repo.
+ *
  * Uso:
- *   ddev drush php:script scripts/clonar-producto.php             (simulación)
- *   ddev drush php:script scripts/clonar-producto.php -- --crear  (escribe)
- * En producción, lo mismo sin el ddev de delante.
+ *   ddev drush php:script scripts/clonar-producto.php -- <tanda>
+ *   ddev drush php:script scripts/clonar-producto.php -- <tanda> --crear
+ * donde <tanda> es scripts/tandas/<fichero>.php. Sin fichero, lista las
+ * disponibles. En producción, lo mismo sin el ddev de delante.
  *
  * Guía de uso, con el procedimiento en producción y qué revisar antes de
  * publicar: scripts/clonar-producto.md.
@@ -71,6 +77,7 @@
 
 declare(strict_types=1);
 
+use Drupal\commerce_price\Price;
 use Drupal\Core\File\FileExists;
 use Drupal\Core\File\FileSystemInterface;
 use Drupal\file\Entity\File;
@@ -78,71 +85,41 @@ use Drupal\media\Entity\Media;
 use Drupal\search_api\Entity\Index;
 
 // ---------------------------------------------------------------------------
-// La tanda. Esto es lo único que cambia de un encargo a otro.
-//
-// Rutas de foto relativas a la raíz del repo. La principal es obligatoria si
-// se quiere crear con fotos; la galería es opcional.
+// La tanda: un fichero de scripts/tandas/ que devuelve el array de encargos.
 // ---------------------------------------------------------------------------
-$tandas = [
-  [
-    'origen' => 269,
-    'titulos' => [
-      'es' => 'Blusón Educadora Infantil color rojo',
-      'ca' => 'Brusa d’educadora infantil de color vermell',
-      'en' => 'Red Early Years Educator Tunic',
-      'fr' => 'Blouse d’éducatrice de jeunes enfants couleur rouge',
-      'it' => 'Blusa da educatrice dell’infanzia color rosso',
-    ],
-    'texto' => [
-      'es' => ['pistacho' => 'rojo'],
-      'ca' => ['pistatxo' => 'vermell', 'festuc' => 'vermell'],
-      'en' => ['pistachio green' => 'red', 'Pistachio-coloured' => 'Red', 'pistachio' => 'red'],
-      'fr' => ['couleur pistache' => 'couleur rouge', 'pistache' => 'rouge'],
-      'it' => ['pistacchio' => 'rosso'],
-    ],
-    'sku' => ['PIST' => 'ROJO'],
-    'skus' => [],
-    'stock' => 0,
-    'color_attr' => NULL,
-    'hilo' => NULL,
-    'fotos' => [
-      'principal' => 'fotos-clones/bluson-rojo.jpeg',
-      'galeria' => ['fotos-clones/bluson-rojo-puesto.jpeg'],
-    ],
-  ],
-  [
-    'origen' => 269,
-    'titulos' => [
-      'es' => 'Blusón Educadora Infantil color blanco',
-      'ca' => 'Brusa d’educadora infantil de color blanc',
-      'en' => 'White Early Years Educator Tunic',
-      'fr' => 'Blouse d’éducatrice de jeunes enfants couleur blanche',
-      'it' => 'Blusa da educatrice dell’infanzia color bianco',
-    ],
-    'texto' => [
-      'es' => ['pistacho' => 'blanco'],
-      'ca' => ['pistatxo' => 'blanc', 'festuc' => 'blanc'],
-      'en' => ['pistachio green' => 'white', 'Pistachio-coloured' => 'White', 'pistachio' => 'white'],
-      'fr' => ['couleur pistache' => 'couleur blanche', 'pistache' => 'blanc'],
-      'it' => ['pistacchio' => 'bianco'],
-    ],
-    'sku' => ['PIST' => 'BLAN'],
-    'skus' => [],
-    'stock' => 0,
-    'color_attr' => NULL,
-    'hilo' => NULL,
-    'fotos' => [
-      'principal' => 'fotos-clones/bluson-blanco.jpeg',
-      'galeria' => ['fotos-clones/bluson-blanco-puesto.jpeg'],
-    ],
-  ],
-];
+$argumentos = $extra ?? [];
+$crear = in_array('--crear', $argumentos, TRUE);
+$raiz = dirname(DRUPAL_ROOT);
+
+$fichero = NULL;
+foreach ($argumentos as $argumento) {
+  if (!str_starts_with((string) $argumento, '--')) {
+    $fichero = (string) $argumento;
+  }
+}
+if ($fichero === NULL) {
+  print "Falta el fichero de la tanda.\n";
+  print "Uso: drush php:script scripts/clonar-producto.php -- scripts/tandas/<fichero>.php [--crear]\n";
+  print "Tandas disponibles:\n";
+  foreach (glob($raiz . '/scripts/tandas/*.php') as $disponible) {
+    print '  scripts/tandas/' . basename($disponible) . "\n";
+  }
+  return;
+}
+$ruta_tanda = str_starts_with($fichero, '/') ? $fichero : $raiz . '/' . $fichero;
+if (!is_file($ruta_tanda)) {
+  print "No encuentro la tanda: $ruta_tanda\n";
+  return;
+}
+$tandas = require $ruta_tanda;
+if (!is_array($tandas) || $tandas === []) {
+  print "La tanda $fichero no devuelve un array de encargos.\n";
+  return;
+}
+print "Tanda: $fichero (" . count($tandas) . " productos)\n";
 
 // Campos del producto que NO se copian: son fotos del color viejo.
 $vaciar_producto = ['field_imagen_principal', 'field_galeria', 'field_bordado_foto'];
-
-$argumentos = $extra ?? [];
-$crear = in_array('--crear', $argumentos, TRUE);
 
 $gestor = \Drupal::entityTypeManager();
 $almacen_producto = $gestor->getStorage('commerce_product');
@@ -151,7 +128,6 @@ $pathauto = \Drupal::service('pathauto.generator');
 $ficheros = \Drupal::service('file_system');
 $ahora = \Drupal::time()->getRequestTime();
 $carpeta = 'public://' . date('Y-m', $ahora);
-$raiz = dirname(DRUPAL_ROOT);
 
 print $crear
   ? "Modo ESCRITURA: se van a crear productos.\n\n"
@@ -284,12 +260,13 @@ foreach ($tandas as $numero => $tanda) {
   }
 
   print sprintf(
-    "  %d variaciones | idiomas: %s | fotos: %d | stock: %s | foto por variación: %s\n",
+    "  %d variaciones | idiomas: %s | fotos: %d | stock: %s | foto por variación: %s | precio: %s\n",
     count($variaciones),
     implode(',', array_keys($origen->getTranslationLanguages())),
     count($rutas),
     $tanda['stock'] > 0 ? (string) $tanda['stock'] . ' uds' : 'SIN transacción (saldrá Agotado)',
-    $comparten ? 'la principal, como en el origen' : 'vacía, en el origen no era la principal'
+    $comparten ? 'la principal, como en el origen' : 'vacía, en el origen no era la principal',
+    isset($tanda['precio']) ? $tanda['precio'] . ' €' : 'el del origen'
   );
   foreach ($variaciones as $variacion) {
     print sprintf("    SKU %-30s → %s\n", $variacion->getSku(), $skus[$variacion->id()]);
@@ -342,7 +319,8 @@ foreach ($tandas as $numero => $tanda) {
     $traduccion->setUnpublished();
     if (isset($tanda['titulos'][$codigo])) {
       $traduccion->setTitle($tanda['titulos'][$codigo]);
-    } else {
+    }
+    else {
       print "    AVISO: sin título para $codigo, se queda el del origen.\n";
     }
     $mapa = $tanda['texto'][$codigo] ?? [];
@@ -388,6 +366,12 @@ foreach ($tandas as $numero => $tanda) {
     $nueva = $variacion->createDuplicate();
     $nueva->set('product_id', NULL);
     $nueva->setSku($skus[$variacion->id()]);
+    if (isset($tanda['precio'])) {
+      // El precio se copia salvo que la tanda diga otro: una prenda estampada
+      // no tiene por qué costar lo mismo que la lisa. Se respeta la moneda de
+      // la variación de origen.
+      $nueva->setPrice(new Price((string) $tanda['precio'], $variacion->getPrice()->getCurrencyCode()));
+    }
     $nueva->setCreatedTime($ahora);
     $nueva->setChangedTime($ahora);
     if ($nueva->hasField('field_imagenes')) {
@@ -424,7 +408,8 @@ foreach ($tandas as $numero => $tanda) {
       );
     }
     print "  Stock: " . $tanda['stock'] . " uds en cada una de las " . count($clon->getVariations()) . " variaciones.\n";
-  } else {
+  }
+  else {
     print "  AVISO: sin stock. Ponlo en cada variación antes de publicar o saldrá Agotado.\n";
   }
 
