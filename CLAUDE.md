@@ -1771,6 +1771,17 @@ Donde este documento y la realidad del repo discrepan, manda esta lista (decidid
     que `ResumenFacturas::precargar()` resuelve la página con una consulta al almacén en vez de una
     por fila. Las facturas en borrador se dejan fuera: la ruta de descarga las rechaza y el botón
     daría un 404.
+  - **La casilla se colorea: verde claro si está descargada, amarillo suave si falta** (cliente,
+    2026-09-08). La primera idea fue teñir la FILA entera de verde y se descartó con el cliente: a
+    lo ancho se lee como «este pedido está listo», y un pedido puede tener la factura impresa y
+    seguir sin expedir. Acotado a su columna, el color dice exactamente lo que sabe; los pedidos sin
+    factura se quedan en blanco, que también es información. La clase la pone
+    `ViewsHooks::coloreaLaCasillaDeFactura` en el `<td>`, y no un `:has()` de CSS, porque el dato es
+    «esta factura está descargada» y no «esta celda tiene una marca dentro». Dos detalles de
+    especificidad: Claro pinta `tr { background: white }` con 0,0,1, así que una clase en el `td` le
+    gana, pero su `tr:hover` (0,1,1) también pinta fondo y borraba el color al pasar el ratón, de ahí
+    las reglas de hover con 0,2,1 y el mismo tono algo más cerrado. Es lo que hace Claro con sus
+    propias filas `color-warning` y `color-error`.
 - **Los estados del pedido, del pago y de la factura salían en INGLÉS (2026-09-08)**: la lista decía
   «Completed» en todas las filas, la pestaña de facturas «Paid» y la de pagos «Completed» y «New».
   Commerce no traduce sus workflows. Lo arregla `scripts/traducir-pedidos-admin.php`, hermano de
@@ -1782,6 +1793,32 @@ Donde este documento y la realidad del repo discrepan, manda esta lista (decidid
   - **Y `traducir-envios.php` NO se había ejecutado en esta base de datos** (import de producción),
     así que la pestaña de envíos seguía diciendo «Draft», «Finalize shipment» y «Cancel shipment».
     Se lanzó también: 41 traducciones. **Conviene lanzarlo en producción igualmente.**
+- **La factura lleva el teléfono del cliente y el tipo de entrega (2026-09-09, cliente)**: dos
+  huecos que salían al usarla en el taller. El teléfono, «para dar una llamada rápida» cuando algo
+  del pedido no cuadra, vive en el **perfil de facturación** (`field_telefono`), no en el pedido,
+  igual que en el aviso de pedido nuevo; sale bajo el correo en el bloque «Facturar a». Y el tipo de
+  entrega, porque el ajuste de envío de Commerce se llama siempre «Envío» y un **0,00 € no dice si
+  es recogida en tienda o envío gratuito por importe**: ahora la línea de envío de los totales lleva
+  debajo, en letra pequeña, «Recoger en tienda (C/ Alcudia 100, Barcelona)» o «Envío gratuito» o
+  «Envío España». Lo que conviene no reinventar:
+  - **La etiqueta es la que el cliente eligió al comprar** (`service_label` del envío, congelada en
+    la entidad), y solo si falta se cae al nombre del método de envío, que sí cambiaría al
+    renombrarlo en la administración. Una factura es una foto del momento.
+  - **Cada línea de envío describe SU envío**: el ajuste guarda en `source_id` el id del envío que lo
+    generó, así que un pedido con dos cajas no mezcla. Verificado contra los datos: los `source_id`
+    de las 7 facturas coinciden con los envíos referenciados por sus pedidos.
+  - **Se lee por la API genérica de entidades** (`hasField('shipments')`, `service_label`), sin
+    `ShipmentInterface`: `pronens_factura` no depende de `commerce_shipping` y no va a empezar a
+    hacerlo por un rótulo.
+  - **«Telephone» ya estaba traducida** en los cuatro idiomas (core, sin contexto), así que no hace
+    falta tocar `scripts/traducir-factura.php`.
+  - **El PDF se guarda y no se rehace solo**: `InvoiceFileManager::getInvoiceFile()` sirve el fichero
+    de `private://facturas` mientras exista, de modo que un cambio de plantilla solo se vería en las
+    facturas nuevas. `scripts/facturas-regenerar.php` borra el PDF guardado y suelta la referencia;
+    la siguiente descarga o el siguiente correo lo generan otra vez. **No cambia ningún dato**: el
+    perfil de facturación se referencia por REVISIÓN, así que la dirección y el teléfono son los de
+    la compra aunque el cliente los haya cambiado después. Es contenido: **ejecutar también en
+    producción** después de desplegar.
 
 ## Orden de trabajo
 1. **Tema `pronens`**: tokens CSS (custom properties con los colores/tipos del README), fuentes

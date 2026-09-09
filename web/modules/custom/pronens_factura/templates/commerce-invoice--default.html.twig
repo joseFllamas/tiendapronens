@@ -9,10 +9,11 @@
  * Variables de pronens_factura (FacturaHooks::preprocessCommerceInvoice):
  * - numero, fecha, pedidos: [{numero, fecha}], tienda (datos fiscales del
  *   emisor, el "texto del pie" del tipo de factura, que aquí va arriba).
- * - cliente: nombre, empresa, direccion (lista de líneas), nif, correo.
+ * - cliente: nombre, empresa, direccion (lista de líneas), nif, correo,
+ *   telefono.
  * - lineas: [{titulo, opciones, bordado, fondo, cantidad, unitario, total, ajustes}].
- * - base_imponible, otros [{etiqueta, importe}], impuestos [{etiqueta, importe}],
- *   total, pago.
+ * - base_imponible, otros [{etiqueta, detalle, importe}] (detalle es el tipo de
+ *   entrega en la línea de envío), impuestos [{etiqueta, importe}], total, pago.
  *
  * Vive en el módulo y no en el tema a propósito: entity_print renderiza con el
  * tema ACTIVO, y una factura regenerada desde el backoffice saldría con la
@@ -52,6 +53,7 @@
       {% if cliente.nif %}<div class="fac__linea">{{ 'Tax ID'|t }}: {{ cliente.nif }}</div>{% endif %}
       {% for linea in cliente.direccion %}<div class="fac__linea">{{ linea }}</div>{% endfor %}
       {% if cliente.correo %}<div class="fac__linea fac__mute">{{ cliente.correo }}</div>{% endif %}
+      {% if cliente.telefono %}<div class="fac__linea fac__mute">{{ 'Telephone'|t }}: {{ cliente.telefono }}</div>{% endif %}
     </div>
   {% endif %}
 
@@ -99,7 +101,13 @@
       <td class="fac__totales-col">
         <table class="fac__totales" cellpadding="0" cellspacing="0">
           {% for ajuste in otros %}
-            <tr><th>{{ ajuste.etiqueta }}</th><td>{{ ajuste.importe }}</td></tr>
+            <tr>
+              <th>
+                {{ ajuste.etiqueta }}
+                {% if ajuste.detalle %}<span class="fac__detalle">{{ ajuste.detalle }}</span>{% endif %}
+              </th>
+              <td>{{ ajuste.importe }}</td>
+            </tr>
           {% endfor %}
           <tr><th>{{ 'Taxable base'|t }}</th><td>{{ base_imponible }}</td></tr>
           {% for impuesto in impuestos %}

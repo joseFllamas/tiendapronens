@@ -53,3 +53,38 @@
   overflow-wrap: normal;
   word-break: normal;
 }
+
+/**
+ * Color de la casilla de factura (cliente, 2026-09-08).
+ *
+ * Verde claro si ya está descargada, amarillo suave si falta. La clase la pone
+ * el preprocess en el `<td>` (ver ViewsHooks); las casillas de los pedidos sin
+ * factura se quedan en blanco, que es lo correcto: ahí no hay nada que bajar.
+ *
+ * Especificidades, que aquí importan: Claro pinta `tr { background: white }`
+ * con 0,0,1, así que una clase en el `td` le gana. Su `tr:hover` es 0,1,1 y
+ * también pinta fondo, o sea que al pasar el ratón la casilla perdería el
+ * color; de ahí las reglas de hover con 0,2,1, con el mismo tono algo más
+ * cerrado. Es lo que hace Claro con sus propias filas de aviso y de error.
+ *
+ * Los dos fondos son claros y el texto sigue siendo el de Claro, así que el
+ * contraste se mantiene muy por encima de AA: el botón azul da 7,6:1 sobre el
+ * verde y 7,1:1 sobre el amarillo.
+ */
+.pronens-factura-casilla--si {
+  background: #eaf6ee;
+}
+
+tr:hover .pronens-factura-casilla--si,
+tr:focus-within .pronens-factura-casilla--si {
+  background: #dcefe3;
+}
+
+.pronens-factura-casilla--no {
+  background: #fdf5e3;
+}
+
+tr:hover .pronens-factura-casilla--no,
+tr:focus-within .pronens-factura-casilla--no {
+  background: #f8ecd0;
+}

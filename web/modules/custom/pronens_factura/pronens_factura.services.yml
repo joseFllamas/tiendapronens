@@ -61,6 +61,8 @@ services:
 
   Drupal\pronens_factura\Hook\ViewsHooks:
     class: Drupal\pronens_factura\Hook\ViewsHooks
+    arguments:
+      - '@Drupal\pronens_factura\ResumenFacturas'
     calls:
       - [setStringTranslation, ['@string_translation']]
 

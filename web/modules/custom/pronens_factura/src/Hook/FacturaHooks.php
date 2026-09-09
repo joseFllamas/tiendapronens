@@ -130,6 +130,7 @@ final class FacturaHooks {
       'nif' => '',
       'direccion' => [],
       'correo' => (string) $factura->getEmail(),
+      'telefono' => '',
     ];
     if (!$perfil instanceof ProfileInterface) {
       return $cliente['correo'] === '' ? NULL : $cliente;
@@ -154,6 +155,12 @@ final class FacturaHooks {
     }
     if ($perfil->hasField('tax_number') && !$perfil->get('tax_number')->isEmpty()) {
       $cliente['nif'] = (string) $perfil->get('tax_number')->value;
+    }
+    // El teléfono, para poder llamar al cliente desde la propia factura cuando
+    // algo del pedido no cuadra (cliente, 2026-09-09). Vive en el perfil de
+    // facturación y no en el pedido, igual que en el aviso a la tienda.
+    if ($perfil->hasField('field_telefono') && !$perfil->get('field_telefono')->isEmpty()) {
+      $cliente['telefono'] = (string) $perfil->get('field_telefono')->value;
     }
 
     return $cliente;
@@ -224,15 +231,20 @@ final class FacturaHooks {
       $impuestos[] = ['etiqueta' => $etiqueta, 'importe' => $this->importe($importe)];
       $cuota = $cuota === NULL ? $importe : $cuota->add($importe);
     }
+    $envios = $this->tiposDeEnvio($factura);
     // Lo demás (envío, cupón, comisión), SOLO del nivel de factura: los
     // recargos de línea (bordado, extras) ya van bajo su línea y volver a
-    // listarlos aquí los enseñaba dos veces.
+    // listarlos aquí los enseñaba dos veces. La línea de envío se acompaña del
+    // tipo de entrega: su importe puede ser 0 € por recogida o por promoción.
     foreach ($factura->getAdjustments() as $ajuste) {
       if ($ajuste->getType() === 'tax' || $ajuste->isIncluded()) {
         continue;
       }
       $otros[] = [
         'etiqueta' => (string) $ajuste->getLabel(),
+        'detalle' => $ajuste->getType() === 'shipping'
+          ? ($envios[(string) $ajuste->getSourceId()] ?? '')
+          : '',
         'importe' => $this->importe($ajuste->getAmount()),
       ];
     }
@@ -241,6 +253,53 @@ final class FacturaHooks {
     $variables['otros'] = $otros;
     $variables['total'] = $total !== NULL ? $this->importe($total) : '';
     $variables['base_imponible'] = $total === NULL ? '' : $this->importe($cuota === NULL ? $total : $total->subtract($cuota));
+  }
+
+  /**
+   * Cómo se entrega cada envío de la factura, indexado por id del envío.
+   *
+   * El ajuste de envío de Commerce se llama siempre "Envío" y su importe puede
+   * ser 0 € por dos motivos distintos: la recogida en tienda y el envío
+   * gratuito a partir de 60 €. Sin decir cuál, la factura no permite saber si
+   * el paquete sale del taller o lo recoge el cliente (cliente, 2026-09-09).
+   *
+   * La etiqueta es la que el cliente eligió en la compra (`service_label`,
+   * congelada en el envío), y solo si falta se cae al nombre del método, que
+   * sí cambiaría al renombrarlo en la administración. El envío se busca por el
+   * `source_id` del ajuste, que es su id, así que un pedido con dos cajas
+   * describe cada línea con lo suyo.
+   *
+   * Se accede por la API genérica de entidades y no por ShipmentInterface: el
+   * módulo no depende de commerce_shipping y una tienda sin envíos (solo
+   * descarga) tiene que seguir facturando.
+   *
+   * @return array<string, string>
+   *   Etiqueta del tipo de entrega por id de envío; vacío sin envíos.
+   */
+  protected function tiposDeEnvio(InvoiceInterface $factura): array {
+    $tipos = [];
+    foreach ($factura->getOrders() as $pedido) {
+      if (!$pedido->hasField('shipments')) {
+        continue;
+      }
+      foreach ($pedido->get('shipments')->referencedEntities() as $envio) {
+        $etiqueta = '';
+        if ($envio->hasField('service_label') && !$envio->get('service_label')->isEmpty()) {
+          $etiqueta = trim((string) $envio->get('service_label')->value);
+        }
+        if ($etiqueta === '' && $envio->hasField('shipping_method') && !$envio->get('shipping_method')->isEmpty()) {
+          $metodo = $envio->get('shipping_method')->entity;
+          $etiqueta = $metodo === NULL
+            ? ''
+            : (string) $this->entityRepository->getTranslationFromContext($metodo)->label();
+        }
+        if ($etiqueta !== '') {
+          $tipos[(string) $envio->id()] = $etiqueta;
+        }
+      }
+    }
+
+    return $tipos;
   }
 
   /**
