@@ -25,6 +25,14 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  * acción masiva «Generar expediciones» devuelve a esta misma lista, y sin el
  * enlace habría que entrar en cada pedido y pasar por su pestaña de envíos
  * para imprimir. Solo lo ve quien puede expedir.
+ *
+ * Y por lo mismo la casilla ofrece el alta cuando todavía no hay expedición
+ * (cliente, 2026-09-09): el trabajo del taller se hace desde esta lista, y
+ * llegar al alta obligaba a entrar en el pedido y pasar por su pestaña de
+ * envíos. El botón NO crea nada: lleva al formulario de siempre, que viene
+ * prerrellenado. Quién lo ve es la misma regla de operacionesDeEnvio(), con la
+ * recogida en tienda fuera, solo que leída del resumen para no volver a
+ * preguntárselo a las entidades fila a fila.
  */
 #[ViewsField('pronens_expedicion_pedido')]
 final class ExpedicionDelPedido extends FieldPluginBase {
@@ -81,13 +89,13 @@ final class ExpedicionDelPedido extends FieldPluginBase {
     $metadatos = new CacheableMetadata();
     $metadatos->addCacheableDependency($pedido);
     $resumen = $this->resumenEnvios->deUnPedido($pedido, $metadatos);
-    if ($resumen->expediciones === []) {
+    if ($resumen->expediciones === [] && $resumen->pendientes === []) {
       return '';
     }
 
-    // Quien puede expedir puede imprimir; el enlace depende del permiso, así
+    // Quien puede expedir puede imprimir; los enlaces dependen del permiso, así
     // que la fila no vale igual para todos.
-    $puedeImprimir = $this->usuarioActual->hasPermission('generar expediciones correos express');
+    $puedeExpedir = $this->usuarioActual->hasPermission('generar expediciones correos express');
     $metadatos->addCacheContexts(['user.permissions']);
 
     $construccion = [
@@ -124,7 +132,7 @@ final class ExpedicionDelPedido extends FieldPluginBase {
           ],
         ];
 
-      if ($puedeImprimir && $expedicion['url'] !== NULL) {
+      if ($puedeExpedir && $expedicion['url'] !== NULL) {
         $item['etiqueta'] = [
           '#type' => 'link',
           '#title' => 'Etiqueta',
@@ -137,6 +145,35 @@ final class ExpedicionDelPedido extends FieldPluginBase {
       }
 
       $construccion['#items'][] = $item;
+    }
+
+    // Lo que falta por dar de alta. El botón lleva al formulario de siempre,
+    // que viene prerrellenado: no crea nada por sí solo. Dar de alta es
+    // irreversible y Correos Express lo factura, así que la confirmación, el
+    // aviso de producción y el peso corregido con la báscula siguen estando por
+    // medio, igual que en la acción masiva.
+    //
+    // Y sin `destination`: al crear la expedición el formulario redirige a la
+    // etiqueta, que es lo siguiente que se hace, y un destino la pisaría.
+    if ($puedeExpedir) {
+      foreach ($resumen->pendientes as $pendiente) {
+        $construccion['#items'][] = [
+          'generar' => [
+            '#type' => 'link',
+            '#title' => 'EXPEDIR',
+            '#url' => Url::fromRoute('pronens_correos_express.generar', [
+              'commerce_order' => $pendiente['pedido'],
+              'commerce_shipment' => $pendiente['envio'],
+            ]),
+            '#attributes' => [
+              'class' => ['button', 'button--small', 'pronens-expedicion__generar'],
+              // El título nombra el envío, que es lo único que distingue los
+              // botones cuando un pedido va en varias cajas.
+              'title' => 'Generar la expedición de Correos Express (' . $pendiente['etiqueta'] . ')',
+            ],
+          ],
+        ];
+      }
     }
 
     $metadatos->applyTo($construccion);

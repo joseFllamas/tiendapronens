@@ -43,7 +43,7 @@ final class ViewsHooks {
 
     $data['commerce_order']['pronens_expedicion_pedido'] = [
       'title' => $this->t('Expedición de Correos Express'),
-      'help' => $this->t('Número de expedición, con enlace al seguimiento público y a la etiqueta.'),
+      'help' => $this->t('Número de expedición, con enlace al seguimiento público y a la etiqueta, y botón para darla de alta cuando todavía no existe.'),
       'field' => [
         'id' => 'pronens_expedicion_pedido',
         'click sortable' => FALSE,

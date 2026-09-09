@@ -98,6 +98,7 @@ services:
       - '@Drupal\pronens_correos_express\Catalogo\CalculadoraSituacion'
       - '@entity_type.manager'
       - '@entity.repository'
+      - '@config.factory'
 
   Drupal\pronens_correos_express\SincronizadorSeguimiento:
     class: Drupal\pronens_correos_express\SincronizadorSeguimiento

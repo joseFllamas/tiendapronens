@@ -7,6 +7,7 @@ namespace Drupal\pronens_correos_express;
 use Drupal\commerce_order\Entity\OrderInterface;
 use Drupal\commerce_shipping\Entity\ShipmentInterface;
 use Drupal\Core\Cache\CacheableMetadata;
+use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Entity\EntityRepositoryInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\pronens_correos_express\Catalogo\CalculadoraSituacion;
@@ -25,6 +26,7 @@ final class ResumenEnvios {
     private readonly CalculadoraSituacion $calculadora,
     private readonly EntityTypeManagerInterface $gestorEntidades,
     private readonly EntityRepositoryInterface $repositorioEntidades,
+    private readonly ConfigFactoryInterface $configuracion,
   ) {}
 
   /**
@@ -41,16 +43,38 @@ final class ResumenEnvios {
     $descripciones = [];
     $metodos = [];
     $expediciones = [];
+    $pendientes = [];
+
+    // Quién se expide sale de los ajustes (la lista de métodos que no pasan por
+    // Correos Express), así que una fila cacheada tiene que caducar cuando el
+    // cliente marca ahí otro método: si no, el botón de expedir seguiría
+    // saliendo en las recogidas en tienda hasta el próximo vaciado de caché.
+    $metadatos?->addCacheableDependency(
+      $this->configuracion->get('pronens_correos_express.settings'),
+    );
 
     foreach ($envios as $envio) {
       $metadatos?->addCacheableDependency($envio);
 
+      $expedido = $this->gestorExpediciones->estaExpedido($envio);
+      $seExpide = $this->gestorExpediciones->seExpide($envio);
       $descripciones[] = [
         'estado' => $envio->getState()->getId(),
-        'expedido' => $this->gestorExpediciones->estaExpedido($envio),
-        'seExpide' => $this->gestorExpediciones->seExpide($envio),
+        'expedido' => $expedido,
+        'seExpide' => $seExpide,
         'situacion' => $this->situacionDeSeguimiento($envio),
       ];
+
+      // Lo que todavía hay que dar de alta. Mismo criterio que
+      // operacionesDeEnvio(): se expide por Correos Express y aún no tiene
+      // expedición.
+      if ($seExpide && !$expedido) {
+        $pendientes[] = [
+          'envio' => (string) $envio->id(),
+          'pedido' => (string) $pedido->id(),
+          'etiqueta' => (string) $envio->label(),
+        ];
+      }
 
       $metodo = $envio->getShippingMethod();
       if ($metodo !== NULL) {
@@ -83,6 +107,7 @@ final class ResumenEnvios {
       $this->calculadora->calcular($pedido->getState()->getId(), $descripciones),
       array_values($metodos),
       $expediciones,
+      $pendientes,
     );
   }
 

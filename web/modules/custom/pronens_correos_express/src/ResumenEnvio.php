@@ -29,11 +29,19 @@ final class ResumenEnvio {
    *   etiqueta. `url` es NULL cuando el código NO lo puso este módulo (se
    *   escribió a mano, o viene de otro transportista): ahí no hay página de
    *   seguimiento que enlazar ni etiqueta que imprimir.
+   * @param array<int, array{envio: string, pedido: string, etiqueta: string}> $pendientes
+   *   Una por envío que se expide por Correos Express y todavía no tiene
+   *   expedición. Es lo que permite ofrecer el alta desde una lista sin volver
+   *   a preguntarle a las entidades quién puede expedirse. Los envíos de
+   *   recogida en tienda no entran, que no se expiden. La `etiqueta` es la del
+   *   envío («Shipment #1»), y solo sirve para distinguirlos cuando un pedido
+   *   va en varias cajas.
    */
   public function __construct(
     public readonly SituacionPedido $situacion,
     public readonly array $metodos = [],
     public readonly array $expediciones = [],
+    public readonly array $pendientes = [],
   ) {}
 
 }
