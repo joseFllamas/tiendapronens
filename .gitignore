@@ -63,3 +63,6 @@
 # Ficheros privados de Drupal (facturas PDF). La ruta la fija settings.local.php.
 /private/*
 !/private/.gitkeep
+
+# Fotos sueltas para scripts/clonar-producto.php (no van al repo).
+/fotos-clones/

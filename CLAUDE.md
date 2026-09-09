@@ -1819,6 +1819,40 @@ Donde este documento y la realidad del repo discrepan, manda esta lista (decidid
     perfil de facturación se referencia por REVISIÓN, así que la dirección y el teléfono son los de
     la compra aunque el cliente los haya cambiado después. Es contenido: **ejecutar también en
     producción** después de desplegar.
+- **Un modelo en otro color es un producto NUEVO, clonado (2026-09-09)**: el catálogo no monta los
+  colores dentro de una ficha y hay tres razones de código, no de gusto. La galería es del producto
+  (`FichaHooks::fotos()` lee `field_imagen_principal` y `field_galeria`; la foto de la variación
+  solo se usa en la muestra del selector, la línea del carrito y el montaje), así que elegir un
+  color no cambiaría ni una foto; la vista previa del bordado va anclada a **una sola** foto por
+  decisión del cliente del 2026-07-29; y el eje color está muerto en los datos (39 de 1123
+  variaciones, por eso se descartó la faceta). Además ya hay 43 de los 360 publicados con el color
+  en el título. Unificar colores en una ficha es una funcionalidad aparte (swap de galería por
+  variación) y para todo el catálogo, no para un producto suelto.
+  - **La herramienta es `scripts/clonar-producto.php`, con su guía en
+    `scripts/clonar-producto.md`**: cómo se rellena la tanda, dónde van las fotos, el
+    procedimiento en producción y qué revisar antes de publicar. Duplica producto y variaciones,
+    copia las cinco traducciones, registra las fotos, crea el stock, genera los alias con pathauto
+    y reindexa. Simula por defecto y escribe con `--crear`; es idempotente por SKU y el clon nace
+    **despublicado y sin destacar**. Es contenido: **ejecutarlo en producción**, no viaja en
+    `config/sync`.
+  - **No hay módulo y se descartaron los tres que hay**: `commerce_product_clone` es de 2014 (D7),
+    `commerce_quick_node_clone` tiene unos 84 sitios y ninguna cobertura de seguridad, y
+    `entity_clone` (unos 41.500 sitios, sin release estable) por defecto **referencia** las
+    variaciones del origen en vez de clonarlas, y al activar el clonado recursivo chocan los SKU.
+    Commerce sí duplica **variaciones** de serie (`/product/{p}/variations/{v}/duplicate`); lo que
+    no trae es duplicar el producto (issue 3042258, abierto).
+  - **Cuatro trampas de la API que el script ya resuelve**: `ProductVariation::createDuplicate()`
+    **no limpia el SKU** (solo resetea fechas) y el SKU es único; la variación duplicada conserva
+    `product_id` apuntando al ORIGEN, y sin ponerlo a NULL `Product::postSave` no la vuelve a
+    guardar y el título se queda con el nombre viejo; `addVariation()` **descarta las repetidas
+    comparando ids** y las nuevas los tienen a NULL, así que de cinco entra una (van con `set()`);
+    y el producto duplicado hereda el campo `path` con el pid del original dentro, de modo que
+    ponerle alias le cambiaría la URL al origen (`PathItem::postSave` actualiza esa misma fila).
+  - **Lo que no se puede deducir y se declara en la tanda**: títulos por idioma, sustituciones del
+    color dentro del body (cada idioma con su palabra, el catalán con dos y el francés con género),
+    SKU (no hay patrón: conviven `BLUS.PIST.T-S`, `MO.ACOLCHADA PANDA`, `Cojin31 - Vader`), stock
+    (copiarlo sería inventarse inventario) y fotos, que son de otro color y van en `fotos-clones/`,
+    carpeta ignorada por git.
 
 ## Orden de trabajo
 1. **Tema `pronens`**: tokens CSS (custom properties con los colores/tipos del README), fuentes
