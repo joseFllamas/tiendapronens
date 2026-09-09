@@ -10,6 +10,7 @@ dependencies:
   module:
     - color_field
     - media_library
+    - media_library_edit
     - path
     - text
 id: taxonomy_term.color_letra.default
@@ -57,7 +58,10 @@ content:
     region: content
     settings:
       media_types: {  }
-    third_party_settings: {  }
+    third_party_settings:
+      media_library_edit:
+        show_edit: true
+        edit_form_mode: media_library
   langcode:
     type: language_select
     weight: 2
@@ -76,6 +80,11 @@ content:
   path:
     type: path
     weight: 30
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  simple_sitemap:
+    weight: 10
     region: content
     settings: {  }
     third_party_settings: {  }

@@ -10,6 +10,8 @@ dependencies:
     - taxonomy.vocabulary.fondos_bordado
   module:
     - color_field
+    - media_library
+    - media_library_edit
     - path
     - text
 id: taxonomy_term.fondos_bordado.default
@@ -53,15 +55,15 @@ content:
         #9fc6e7,#4986e7,#1f5fbf,#0d2b5e,#b99aff,#7b4397
     third_party_settings: {  }
   field_imagen:
-    type: entity_reference_autocomplete
+    type: media_library_widget
     weight: 1
     region: content
     settings:
-      match_operator: CONTAINS
-      match_limit: 10
-      size: 60
-      placeholder: ''
-    third_party_settings: {  }
+      media_types: {  }
+    third_party_settings:
+      media_library_edit:
+        show_edit: true
+        edit_form_mode: media_library
   langcode:
     type: language_select
     weight: 2
@@ -80,6 +82,11 @@ content:
   path:
     type: path
     weight: 30
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  simple_sitemap:
+    weight: 10
     region: content
     settings: {  }
     third_party_settings: {  }

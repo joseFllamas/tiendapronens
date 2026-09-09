@@ -1,22 +1,18 @@
-uuid: 770c536b-ef6c-42b6-a6b3-ac8be57db47a
+uuid: 15a81924-4748-4f48-9182-d0d6d674953a
 langcode: es
 status: true
 dependencies:
   config:
-    - field.field.taxonomy_term.tipo_de_producto.field_destacado
-    - field.field.taxonomy_term.tipo_de_producto.field_imagen
-    - field.field.taxonomy_term.tipo_de_producto.field_metatag
-    - field.field.taxonomy_term.tipo_de_producto.field_posicion
-    - taxonomy.vocabulary.tipo_de_producto
+    - field.field.taxonomy_term.guia_tallas.field_imagen
+    - taxonomy.vocabulary.guia_tallas
   module:
     - media_library
     - media_library_edit
-    - metatag
     - path
     - text
-id: taxonomy_term.tipo_de_producto.default
+id: taxonomy_term.guia_tallas.default
 targetEntityType: taxonomy_term
-bundle: tipo_de_producto
+bundle: guia_tallas
 mode: default
 content:
   description:
@@ -37,14 +33,6 @@ content:
       media_library_edit:
         show_edit: true
         edit_form_mode: media_library
-  field_metatag:
-    type: metatag_firehose
-    weight: 90
-    region: content
-    settings:
-      sidebar: true
-      use_details: true
-    third_party_settings: {  }
   langcode:
     type: language_select
     weight: 2
@@ -78,6 +66,4 @@ content:
     settings:
       display_label: true
     third_party_settings: {  }
-hidden:
-  field_destacado: true
-  field_posicion: true
+hidden: {  }

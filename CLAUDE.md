@@ -400,7 +400,10 @@ Donde este documento y la realidad del repo discrepan, manda esta lista (decidid
   (`Crop::findCrop($file->getFileUri(), …)`), arrastra el módulo `crop` y **no guarda tamaño**. Aquí la
   decisión es del producto y el parche necesita tamaño. De focal_point se toma la idea de marcar sobre
   la propia foto: `MontajeHooks` añade al formulario del producto un lienzo con la letra arrastrable y
-  una barra de tamaño que rellenan los tres números, que siguen visibles y editables a mano.
+  una barra de tamaño que rellenan los tres números, que siguen visibles y editables a mano. **Ojo:
+  focal_point sí se instaló el 2026-09-10, pero para otra cosa** (decidir por dónde recortan los
+  estilos de imagen, que es una decisión del fichero y no del producto); lo de aquí sigue en pie, el
+  montaje del bordado no usa focal_point. Ver la resolución del punto focal.
 - **La foto del montaje es siempre `field_imagen_principal`**, y no cambia al elegir color (decisión
   del cliente, 2026-07-29). Es la foto **sin letra** sobre la que se mide la posición en el
   backoffice, así que tiene que ser la misma que se pinta en la tienda: si cambiara con la variación,
@@ -754,6 +757,16 @@ Donde este documento y la realidad del repo discrepan, manda esta lista (decidid
     a mano con `drush cset`. Conviene mirar el `git diff` de `config/sync` después de cada
     `drush en` en este sitio; el resto del ruido de ese export (ajustes de `content_translation`,
     `core.base_field_override.media.*`) es deriva vieja, no del módulo, y se dejó sin exportar.
+    **Vuelve a pasar con cada módulo nuevo** (2026-09-10, instalando focal_point: 34 objetos
+    tocados, y esta vez el pisotón se llevó el copy de Klaro de los cinco idiomas —«Funcionamiento
+    de la tienda» → «Tienda Pronens», las descripciones del consent mode de vuelta al inglés de
+    fábrica— y las etiquetas «Estado del pedido» de la vista de pedidos). Lo que hay que saber para
+    arreglarlo: **`drush cim --partial --source=<dir>` con un directorio de unos pocos ficheros NO
+    procesa las collections de idioma**, así que restaura los objetos base y deja los
+    `config/sync/language/<lc>/*.yml` pisados; esos hay que reescribirlos con
+    `getLanguageConfigOverride($lc, $nombre)->setData(Yaml::parseFile(...))->save()`. Un `drush cim`
+    **completo** sí los cubre, así que en producción el remedio es repetir el import después del
+    que instala el módulo, y comprobar el diff.
 - **Patrones de pathauto, migrados del D7 (2026-08-12)**: pathauto estaba instalado desde la fase 2
   con dos patrones que **no describían el sitio**: `/productos/[title]` genera dos segmentos y 1460
   de los 1822 alias de producto tienen tres. Los patrones del D7 se leyeron de la tabla `variable`
@@ -1862,6 +1875,67 @@ Donde este documento y la realidad del repo discrepan, manda esta lista (decidid
     SKU (no hay patrón: conviven `BLUS.PIST.T-S`, `MO.ACOLCHADA PANDA`, `Cojin31 - Vader`), stock
     (copiarlo sería inventarse inventario) y fotos, que son de otro color y van en `fotos-clones/`,
     carpeta ignorada por git.
+
+- **Punto focal en los recortes y botón de editar en los medios (2026-09-10)**: nueve de los estilos
+  de imagen recortan a una proporción fija (la tarjeta y la galería a 3:4, el hero a 1920x600, la
+  miniatura del carrito a un cuadrado) y lo hacían **siempre por el centro**, que es lo único que
+  sabe hacer `image_scale_and_crop`. En un catálogo de prendas de frente y bodegones eso corta
+  cabezas y deja el motivo fuera. Ahora la decisión es de cada foto: `focal_point` 2.1.2 (con `crop`
+  2.6.0) guarda el punto **una vez por FICHERO**, como entidad `Crop` atada al URI, y lo aplican los
+  nueve estilos, así que la misma foto se recorta con el mismo criterio en la tarjeta, en la ficha,
+  en el hero y en el mega menú. El punto se marca arrastrándolo sobre la propia foto, y con
+  `media_library_edit` 3.0.5 se llega ahí sin salir del producto: el lápiz de cada foto del widget
+  abre el medio en un diálogo. Montado con `scripts/focal-point.php`. Lo que conviene no reinventar:
+  - **Esto NO contradice el descarte de focal_point de 2026-07-29**, que sigue vigente: allí se
+    descartó para **colocar el parche del bordado** (decisión del producto, y necesita tamaño, que
+    focal_point no guarda). Aquí resuelve otra cosa, **por dónde se recorta la foto**, que sí es del
+    fichero. Son dos mecanismos que conviven y no se tocan.
+  - **OJO CON EL BORDADO**: `field_inicial_x/_y` se miden en % de `pronens_ficha_principal`, que es
+    uno de los estilos convertidos. Mientras el punto se quede en el centro no se mueve nada, pero
+    **cambiar el punto focal de la foto de montaje de un producto ya calibrado le desplaza el
+    bordado**: son unos 180 productos (41 bodys, 85 bolsas, 46 baberos, 8 sudaderas de inicial y la
+    mochila 373). Si se toca su punto focal, hay que repasar la colocación en el formulario del
+    producto.
+  - **Con el punto centrado el encuadre es el mismo, comprobado píxel a píxel**: los derivados de
+    antes y después son idénticos en `pronens_card` y `pronens_hero` (0 píxeles distintos) y en el
+    resto difieren sin ningún desplazamiento (el mínimo de la comparación está en dy=0; RMSE 1,5 %
+    en la ficha y 5 % en la miniatura de 148px). La razón es que **focal_point escala a la medida
+    exacta** (1200x1600 → 800x1066) donde core escalaba a 800x1067 y quitaba 1px: mismo contenido
+    visible, remuestreo sub-píxel distinto, más visible cuanto más pequeña la miniatura. No es un
+    desplazamiento del encuadre y no descoloca nada.
+  - **Guardar un estilo modificado vacía sus derivados**, así que las fotos de los nueve estilos se
+    regeneran bajo demanda: la primera visita de cada página tras el despliegue paga la conversión.
+  - **La previsualización del widget pasa de `thumbnail` a `max_650x650`**: el punto se arrastra
+    sobre esa imagen y en 100px no se acierta.
+  - **El widget va en los DOS modos de formulario del medio**: `default` es el de
+    /admin/content/media y `media_library` el que abre el lápiz. El lápiz apunta a propósito al
+    reducido (`edit_form_mode: media_library`), que enseña la foto con su punto focal y su texto
+    alternativo y nada más; de paso es la vía para corregir a mano los `alt` que
+    `scripts/alt-fotos.php` no pudo resolver (los 144 medios que no referencia ninguna entidad).
+  - **El botón se activa recorriendo los campos, no con una lista a mano**: el script busca los
+    campos que apuntan a un medio y sus formularios, de modo que el campo de medios que se añada
+    mañana lo hereda relanzándolo. Son **15 campos en 13 formularios**. `fondos_bordado.field_imagen`
+    seguía con el autocompletar y pasa a la biblioteca (sin widget de biblioteca no hay lápiz).
+  - **Tres campos de medios salen a la luz** (cliente): la **foto de la categoría**
+    (`tipo_de_producto.field_imagen`), que estaba escondida y es la que alimenta las teselas de la
+    home y el mega menú, o sea los dos recortes donde más se nota el punto focal; las **guías de
+    tallas** (`guia_tallas.field_imagen`), cuyo vocabulario **nunca tuvo formulario propio**, así que
+    sus 4 fotos no se habían podido editar nunca; y las **fotos de variación**
+    (`variation.field_imagenes`). Se queda dormido `fuente_bordado.field_muestra`, del vocabulario
+    que se apagó al decidir que la fuente del bordado no la elige quien compra.
+  - **Ojo al crear un form display que no existía**: `FieldConfigBase::getDisplayOptions()` devuelve
+    `region: hidden` para todo campo configurable, así que un display recién creado nace con los
+    campos de campo escondidos y `getComponent()` devuelve NULL. Por eso `guia_tallas` no tenía su
+    foto en el formulario aunque los 4 términos la traigan. Y por eso
+    `getFormModeOptionsByBundle()` devuelve **vacío** para un paquete sin ningún display guardado:
+    hay que añadirle `default` a mano o el bucle no lo visita.
+  - **Los puntos focales son CONTENIDO** (entidades `Crop` por URI de fichero), así que no viajan en
+    `config/sync` ni en los scripts: lo que se despliega es la maquinaria, y el punto de cada foto se
+    marca en cada entorno. La configuración sí se exporta (30 objetos).
+  - **Pendiente de producción**: `composer install` + `drush cim` (y repetir el import por el pisotón
+    de traducciones del alta de módulos, ver la resolución de redirect), y después marcar los puntos
+    focales de las fotos que lo pidan, empezando por las 30 categorías (teselas y mega menú) y el
+    hero.
 
 ## Orden de trabajo
 1. **Tema `pronens`**: tokens CSS (custom properties con los colores/tipos del README), fuentes

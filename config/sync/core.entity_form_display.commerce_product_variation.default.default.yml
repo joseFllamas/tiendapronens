@@ -15,6 +15,8 @@ dependencies:
     - field.field.commerce_product_variation.default.weight
   module:
     - commerce_price
+    - media_library
+    - media_library_edit
     - physical
 _core:
   default_config_hash: dDLA40Axom_QFA79EWUpe_bWXWE8I_7MijzPkslbVfA
@@ -69,6 +71,16 @@ content:
       allow_unit_change: true
       available_units: {  }
     third_party_settings: {  }
+  field_imagenes:
+    type: media_library_widget
+    weight: 6
+    region: content
+    settings:
+      media_types: {  }
+    third_party_settings:
+      media_library_edit:
+        show_edit: true
+        edit_form_mode: media_library
   langcode:
     type: language_select
     weight: 2
@@ -114,6 +126,5 @@ content:
     third_party_settings: {  }
 hidden:
   created: true
-  field_imagenes: true
   field_stock: true
   uid: true

@@ -36,6 +36,7 @@ dependencies:
     - commerce
     - commerce_price
     - media_library
+    - media_library_edit
     - metatag
     - path
     - text
@@ -81,7 +82,10 @@ content:
     region: content
     settings:
       media_types: {  }
-    third_party_settings: {  }
+    third_party_settings:
+      media_library_edit:
+        show_edit: true
+        edit_form_mode: media_library
   field_bordado_fuente:
     type: options_select
     weight: 14
@@ -158,7 +162,10 @@ content:
     region: content
     settings:
       media_types: {  }
-    third_party_settings: {  }
+    third_party_settings:
+      media_library_edit:
+        show_edit: true
+        edit_form_mode: media_library
   field_guia_tallas:
     type: options_select
     weight: 17
@@ -171,7 +178,10 @@ content:
     region: content
     settings:
       media_types: {  }
-    third_party_settings: {  }
+    third_party_settings:
+      media_library_edit:
+        show_edit: true
+        edit_form_mode: media_library
   field_inicial_tamano:
     type: number
     weight: 11

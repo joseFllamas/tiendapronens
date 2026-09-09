@@ -10,6 +10,10 @@ dependencies:
     - field.field.paragraph.hero.field_subtitulo
     - field.field.paragraph.hero.field_titulo
     - paragraphs.paragraphs_type.hero
+  module:
+    - link
+    - media_library
+    - media_library_edit
 id: paragraph.hero.default
 targetEntityType: paragraph
 bundle: hero
@@ -37,8 +41,12 @@ content:
     type: media_library_widget
     weight: 0
     region: content
-    settings: {  }
-    third_party_settings: {  }
+    settings:
+      media_types: {  }
+    third_party_settings:
+      media_library_edit:
+        show_edit: true
+        edit_form_mode: media_library
   field_subtitulo:
     type: string_textfield
     weight: 3

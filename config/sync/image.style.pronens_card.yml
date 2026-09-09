@@ -1,21 +1,23 @@
 uuid: d4963a36-4144-4ff9-b5d7-c1b7c953a541
 langcode: es
 status: true
-dependencies: {  }
+dependencies:
+  module:
+    - focal_point
 name: pronens_card
 label: 'Pronens: pronens_card (600x800 WebP)'
 effects:
-  0afa70e3-4f6f-4282-9f62-c22d26906f0f:
-    uuid: 0afa70e3-4f6f-4282-9f62-c22d26906f0f
-    id: image_scale_and_crop
-    weight: 0
-    data:
-      width: 600
-      height: 800
-      anchor: center-center
   10ec3071-6c5c-439e-8730-58ee2edcd0ca:
     uuid: 10ec3071-6c5c-439e-8730-58ee2edcd0ca
     id: image_convert
     weight: 1
     data:
       extension: webp
+  01352004-db42-4236-aa37-50e01a0a5f3d:
+    uuid: 01352004-db42-4236-aa37-50e01a0a5f3d
+    id: focal_point_scale_and_crop
+    weight: 0
+    data:
+      width: 600
+      height: 800
+      crop_type: focal_point
