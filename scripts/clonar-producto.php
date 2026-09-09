@@ -106,8 +106,8 @@ $tandas = [
     'color_attr' => NULL,
     'hilo' => NULL,
     'fotos' => [
-      'principal' => 'fotos-clones/bluson-rojo.jpg',
-      'galeria' => [],
+      'principal' => 'fotos-clones/bluson-rojo.jpeg',
+      'galeria' => ['fotos-clones/bluson-rojo-puesto.jpeg'],
     ],
   ],
   [
@@ -132,8 +132,8 @@ $tandas = [
     'color_attr' => NULL,
     'hilo' => NULL,
     'fotos' => [
-      'principal' => 'fotos-clones/bluson-blanco.jpg',
-      'galeria' => [],
+      'principal' => 'fotos-clones/bluson-blanco.jpeg',
+      'galeria' => ['fotos-clones/bluson-blanco-puesto.jpeg'],
     ],
   ],
 ];
@@ -342,8 +342,7 @@ foreach ($tandas as $numero => $tanda) {
     $traduccion->setUnpublished();
     if (isset($tanda['titulos'][$codigo])) {
       $traduccion->setTitle($tanda['titulos'][$codigo]);
-    }
-    else {
+    } else {
       print "    AVISO: sin título para $codigo, se queda el del origen.\n";
     }
     $mapa = $tanda['texto'][$codigo] ?? [];
@@ -425,8 +424,7 @@ foreach ($tandas as $numero => $tanda) {
       );
     }
     print "  Stock: " . $tanda['stock'] . " uds en cada una de las " . count($clon->getVariations()) . " variaciones.\n";
-  }
-  else {
+  } else {
     print "  AVISO: sin stock. Ponlo en cada variación antes de publicar o saldrá Agotado.\n";
   }
 
