@@ -13,6 +13,7 @@ dependencies:
     - field.field.commerce_product.default.field_complementarios
     - field.field.commerce_product.default.field_composicion
     - field.field.commerce_product.default.field_destacado
+    - field.field.commerce_product.default.field_diseno
     - field.field.commerce_product.default.field_escuela
     - field.field.commerce_product.default.field_extras_disponibles
     - field.field.commerce_product.default.field_fondo_tamano
@@ -95,6 +96,7 @@ hidden:
   field_bordado_rotacion: true
   field_complementarios: true
   field_destacado: true
+  field_diseno: true
   field_escuela: true
   field_extras_disponibles: true
   field_fondo_tamano: true

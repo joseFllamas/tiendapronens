@@ -13,6 +13,7 @@ dependencies:
     - field.field.commerce_product.default.field_complementarios
     - field.field.commerce_product.default.field_composicion
     - field.field.commerce_product.default.field_destacado
+    - field.field.commerce_product.default.field_diseno
     - field.field.commerce_product.default.field_escuela
     - field.field.commerce_product.default.field_extras_disponibles
     - field.field.commerce_product.default.field_fondo_tamano
@@ -130,6 +131,14 @@ content:
     region: content
     settings:
       display_label: true
+    third_party_settings: {  }
+  field_diseno:
+    type: string_textfield
+    weight: 2
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
     third_party_settings: {  }
   field_escuela:
     type: options_buttons

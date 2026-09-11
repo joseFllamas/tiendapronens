@@ -1,0 +1,19 @@
+uuid: f9d86478-9750-4689-bd7d-166e90cba1eb
+langcode: es
+status: true
+dependencies:
+  config:
+    - field.storage.taxonomy_term.field_titulo_pagina
+    - taxonomy.vocabulary.tipo_de_producto
+id: taxonomy_term.tipo_de_producto.field_titulo_pagina
+field_name: field_titulo_pagina
+entity_type: taxonomy_term
+bundle: tipo_de_producto
+label: 'Título de la página (H1)'
+description: 'Opcional. Si se rellena, es el H1 y el title de la página de esta categoría. El nombre de arriba sigue siendo el del menú, la miga y las teselas de la home.'
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

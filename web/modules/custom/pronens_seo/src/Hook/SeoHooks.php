@@ -6,6 +6,7 @@ namespace Drupal\pronens_seo\Hook;
 
 use Drupal\commerce_product\Entity\ProductInterface;
 use Drupal\Core\Entity\EntityRepositoryInterface;
+use Drupal\Core\Entity\FieldableEntityInterface;
 use Drupal\Core\Hook\Attribute\Hook;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
@@ -13,6 +14,7 @@ use Drupal\Core\Url;
 use Drupal\pronens_seo\CanonicalCalculator;
 use Drupal\pronens_seo\Descripcion;
 use Drupal\pronens_seo\ResultadosCatalogo;
+use Drupal\pronens_seo\TituloSeo;
 use Drupal\taxonomy\TermInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 
@@ -28,6 +30,13 @@ use Symfony\Component\HttpFoundation\RequestStack;
  * que dos párrafos salían pegados y el texto entero (551 caracteres en las
  * categorías del D7) viajaba en la etiqueta. Se sustituye el token por el
  * texto ya limpio y recortado (Descripcion), en el idioma de la página.
+ *
+ * Y los títulos que no coinciden con el nombre (TituloSeo): una categoría
+ * puede declarar un H1/<title> largo en field_titulo_pagina, y un patrón para
+ * el <title> de sus fichas en field_titulo_productos, que se compone con el
+ * field_diseno de cada producto. El nombre corto de la categoría y el título
+ * del producto siguen mandando en el menú, la miga, las tarjetas y el H1 de
+ * la ficha.
  */
 final class SeoHooks {
 
@@ -63,6 +72,39 @@ final class SeoHooks {
    */
   private const ETIQUETAS_DESCRIPCION = ['description', 'og_description', 'twitter_cards_description'];
 
+  /**
+   * Etiquetas que llevan el nombre de la categoría y pasan a llevar su H1.
+   *
+   * Las etiquetas og:title y twitter:title son "el nombre de la página" para
+   * quien la comparte, así que siguen al H1 igual que el <title>.
+   *
+   * @var array<int, string>
+   */
+  private const ETIQUETAS_TITULO_CATEGORIA = ['title', 'og_title', 'twitter_cards_title'];
+
+  /**
+   * Campos de la categoría: H1 propio y patrón del <title> de sus fichas.
+   */
+  private const CAMPO_TITULO_PAGINA = 'field_titulo_pagina';
+  private const CAMPO_TITULO_PRODUCTOS = 'field_titulo_productos';
+
+  /**
+   * Campos del producto: su diseño y su categoría principal (primer término).
+   */
+  private const CAMPO_DISENO = 'field_diseno';
+  private const CAMPO_CATEGORIA = 'field_tipo_de_producto';
+
+  /**
+   * Campo de metatag por entidad: lo que el cliente escriba ahí manda.
+   */
+  private const CAMPO_METATAG = 'field_metatag';
+
+  /**
+   * Tokens que metatag pone por defecto en las etiquetas de título.
+   */
+  private const TOKEN_NOMBRE_TERMINO = '[term:name]';
+  private const TOKEN_TITULO_PRODUCTO = '[commerce_product:title]';
+
   public function __construct(
     private readonly RouteMatchInterface $routeMatch,
     private readonly EntityRepositoryInterface $entityRepository,
@@ -88,6 +130,7 @@ final class SeoHooks {
     }
 
     $this->descripciones($metatags, $context);
+    $this->titulos($metatags, $context);
     $this->fotoDeReserva($metatags, $context);
 
     if ($this->routeMatch->getParameter('view_id') !== self::VIEW_ID) {
@@ -144,6 +187,165 @@ final class SeoHooks {
     $sitemap = Url::fromUserInput('/sitemap.xml', ['absolute' => TRUE])->toString();
 
     return ['Sitemap: ' . $sitemap];
+  }
+
+  /**
+   * Implements hook_page_attachments().
+   *
+   * El <title> de la ficha depende ahora del patrón de su categoría, así que
+   * la página tiene que caducar cuando el cliente edite el término. La miga
+   * ya lo declara, pero es una dependencia de otro sitio: aquí se declara
+   * donde se introduce.
+   *
+   * @param array<string, mixed> $attachments
+   *   Los adjuntos de la página.
+   */
+  #[Hook('page_attachments')]
+  public function pageAttachments(array &$attachments): void {
+    if ($this->routeMatch->getRouteName() !== 'entity.commerce_product.canonical') {
+      return;
+    }
+    $producto = $this->routeMatch->getParameter('commerce_product');
+    if (!$producto instanceof ProductInterface) {
+      return;
+    }
+    $categoria = $this->categoriaPrincipal($producto);
+    if ($categoria === NULL) {
+      return;
+    }
+    $attachments['#cache']['tags'] = array_unique(array_merge(
+      $attachments['#cache']['tags'] ?? [],
+      $categoria->getCacheTags(),
+    ));
+  }
+
+  /**
+   * Títulos que no coinciden con el nombre de la entidad.
+   *
+   * @param array<string, mixed> $metatags
+   *   Etiquetas con tokens.
+   * @param array<string, mixed> $context
+   *   Contexto de metatag.
+   */
+  private function titulos(array &$metatags, array $context): void {
+    $entidad = $context['entity'] ?? NULL;
+    if ($entidad instanceof TermInterface) {
+      $this->tituloDeCategoria($metatags, $entidad);
+    }
+    elseif ($entidad instanceof ProductInterface) {
+      $this->tituloDeProducto($metatags, $entidad);
+    }
+  }
+
+  /**
+   * El H1 largo de la categoría ocupa el sitio de su nombre en los títulos.
+   *
+   * Solo donde metatag todavía tiene el token del nombre: si el cliente ha
+   * escrito otra cosa en la etiqueta por defecto o en el metatag del propio
+   * término, eso manda.
+   *
+   * @param array<string, mixed> $metatags
+   *   Etiquetas con tokens.
+   * @param \Drupal\taxonomy\TermInterface $termino
+   *   La categoría de la página, sin traducir todavía.
+   */
+  private function tituloDeCategoria(array &$metatags, TermInterface $termino): void {
+    $traducido = $this->entityRepository->getTranslationFromContext($termino);
+    $h1 = $this->valor($traducido, self::CAMPO_TITULO_PAGINA);
+    if ($h1 === '') {
+      return;
+    }
+    foreach (self::ETIQUETAS_TITULO_CATEGORIA as $etiqueta) {
+      if (!isset($metatags[$etiqueta]) || !is_string($metatags[$etiqueta]) || $this->etiquetaPropia($traducido, $etiqueta)) {
+        continue;
+      }
+      $nuevo = TituloSeo::sustituye($metatags[$etiqueta], self::TOKEN_NOMBRE_TERMINO, $h1);
+      if ($nuevo !== NULL) {
+        $metatags[$etiqueta] = $nuevo;
+      }
+    }
+  }
+
+  /**
+   * El <title> de la ficha sigue el patrón de su categoría principal.
+   *
+   * Solo el <title>: og:title, el H1 y el JSON-LD siguen diciendo cómo se
+   * llama el producto, que es lo que se comparte y lo que se compra.
+   *
+   * @param array<string, mixed> $metatags
+   *   Etiquetas con tokens.
+   * @param \Drupal\commerce_product\Entity\ProductInterface $producto
+   *   El producto de la ficha, sin traducir todavía.
+   */
+  private function tituloDeProducto(array &$metatags, ProductInterface $producto): void {
+    if (!isset($metatags['title']) || !is_string($metatags['title'])) {
+      return;
+    }
+    $traducido = $this->entityRepository->getTranslationFromContext($producto);
+    if ($this->etiquetaPropia($traducido, 'title')) {
+      return;
+    }
+    $categoria = $this->categoriaPrincipal($traducido);
+    if ($categoria === NULL) {
+      return;
+    }
+    $titulo = TituloSeo::deProducto(
+      $this->valor($categoria, self::CAMPO_TITULO_PRODUCTOS),
+      $this->valor($traducido, self::CAMPO_DISENO),
+    );
+    if ($titulo === NULL) {
+      return;
+    }
+    $nuevo = TituloSeo::sustituye($metatags['title'], self::TOKEN_TITULO_PRODUCTO, $titulo);
+    if ($nuevo !== NULL) {
+      $metatags['title'] = $nuevo;
+    }
+  }
+
+  /**
+   * La categoría principal del producto, traducida: el PRIMER término.
+   *
+   * Mismo criterio que la miga, el patrón de alias y "También te puede
+   * gustar": un producto puede estar en varias categorías (las sudaderas de
+   * inicial están en la suya y en Iniciales) y la que lo define es la primera.
+   */
+  private function categoriaPrincipal(ProductInterface $producto): ?TermInterface {
+    if (!$producto->hasField(self::CAMPO_CATEGORIA)) {
+      return NULL;
+    }
+    $termino = $producto->get(self::CAMPO_CATEGORIA)->entity;
+    if (!$termino instanceof TermInterface) {
+      return NULL;
+    }
+
+    return $this->entityRepository->getTranslationFromContext($termino);
+  }
+
+  /**
+   * ¿Tiene la entidad esa etiqueta escrita a mano en su campo de metatag?
+   *
+   * En hook_metatags_alter el valor del campo ya está fundido con el de la
+   * configuración y no se distingue de dónde viene; hay que preguntárselo a
+   * la entidad.
+   */
+  private function etiquetaPropia(FieldableEntityInterface $entidad, string $etiqueta): bool {
+    if (!$entidad->hasField(self::CAMPO_METATAG) || $entidad->get(self::CAMPO_METATAG)->isEmpty()) {
+      return FALSE;
+    }
+    $propias = metatag_data_decode((string) $entidad->get(self::CAMPO_METATAG)->value);
+
+    return trim((string) ($propias[$etiqueta] ?? '')) !== '';
+  }
+
+  /**
+   * Valor de un campo de texto de la entidad, o cadena vacía si no lo tiene.
+   */
+  private function valor(FieldableEntityInterface $entidad, string $campo): string {
+    if (!$entidad->hasField($campo) || $entidad->get($campo)->isEmpty()) {
+      return '';
+    }
+
+    return trim((string) $entidad->get($campo)->value);
   }
 
   /**

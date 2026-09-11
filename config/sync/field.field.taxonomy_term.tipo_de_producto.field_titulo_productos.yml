@@ -1,0 +1,19 @@
+uuid: 14014a59-48a1-4928-af4f-cba64fcdd71f
+langcode: es
+status: true
+dependencies:
+  config:
+    - field.storage.taxonomy_term.field_titulo_productos
+    - taxonomy.vocabulary.tipo_de_producto
+id: taxonomy_term.tipo_de_producto.field_titulo_productos
+field_name: field_titulo_productos
+entity_type: taxonomy_term
+bundle: tipo_de_producto
+label: 'Title SEO de sus productos'
+description: 'Opcional. Patrón del title de las fichas que tienen esta categoría como principal. @diseno se sustituye por el «Diseño» de cada producto; sin diseño la ficha conserva su título. El «| Tienda Pronens» se añade solo. Ejemplo: Saco de almuerzo o muda escolar, diseño @diseno'
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

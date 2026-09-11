@@ -110,7 +110,7 @@ class CatalogoHooks {
 
     $termino = $this->terminoDelArgumento($view);
     $variables['catalogo'] = [
-      'titulo' => $termino?->label() ?? '',
+      'titulo' => $termino !== NULL ? $this->tituloDelTermino($termino) : '',
       'descripcion' => $termino !== NULL ? $this->descripcionDelTermino($termino) : NULL,
       // total_rows lo pone el paginador; sin paginador se queda a 0 y las
       // filas cargadas son todas.
@@ -220,6 +220,25 @@ class CatalogoHooks {
     unset($query['f'], $query['page']);
 
     return Url::fromRoute('<current>', [], ['query' => $query]);
+  }
+
+  /**
+   * El H1 de la categoría: su título de página si lo tiene, y si no su nombre.
+   *
+   * El campo field_titulo_pagina existe para que una categoría pueda llamarse
+   * corto en el menú y la miga ("Bolsas y sacos") y largo en su propia página
+   * ("Bolsas de guardería y sacos de almuerzo"). El <title> sigue al mismo
+   * campo desde pronens_seo, así que H1 y title no se separan.
+   */
+  protected function tituloDelTermino(TermInterface $termino): string {
+    if ($termino->hasField('field_titulo_pagina') && !$termino->get('field_titulo_pagina')->isEmpty()) {
+      $titulo = trim((string) $termino->get('field_titulo_pagina')->value);
+      if ($titulo !== '') {
+        return $titulo;
+      }
+    }
+
+    return (string) $termino->label();
   }
 
   /**

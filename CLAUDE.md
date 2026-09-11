@@ -2007,6 +2007,53 @@ Donde este documento y la realidad del repo discrepan, manda esta lista (decidid
     sucio) y simula por defecto; escribe con `-- --crear` y admite `-- --limite=N` para una primera
     tanda corta. Copia previa: snapshot `pre-transliterar-urls`.
 
+- **"Bolsas guardería y escolares" (182) pasa a "Bolsas y sacos", con H1 y title propios (2026-09-11,
+  cliente)**: nombre corto donde hay poco sitio (menú, miga, teselas, chips, JSON-LD de categoría), H1 y
+  `<title>` largos en su página («Bolsas de guardería y sacos de almuerzo»), y las 74 fichas con un
+  `<title>` de patrón («Saco de almuerzo o muda escolar, diseño Sakura | Tienda Pronens») **sin tocar
+  ni el H1 ni el nombre del producto**. Todo en `scripts/bolsas-y-sacos.php`. Lo que conviene no
+  reinventar:
+  - **Tres campos nuevos, traducibles y opcionales**: `field_titulo_pagina` y `field_titulo_productos`
+    (con el marcador `@diseno`) en `tipo_de_producto`, y `field_diseno` en el producto. Vacíos, todo
+    sigue como antes, así que valen para cualquier otra categoría sin código: el cliente escribe el H1
+    o el patrón en el término y el diseño en cada ficha.
+  - **El H1 lo pinta el tema** (`CatalogoHooks::tituloDelTermino()`) y **los títulos los pone
+    `SeoHooks`** en `hook_metatags_alter`, sustituyendo el TOKEN (`[term:name]`,
+    `[commerce_product:title]`) y no la etiqueta entera: así se respeta la cola configurada
+    (`| [site:name]`) y, si el cliente quita el token de la configuración, no se pisa nada. Lo que
+    escriba en `field_metatag` manda, y como en el alter ya está fundido con la configuración hay que
+    **preguntárselo a la entidad** (`etiquetaPropia()`). La composición es lógica pura en `TituloSeo`,
+    con pruebas.
+  - **En la categoría siguen al H1 el `<title>`, og:title y twitter:title**; en la ficha **solo el
+    `<title>`**: og:title, H1 y JSON-LD siguen diciendo cómo se llama el producto, que es lo que se
+    comparte y se compra. Y solo aplica si la categoría es la **PRINCIPAL** del producto (primer
+    término), el mismo criterio que la miga y el alias. La ficha declara la cache tag del término en
+    `hook_page_attachments`, porque su `<title>` depende ahora del patrón.
+  - **El diseño de las 74 bolsas se dedujo del título en los 5 idiomas**: en es/ca/fr/it la primera
+    palabra es el genérico y el diseño empieza en la primera mayúscula («La Granja de mi Tío» entera);
+    en inglés, Title Case con el diseño en medio, se quitan las genéricas. Ocho ajustes a mano en el
+    script (321 fr/it con el diseño en minúscula, 199/273/304 en, y **283 ca «Unicornio» y 303 ca/fr
+    «Mago», restos de castellano en el título traducido, que NO se tocaron**). Solo escribe donde está
+    vacío, salvo que el valor sea exactamente el deducido y exista ajuste: así una corrección del
+    cliente nunca se pisa.
+  - **URL nueva con 301 automático**: el término está en pathauto automático, así que el alias pasa a
+    `/productos/bolsas-y-sacos` (y `/ca/productes/bosses-i-sacs`, `/en/products/nursery-and-lunch-bags`,
+    `/fr/produits/sacs-de-creche-et-a-gouter`, `/it/prodotti/borse-e-sacche`), traducción a
+    traducción, y `redirect` deja los 5 301 (rids 1695-1699). Las 7 del D7 que ya apuntaban al término
+    siguen en un salto porque su destino es la ruta interna. **Los alias de los 74 productos NO se
+    mueven**: están en manual y llevan congelado el tramo `bolsas-guarderia` del D7.
+  - El enlace 9 del menú `main` y la línea de llms.txt toman el nombre nuevo. Sitemap regenerado
+    (1962 URLs, solo las nuevas de la categoría).
+  - **Config exportada** (6 `field.*`, 2 form displays, los 2 view displays del producto con el campo
+    oculto y `llms_txt.settings`). Ojo: ese `drush cex` arrastró deriva de klaro, metatag global por
+    idioma, `views.view.commerce_orders` y `pronens.settings` que **no era de esto y se revirtió**.
+  - **Contenido, ejecutar en producción**: `drush cim` primero (los campos), luego
+    `scripts/bolsas-y-sacos.php`, `drush cr` y `drush simple-sitemap:generate`. Copia previa:
+    snapshot `pre-bolsas-y-sacos`.
+  - **Pendiente y del cliente**: las traducciones de nombre, H1 y patrón en ca/en/fr/it son propuesta
+    y se editan en el término; la descripción del término (meta description) sigue hablando de «bolsas
+    guardería» y podría mencionar los sacos; y los títulos 283 ca y 303 ca/fr con castellano dentro.
+
 ## Orden de trabajo
 1. **Tema `pronens`**: tokens CSS (custom properties con los colores/tipos del README), fuentes
    self-hosted WOFF2 (Archivo, Nunito Sans, Caveat), layout base, header sticky + marquee + footer.

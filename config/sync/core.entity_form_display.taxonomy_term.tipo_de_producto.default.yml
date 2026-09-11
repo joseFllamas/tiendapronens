@@ -7,6 +7,8 @@ dependencies:
     - field.field.taxonomy_term.tipo_de_producto.field_imagen
     - field.field.taxonomy_term.tipo_de_producto.field_metatag
     - field.field.taxonomy_term.tipo_de_producto.field_posicion
+    - field.field.taxonomy_term.tipo_de_producto.field_titulo_pagina
+    - field.field.taxonomy_term.tipo_de_producto.field_titulo_productos
     - taxonomy.vocabulary.tipo_de_producto
   module:
     - media_library
@@ -44,6 +46,22 @@ content:
     settings:
       sidebar: true
       use_details: true
+    third_party_settings: {  }
+  field_titulo_pagina:
+    type: string_textfield
+    weight: -4
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  field_titulo_productos:
+    type: string_textfield
+    weight: -3
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
     third_party_settings: {  }
   langcode:
     type: language_select
