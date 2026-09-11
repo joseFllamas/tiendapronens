@@ -124,10 +124,15 @@
         <li>{{ 'Returns within 30 days'|t }}</li>
       </ul>
 
-      {# Plegada: las descripciones migradas son largas y empujaban el resto
-         de la columna de compra fuera de pantalla (decisión 2026-08-11). #}
+      {# Desplegada (2026-09-10, cliente): es el texto propio del producto y
+         plegarlo lo esconde, que era justo lo que le restaba peso en búsqueda.
+         Revierte la decisión del 2026-08-11, y lo que la motivaba (que el
+         acordeón abierto empujaba el resto de la columna fuera de pantalla) ya
+         no molesta: la galería se queda pegada, así que una columna de compra
+         más larga no deja el lado izquierdo en blanco. Los otros acordeones
+         siguen plegados: son datos de consulta, no el texto del producto. #}
       {% if product.body|render|trim %}
-        <details class="pro-acc">
+        <details class="pro-acc" open>
           <summary class="pro-acc__title">{{ 'Description'|t }}</summary>
           <div class="pro-acc__body">{{ product.body }}</div>
         </details>

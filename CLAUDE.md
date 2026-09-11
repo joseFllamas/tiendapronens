@@ -1937,6 +1937,76 @@ Donde este documento y la realidad del repo discrepan, manda esta lista (decidid
     focales de las fotos que lo pidan, empezando por las 30 categorías (teselas y mega menú) y el
     hero.
 
+- **Empujón de SEO y UX en la ficha (2026-09-10, cliente)**: la ficha del recambio Sakura la había
+  leído Google y seguía sin indexar, así que se tocaron las tres cosas que le restaban calidad.
+  Ninguna cambia datos: son tema y alias. Lo que conviene no reinventar:
+  - **La galería se queda pegada** (`pro-ficha__gallery--pegada`) en vez de dejar el lado izquierdo
+    en blanco cuando la columna de compra es más larga. El sticky va en la CUADRÍCULA y no en cada
+    foto: un item de grid solo puede desplazarse dentro de su propia celda, así que ahí no serviría
+    de nada. Y el desplazamiento de arriba es un `min()` con los dos casos, que decide la altura que
+    mide el JS en `--pro-gal-alto`: si la galería cabe en la pantalla se pega debajo de la cabecera
+    y acompaña a la descripción todo el camino, y si es más alta el segundo valor sale negativo y la
+    pega por su BASE, de modo que primero se recorren todas las fotos y solo al acabarse se queda
+    quieta. **Un sticky por arriba a secas no vale**: con la galería de 1403px de un body de 6 fotos
+    en una pantalla de 900, las últimas no se podrían llegar a ver nunca. El JS solo MIDE, y con
+    ResizeObserver porque al arrancar las fotos no han cargado y con 3:4 la altura cambia también
+    con el ancho de la ventana; quién se pega y por dónde lo decide el CSS. No hace falta escuchar
+    el `resize`: la parte de pantalla del cálculo son `vh` y esos los rehace el navegador solo. Y
+    escribir la variable no cambia el tamaño de la galería (solo su `top`), así que el observador no
+    se llama a sí mismo. Por debajo de 1025px la ficha es de una columna y el sticky se apaga.
+  - **Con un número impar de fotos, la última ocupa la fila entera**
+    (`:last-child:nth-child(odd)`, que es «la última y en posición impar», o sea total impar, sin
+    pasar el número desde el preprocess): si no, la cuadrícula de dos columnas deja medio hueco en
+    blanco justo donde termina la galería, que es exactamente lo que se queda pegado a la vista.
+    Afecta a los **72 productos publicados de una sola foto** (media columna con una foto suelta al
+    lado del título) y a los 54 de tres o cinco. A ancho completo la foto mide unos 702px y
+    `pronens_ficha_miniatura` sirve 740, así que no se amplía. En móvil la galería es una tira flex
+    y `grid-column` no pinta nada.
+  - **La descripción va desplegada**, y eso revierte la decisión del 2026-08-11: se plegó porque el
+    acordeón abierto empujaba el resto de la columna de compra fuera de pantalla, y con la galería
+    pegada eso ya no molesta. Es el texto propio del producto, lo único que no comparte con el resto
+    del catálogo, y plegarlo lo escondía. Los otros tres acordeones siguen plegados: son datos de
+    consulta (lavado, tallas, envíos), no el texto del producto.
+
+- **URLs sin tildes, y las viejas redirigidas (2026-09-10, cliente)**: los 1224 alias que trajo la
+  migración con tilde, ñ o espacios dentro (`/productos/bolsas-guarder%C3%ADa/…`) pasan a ASCII con
+  `scripts/urls-transliterar.php`. Aquí ya estaba `transliterate: true`, así que lo que se cree de
+  ahora en adelante nace limpio; esto arregla lo que quedó del D7, que la tenía apagada. Lo que
+  conviene no reinventar:
+  - **Se cambian los caracteres, NO la estructura**: `bolsas-guardería` pasa a `bolsas-guarderia` y
+    el resto del alias se queda igual, incluido el tramo de la categoría, que en los alias migrados
+    está congelado aunque el producto haya cambiado de categoría desde el D7. **No se regeneran con
+    pathauto ni se pasan a estado automático**: eso movería los 1460 alias de tres tramos a su
+    categoría de hoy y con el título normalizado en agosto, que es otra decisión y de otro tamaño.
+  - **La limpieza la hace el limpiador de pathauto tramo a tramo** (`pathauto.alias_cleaner`), no
+    una transliteración a pelo, para que estos alias queden como los que genera el patrón para el
+    contenido nuevo. En 1221 de los 1224 el resultado es idéntico; los 3 que difieren son justo los
+    que hay que arreglar bien: un alias catalán con **espacios de verdad** dentro (que la URL servía
+    con %20), donde el limpiador pone guiones, y dos con el apóstrofo tipográfico `’`
+    (`children’s-school-backpacks`), que el limpiador quita. Por eso el criterio no es «tiene
+    caracteres no ASCII» sino **«no es un slug limpio»**: así entra también `tuta sportiva`, que no
+    lleva ni una tilde y sí un espacio.
+  - **No hay que escribir ni una redirección**: se guarda la MISMA entidad `path_alias` con el
+    alias nuevo (no se borra y se crea otra), y el `hook_path_alias_update` de `redirect` deja el
+    301 del alias viejo a la ruta interna del producto, que sale ya con el alias nuevo aplicado. Un
+    solo salto, verificado por HTTP en 40 al azar (40 de 40 nuevas en 200 y 40 de 40 viejas en 301 a
+    la nueva). Guardar la misma entidad es además lo que mantiene el pid al que apunta el campo
+    `path` del producto. **Y las 266 redirecciones del D7 siguen valiendo y siguen en un salto**
+    porque sus destinos son rutas internas y no alias: el `/productos/márfegas…/colchoneta…` del
+    informe de GA4 acaba ahora en la URL limpia directamente.
+  - **Antes de escribir se revisan cuatro choques** y lo que falle se salta con aviso en vez de
+    dejar el catálogo a medias: dos alias nuevos que colisionen, uno que pise un alias existente,
+    una redirección cuyo origen sea el alias NUEVO (se resuelve antes del enrutado, así que taparía
+    la página) y una que ya exista con el origen viejo (cortaría la creación del 301). En la base de
+    datos del 10/09/2026 los cuatro salían a cero.
+  - **Después hace falta `drush cr`** (las páginas cacheadas enlazan a las URLs viejas y pagarían un
+    salto) y `drush simple-sitemap:generate`, que guarda las URLs generadas: el sitemap quedó con
+    1956 URLs y **ninguna porcentajeada**, que es lo que se quiere que lea Google.
+  - Los alias y las redirecciones son **contenido**: no viajan en `config/sync` y el script hay que
+    ejecutarlo también en producción. Es idempotente (en la segunda pasada no queda ningún alias
+    sucio) y simula por defecto; escribe con `-- --crear` y admite `-- --limite=N` para una primera
+    tanda corta. Copia previa: snapshot `pre-transliterar-urls`.
+
 ## Orden de trabajo
 1. **Tema `pronens`**: tokens CSS (custom properties con los colores/tipos del README), fuentes
    self-hosted WOFF2 (Archivo, Nunito Sans, Caveat), layout base, header sticky + marquee + footer.

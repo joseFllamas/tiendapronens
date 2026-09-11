@@ -672,6 +672,31 @@
     }, { passive: true });
   }
 
+  /**
+   * Publica la altura de la galería para que el CSS la pueda pegar.
+   *
+   * El JS solo MIDE: quién se pega y por dónde lo decide el min() de
+   * .pro-ficha__gallery--pegada. Se mide con ResizeObserver y no una sola vez
+   * en el attach porque al arrancar las fotos todavía no han cargado y la
+   * altura cambia al llegar; y con 3:4, cambia también con el ancho de la
+   * ventana. No hace falta escuchar el resize de la ventana: la parte de
+   * pantalla del cálculo son vh y esos los recalcula el navegador solo.
+   *
+   * Escribir la variable no cambia el tamaño de la galería (solo su top), así
+   * que el observador no se llama a sí mismo.
+   *
+   * @param {Element} galeria - La cuadrícula [data-pro-galeria].
+   */
+  function iniciaGaleriaPegada(galeria) {
+    if (typeof ResizeObserver !== 'function') {
+      return;
+    }
+    new ResizeObserver(() => {
+      galeria.style.setProperty('--pro-gal-alto', galeria.offsetHeight + 'px');
+    }).observe(galeria);
+    galeria.classList.add('pro-ficha__gallery--pegada');
+  }
+
   Drupal.behaviors.pronensFicha = {
     attach(context) {
       once('pro-qty', '[data-pro-qty-input]', context).forEach(iniciaStepper);
@@ -679,6 +704,7 @@
       once('pro-guia-dialogo', '[data-pro-guia]', context).forEach(iniciaGuiaDialogo);
       once('pro-guia-enlace', '.pro-formatos', context).forEach(iniciaGuiaEnlace);
       once('pro-galeria', '[data-pro-galeria]', context).forEach(iniciaZoom);
+      once('pro-galeria-pegada', '[data-pro-galeria]', context).forEach(iniciaGaleriaPegada);
     },
   };
 })(Drupal, once, drupalSettings);

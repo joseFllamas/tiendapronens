@@ -22,6 +22,36 @@
   min-width: 0;
 }
 
+/* La galería acompaña a la columna de compra en vez de dejar el lado izquierdo
+   en blanco: cuando las fotos se acaban y la descripción sigue, se queda
+   pegada. Va en la CUADRÍCULA y no en cada foto, porque un item de grid solo
+   puede desplazarse dentro de su propia celda y ahí el sticky no serviría de
+   nada.
+
+   Dos casos en una sola regla, y los decide la altura que mide el JS en
+   --pro-gal-alto:
+   - Galería más baja que la pantalla: gana el primer valor y se pega debajo de
+     la cabecera, acompañando a la descripción todo el camino.
+   - Galería más alta: el segundo valor sale negativo y la pega por su BASE, así
+     que primero se recorren todas las fotos y solo al acabarse se queda quieta.
+     Con un sticky por arriba a secas, las últimas fotos de una galería alta no
+     se podrían llegar a ver nunca.
+   El sticky de un item de grid se mueve dentro de SU ÁREA, que abarca toda la
+   fila, de modo que se despega solo al llegar al final de la columna de compra
+   y no se sale nunca de la ficha. El valor de reserva son 200vh (galería muy
+   alta), que es el lado seguro: si por lo que sea faltara la medida, la regla
+   no se pega y no esconde ninguna foto.
+
+   La clase la pone el JS, que es quien mide: sin JS la galería se queda en el
+   flujo, como estaba. */
+.pro-ficha__gallery--pegada {
+  position: sticky;
+  top: min(
+    calc(var(--pro-header-height) + 12px),
+    calc(100vh - var(--pro-gal-alto, 200vh) - 12px)
+  );
+}
+
 .pro-ficha__shot {
   position: relative;
   aspect-ratio: 3 / 4;
@@ -35,6 +65,20 @@
   height: 100%;
   object-fit: cover;
   display: block;
+}
+
+/* Con un número impar de fotos, la última ocupa la fila entera: si no, la
+   cuadrícula de dos columnas deja medio hueco en blanco justo donde termina la
+   galería, que es lo que se queda pegado a la vista. Afecta a los 72 productos
+   de una sola foto (media columna con una foto suelta al lado del título) y a
+   los 54 de tres o cinco.
+
+   :last-child:nth-child(odd) es «la última y en posición impar», o sea que el
+   total es impar, sin necesidad de pasar el número desde el preprocess. A
+   ancho completo la foto mide unos 702px y el estilo sirve 740, así que no se
+   amplía. En móvil la galería es una tira flex y grid-column no pinta nada. */
+.pro-ficha__shot:last-child:nth-child(odd) {
+  grid-column: 1 / -1;
 }
 
 /* La foto de la vista previa es el contenedor que mide el bordado: la altura de
@@ -1226,6 +1270,12 @@
   .pro-ficha__grid {
     grid-template-columns: minmax(0, 1fr);
     gap: 32px;
+  }
+
+  /* Una sola columna: ya no hay lado derecho al que acompañar, y pegada
+     taparía el bloque de compra. */
+  .pro-ficha__gallery--pegada {
+    position: static;
   }
 
   .pro-ficha__title {
