@@ -190,6 +190,18 @@ class CheckoutHooks {
     $this->marcarGrupoRadios($form, ['payment_information', 'payment_method'], $this->t('Payment method'));
     $this->marcarGrupoRadios($form, ['shipping_information', 'shipments', 0, 'shipping_method'], $this->t('Shipping method'));
 
+    // El formulario de cupón de Commerce no trae ni form--inline ni
+    // container-inline, así que el flex del tema no tenía a qué agarrarse y el
+    // botón "Aplicar cupón" caía debajo del campo (y sangrado, por el margen
+    // que components/button.css da a todo .button que no sea :first-child). La
+    // clase va aquí y no en CSS porque el contenedor a marcar es el del #theme
+    // del formulario en línea, indistinguible del envoltorio del propio pane.
+    // form_alter corre en cada reconstrucción, así que sobrevive al AJAX del
+    // botón.
+    if (isset($form['sidebar']['coupon_redemption']['form'])) {
+      $form['sidebar']['coupon_redemption']['form']['#attributes']['class'][] = 'pro-co__coupon-form';
+    }
+
     // El pane de registro de la pantalla de gracias (completion_register)
     // construye sus campos con el form display "register" del usuario, que
     // arrastra la foto de perfil: en una tienda no pinta nada. Las
