@@ -358,8 +358,11 @@
   border-top: 1px solid var(--pro-border-cream);
 }
 
-.pro-co__coupon .form--inline,
-.pro-co__coupon .container-inline {
+/* La clase la pone CheckoutHooks::formCheckoutAlter(). Aquí había un selector
+   sobre .form--inline / .container-inline que no aplicaba nunca: el formulario
+   de cupón de Commerce no lleva ninguna de las dos, así que campo y botón se
+   apilaban en flujo normal. */
+.pro-co__coupon-form {
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
@@ -400,10 +403,70 @@
   border-radius: 10px;
   padding: 11px 18px;
   cursor: pointer;
+  /* components/button.css da margin: 0 1em a todo .button que no sea
+     :first-child, y el de aplicar va detrás del campo: sin esto el botón sale
+     sangrado respecto del bloque. */
+  margin: 0;
 }
 
 .pro-co__coupon input[type="submit"]:hover {
   border-color: var(--pro-ink-2);
+}
+
+/* El throbber del AJAX se inserta detrás del botón, o sea que es un item más
+   de la fila. */
+.pro-co__coupon .ajax-progress {
+  align-self: center;
+}
+
+/* --- Cupón ya aplicado. --- */
+.pro-co__coupon-list {
+  /* En su propia fila, por si algún día se admite más de un cupón y conviven
+     la lista y el campo. */
+  flex: 1 1 100%;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.pro-co__coupon-applied {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--pro-font-ui);
+  font-size: 15px;
+  color: var(--pro-ink-2);
+  background: #fff;
+  border: 1px solid var(--pro-border-2);
+  border-radius: 10px;
+  padding: 10px 13px;
+}
+
+.pro-co__coupon-code {
+  font-weight: 700;
+}
+
+.pro-co__coupon-code::before {
+  content: "✓";
+  margin-right: 6px;
+  color: var(--pro-teal-ink);
+}
+
+/* Gana a .pro-co__coupon input[type="submit"] por especificidad (0,2,1). */
+.pro-co__coupon-applied input[type="submit"] {
+  margin: 0 0 0 auto;
+  padding: 0;
+  background: none;
+  border: 0;
+  font-weight: 400;
+  font-size: 14px;
+  color: var(--pro-text-2);
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.pro-co__coupon-applied input[type="submit"]:hover {
+  color: var(--pro-ink-2);
 }
 
 /* --- Líneas del resumen. --- */

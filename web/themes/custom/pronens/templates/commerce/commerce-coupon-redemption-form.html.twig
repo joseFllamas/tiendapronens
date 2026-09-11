@@ -1,0 +1,36 @@
+{#
+/**
+ * @file
+ * Formulario del cupón del resumen del checkout.
+ *
+ * - form: el formulario. Los cupones ya aplicados van en form.coupons, cada uno
+ *   con code, display_name y remove_button.
+ *
+ * Se sustituye el del módulo por dos motivos. Uno, pintaba un <h3> "Cupones
+ * aplicados" y una <table> en crudo dentro del panel del resumen, que ya tiene
+ * su propio encabezado. Y dos, su rama "single" está muerta: comprueba
+ * form['#cardinality'], que ningún sitio de commerce_promotion rellena ya (la
+ * cardinalidad viaja en #configuration.max_coupons), así que el estado aplicado
+ * caía SIEMPRE en la tabla aunque la tienda solo admita un cupón.
+ *
+ * El filtro sobre las claves que empiezan por "#" es el del template original:
+ * sin él se intentarían pintar las propiedades del render array.
+ *
+ * El contenedor es flex (.pro-co__coupon-form, clase que pone
+ * CheckoutHooks::formCheckoutAlter), así que la lista y la pareja campo+botón
+ * son items de la misma fila. Con un cupón puesto, code y apply llegan con
+ * #access FALSE y no se pintan.
+ */
+#}
+{% if form.coupons|length %}
+  <ul class="pro-co__coupon-list">
+    {% for key, coupon in form.coupons|filter((coupon, key) => key|first != '#') %}
+      <li class="pro-co__coupon-applied">
+        <span class="pro-co__coupon-code">{{ coupon.code }}</span>
+        {{ coupon.remove_button }}
+      </li>
+    {% endfor %}
+  </ul>
+{% endif %}
+
+{{ form|without('coupons') }}
