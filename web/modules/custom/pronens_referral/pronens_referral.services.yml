@@ -1,0 +1,14 @@
+services:
+  Drupal\pronens_referral\AtribuidorDePedidos:
+    class: Drupal\pronens_referral\AtribuidorDePedidos
+    arguments:
+      - '@config.factory'
+      - '@request_stack'
+      - '@datetime.time'
+
+  Drupal\pronens_referral\EventSubscriber\AtribucionSubscriber:
+    class: Drupal\pronens_referral\EventSubscriber\AtribucionSubscriber
+    arguments:
+      - '@Drupal\pronens_referral\AtribuidorDePedidos'
+    tags:
+      - { name: event_subscriber }

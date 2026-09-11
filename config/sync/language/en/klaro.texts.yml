@@ -1,18 +1,15 @@
 consentModal:
-  title: 'Use of personal data and cookies'
-  description: |
-    Please choose the services and 3rd party applications we would like to use.
+  title: 'Cookies at Pronens'
+  description: 'Choose which services you allow. Necessary cookies cannot be switched off because the shop does not work without them.'
   privacyPolicy:
-    name: 'privacy policy'
-    text: |
-      To learn more, please read our {privacyPolicy}.
-    url: 'internal:/<front>'
+    name: 'cookie policy'
+    text: 'Read more in our {privacyPolicy}.'
+    url: 'entity:node/9'
 consentNotice:
-  title: 'Use of personal data and cookies'
-  changeDescription: 'There were changes since your last visit, please update your consent.'
-  description: |
-    We use cookies and process personal data for the following purposes: {purposes}.
-  learnMore: Customize
+  title: 'Cookies at Pronens'
+  changeDescription: 'Things have changed since your last visit: please review your choice.'
+  description: 'We use our own cookies so the shop works and, if you allow it, Google Analytics to learn how it is used and improve it. You can change your decision at any time. {purposes}.'
+  learnMore: Settings
 ok: Accept
 save: Save
 decline: Decline
@@ -21,18 +18,18 @@ acceptAll: 'Accept all'
 acceptSelected: 'Accept selected'
 service:
   disableAll:
-    title: 'Toggle all services'
-    description: 'Use this switch to enable/disable all services.'
+    title: 'All services'
+    description: 'Switch all services on or off at once.'
   optOut:
-    title: (opt-out)
-    description: 'This service is loaded by default (opt-out possible).'
+    title: '(on by default)'
+    description: 'This service loads by default; you can switch it off.'
   required:
-    title: '(always required)'
-    description: 'This service is always required.'
+    title: '(always on)'
+    description: 'This service is required and cannot be switched off.'
   purposes: Purposes
   purpose: Purpose
 contextualConsent:
   acceptAlways: Always
-  acceptOnce: 'Yes (this time)'
-  description: 'Load external content supplied by {title}?'
-poweredBy: 'Powered by Klaro!'
+  acceptOnce: 'Yes, this time'
+  description: 'Load external content from {title}?'
+poweredBy: ''

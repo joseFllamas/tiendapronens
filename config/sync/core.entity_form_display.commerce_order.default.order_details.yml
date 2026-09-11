@@ -5,6 +5,11 @@ dependencies:
   config:
     - commerce_order.commerce_order_type.default
     - core.entity_form_mode.commerce_order.order_details
+    - field.field.commerce_order.default.field_ref_campaign
+    - field.field.commerce_order.default.field_ref_content
+    - field.field.commerce_order.default.field_ref_method
+    - field.field.commerce_order.default.field_ref_seen
+    - field.field.commerce_order.default.field_ref_source
   enforced:
     module:
       - commerce_order
@@ -35,6 +40,11 @@ hidden:
   billing_profile: true
   coupons: true
   customer_comments: true
+  field_ref_campaign: true
+  field_ref_content: true
+  field_ref_method: true
+  field_ref_seen: true
+  field_ref_source: true
   ip_address: true
   order_items: true
   order_number: true

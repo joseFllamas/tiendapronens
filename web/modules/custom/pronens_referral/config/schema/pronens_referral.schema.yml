@@ -1,0 +1,22 @@
+pronens_referral.settings:
+  type: config_object
+  label: 'Ajustes de la atribución de partners'
+  mapping:
+    activo:
+      type: boolean
+      label: 'Atribución activada'
+    fuente:
+      type: string
+      label: 'Valor de utm_source que se reconoce'
+    dias_cookie:
+      type: integer
+      label: 'Días que dura la cookie de atribución'
+    prefijo_cupon:
+      type: string
+      label: 'Prefijo de los cupones B2B del partner'
+    cupones:
+      type: sequence
+      label: 'Códigos de cupón que cuentan como del partner'
+      sequence:
+        type: string
+        label: 'Código de cupón'

@@ -54,6 +54,7 @@
         "drupal/symfony_mailer": "^2.0.2",
         "drupal/tmgmt": "^1.18",
         "drupal/tmgmt_deepl_glossary": "^2.2",
+        "drupal/views_data_export": "^1.10",
         "drush/drush": "^13.7"
     },
     "conflict": {

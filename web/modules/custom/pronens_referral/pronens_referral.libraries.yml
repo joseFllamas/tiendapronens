@@ -1,0 +1,9 @@
+captura:
+  version: 1.x
+  js:
+    # defer, como el resto del JS del tema: no hay nada que pintar y la captura
+    # no compite con el primer render.
+    js/referral.js: { attributes: { defer: true } }
+  dependencies:
+    - core/drupal
+    - core/drupalSettings

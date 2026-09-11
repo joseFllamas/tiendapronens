@@ -1,0 +1,21 @@
+langcode: es
+status: true
+dependencies:
+  enforced:
+    module:
+      - pronens_referral
+  config:
+    - commerce_order.commerce_order_type.default
+    - field.storage.commerce_order.field_ref_seen
+id: commerce_order.default.field_ref_seen
+field_name: field_ref_seen
+entity_type: commerce_order
+bundle: default
+label: 'Llegada a la tienda'
+description: 'Cuándo hizo clic el visitante en el enlace del partner.'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: timestamp

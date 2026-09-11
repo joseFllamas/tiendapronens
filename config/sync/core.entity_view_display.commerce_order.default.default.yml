@@ -4,10 +4,16 @@ status: true
 dependencies:
   config:
     - commerce_order.commerce_order_type.default
+    - field.field.commerce_order.default.field_ref_campaign
+    - field.field.commerce_order.default.field_ref_content
+    - field.field.commerce_order.default.field_ref_method
+    - field.field.commerce_order.default.field_ref_seen
+    - field.field.commerce_order.default.field_ref_source
   module:
     - commerce_order
     - commerce_payment
     - commerce_price
+    - commerce_shipping
     - state_machine
     - user
 _core:
@@ -90,6 +96,11 @@ content:
     third_party_settings: {  }
     weight: 10
     region: content
+  entity_print_view_pdf:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 0
+    region: content
   ip_address:
     type: string
     label: inline
@@ -157,6 +168,13 @@ content:
     region: content
 hidden:
   commerce_activity_log: true
+  entity_print_view_epub: true
+  entity_print_view_word_docx: true
+  field_ref_campaign: true
+  field_ref_content: true
+  field_ref_method: true
+  field_ref_seen: true
+  field_ref_source: true
   order_number: true
   search_api_excerpt: true
   total_paid: true

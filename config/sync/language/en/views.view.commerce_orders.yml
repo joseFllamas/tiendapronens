@@ -1,13 +1,27 @@
+label: Orders
 display:
   default:
+    display_title: Master
     display_options:
+      exposed_form:
+        options:
+          submit_button: Filter
+          reset_button_label: Reset
+          exposed_sorts_label: 'Sort by'
+          sort_asc_label: Asc
+          sort_desc_label: Desc
+      pager:
+        options:
+          expose:
+            items_per_page_label: 'Items per page'
+            items_per_page_options_all_label: '- All -'
+            offset_label: Offset
+          tags:
+            previous: '‹ previous'
+            next: 'next ›'
+            first: '« first'
+            last: 'last »'
       fields:
-        pronens_envio_pedido:
-          label: Shipping
-        pronens_expedicion_pedido:
-          label: Tracking
-        pronens_factura_pedido:
-          label: Invoice
         commerce_order_bulk_form:
           action_title: 'With selection'
         order_number:
@@ -29,20 +43,20 @@ display:
           label: Email
           separator: ', '
         state:
-          label: State
+          label: 'Order status'
           separator: ', '
         total_price__number:
           label: Total
           separator: ', '
         operations:
           label: Operations
+        pronens_envio_pedido:
+          label: Shipping
+        pronens_expedicion_pedido:
+          label: Tracking
+        pronens_factura_pedido:
+          label: Invoice
       filters:
-        pronens_situacion_envio:
-          expose:
-            label: Shipping
-        pronens_factura_descargada:
-          expose:
-            label: Invoice
         order_number:
           expose:
             label: 'Order number'
@@ -51,30 +65,17 @@ display:
             label: Type
         state:
           expose:
-            label: State
-      exposed_form:
-        options:
-          submit_button: Filter
-          reset_button_label: Reset
-          exposed_sorts_label: 'Sort by'
-          sort_asc_label: Asc
-          sort_desc_label: Desc
-      pager:
-        options:
+            label: 'Order status'
+        pronens_situacion_envio:
           expose:
-            items_per_page_label: 'Items per page'
-            items_per_page_options_all_label: '- All -'
-            offset_label: Offset
-          tags:
-            previous: '‹ previous'
-            next: 'next ›'
-            first: '« first'
-            last: 'last »'
+            label: Shipping
+        pronens_factura_descargada:
+          expose:
+            label: Invoice
       title: Orders
       empty:
         area_text_custom:
           content: 'No orders available.'
-    display_title: Master
   page_1:
     display_title: Page
     display_options:
@@ -83,4 +84,3 @@ display:
       tab_options:
         title: Orders
         description: 'Manage your orders.'
-label: Orders

@@ -15,6 +15,11 @@
  * páginas y es el consent mode quien decide si manda pings sin cookies o
  * medición completa.
  *
+ * El apartado de la cookie de atribución de educoland está también en
+ * `scripts/atribucion-educoland.php`, que lo inserta de forma quirúrgica: aquí
+ * va dentro del texto completo para que un re-lanzamiento de este script no lo
+ * borre. Si se cambia el copy, hay que cambiarlo en los dos.
+ *
  * Es configuración (Klaro, google_tag, textos) más un nodo y un enlace de
  * menú (contenido). Idempotente. Uso:
  *   ddev drush php:script scripts/cookies-klaro.php
@@ -41,6 +46,8 @@ $cuerpos = [
 <p>Hacen funcionar la tienda: mantienen tu sesión y tu cesta, protegen los formularios y recuerdan tu elección sobre las demás cookies. No requieren consentimiento y no se pueden desactivar.</p>
 <h2>Cookies de analítica</h2>
 <p>Con tu permiso usamos Google Analytics 4, a través de Google Tag Manager, para saber qué páginas se visitan y cómo se navega por la tienda, y así mejorarla. Los datos se tratan de forma agregada y Google actúa como encargado del tratamiento. Si no las aceptas, Google Analytics no guarda cookies ni identificadores en tu dispositivo: solo recibe señales anónimas y sin cookies (modo de consentimiento avanzado de Google), que no permiten reconocerte.</p>
+<h2>Cookie de atribución de colaboraciones</h2>
+<p>Colaboramos con educoland.com, un directorio de centros educativos que recomienda nuestra tienda. Si llegas desde uno de sus enlaces y aceptas la analítica, guardamos en tu navegador una cookie propia, <code>pronens_ref</code>, durante 90 días. Solo recuerda de qué sección y de qué banner veniste, nunca quién eres: no contiene tu nombre, tu correo ni ningún identificador, y no se envía a educoland ni a terceros. Sirve para saber cuántos pedidos llegan gracias a esa colaboración y liquidarla con justicia. Si no aceptas la analítica no se guarda nada, y si cambias de opinión se borra.</p>
 <h2>Cómo cambiar tu elección</h2>
 <p>Puedes aceptar, rechazar o cambiar tu decisión en cualquier momento desde el botón de cookies que hay en la esquina inferior de cada página, o borrando las cookies desde la configuración de tu navegador.</p>
 <h2>Responsable</h2>
@@ -52,6 +59,8 @@ HTML],
 <p>Fan funcionar la botiga: mantenen la teva sessió i la teva cistella, protegeixen els formularis i recorden la teva elecció sobre les altres cookies. No requereixen consentiment i no es poden desactivar.</p>
 <h2>Cookies d’analítica</h2>
 <p>Amb el teu permís fem servir Google Analytics 4, a través de Google Tag Manager, per saber quines pàgines es visiten i com es navega per la botiga, i així millorar-la. Les dades es tracten de manera agregada i Google actua com a encarregat del tractament. Si no les acceptes, Google Analytics no guarda cookies ni identificadors al teu dispositiu: només rep senyals anònims i sense cookies (mode de consentiment avançat de Google), que no permeten reconèixer-te.</p>
+<h2>Cookie d’atribució de col·laboracions</h2>
+<p>Col·laborem amb educoland.com, un directori de centres educatius que recomana la nostra botiga. Si arribes des d’un dels seus enllaços i acceptes l’analítica, guardem al teu navegador una cookie pròpia, <code>pronens_ref</code>, durant 90 dies. Només recorda de quina secció i de quin bàner vas venir, mai qui ets: no conté el teu nom, el teu correu ni cap identificador, i no s’envia a educoland ni a tercers. Serveix per saber quantes comandes arriben gràcies a aquesta col·laboració i liquidar-la amb justícia. Si no acceptes l’analítica no es guarda res, i si canvies d’opinió s’esborra.</p>
 <h2>Com canviar la teva elecció</h2>
 <p>Pots acceptar, rebutjar o canviar la teva decisió en qualsevol moment des del botó de cookies de la cantonada inferior de cada pàgina, o esborrant les cookies des de la configuració del navegador.</p>
 <h2>Responsable</h2>
@@ -63,6 +72,8 @@ HTML],
 <p>They make the shop work: they keep your session and your basket, protect the forms and remember your choice about the other cookies. They do not require consent and cannot be switched off.</p>
 <h2>Analytics cookies</h2>
 <p>With your permission we use Google Analytics 4, through Google Tag Manager, to learn which pages are visited and how people browse the shop, so we can improve it. Data is processed in aggregate and Google acts as data processor. If you do not accept them, Google Analytics stores no cookies or identifiers on your device: it only receives anonymous, cookieless signals (Google’s advanced consent mode) that cannot identify you.</p>
+<h2>Partnership attribution cookie</h2>
+<p>We work with educoland.com, a directory of schools and nurseries that recommends our shop. If you arrive from one of their links and accept analytics, we store our own cookie, <code>pronens_ref</code>, in your browser for 90 days. It only remembers which section and which banner you came from, never who you are: it holds no name, no email address and no identifier, and it is not sent to educoland or to any third party. We use it to know how many orders come from that partnership and settle it fairly. If you do not accept analytics nothing is stored, and if you change your mind it is deleted.</p>
 <h2>How to change your choice</h2>
 <p>You can accept, decline or change your decision at any time from the cookie button in the bottom corner of every page, or by deleting cookies in your browser settings.</p>
 <h2>Controller</h2>
@@ -74,6 +85,8 @@ HTML],
 <p>Ils font fonctionner la boutique : ils conservent votre session et votre panier, protègent les formulaires et mémorisent votre choix concernant les autres cookies. Ils ne nécessitent pas de consentement et ne peuvent pas être désactivés.</p>
 <h2>Cookies d’analyse</h2>
 <p>Avec votre accord, nous utilisons Google Analytics 4, via Google Tag Manager, pour savoir quelles pages sont consultées et comment on navigue dans la boutique, afin de l’améliorer. Les données sont traitées de façon agrégée et Google agit en tant que sous-traitant. Si vous refusez, Google Analytics n’enregistre ni cookie ni identifiant sur votre appareil : il ne reçoit que des signaux anonymes et sans cookies (mode de consentement avancé de Google), qui ne permettent pas de vous reconnaître.</p>
+<h2>Cookie d’attribution des collaborations</h2>
+<p>Nous collaborons avec educoland.com, un annuaire d’établissements éducatifs qui recommande notre boutique. Si vous arrivez par l’un de leurs liens et que vous acceptez les statistiques, nous enregistrons dans votre navigateur notre propre cookie, <code>pronens_ref</code>, pendant 90 jours. Il mémorise uniquement la rubrique et la bannière d’où vous venez, jamais qui vous êtes : il ne contient ni nom, ni adresse e-mail, ni identifiant, et il n’est transmis ni à educoland ni à des tiers. Il nous sert à savoir combien de commandes proviennent de cette collaboration et à la régler équitablement. Si vous refusez les statistiques, rien n’est enregistré, et si vous changez d’avis, il est supprimé.</p>
 <h2>Modifier votre choix</h2>
 <p>Vous pouvez accepter, refuser ou modifier votre décision à tout moment depuis le bouton cookies situé dans le coin inférieur de chaque page, ou en supprimant les cookies dans les paramètres de votre navigateur.</p>
 <h2>Responsable</h2>
@@ -85,6 +98,8 @@ HTML],
 <p>Fanno funzionare il negozio: mantengono la sessione e il carrello, proteggono i moduli e ricordano la tua scelta sugli altri cookie. Non richiedono consenso e non si possono disattivare.</p>
 <h2>Cookie analitici</h2>
 <p>Con il tuo permesso usiamo Google Analytics 4, tramite Google Tag Manager, per sapere quali pagine vengono visitate e come si naviga nel negozio, così da migliorarlo. I dati sono trattati in forma aggregata e Google agisce come responsabile del trattamento. Se non li accetti, Google Analytics non salva cookie né identificativi sul tuo dispositivo: riceve solo segnali anonimi e senza cookie (modalità di consenso avanzata di Google), che non permettono di riconoscerti.</p>
+<h2>Cookie di attribuzione delle collaborazioni</h2>
+<p>Collaboriamo con educoland.com, una directory di centri educativi che consiglia il nostro negozio. Se arrivi da uno dei loro link e accetti le statistiche, salviamo nel tuo browser un cookie nostro, <code>pronens_ref</code>, per 90 giorni. Ricorda soltanto da quale sezione e da quale banner sei arrivato, mai chi sei: non contiene il tuo nome, la tua email né alcun identificativo, e non viene inviato a educoland né a terzi. Ci serve per sapere quanti ordini arrivano grazie a quella collaborazione e liquidarla con correttezza. Se non accetti le statistiche non viene salvato nulla, e se cambi idea viene cancellato.</p>
 <h2>Come cambiare la tua scelta</h2>
 <p>Puoi accettare, rifiutare o cambiare la tua decisione in qualsiasi momento dal pulsante dei cookie nell’angolo inferiore di ogni pagina, oppure cancellando i cookie dalle impostazioni del browser.</p>
 <h2>Titolare</h2>

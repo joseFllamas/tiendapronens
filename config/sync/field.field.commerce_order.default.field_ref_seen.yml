@@ -1,0 +1,24 @@
+uuid: ee174ce2-d9c4-418c-8b61-2eabe8a7c6a2
+langcode: es
+status: true
+dependencies:
+  config:
+    - commerce_order.commerce_order_type.default
+    - field.storage.commerce_order.field_ref_seen
+  enforced:
+    module:
+      - pronens_referral
+_core:
+  default_config_hash: XEDSc6ea-q_Uqc3YIxhCBdj35zZ4a2Gb2Jt77rgfYc4
+id: commerce_order.default.field_ref_seen
+field_name: field_ref_seen
+entity_type: commerce_order
+bundle: default
+label: 'Llegada a la tienda'
+description: 'Cuándo hizo clic el visitante en el enlace del partner.'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: timestamp

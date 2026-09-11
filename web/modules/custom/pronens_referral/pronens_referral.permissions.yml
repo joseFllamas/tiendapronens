@@ -1,0 +1,4 @@
+'administrar atribucion de partners pronens':
+  title: 'Administrar la atribución de partners'
+  description: 'Permite cambiar los cupones del convenio, la vida de la cookie y el interruptor general.'
+  restrict access: true

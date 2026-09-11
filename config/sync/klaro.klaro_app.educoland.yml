@@ -1,0 +1,38 @@
+uuid: 189c972f-a29d-4210-ba37-fb508ae7c0b9
+langcode: es
+status: true
+dependencies: {  }
+id: educoland
+label: 'Atribución de partners (educoland)'
+description: 'Si llegas desde educoland.com, recuerda durante 90 días desde qué enlace viniste para poder atribuir tu pedido a esa colaboración. No guarda quién eres ni se comparte con nadie.'
+default: false
+purposes:
+  - analytics
+cookies:
+  -
+    regex: ^pronens_ref$
+    path: /
+    domain: ''
+required: false
+opt_out: false
+only_once: false
+contextual_consent_only: null
+contextual_consent_text: null
+info_url: ''
+privacy_policy_url: ''
+javascripts: {  }
+callback_code: |-
+  if (window.Drupal && Drupal.pronensReferral) {
+    if (consent) {
+      Drupal.pronensReferral.capturar();
+    }
+    else {
+      Drupal.pronensReferral.borrar();
+    }
+  }
+on_init: ''
+on_accept: ''
+on_decline: ''
+wrapper_identifier: {  }
+attachments: {  }
+weight: 4

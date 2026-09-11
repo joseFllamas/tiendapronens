@@ -1,0 +1,5 @@
+pronens_referral.settings:
+  title: 'Atribución de partners'
+  description: 'Cupones del convenio con educoland, vida de la cookie e interruptor general.'
+  route_name: pronens_referral.settings
+  parent: commerce.configuration

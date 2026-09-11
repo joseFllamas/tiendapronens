@@ -1,0 +1,26 @@
+uuid: cbb9c9ab-b1d0-45b3-80fc-c9f6daba67f7
+langcode: es
+status: true
+dependencies:
+  module:
+    - commerce_order
+  enforced:
+    module:
+      - pronens_referral
+_core:
+  default_config_hash: 90PW-glMEiLQ-ct53bj055nepiWPVDotWt5oXJ3fytE
+id: commerce_order.field_ref_content
+field_name: field_ref_content
+entity_type: commerce_order
+type: string
+settings:
+  max_length: 64
+  case_sensitive: false
+  is_ascii: false
+module: core
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

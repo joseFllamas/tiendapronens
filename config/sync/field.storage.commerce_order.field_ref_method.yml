@@ -1,0 +1,35 @@
+uuid: d55ce461-afbd-4037-b26a-2be854e3e7e2
+langcode: es
+status: true
+dependencies:
+  module:
+    - commerce_order
+    - options
+  enforced:
+    module:
+      - pronens_referral
+_core:
+  default_config_hash: 0IzkcDUinqJePnLEQEtLAg2vmsmcHcaOjK1bppcfgZQ
+id: commerce_order.field_ref_method
+field_name: field_ref_method
+entity_type: commerce_order
+type: list_string
+settings:
+  allowed_values:
+    -
+      value: cookie
+      label: 'Enlace del partner'
+    -
+      value: cupon
+      label: 'Cupón del convenio'
+    -
+      value: cookie+cupon
+      label: 'Enlace y cupón'
+  allowed_values_function: ''
+module: options
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false
