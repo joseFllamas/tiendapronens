@@ -1,0 +1,17 @@
+# Interruptor general: a false no se captura, no se escribe cookie y los pedidos
+# no se marcan. Lo que ya esté marcado se queda como está.
+activo: true
+# El partner que se reconoce en utm_source. Es configuración y no código porque
+# mañana puede haber un segundo directorio con el mismo montaje.
+fuente: educoland
+# Ventana de atribución, en días. Vale para la cookie del navegador y para
+# descartarla en servidor si vuelve con una fecha más vieja.
+dias_cookie: 90
+# Cupones B2B por centro: EDUCO-12345678. Se compara sin distinguir mayúsculas.
+prefijo_cupon: 'EDUCO-'
+# Códigos públicos del convenio. educoland los rota, así que se editan en
+# /admin/commerce/config/pronens-referral sin tocar código.
+cupones:
+  - EDUCOFAM10
+  - EDUBABY10
+  - EDUCOLE10

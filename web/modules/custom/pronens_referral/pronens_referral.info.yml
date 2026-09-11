@@ -1,0 +1,20 @@
+name: 'Pronens: atribución de partners'
+type: module
+description: 'Marca cada pedido que llega desde educoland con su colocación y su creatividad, use cupón o no: cookie de primera parte (solo con consentimiento de Klaro) más los cupones del convenio, con informe mensual y exportación a CSV.'
+package: Pronens
+core_version_requirement: ^11
+dependencies:
+  # El carrito, porque la captura entra en el pedido en cuanto hay carrito y no
+  # solo al colocarlo (ver el README: hay pedidos que se colocan a mano días
+  # después, desde el navegador de la tienda, donde ya no existe la cookie).
+  - commerce:commerce_cart
+  - commerce:commerce_order
+  # Los cupones son la red cuando no hay consentimiento.
+  - commerce:commerce_promotion
+  # Sin gestor de consentimiento no se captura nada: la cookie es opcional y su
+  # interruptor vive en Klaro, así que la dependencia es real, no decorativa.
+  - klaro:klaro
+  - drupal:views
+  # Solo para el CSV del informe; la pantalla funciona sin él.
+  - views_data_export:views_data_export
+configure: pronens_referral.settings

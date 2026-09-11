@@ -1,0 +1,7 @@
+pronens_referral.settings:
+  path: '/admin/commerce/config/pronens-referral'
+  defaults:
+    _form: '\Drupal\pronens_referral\Form\SettingsForm'
+    _title: 'Atribución de partners'
+  requirements:
+    _permission: 'administrar atribucion de partners pronens'

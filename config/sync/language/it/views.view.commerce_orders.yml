@@ -1,13 +1,27 @@
+label: Ordini
 display:
   default:
+    display_title: Principale
     display_options:
+      exposed_form:
+        options:
+          submit_button: Filtra
+          reset_button_label: Ripristina
+          exposed_sorts_label: 'Ordina per'
+          sort_asc_label: Asc
+          sort_desc_label: Disc
+      pager:
+        options:
+          expose:
+            items_per_page_label: 'Voci per pagina'
+            items_per_page_options_all_label: '- Tutto -'
+            offset_label: Scostamento
+          tags:
+            previous: '‹ precedente'
+            next: 'seguente ›'
+            first: '« prima'
+            last: 'ultima »'
       fields:
-        pronens_envio_pedido:
-          label: Spedizione
-        pronens_expedicion_pedido:
-          label: Tracking
-        pronens_factura_pedido:
-          label: Fattura
         commerce_order_bulk_form:
           action_title: 'Con la selezione'
         order_number:
@@ -28,20 +42,20 @@ display:
           label: E-mail
           separator: ', '
         state:
-          label: Stato
+          label: "Stato dell'ordine"
           separator: ', '
         total_price__number:
           label: Totale
           separator: ', '
         operations:
           label: Operazioni
+        pronens_envio_pedido:
+          label: Spedizione
+        pronens_expedicion_pedido:
+          label: Tracking
+        pronens_factura_pedido:
+          label: Fattura
       filters:
-        pronens_situacion_envio:
-          expose:
-            label: Spedizione
-        pronens_factura_descargada:
-          expose:
-            label: Fattura
         order_number:
           expose:
             label: "Numero d'ordine"
@@ -50,27 +64,14 @@ display:
             label: Tipo
         state:
           expose:
-            label: Stato
-      exposed_form:
-        options:
-          submit_button: Filtra
-          reset_button_label: Ripristina
-          exposed_sorts_label: 'Ordina per'
-          sort_asc_label: Asc
-          sort_desc_label: Disc
-      pager:
-        options:
+            label: "Stato dell'ordine"
+        pronens_situacion_envio:
           expose:
-            items_per_page_label: 'Voci per pagina'
-            items_per_page_options_all_label: '- Tutto -'
-            offset_label: Scostamento
-          tags:
-            previous: '‹ precedente'
-            next: 'seguente ›'
-            first: '« prima'
-            last: 'ultima »'
+            label: Spedizione
+        pronens_factura_descargada:
+          expose:
+            label: Fattura
       title: Ordini
-    display_title: Principale
   page_1:
     display_title: Pagina
     display_options:
@@ -78,5 +79,3 @@ display:
         title: Ordini
       tab_options:
         title: Ordini
-        description: 'Gestione sus pedidos.'
-label: Ordini

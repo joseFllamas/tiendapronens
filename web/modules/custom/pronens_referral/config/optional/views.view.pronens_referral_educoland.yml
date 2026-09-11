@@ -1,0 +1,494 @@
+langcode: es
+status: true
+dependencies:
+  config:
+    - field.storage.commerce_order.field_ref_campaign
+    - field.storage.commerce_order.field_ref_content
+    - field.storage.commerce_order.field_ref_method
+    - system.menu.admin
+  module:
+    - commerce_order
+    - commerce_price
+    - csv_serialization
+    - options
+    - pronens_referral
+    - rest
+    - serialization
+    - state_machine
+    - user
+    - views_data_export
+id: pronens_referral_educoland
+label: 'Pedidos de educoland'
+module: views
+description: 'Pedidos colocados que vienen del partner, con su colocación, su creatividad y cómo se reconocieron. Es la base del convenio.'
+tag: commerce
+base_table: commerce_order
+base_field: order_id
+display:
+  default:
+    id: default
+    display_title: Predeterminado
+    display_plugin: default
+    position: 0
+    display_options:
+      title: 'Pedidos de educoland'
+      fields:
+        order_number:
+          id: order_number
+          table: commerce_order
+          field: order_number
+          entity_type: commerce_order
+          entity_field: order_number
+          plugin_id: field
+          label: Pedido
+          alter:
+            alter_text: false
+          type: string
+          settings:
+            link_to_entity: true
+        placed:
+          id: placed
+          table: commerce_order
+          field: placed
+          entity_type: commerce_order
+          entity_field: placed
+          plugin_id: field
+          label: Fecha
+          alter:
+            alter_text: false
+          type: timestamp
+          settings:
+            date_format: short
+            custom_date_format: ''
+            timezone: ''
+        mail:
+          id: mail
+          table: commerce_order
+          field: mail
+          entity_type: commerce_order
+          entity_field: mail
+          plugin_id: field
+          label: Cliente
+          alter:
+            alter_text: false
+          type: basic_string
+        field_ref_method:
+          id: field_ref_method
+          table: commerce_order__field_ref_method
+          field: field_ref_method
+          plugin_id: field
+          label: 'Reconocido por'
+          alter:
+            alter_text: false
+          type: list_default
+        field_ref_campaign:
+          id: field_ref_campaign
+          table: commerce_order__field_ref_campaign
+          field: field_ref_campaign
+          plugin_id: field
+          label: Colocación
+          alter:
+            alter_text: false
+          empty: —
+          type: string
+        field_ref_content:
+          id: field_ref_content
+          table: commerce_order__field_ref_content
+          field: field_ref_content
+          plugin_id: field
+          label: Creatividad
+          alter:
+            alter_text: false
+          empty: —
+          type: string
+        total_price__number:
+          id: total_price__number
+          table: commerce_order
+          field: total_price__number
+          entity_type: commerce_order
+          entity_field: total_price
+          plugin_id: field
+          label: Total
+          alter:
+            alter_text: false
+          type: commerce_price_default
+          settings:
+            strip_trailing_zeroes: false
+            currency_display: symbol
+        state:
+          id: state
+          table: commerce_order
+          field: state
+          entity_type: commerce_order
+          entity_field: state
+          plugin_id: field
+          label: Estado
+          alter:
+            alter_text: false
+          type: list_default
+      pager:
+        type: full
+        options:
+          offset: 0
+          items_per_page: 50
+      exposed_form:
+        type: basic
+        options:
+          submit_button: Filtrar
+          reset_button: true
+          reset_button_label: Restablecer
+          expose_sort_order: true
+      access:
+        type: perm
+        options:
+          perm: 'access commerce_order overview'
+      cache:
+        type: tag
+        options: {  }
+      empty:
+        area_text_custom:
+          id: area_text_custom
+          table: views
+          field: area_text_custom
+          plugin_id: text_custom
+          empty: true
+          content: 'Todavía no hay ningún pedido del partner en este periodo.'
+      sorts:
+        placed:
+          id: placed
+          table: commerce_order
+          field: placed
+          entity_type: commerce_order
+          entity_field: placed
+          plugin_id: date
+          order: DESC
+      filters:
+        field_ref_source_value:
+          id: field_ref_source_value
+          table: commerce_order__field_ref_source
+          field: field_ref_source_value
+          plugin_id: string
+          operator: '='
+          value: educoland
+          group: 1
+          exposed: false
+        state:
+          id: state
+          table: commerce_order
+          field: state
+          entity_type: commerce_order
+          entity_field: state
+          plugin_id: state_machine_state
+          operator: 'not in'
+          value:
+            draft: draft
+          group: 1
+          exposed: false
+        placed:
+          id: placed
+          table: commerce_order
+          field: placed
+          entity_type: commerce_order
+          entity_field: placed
+          plugin_id: date
+          operator: between
+          value:
+            min: ''
+            max: ''
+            value: ''
+            type: date
+          group: 1
+          exposed: true
+          expose:
+            operator_id: placed_op
+            label: 'Fecha de compra'
+            description: 'Para el informe de un mes: del 1 al último día. Formato aaaa-mm-dd.'
+            use_operator: false
+            operator: placed_op
+            identifier: fecha
+            remember: false
+            multiple: false
+        field_ref_method_value:
+          id: field_ref_method_value
+          table: commerce_order__field_ref_method
+          field: field_ref_method_value
+          plugin_id: list_field
+          operator: or
+          value: {  }
+          group: 1
+          exposed: true
+          expose:
+            operator_id: field_ref_method_value_op
+            label: 'Reconocido por'
+            use_operator: false
+            operator: field_ref_method_value_op
+            identifier: metodo
+            multiple: false
+            reduce: false
+        field_ref_campaign_value:
+          id: field_ref_campaign_value
+          table: commerce_order__field_ref_campaign
+          field: field_ref_campaign_value
+          plugin_id: string
+          operator: word
+          value: ''
+          group: 1
+          exposed: true
+          expose:
+            operator_id: field_ref_campaign_value_op
+            label: Colocación
+            description: 'ficha_publica, email_alta, dashboard_centro…'
+            use_operator: false
+            operator: field_ref_campaign_value_op
+            identifier: colocacion
+            multiple: false
+      style:
+        type: table
+        options:
+          grouping: {  }
+          row_class: ''
+          default_row_class: true
+          columns: {  }
+          default: placed
+          info:
+            order_number:
+              sortable: true
+              default_sort_order: asc
+            placed:
+              sortable: true
+              default_sort_order: desc
+            mail:
+              sortable: true
+              default_sort_order: asc
+            field_ref_method:
+              sortable: true
+              default_sort_order: asc
+            field_ref_campaign:
+              sortable: true
+              default_sort_order: asc
+            field_ref_content:
+              sortable: true
+              default_sort_order: asc
+            total_price__number:
+              sortable: true
+              default_sort_order: desc
+            state:
+              sortable: true
+              default_sort_order: asc
+          override: true
+          sticky: true
+          empty_table: true
+      row:
+        type: fields
+      query:
+        type: views_query
+        options:
+          distinct: false
+      use_ajax: false
+      header: {  }
+      display_extenders: {  }
+    cache_metadata:
+      max-age: -1
+      contexts:
+        - 'languages:language_content'
+        - 'languages:language_interface'
+        - url
+        - url.query_args
+        - user.permissions
+      tags:
+        - 'config:field.storage.commerce_order.field_ref_campaign'
+        - 'config:field.storage.commerce_order.field_ref_content'
+        - 'config:field.storage.commerce_order.field_ref_method'
+  attachment_1:
+    id: attachment_1
+    display_title: 'Resumen por mes'
+    display_plugin: attachment
+    position: 1
+    display_options:
+      title: 'Resumen por mes'
+      fields:
+        pronens_mes_de_compra:
+          id: pronens_mes_de_compra
+          table: commerce_order
+          field: pronens_mes_de_compra
+          group_type: group
+          plugin_id: pronens_mes_de_compra
+          label: Mes
+          alter:
+            alter_text: false
+        order_id:
+          id: order_id
+          table: commerce_order
+          field: order_id
+          group_type: count
+          entity_type: commerce_order
+          entity_field: order_id
+          plugin_id: field
+          label: Pedidos
+          alter:
+            alter_text: false
+          type: number_integer
+          settings:
+            thousand_separator: .
+            prefix_suffix: false
+        total_price__number:
+          id: total_price__number
+          table: commerce_order
+          field: total_price__number
+          group_type: sum
+          entity_type: commerce_order
+          entity_field: total_price
+          plugin_id: numeric
+          label: Facturado
+          alter:
+            alter_text: false
+          set_precision: true
+          precision: 2
+          decimal: ','
+          separator: .
+          suffix: ' €'
+      pager:
+        type: some
+        options:
+          offset: 0
+          items_per_page: 36
+      empty: {  }
+      sorts:
+        pronens_mes_de_compra:
+          id: pronens_mes_de_compra
+          table: commerce_order
+          field: pronens_mes_de_compra
+          group_type: group
+          plugin_id: standard
+          order: DESC
+      style:
+        type: table
+        options:
+          grouping: {  }
+          row_class: ''
+          default_row_class: true
+          columns: {  }
+          default: '-1'
+          info:
+            pronens_mes_de_compra:
+              sortable: false
+            order_id:
+              sortable: false
+            total_price__number:
+              sortable: false
+          override: true
+          sticky: false
+          empty_table: false
+          caption: 'Pedidos y facturación por mes, con los filtros de abajo aplicados.'
+          class: ''
+      row:
+        type: fields
+      defaults:
+        empty: false
+        title: false
+        pager: false
+        use_more: false
+        group_by: false
+        style: false
+        row: false
+        fields: false
+        sorts: false
+      group_by: true
+      display_description: 'Una fila por mes: cuántos pedidos y cuánto se facturó.'
+      use_more: false
+      display_extenders: {  }
+      displays:
+        page_1: page_1
+      attachment_position: before
+      inherit_arguments: true
+      inherit_exposed_filters: true
+      inherit_pager: false
+      render_pager: false
+    cache_metadata:
+      max-age: -1
+      contexts:
+        - 'languages:language_interface'
+        - url
+        - user.permissions
+      tags: {  }
+  data_export_1:
+    id: data_export_1
+    display_title: CSV
+    display_plugin: data_export
+    position: 3
+    display_options:
+      pager:
+        type: some
+        options:
+          offset: 0
+          items_per_page: 0
+      style:
+        type: data_export
+        options:
+          formats:
+            - csv
+          csv_settings:
+            delimiter: ;
+            enclosure: '"'
+            escape_char: \
+            strip_tags: true
+            trim: true
+            encoding: utf8
+            utf8_bom: '1'
+            use_serializer_encode_only: false
+      row:
+        type: data_field
+      defaults:
+        pager: false
+        style: false
+        row: false
+      display_description: 'El mismo listado en CSV, con los filtros que lleve la página.'
+      display_extenders: {  }
+      path: admin/commerce/reports/educoland/csv
+      displays:
+        page_1: page_1
+      filename: educoland-pedidos.csv
+      automatic_download: true
+      export_limit: 0
+    cache_metadata:
+      max-age: -1
+      contexts:
+        - 'languages:language_content'
+        - 'languages:language_interface'
+        - request_format
+        - url
+        - user.permissions
+      tags:
+        - 'config:field.storage.commerce_order.field_ref_campaign'
+        - 'config:field.storage.commerce_order.field_ref_content'
+        - 'config:field.storage.commerce_order.field_ref_method'
+  page_1:
+    id: page_1
+    display_title: Página
+    display_plugin: page
+    position: 2
+    display_options:
+      display_description: 'La pantalla del informe, con el resumen por mes encima.'
+      display_extenders: {  }
+      path: admin/commerce/reports/educoland
+      menu:
+        type: normal
+        title: 'Pedidos de educoland'
+        description: 'Pedidos que vienen del partner, por mes, colocación y creatividad.'
+        weight: 0
+        expanded: false
+        menu_name: admin
+        parent: commerce.admin_commerce
+        context: ''
+    cache_metadata:
+      max-age: -1
+      contexts:
+        - 'languages:language_content'
+        - 'languages:language_interface'
+        - url
+        - url.query_args
+        - user.permissions
+      tags:
+        - 'config:field.storage.commerce_order.field_ref_campaign'
+        - 'config:field.storage.commerce_order.field_ref_content'
+        - 'config:field.storage.commerce_order.field_ref_method'

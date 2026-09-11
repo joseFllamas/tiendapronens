@@ -1,0 +1,32 @@
+langcode: es
+status: true
+dependencies:
+  enforced:
+    module:
+      - pronens_referral
+  module:
+    - commerce_order
+    - options
+id: commerce_order.field_ref_method
+field_name: field_ref_method
+entity_type: commerce_order
+type: list_string
+settings:
+  allowed_values:
+    -
+      value: cookie
+      label: 'Enlace del partner'
+    -
+      value: cupon
+      label: 'Cupón del convenio'
+    -
+      value: 'cookie+cupon'
+      label: 'Enlace y cupón'
+  allowed_values_function: ''
+module: options
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

@@ -1,22 +1,13 @@
-consentModal:
-  title: 'Cookies a Pronens'
-  description: 'Tria quins serveis permets. Les cookies necessàries no es poden desactivar perquè sense elles la botiga no funciona.'
-  privacyPolicy:
-    name: 'política de cookies'
-    text: 'Més informació a la nostra {privacyPolicy}.'
-    url: 'entity:node/9'
 consentNotice:
-  title: 'Cookies a Pronens'
-  changeDescription: 'Hi ha canvis des de la teva última visita: revisa la teva elecció.'
-  description: 'Fem servir cookies pròpies perquè la botiga funcioni i, si ens ho permets, Google Analytics per saber com es fa servir i millorar-la. Pots canviar la decisió quan vulguis. {purposes}.'
   learnMore: Configurar
+  title: 'Cookies a Pronens'
+  description: 'Fem servir cookies pròpies perquè la botiga funcioni i, si ens ho permets, Google Analytics per saber com es fa servir i millorar-la. Pots canviar la decisió quan vulguis. {purposes}.'
+  changeDescription: 'Hi ha canvis des de la teva última visita: revisa la teva elecció.'
 ok: Acceptar
 save: Desar
-decline: Rebutjar
 close: Tancar
-acceptAll: 'Acceptar-ho tot'
-acceptSelected: 'Acceptar la selecció'
 service:
+  purpose: Finalitat
   disableAll:
     title: 'Tots els serveis'
     description: 'Activa o desactiva tots els serveis alhora.'
@@ -27,8 +18,18 @@ service:
     title: '(sempre actiu)'
     description: 'Aquest servei és necessari i no es pot desactivar.'
   purposes: Finalitats
-  purpose: Finalitat
 contextualConsent:
   acceptAlways: Sempre
   acceptOnce: 'Sí, aquesta vegada'
   description: 'Carregar el contingut extern de {title}?'
+consentModal:
+  title: 'Cookies a Pronens'
+  description: 'Tria quins serveis permets. Les cookies necessàries no es poden desactivar perquè sense elles la botiga no funciona.'
+  privacyPolicy:
+    name: 'política de cookies'
+    text: 'Més informació a la nostra {privacyPolicy}.'
+    url: 'entity:node/9'
+decline: Rebutjar
+acceptAll: 'Acceptar-ho tot'
+acceptSelected: 'Acceptar la selecció'
+poweredBy: ''

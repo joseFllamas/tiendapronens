@@ -5,6 +5,6 @@ dependencies: {  }
 _core:
   default_config_hash: 3j5wXqDkwDxjQzmBncu4QboNV0z9hzVwJug3j5IpigQ
 id: cms
-label: 'Tienda Pronens'
+label: 'Funcionamiento de la tienda'
 description: ''
 weight: -1

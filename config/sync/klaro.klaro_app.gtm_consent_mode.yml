@@ -6,7 +6,7 @@ _core:
   default_config_hash: yUNFm4zDnRj9Fj6If-Z-upP2C6_QCSQezNPiJyijyoE
 id: gtm_consent_mode
 label: 'Google Tag Manager'
-description: 'Manages and deploys marketing tags.'
+description: 'Gestor de etiquetas. Carga siempre; hasta que aceptes, Google Analytics solo recibe señales anónimas sin cookies (Consent Mode v2).'
 default: false
 purposes:
   - analytics

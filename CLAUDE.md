@@ -2045,14 +2045,87 @@ Donde este documento y la realidad del repo discrepan, manda esta lista (decidid
   - El enlace 9 del menú `main` y la línea de llms.txt toman el nombre nuevo. Sitemap regenerado
     (1962 URLs, solo las nuevas de la categoría).
   - **Config exportada** (6 `field.*`, 2 form displays, los 2 view displays del producto con el campo
-    oculto y `llms_txt.settings`). Ojo: ese `drush cex` arrastró deriva de klaro, metatag global por
-    idioma, `views.view.commerce_orders` y `pronens.settings` que **no era de esto y se revirtió**.
+    oculto y `llms_txt.settings`). **Ojo con `drush cex` en esta base de datos**: la BBDD local (import
+    de producción) seguía con los objetos pisoteados por la importación de traducciones del 10/09
+    (copy de Klaro en inglés y con las etiquetas de app y finalidad cruzadas, «Estado» en vez de
+    «Estado del pedido», «Estat» en el override catalán, un «Gestione sus pedidos.» en castellano
+    dentro del override `ca`), mientras `config/sync` tenía el copy bueno. Un `cex` a ciegas los
+    exportó y se commitearon (ddbb5f0, 27 ficheros). Se arregló restaurando esos 27 desde 113f4db,
+    `drush cim` (27 objetos, cubre las collections de idioma) y `cex` de comprobación sin cambios.
+    Regla: **antes de commitear un `cex`, `git diff` y todo lo que toque klaro, metatag por idioma o
+    `views.view.commerce_orders` sin haberlo cambiado tú es el pisotón: se revierte, no se exporta**;
+    la verdad de ese copy son `scripts/cookies-klaro.php` y `scripts/pedidos-admin-etiquetas.php`. Lo
+    único legítimo que faltaba en `config/sync` y se conserva: `pronens.settings` (favicon propio del
+    tema; sin él un `cim` lo habría borrado) y los overrides de las apps legacy `ga`/`gtm` de Klaro,
+    que están apagadas.
   - **Contenido, ejecutar en producción**: `drush cim` primero (los campos), luego
     `scripts/bolsas-y-sacos.php`, `drush cr` y `drush simple-sitemap:generate`. Copia previa:
     snapshot `pre-bolsas-y-sacos`.
   - **Pendiente y del cliente**: las traducciones de nombre, H1 y patrón en ca/en/fr/it son propuesta
     y se editan en el término; la descripción del término (meta description) sigue hablando de «bolsas
     guardería» y podría mencionar los sacos; y los títulos 283 ca y 303 ca/fr con castellano dentro.
+
+- **Atribución de los pedidos que llegan de educoland (2026-09-11)**: educoland.com, el directorio de
+  centros con el que hay convenio, manda ya sus enlaces con UTM estándar (`utm_source=educoland`,
+  `utm_medium=referral`, `utm_campaign=<colocación>`, `utm_content=banner<id>[-s<id>]`) y sin ningún
+  identificador de persona. La tienda los recoge con el módulo nuevo **`pronens_referral`**: cinco
+  campos en el pedido (`field_ref_source`, `_campaign`, `_content`, `_method`, `_seen`), bloque
+  «Procedencia» en `/admin/commerce/orders/N` y el informe `/admin/commerce/reports/educoland` con
+  resumen por mes y CSV. GA4 ya recibía los UTM y **no hubo que tocar nada**: el contenedor tiene
+  activo el evento `commerce_purchase` de `google_tag`. Lo que conviene no reinventar:
+  - **La cookie la escribe el JS, nunca PHP**: un `Set-Cookie` puesto al renderizar una página normal
+    se guarda con ella en la caché de página y se lo lleva el siguiente visitante. Por eso se descartó
+    `persistent_visitor_parameters` (D11, cubierto por seguridad, unos 14 sitios), que es lo único
+    parecido que hay en drupal.org: escribe la cookie desde el servidor, no tiene gancho de
+    consentimiento y no toca Commerce. `commerce_cookie_condition` no está cubierto por la política de
+    seguridad y además resuelve otra cosa. El único contrib que entra es `views_data_export` para el
+    CSV (arrastra `csv_serialization`, `rest` y `serialization`).
+  - **El consentimiento manda, y el gancho es el `callback_code` de Klaro**: servicio nuevo
+    «Atribución de partners (educoland)» en la finalidad *Analítica*. `callback_code` y no
+    `on_accept`/`on_decline` porque es el único que corre **en cada página** con el consentimiento ya
+    resuelto Y en cada cambio, que es lo que hace falta para el last-click. El JS del módulo se cuelga
+    de la library de Klaro con `hook_library_info_alter`: así se carga siempre antes que él (verificado
+    en el HTML: `referral.js` sale antes del agregado que lleva `klaro.drupal.js`) y nunca donde Klaro
+    no está. La cookie va además declarada en el servicio, de modo que Klaro la borra sola al retirar
+    el consentimiento.
+  - **La marca entra ya en el carrito, no solo al colocar**: hay pedidos que se colocan **sin el
+    navegador del cliente delante** —el P-2026-0004 se colocó a mano desde el backoffice días después
+    porque el retorno de Redsys falló—, y ahí la única cookie es la del administrador. Se captura en
+    `CART_ENTITY_ADD` (sin `save()`: el `CartManager` guarda el carrito justo después) y se consolida
+    en `commerce_order.place.**pre**_transition`, no en el post, por lo mismo que
+    `PedidoInvitadoSubscriber`: en el pre basta con poner los campos y los persiste el save de la
+    propia transición, sin guardado anidado.
+  - **`field_ref_seen` lo escribe solo la cookie**, y esa es la señal de «hubo cookie» para decidir el
+    método: un pedido reconocido únicamente por el cupón lo tiene vacío. Sin cookie y sin cupón el
+    pedido **no se toca**.
+  - **El mes del informe es una expresión SQL**, no un campo: la agregación de Views agrupa por el
+    valor de `placed`, que son segundos, así que daría un grupo por pedido. `MesDeCompra` (plugin de
+    campo de Views) compone `DATE_FORMAT` con `getDateField()`+`getDateFormat()`, que son los que
+    aplican el desfase horario del sitio: sin él una compra de las 00:30 del día 1 en Madrid caería en
+    el mes anterior, porque la conexión habla UTC.
+  - **Dos trampas de Views que costaron encontrar**: el filtro expuesto de una lista (`list_field`)
+    necesita el operador **`or`, no `in`** —extiende `ManyToOne`, y con `in` se queda sin widget y
+    desaparece de la pantalla sin dar ningún error—; y una columna agregada con `SUM` **no pasa por el
+    formateador** del campo de entidad (salía «23.600000»), así que el total va con el manejador
+    `numeric`, que sí redondea, con el € puesto a mano porque el SUM ha perdido la columna de moneda.
+  - **Los campos son del módulo** (`dependencies.enforced.module`), así que desinstalarlo los borra con
+    sus datos; sin eso quedaban huérfanos, porque un `field.storage` depende del módulo de la entidad y
+    no de quien lo trae. Verificado el ciclo desinstalar/instalar.
+  - **Es configuración más contenido**: `drush cim` trae módulo, campos e informe, y
+    `scripts/atribucion-educoland.php` (idempotente, **ejecutar también en producción**) crea el
+    servicio de Klaro en los cinco idiomas, añade el apartado de la cookie a la política de cookies y
+    traduce el enlace del CSV. El copy completo de esa página sigue viviendo en
+    `scripts/cookies-klaro.php`, que la reescribe entera: el apartado está en los dos ficheros a
+    propósito.
+  - **Y otra vez el pisotón de las traducciones**: `drush en views_data_export` volvió a pisar 62
+    objetos de configuración (klaro, metatag por idioma, las etiquetas de `views.view.commerce_orders`
+    y de otras siete views de Commerce y TMGMT). Restaurados desde git y devueltos con `drush cim`; el
+    `cex` de comprobación ya solo trae lo del encargo.
+  - **Pendiente y de decisión del cliente**: la cuota del convenio se calcula sobre `total_price`, con
+    IVA y envío dentro (si se liquida sobre la base imponible, hay que cambiar la columna del informe);
+    el aviso de cookies de primera capa sigue nombrando solo a Google Analytics, y la finalidad
+    «Analítica» ya cubre dos servicios; y la ventana de atribución son 90 días, que es lo que había que
+    suponer, no algo pactado por escrito.
 
 ## Orden de trabajo
 1. **Tema `pronens`**: tokens CSS (custom properties con los colores/tipos del README), fuentes

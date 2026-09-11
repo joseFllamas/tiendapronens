@@ -1,2 +1,2 @@
 label: 'Google Tag Manager'
-description: 'Manages and deploys marketing tags.'
+description: 'Tag manager. Always loads; until you accept, Google Analytics only receives anonymous cookieless signals (Consent Mode v2).'

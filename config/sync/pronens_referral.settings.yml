@@ -1,0 +1,10 @@
+_core:
+  default_config_hash: j1EkDWSZpW9j6ZO6hEjcq1dp5Oz9sWb_1PpVgnQHU_w
+activo: true
+fuente: educoland
+dias_cookie: 90
+prefijo_cupon: EDUCO-
+cupones:
+  - EDUCOFAM10
+  - EDUBABY10
+  - EDUCOLE10
