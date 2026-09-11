@@ -6,7 +6,7 @@ _core:
   default_config_hash: VdibtFj4X5ekW1PpEJx9ujvGgbz_v8oXOpZi2hi2OaA
 id: ga_consent_mode
 label: 'Google Analytics 4'
-description: 'Estadísticas de uso de la tienda: páginas vistas, productos y compras, de forma agregada.'
+description: 'Tracks online visits of the website as a service.'
 default: false
 purposes:
   - analytics

@@ -488,7 +488,7 @@ display:
           entity_type: commerce_order
           entity_field: status
           plugin_id: field
-          label: 'Estado del pedido'
+          label: Estado
           exclude: false
           alter:
             alter_text: false
@@ -955,7 +955,7 @@ display:
           exposed: true
           expose:
             operator_id: state_op
-            label: 'Estado del pedido'
+            label: Estado
             description: ''
             use_operator: false
             operator: state_op

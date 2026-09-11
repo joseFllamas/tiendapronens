@@ -1,27 +1,13 @@
-label: Comandes
 display:
   default:
-    display_title: Mestre
     display_options:
-      exposed_form:
-        options:
-          submit_button: Filtra
-          reset_button_label: Reinicialitza
-          exposed_sorts_label: 'Ordena per'
-          sort_asc_label: Asc
-          sort_desc_label: Desc
-      pager:
-        options:
-          expose:
-            items_per_page_label: 'Elements per pàgina'
-            items_per_page_options_all_label: '- Tot -'
-            offset_label: Desplaçament
-          tags:
-            previous: '‹ anterior'
-            next: 'següent ›'
-            first: '« primer'
-            last: 'últim »'
       fields:
+        pronens_envio_pedido:
+          label: Enviament
+        pronens_expedicion_pedido:
+          label: Expedició
+        pronens_factura_pedido:
+          label: Factura
         commerce_order_bulk_form:
           action_title: 'Amb la selecció'
         order_number:
@@ -42,20 +28,20 @@ display:
           label: 'Correu electrònic'
           separator: ', '
         state:
-          label: 'Estat de la comanda'
+          label: Estat
           separator: ', '
         total_price__number:
           label: Total
           separator: ', '
         operations:
           label: Operacions
-        pronens_envio_pedido:
-          label: Enviament
-        pronens_expedicion_pedido:
-          label: Expedició
-        pronens_factura_pedido:
-          label: Factura
       filters:
+        pronens_situacion_envio:
+          expose:
+            label: Enviament
+        pronens_factura_descargada:
+          expose:
+            label: Factura
         order_number:
           expose:
             label: 'Número de comanda'
@@ -64,14 +50,27 @@ display:
             label: Tipus
         state:
           expose:
-            label: 'Estat de la comanda'
-        pronens_situacion_envio:
+            label: Estat
+      exposed_form:
+        options:
+          submit_button: Filtra
+          reset_button_label: Reinicialitza
+          exposed_sorts_label: 'Ordena per'
+          sort_asc_label: Asc
+          sort_desc_label: Desc
+      pager:
+        options:
           expose:
-            label: Enviament
-        pronens_factura_descargada:
-          expose:
-            label: Factura
+            items_per_page_label: 'Elements per pàgina'
+            items_per_page_options_all_label: '- Tot -'
+            offset_label: Desplaçament
+          tags:
+            previous: '‹ anterior'
+            next: 'següent ›'
+            first: '« primer'
+            last: 'últim »'
       title: Comandes
+    display_title: Mestre
   page_1:
     display_title: Pàgina
     display_options:
@@ -79,3 +78,5 @@ display:
         title: Comandes
       tab_options:
         title: Comandes
+        description: 'Gestione sus pedidos.'
+label: Comandes
