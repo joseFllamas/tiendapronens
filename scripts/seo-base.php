@@ -78,18 +78,6 @@ if ($estilos->load('pronens_og') === NULL) {
 // 3. Metatag: valores por defecto.
 // ---------------------------------------------------------------------------
 $sitio = \Drupal::config('system.site');
-// Datos del emisor, los del Aviso legal (nodo 3) y el pie de la tienda.
-$organizacion = [
-  '@type' => 'OnlineStore',
-  '@id' => '[site:url]#organization',
-  'name' => 'Pronens',
-  'url' => '[site:url]',
-  'sameAs' => '',
-  'logo' => [
-    '@type' => 'ImageObject',
-    'url' => '[site:url]themes/custom/pronens/logo.svg',
-  ],
-];
 $fija = static function (string $id, string $etiqueta, array $tags): void {
   $defaults = MetatagDefaults::load($id);
   if ($defaults === NULL) {
@@ -149,6 +137,8 @@ $fija('global', 'Global', [
   ],
   // sameAs: perfiles sociales. Vacío a propósito: no hay ninguno enlazado en
   // la web y no se inventan. Se rellena en /admin/config/search/metatag/global.
+  // El vínculo con pronens.com NO va aquí: son dos entidades (matriz y tienda
+  // de particulares) y lo declara parentOrganization, en JsonLdHooks.
   'schema_organization_same_as' => '',
   'schema_web_site_type' => 'WebSite',
   'schema_web_site_id' => '[site:url]#website',

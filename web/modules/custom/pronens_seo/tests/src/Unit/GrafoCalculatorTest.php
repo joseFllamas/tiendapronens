@@ -25,7 +25,8 @@ final class GrafoCalculatorTest extends TestCase {
   private function datos(): array {
     return [
       'empresa' => ['legalName' => 'Quien Sea', 'foundingDate' => '1984'],
-      'vendedor' => 'https://ejemplo.test/#organization',
+      'base' => 'https://ejemplo.test/',
+      'vendedor' => 'https://ejemplo.test/#store',
       'devolucion' => ['@type' => 'MerchantReturnPolicy', '@id' => 'https://ejemplo.test/#dev', 'merchantReturnDays' => 30],
       'devolucionRef' => 'https://ejemplo.test/#dev',
       'envio' => [['@type' => 'OfferShippingDetails']],
@@ -45,6 +46,89 @@ final class GrafoCalculatorTest extends TestCase {
     self::assertSame('Quien Sea', $salida[0]['legalName']);
     self::assertSame('1984', $salida[0]['foundingDate']);
     self::assertSame(30, $salida[0]['hasMerchantReturnPolicy']['merchantReturnDays']);
+  }
+
+  /**
+   * La tienda es una sola entidad en los cinco idiomas.
+   *
+   * [site:url] resuelve con el idioma de la página, así que metatag emite
+   * …/ca#store en catalán. Sin normalizar, el grafo declara cinco tiendas y
+   * el seller de cada Offer (que se forma con la raíz sin prefijo) apunta a
+   * un nodo que no está en el documento.
+   */
+  public function testElIdDeLaTiendaPierdeElPrefijoDeIdioma(): void {
+    $grafo = [
+      ['@type' => 'OnlineStore', '@id' => 'https://ejemplo.test/ca#store'],
+      ['@type' => 'Product', 'offers' => [['price' => '1.00']]],
+      [
+        '@type' => 'WebSite',
+        '@id' => 'https://ejemplo.test/ca#website',
+        'publisher' => ['@type' => 'Organization', '@id' => 'https://ejemplo.test/ca#store'],
+      ],
+    ];
+
+    $salida = GrafoCalculator::enriquecer($grafo, $this->datos());
+
+    self::assertSame('https://ejemplo.test/#store', $salida[0]['@id']);
+    self::assertSame('https://ejemplo.test/#store', $salida[1]['offers'][0]['seller']['@id']);
+    self::assertSame('https://ejemplo.test/#store', $salida[2]['publisher']['@id']);
+    // El WebSite sí es de cada idioma: tiene su portada y su inLanguage.
+    self::assertSame('https://ejemplo.test/ca#website', $salida[2]['@id']);
+  }
+
+  /**
+   * El fragmento lo decide la configuración, no el código.
+   *
+   * Si el cliente cambia schema_organization_id en el backoffice, el seller y
+   * el publisher tienen que seguirlo sin tocar nada.
+   */
+  public function testElFragmentoDelIdSaleDeLaConfiguracion(): void {
+    $grafo = [
+      ['@type' => 'OnlineStore', '@id' => 'https://ejemplo.test/fr#empresa'],
+      ['@type' => 'Product', 'offers' => [['price' => '1.00']]],
+    ];
+
+    $salida = GrafoCalculator::enriquecer($grafo, $this->datos());
+
+    self::assertSame('https://ejemplo.test/#empresa', $salida[0]['@id']);
+    self::assertSame('https://ejemplo.test/#empresa', $salida[1]['offers'][0]['seller']['@id']);
+  }
+
+  /**
+   * Sin @id en la ficha de empresa no se inventa ninguno.
+   */
+  public function testNoInventaUnIdQueMetatagNoPuso(): void {
+    $grafo = [['@type' => 'OnlineStore', 'name' => 'Pronens']];
+
+    $salida = GrafoCalculator::enriquecer($grafo, $this->datos());
+
+    self::assertArrayNotHasKey('@id', $salida[0]);
+  }
+
+  /**
+   * Las relaciones con otras entidades llegan enteras, no aplanadas.
+   *
+   * Tanto parentOrganization como employee son objetos anidados (y employee,
+   * una lista de ellos): si el enriquecimiento los tocara, el vínculo con la
+   * matriz se quedaría en una cadena suelta y ningún grafo de conocimiento lo
+   * uniría con la Organization que declara pronens.com.
+   */
+  public function testCopiaLasRelacionesAnidadasSinTocarlas(): void {
+    $datos = $this->datos();
+    $datos['empresa']['parentOrganization'] = [
+      '@type' => 'WholesaleStore',
+      '@id' => 'https://matriz.test/#organization',
+      'name' => 'Matriz',
+    ];
+    $datos['empresa']['employee'] = [
+      ['@type' => 'Person', '@id' => 'https://quien.test/#persona', 'jobTitle' => 'CEO'],
+    ];
+    $grafo = [['@type' => 'OnlineStore', 'name' => 'Pronens']];
+
+    $salida = GrafoCalculator::enriquecer($grafo, $datos);
+
+    self::assertSame($datos['empresa']['parentOrganization'], $salida[0]['parentOrganization']);
+    self::assertSame('CEO', $salida[0]['employee'][0]['jobTitle']);
   }
 
   /**
@@ -74,7 +158,7 @@ final class GrafoCalculatorTest extends TestCase {
 
     self::assertSame('UNO', $salida[0]['offers'][0]['sku']);
     self::assertSame('DOS', $salida[0]['offers'][1]['sku']);
-    self::assertSame('https://ejemplo.test/#organization', $salida[0]['offers'][1]['seller']['@id']);
+    self::assertSame('https://ejemplo.test/#store', $salida[0]['offers'][1]['seller']['@id']);
     self::assertCount(1, $salida[0]['offers'][0]['shippingDetails']);
     self::assertSame('https://ejemplo.test/#dev', $salida[0]['offers'][0]['hasMerchantReturnPolicy']['@id']);
   }

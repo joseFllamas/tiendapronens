@@ -118,7 +118,16 @@ final class PoliticasComerciales {
       'returnPolicyCategory' => 'https://schema.org/MerchantReturnFiniteReturnWindow',
       'merchantReturnDays' => self::DIAS_DEVOLUCION,
       'returnMethod' => 'https://schema.org/ReturnByMail',
-      'returnFees' => 'https://schema.org/ReturnShippingFees',
+      // ReturnFeesCustomerResponsibility y NO ReturnShippingFees: los dos
+      // dicen que paga el cliente, pero schema.org define
+      // returnShippingFeesAmount como "applicable when returnFees equals
+      // ReturnShippingFees" y Google lo exige en ese caso. Aquí no hay un
+      // importe: el cliente elige transportista y paga lo que le cueste (los
+      // 10,90 € de la página son un servicio opcional de recogida, no la
+      // tarifa de devolución, y publicarlos como tal sería una condición
+      // falsa). Esta otra opción dice exactamente eso, que el coste es
+      // responsabilidad del cliente, y no pide importe.
+      'returnFees' => 'https://schema.org/ReturnFeesCustomerResponsibility',
       'returnPolicyUrl' => $url,
     ];
   }
