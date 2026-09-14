@@ -419,6 +419,20 @@
   align-self: center;
 }
 
+/* Y el mensaje de "El cupón proporcionado no es válido" se inyecta DENTRO de
+   este contenedor (AjaxFormTrait hace un prepend sobre el propio elemento, no
+   en la zona de mensajes de la página), así que también es un item de la fila
+   y necesita la suya. */
+.pro-co__coupon-form > [data-drupal-messages] {
+  flex: 1 1 100%;
+}
+
+.pro-co__coupon-form .messages {
+  margin: 0 0 4px;
+  font-family: var(--pro-font-ui);
+  font-size: 14px;
+}
+
 /* --- Cupón ya aplicado. --- */
 .pro-co__coupon-list {
   /* En su propia fila, por si algún día se admite más de un cupón y conviven
@@ -432,7 +446,14 @@
 .pro-co__coupon-applied {
   display: flex;
   align-items: center;
-  gap: 10px;
+  /* Envuelve por si el código es largo o la etiqueta del botón crece al
+     traducirse: un código no se puede partir, así que sin esto el enlace de
+     quitar se saldría del chip. Medido en el hueco más estrecho (unos 288px de
+     un móvil pequeño), "BIENVENIDA" + "Eliminar cupón" caben en una línea y
+     "BIENVENIDAPRIMAVERA2026" + "Supprimer le coupon" bajan el enlace a la
+     suya, que el margin-left auto deja alineada a la derecha. */
+  flex-wrap: wrap;
+  gap: 4px 10px;
   font-family: var(--pro-font-ui);
   font-size: 15px;
   color: var(--pro-ink-2);

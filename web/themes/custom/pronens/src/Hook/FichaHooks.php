@@ -773,6 +773,12 @@ class FichaHooks {
   /**
    * Guía de tallas: solo 57 productos la tienen.
    *
+   * Los cuatro términos de guia_tallas traen la tabla como FOTO
+   * (field_imagen) y la descripción vacía, así que pintar solo la
+   * descripción dejaba el desplegable abierto y en blanco (2026-09-14).
+   * Se pinta la foto con el estilo del lightbox (escala sin recortar, no
+   * amplía) y, si algún día el término lleva texto, debajo.
+   *
    * @return array<string, mixed>|null
    *   Render array del término de la guía.
    */
@@ -783,10 +789,33 @@ class FichaHooks {
     }
 
     $traducido = $this->traducido($termino);
+    $contenido = [
+      '#cache' => ['tags' => $termino->getCacheTags()],
+    ];
+    $media = $termino->hasField('field_imagen') ? ($termino->get('field_imagen')->entity ?? NULL) : NULL;
+    if ($media instanceof MediaInterface && $media->hasField('field_media_image')) {
+      $fichero = $media->get('field_media_image')->entity ?? NULL;
+      if ($fichero instanceof FileInterface) {
+        $contenido['foto'] = [
+          '#theme' => 'image_style',
+          '#style_name' => 'pronens_lightbox',
+          '#uri' => $fichero->getFileUri(),
+          '#alt' => (string) ($media->get('field_media_image')->alt ?: $traducido->label()),
+          '#attributes' => ['class' => ['pro-acc__guia'], 'loading' => 'lazy'],
+        ];
+        $contenido['#cache']['tags'] = array_merge($contenido['#cache']['tags'], $media->getCacheTags());
+      }
+    }
+    if (!$traducido->get('description')->isEmpty()) {
+      $contenido['texto'] = $traducido->get('description')->view(['label' => 'hidden', 'type' => 'text_default']);
+    }
+    if (!isset($contenido['foto']) && !isset($contenido['texto'])) {
+      return NULL;
+    }
 
     return [
       'titulo' => $traducido->label(),
-      'contenido' => $traducido->get('description')->view(['label' => 'hidden', 'type' => 'text_default']),
+      'contenido' => $contenido,
     ];
   }
 

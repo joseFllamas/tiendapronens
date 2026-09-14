@@ -2127,6 +2127,96 @@ Donde este documento y la realidad del repo discrepan, manda esta lista (decidid
     «Analítica» ya cubre dos servicios; y la ventana de atribución son 90 días, que es lo que había que
     suponer, no algo pactado por escrito.
 
+- **Descripciones de producto y de categoría reescritas (2026-09-14, cliente)**: la tienda se
+  desindexó en marzo sin causa técnica y todo apuntaba al texto heredado del D7: 366 productos
+  publicados con solo 325 descripciones distintas, 74 bolsas con el mismo bloque de doce frases
+  y solo el motivo cambiado, 41 bodys idénticos salvo una línea, 38 cojines iguales, párrafos de
+  enciclopedia sobre el cuento del estampado, y en todas la composición, el lavado, los plazos y
+  el envío gratis, que la ficha ya enseña en el eyebrow y en los desplegables. Se reescribieron
+  las **364 publicadas** (todas menos la basura 260 y 359) y las **22 categorías con contenido**,
+  siguiendo `guia-contenidos.md` del cliente. Lo que conviene no reinventar:
+  - **El brief es la única fuente de reglas**: `scripts/textos/descripciones/BRIEF.md`. Fija la
+    estructura (primera frase de 90-155 caracteres porque `Descripcion::resumir()` la convierte
+    en meta description, og:description y descripción del JSON-LD), lo que NO va en la ficha
+    (composición, lavado, envíos, precios, lista de tallas), el reparto categoría/producto, los
+    hechos verificados por categoría y qué se puede prometer del bordado en cada modo. Los textos
+    se escribieron mirando la foto de cada producto y validando con
+    `scripts/textos/descripciones/validar.py` (HTML permitido, longitud, prohibiciones, ninguna
+    frase de 8+ palabras repetida entre dos productos, arranques distintos, similitud por 5-gramas).
+  - **Reparto categoría/ficha** (cliente): los rasgos que comparten todos los productos de una
+    categoría (material, cierre, certificados, medidas, edades) viven en la **descripción del
+    término**, que la página de categoría pinta como intro bajo el H1 y SeoHooks usa de meta
+    description; la ficha toma dos o tres como mucho y pone el peso en el diseño, el ángulo y la
+    personalización. La intro admite ahora varios párrafos (`.pro-catalogo__intro p`).
+  - **Los textos son contenido**: `descripciones-es.csv` (id;titulo;body) y `categorias-es.json`
+    en `scripts/textos/descripciones/`, con `descripciones-es.json` que guarda además el ángulo de
+    cada uno. Se importan con `scripts/descripciones-importar.php` y
+    `scripts/descripciones-categorias-importar.php` (simulan por defecto, escriben con `--crear`,
+    respaldan los textos anteriores en `respaldo/` y marcan las otras traducciones como
+    desactualizadas). **Ejecutar los dos en producción.** Copia previa: snapshot
+    `pre-descripciones`. `commerce_product` no tiene revisiones: la vuelta atrás son esos JSON.
+  - **Hechos que las fotos engañan**: en los baberos de microfibra se ven dos círculos en el
+    cuello que parecen botones de presión y NO lo son, son parte del dibujo impreso; el cierre es
+    **velcro** (cliente). Se corrigió dos veces en sentido contrario antes de confirmarlo: no
+    describir botones, broches ni "dos posiciones". Y en los cojines, las bolsas y los baberos con
+    personajes de franquicia se usa solo el nombre del título y se describe la ilustración, sin
+    nombrar estudios ni marcas ni afirmar licencia (salvo el merch de Ede Minmore, que sí es oficial).
+  - **Guía de tallas vacía, arreglada**: `FichaHooks::guiaTallas()` pintaba la descripción del
+    término, vacía en los cuatro, y el desplegable salía abierto y en blanco. Ahora pinta la foto
+    del término (`field_imagen`, estilo `pronens_lightbox`) y la descripción debajo si la hubiera.
+  - **La traducción va con TMGMT pero SOLO del body**: `TraduccionHooks` (pronens_seo) implementa
+    `hook_tmgmt_translatable_fields_alter` con un interruptor en State
+    (`pronens_seo.tmgmt_solo_campos`) que enciende `scripts/descripciones-traducir.php`; sin él
+    TMGMT retraduciría también el título (normalizado a mano en agosto), la composición y el
+    diseño. Dos trampas medidas en el piloto: **TMGMT extrae los campos en `Job::addItem()`**, no
+    al pedir la traducción (el `save()` del item recalcula estadísticas y llama a `getData()`), así
+    que el interruptor se enciende antes de crear los items; y el traductor de `ai_tmgmt` **reclama
+    los trozos para un batch que en CLI nunca corre** y los deja bloqueados 30 s, por lo que el
+    script suelta los leases antes de que se vacíe la cola con
+    `drush queue:run ai_translator_worker`. El piloto verificó que la cola solo lleva
+    `body][0][value`.
+  - **La secuencia de producción, verificada (2026-09-14)**. Dos detalles que hacen fallar los
+    comandos si se copian mal: **drush solo pasa los argumentos al script después de `--`** (sin
+    el separador, `drush php:script x.php --crear` aborta con "unknown option") y **el directorio
+    de trabajo del proceso es el DOCROOT (`web/`), no la raíz del repo**, así que una ruta
+    relativa `scripts/...` no resuelve. Por eso los tres scripts derivan las rutas de
+    `dirname(DRUPAL_ROOT)` y el importador de productos ya no necesita que se le pase el CSV.
+    ```
+    git pull && drush cr            # el hook nuevo de TraduccionHooks se registra aquí
+    drush php:script scripts/descripciones-importar.php --            # simula
+    drush php:script scripts/descripciones-importar.php -- --crear
+    drush php:script scripts/descripciones-categorias-importar.php -- --crear
+    ```
+    **No hace falta `drush cim`** (no hay configuración nueva), **ni `sapi-i`** (el índice
+    `catalogo` indexa título y SKU, no el body), **ni regenerar el sitemap** (ninguna URL se
+    mueve). La caché de cada ficha y cada categoría se invalida sola al guardar la entidad.
+  - **El importador comprueba el título antes de escribir**: el CSV se redactó contra la copia
+    local de la base de datos, y si en producción un id fuera otro producto se le escribiría la
+    descripción de otro. Lo que no cuadra se salta con aviso (`--sin-comprobar-titulo` lo
+    desactiva, pero entonces hay que saber por qué). Caso previsible: si en producción no se ha
+    ejecutado `scripts/bolsas-y-sacos.php`, la categoría 182 aún se llama "Bolsas guardería y
+    escolares" y el importador de categorías la saltará; es correcto, se ejecuta ese script antes
+    y se repite.
+  - **La traducción quedó BLOQUEADA por credenciales (2026-09-14)**: la clave de OpenAI del key
+    `openai` (proveedor `config`) la rechaza la API ("Incorrect API key provided"); el último
+    trabajo que funcionó fue del 2026-08-11. No hay otro traductor configurado. Con una clave
+    válida, la secuencia es: `scripts/descripciones-traducir.php -- --desde-csv=<csv> --categorias
+    --crear` (84 trabajos, 1544 items: 364 productos y 22 categorías × ca/en/fr/it),
+    `drush queue:run ai_translator_worker --time-limit=3000` hasta que `--estado` dé 0 trozos y
+    todos los trabajos en 5, y `--apagar`. Los textos actuales de ca/en/fr/it están respaldados en
+    `respaldo/bodies-otros-idiomas-*.json`. Mientras, las cuatro traducciones siguen con el texto
+    viejo y marcadas como desactualizadas. **La traducción es un paso aparte y posterior**: no
+    hay que encadenarla con la importación, y los textos castellanos ya son correctos sin ella.
+  - **Datos que los redactores detectaron y quedan para el cliente**: la sudadera 362 dice color
+    "Raw Natural" y su foto es marino; las mascarillas 176 y 177 enseñan modelos adultos pero solo
+    existen en tallas infantiles; la alfombrilla 365 tiene una variación con talla "000 (6
+    meses)"; 141 (manguitos), 217 (delantal desechable) y 163 (lámina) están marcados como
+    personalizables sin que tenga sentido físico; 154-156 se personalizan con foto por correo pero
+    están en modo `texto`; las mochilas de vichí 26-30 ofrecen nube (`field_fondos_disponibles`) y
+    las bolsas mochila 227-229 no, al revés de lo que dice la lógica de la categoría; el interior de
+    las Márfegas 91 y 261 no es vichí como decía el D7 sino rayas y liso; los alias de la blanca y la
+    rosa de inicial siguen cruzados; y las fotos de las sudaderas 234 y 238 no enseñan ninguna letra.
+
 ## Orden de trabajo
 1. **Tema `pronens`**: tokens CSS (custom properties con los colores/tipos del README), fuentes
    self-hosted WOFF2 (Archivo, Nunito Sans, Caveat), layout base, header sticky + marquee + footer.

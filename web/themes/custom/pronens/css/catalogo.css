@@ -40,7 +40,11 @@
 }
 
 .pro-catalogo__intro p {
-  margin: 0;
+  margin: 0 0 8px;
+}
+
+.pro-catalogo__intro p:last-child {
+  margin-bottom: 0;
 }
 
 .pro-catalogo__empty {

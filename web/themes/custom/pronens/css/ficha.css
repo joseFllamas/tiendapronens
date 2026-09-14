@@ -1245,6 +1245,14 @@
   margin-bottom: 0;
 }
 
+/* La guía de tallas es una foto de la tabla: ancho de la columna, sin recorte. */
+.pro-acc__body .pro-acc__guia {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  border-radius: 8px;
+}
+
 /* El lavado son 4 términos: lista horizontal, no una columna. */
 .pro-acc__body .field--name-field-lavado {
   display: flex;
