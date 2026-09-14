@@ -42,15 +42,23 @@ final class GrafoCalculator {
   private const TIPOS_COLECCION = ['CollectionPage', 'SearchResultsPage'];
 
   /**
+   * Los @type que referencian a la tienda desde su publisher.
+   *
+   * @var array<int, string>
+   */
+  private const TIPOS_SITIO = ['WebSite'];
+
+  /**
    * Enriquece el grafo entero.
    *
    * @param array<int, mixed> $grafo
    *   El @graph tal y como lo dejó schema_metatag.
    * @param array<string, mixed> $datos
    *   'empresa' => propiedades sueltas que se añaden a la Organization;
+   *   'base' => la raíz del sitio sin prefijo de idioma, para los @id;
    *   'devolucion' => nodo MerchantReturnPolicy o NULL;
    *   'envio' => lista de OfferShippingDetails (puede ir vacía);
-   *   'vendedor' => @id de la Organization, para el seller de cada Offer;
+   *   'vendedor' => @id de reserva si la Organization no trae ninguno;
    *   'skus' => SKU por posición de Offer, alineado con el orden del pivot;
    *   'coleccion' => ['numberOfItems' => int, 'itemListElement' => array].
    *
@@ -58,6 +66,12 @@ final class GrafoCalculator {
    *   El grafo con las propiedades añadidas.
    */
   public static function enriquecer(array $grafo, array $datos): array {
+    // El @id de la tienda se resuelve UNA vez y lo usan los tres sitios que
+    // hablan de ella: su propio nodo, el seller de cada Offer y el publisher
+    // del WebSite. Así no pueden desincronizarse.
+    $datos['tienda'] = self::idDeLaTienda($grafo, (string) ($datos['base'] ?? ''))
+      ?? (string) ($datos['vendedor'] ?? '');
+
     foreach ($grafo as $i => $nodo) {
       if (!is_array($nodo)) {
         continue;
@@ -70,12 +84,72 @@ final class GrafoCalculator {
         $grafo[$i] = self::producto($nodo, $datos);
         continue;
       }
+      if (self::esDe($nodo, self::TIPOS_SITIO)) {
+        $grafo[$i] = self::sitio($nodo, $datos);
+        continue;
+      }
       if (self::esDe($nodo, self::TIPOS_COLECCION)) {
         $grafo[$i] = self::coleccion($nodo, $datos);
       }
     }
 
     return $grafo;
+  }
+
+  /**
+   * El @id de la tienda, ya sin el prefijo de idioma.
+   *
+   * @param array<int, mixed> $grafo
+   *   El @graph entero.
+   * @param string $base
+   *   La raíz del sitio sin prefijo de idioma.
+   *
+   * @return string|null
+   *   El @id, o NULL si la ficha de empresa no trae ninguno.
+   */
+  private static function idDeLaTienda(array $grafo, string $base): ?string {
+    foreach ($grafo as $nodo) {
+      if (!is_array($nodo) || !self::esDe($nodo, self::TIPOS_EMPRESA)) {
+        continue;
+      }
+      $id = $nodo['@id'] ?? NULL;
+      if (!is_string($id) || $id === '') {
+        return NULL;
+      }
+
+      return self::sinIdioma($id, $base);
+    }
+
+    return NULL;
+  }
+
+  /**
+   * Quita el prefijo de idioma de un @id conservando su fragmento.
+   *
+   * El token [site:url] de la configuración de metatag resuelve con el idioma
+   * de la página, así que la ficha de empresa salía con un @id distinto en
+   * cada uno (…/ca#store) y para un grafo de conocimiento eran CINCO tiendas
+   * en vez de una, que es justo lo contrario de para lo que sirve un @id. Y
+   * peor: el seller de cada Offer se forma con la raíz sin prefijo, de modo
+   * que en cuatro de los cinco idiomas apuntaba a un nodo que no estaba en el
+   * documento. El fragmento se conserva porque lo decide la configuración
+   * (hoy #store), no este código.
+   *
+   * @param string $id
+   *   El @id tal y como lo dejó schema_metatag.
+   * @param string $base
+   *   La raíz del sitio sin prefijo de idioma, con o sin barra final.
+   *
+   * @return string
+   *   El @id sin prefijo, o el mismo de entrada si no hay nada que hacer.
+   */
+  private static function sinIdioma(string $id, string $base): string {
+    $almohadilla = strpos($id, '#');
+    if ($base === '' || $almohadilla === FALSE) {
+      return $id;
+    }
+
+    return rtrim($base, '/') . '/' . substr($id, $almohadilla);
   }
 
   /**
@@ -90,6 +164,10 @@ final class GrafoCalculator {
    *   El nodo con las propiedades añadidas.
    */
   private static function empresa(array $nodo, array $datos): array {
+    // Se normaliza, no se inventa: si metatag no puso @id, no lo pone nadie.
+    if (!self::vacio($nodo['@id'] ?? NULL) && !empty($datos['tienda'])) {
+      $nodo['@id'] = $datos['tienda'];
+    }
     foreach (($datos['empresa'] ?? []) as $clave => $valor) {
       if ($valor === NULL || $valor === '' || $valor === []) {
         continue;
@@ -134,8 +212,8 @@ final class GrafoCalculator {
       if (!is_array($oferta)) {
         continue;
       }
-      if (!empty($datos['vendedor']) && self::vacio($oferta['seller'] ?? NULL)) {
-        $oferta['seller'] = ['@type' => 'Organization', '@id' => $datos['vendedor']];
+      if (!empty($datos['tienda']) && self::vacio($oferta['seller'] ?? NULL)) {
+        $oferta['seller'] = ['@type' => 'Organization', '@id' => $datos['tienda']];
       }
       if (isset($skus[$i]) && $skus[$i] !== '' && self::vacio($oferta['sku'] ?? NULL)) {
         $oferta['sku'] = $skus[$i];
@@ -177,6 +255,32 @@ final class GrafoCalculator {
       $imagen['representativeOfPage'] = in_array(strtolower((string) $valor), ['1', 'true'], TRUE);
       $nodo['image'] = $imagen;
     }
+
+    return $nodo;
+  }
+
+  /**
+   * El WebSite: su publisher tiene que ser el mismo nodo que el seller.
+   *
+   * El @id del propio WebSite se deja como está: cada idioma tiene su portada
+   * y su inLanguage, así que ahí el prefijo no sobra. Lo que no puede variar
+   * es la referencia a la tienda, que es una sola entidad.
+   *
+   * @param array<string, mixed> $nodo
+   *   El nodo WebSite.
+   * @param array<string, mixed> $datos
+   *   Los datos del enriquecimiento.
+   *
+   * @return array<string, mixed>
+   *   El nodo con el publisher repuntado.
+   */
+  private static function sitio(array $nodo, array $datos): array {
+    $publisher = $nodo['publisher'] ?? NULL;
+    if (!is_array($publisher) || self::vacio($publisher['@id'] ?? NULL) || empty($datos['tienda'])) {
+      return $nodo;
+    }
+    $publisher['@id'] = $datos['tienda'];
+    $nodo['publisher'] = $publisher;
 
     return $nodo;
   }

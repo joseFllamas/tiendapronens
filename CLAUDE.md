@@ -1629,6 +1629,59 @@ Donde este documento y la realidad del repo discrepan, manda esta lista (decidid
   (`scripts/enlace-fabricante.php`, es contenido: ejecutar también en producción). **Pendiente en
   pronens.com**, que no se ha tocado: no tiene JSON-LD, ni meta description, ni H1, así que le falta
   su `Organization` con el `sameAs` recíproco.
+  - **Revisado el 2026-09-14 (cliente): no son la misma entidad, son matriz e hija.** El `sameAs`
+    de la tienda hacia pronens.com se sustituye por **`parentOrganization`**, y pronens.com
+    declara el recíproco **`subOrganization`** hacia aquí. Las dos cosas a la vez eran una
+    contradicción: `sameAs` afirma que las dos URL **son la misma entidad** y
+    `parentOrganization` que una es la matriz de la otra, y un grafo de conocimiento no puede
+    resolver las dos.
+  - **El bloque de pronens.com manda, y esta tienda se ajusta a él (2026-09-14, cliente)**. Los
+    dos documentos describen el mismo par de nodos, así que **cada campo tiene que decir lo mismo
+    en los dos o describen entidades distintas**. En concreto: el `@id` de la tienda se queda en
+    `#organization` (se probó `#store` y se revirtió), su `name` se queda en **«Pronens»** y la
+    matriz se declara **`Organization`** y no `WholesaleStore`. Si algún día se cambia uno, hay
+    que cambiar los dos a la vez, más el `subOrganization` de pronens.com, que lleva dentro el
+    `@id` y el nombre de esta tienda. **Ojo**: tocar el `@id` de la tienda obliga además a mover
+    **a la vez** las dos referencias internas que apuntan a él, el `publisher` del `WebSite` y el
+    `seller` de cada `Offer`, o quedan colgando de un nodo que no existe; eso ya no hay que
+    acordarse de hacerlo a mano, lo resuelve `GrafoCalculator` leyendo el `@id` del propio grafo.
+    El `sameAs` de la Organization sigue vacío y es para **perfiles sociales**.
+  - **Las personas van en `employee` con `jobTitle`, NO en `founder` (2026-09-14, cliente)**:
+    Victor Minguell es el **CEO** y Jose Llamas el **CTO**, y `founder` junto a
+    `foundingDate: 1984` afirmaba que fundaron la empresa ese año. schema.org no tiene propiedad
+    para el cargo directivo (no existe `chiefExecutiveOfficer`), así que el cargo va en
+    `jobTitle` de la Person. Llevan el **mismo `@id` en los tres sitios** del grupo
+    (`https://www.pronens.com/#victor-minguell` y `#jose-llamas`, que cuelgan de la matriz): un
+    `@id` es un identificador global, no una URL que haya que servir desde aquí, y compartiéndolo
+    **da igual qué documento aporte cada propiedad** (la foto y la formación las tiene
+    educoland, el cargo lo ponen Pronens y esta tienda), porque se funden en una sola persona.
+    Identificadores distintos por sitio serían homónimos sin relación, que es justo lo que se
+    quería evitar. El `sameAs` de LinkedIn se repite aquí a propósito aunque el `@id` ya funda
+    las fichas: un rastreador que solo vea esta página se quedaría si no con un nombre propio que
+    no puede resolver.
+  - **`returnFees` es `ReturnFeesCustomerResponsibility`, NO `ReturnShippingFees` (2026-09-14)**:
+    los dos dicen que el envío de vuelta lo paga el cliente, pero schema.org define
+    `returnShippingFeesAmount` como «applicable when `returnFees` equals `ReturnShippingFees`» y
+    Google lo **exige** en ese caso, así que la ficha de comercio salía con un aviso. Aquí no hay
+    importe que declarar: el cliente elige transportista y paga lo que le cueste. **Los 10,90 €
+    de la página de envíos NO son esa tarifa**, son un servicio opcional de recogida a domicilio,
+    y publicarlos como coste de devolución sería una condición de envío falsa en Merchant Center.
+    La otra opción de la enumeración dice exactamente lo que pasa (el coste es responsabilidad
+    del cliente) y no pide importe. Si algún día se fija una tarifa única de devolución, entonces
+    sí se vuelve a `ReturnShippingFees` **y con `returnShippingFeesAmount`**, nunca uno sin otro.
+  - **Pendiente y de decisión del cliente**: (1) `legalName`, `taxID` y `foundingDate: 1984` están
+    **en los dos nodos**, y dos empresas con el mismo NIF no pueden existir: o la identidad
+    registral se queda solo en la matriz y la tienda conserva lo comercial (nombre, descripción,
+    moneda, devoluciones, envíos), o se vuelve al modelo de una sola entidad con dos URL. El
+    `foundingDate: 1984` en la tienda es además falso por su cuenta: la empresa es de 1984, la
+    tienda online no. (2) La tienda y su matriz se llaman **las dos «Pronens»**, así que en un
+    resultado de búsqueda no se distinguen; «Tienda Pronens Particulares» lo resolvía. (3) En
+    educoland.com las dos `Person` no tienen `@id` y tienen que llevar esos mismos dos, y su
+    Organization sale **distinta en la home y en /quienes-somos con el mismo `@id`**. (4) Victor
+    no tiene `sameAs`, que es la señal que de verdad desambigua a una persona.
+  - **Pendiente en pronens.com**: su `Organization` sigue declarando `sameAs` a la tienda y lo
+    recíproco correcto ahora es **`subOrganization`** (o dejarlo sin nada, que `parentOrganization`
+    ya cuenta la relación entera). Mientras no se cambie, las dos webs se contradicen entre sí.
 
 - **Envíos, devoluciones y formas de pago reescritos (2026-09-03, cliente)**: los nodos 1 y 2 seguían
   con el texto del D7 y contradecían al resto de la tienda en la misma sesión de compra. Lo que
@@ -2187,9 +2240,22 @@ Donde este documento y la realidad del repo discrepan, manda esta lista (decidid
     drush php:script scripts/descripciones-importar.php -- --crear
     drush php:script scripts/descripciones-categorias-importar.php -- --crear
     ```
-    **No hace falta `drush cim`** (no hay configuración nueva), **ni `sapi-i`** (el índice
-    `catalogo` indexa título y SKU, no el body), **ni regenerar el sitemap** (ninguna URL se
-    mueve). La caché de cada ficha y cada categoría se invalida sola al guardar la entidad.
+    **No hace falta `drush cim`** (no hay configuración nueva) **ni `sapi-i`** (el índice
+    `catalogo` indexa título y SKU, no el body). La caché de cada ficha y cada categoría se
+    invalida sola al guardar la entidad.
+  - **El sitemap SÍ hay que regenerarlo, y al final (2026-09-14)**. Aunque no se mueva ninguna
+    URL, el `lastmod` es la señal de re-rastreo, y simple_sitemap guarda el XML generado: hasta
+    que no se relanza, sigue sirviendo las fechas viejas. El importador deja `changed` de hoy en
+    los **cinco** idiomas (guarda el castellano y marca las otras traducciones como
+    desactualizadas, lo que también las toca), así que tras `drush simple-sitemap:generate`
+    **1906 de las 1957 URLs llevan la fecha nueva**, comprobado. Conviene lanzarlo **cuando
+    termine la traducción**, no entre medias: si no, las URLs de ca/en/fr/it anuncian fecha nueva
+    con el texto viejo todavía dentro, que es justo la incoherencia que hace que un buscador
+    deje de fiarse del `lastmod`. Regenerar dos veces no tiene coste.
+  - **El ping a los buscadores ya no existe**: Google retiró el endpoint de ping de sitemaps en
+    junio de 2023 y Bing hizo lo propio. Para pedir el re-rastreo hay que volver a enviar el
+    sitemap desde Search Console y, para un puñado de fichas representativas, usar la inspección
+    de URL, que tiene cuota diaria.
   - **El importador comprueba el título antes de escribir**: el CSV se redactó contra la copia
     local de la base de datos, y si en producción un id fuera otro producto se le escribiría la
     descripción de otro. Lo que no cuadra se salta con aviso (`--sin-comprobar-titulo` lo
@@ -2197,6 +2263,24 @@ Donde este documento y la realidad del repo discrepan, manda esta lista (decidid
     ejecutado `scripts/bolsas-y-sacos.php`, la categoría 182 aún se llama "Bolsas guardería y
     escolares" y el importador de categorías la saltará; es correcto, se ejecuta ese script antes
     y se repite.
+  - **Un 429 de OpenAI mata el `queue:run` entero (2026-09-14)**: al vaciar la cola en
+    producción salió «AI TMGMT queue is suspended due to a rate limit until HH:MM:SS». No es un
+    fallo: el worker lanza las peticiones en ráfaga, sin espaciarlas, así que con 1500 trozos
+    seguidos se topa con el límite por minuto de la cuenta. Lo que pasa entonces es que guarda en
+    State `ai_tmgmt.queue.suspend_until` el momento en que se levanta la pausa (el
+    `rate_limit_delay` del traductor, 60 s aquí) y, mientras siga en el futuro, **cualquier item
+    lanza `SuspendQueueException`, que aborta la ejecución completa de `drush queue:run`**: el
+    comando no espera esos 60 segundos, se muere. El diseño da por hecho que quien procesa la
+    cola es el cron, que vuelve a intentarlo solo.
+    Para desbloquear al instante: `drush sdel ai_tmgmt.queue.suspend_until` (pero si la API sigue
+    limitando, vuelve a saltar). Lo que funciona es relanzar en bucle:
+    `bash scripts/traducir-vaciar-cola.sh`, que encadena pasadas con pausa, informa del avance y
+    avisa si aparecen entidades abortadas. Subir `rate_limit_delay` solo alarga la espera, no
+    evita el 429; lo que lo evitaría es un tier más alto en OpenAI.
+  - **Los trabajos no se abortan, los items sí**: un item que agota los tres intentos pasa a
+    `STATE_ABORTED` (4) y su trozo se descarta, pero el trabajo se queda «en curso» para siempre.
+    Por eso `--estado` cuenta también los items y mira el registro de la última hora: leer solo el
+    estado de los trabajos da una falsa sensación de que todo va bien.
   - **La traducción quedó BLOQUEADA por credenciales (2026-09-14)**: la clave de OpenAI del key
     `openai` (proveedor `config`) la rechaza la API ("Incorrect API key provided"); el último
     trabajo que funcionó fue del 2026-08-11. No hay otro traductor configurado. Con una clave
@@ -2204,8 +2288,9 @@ Donde este documento y la realidad del repo discrepan, manda esta lista (decidid
     --crear` (84 trabajos, 1544 items: 364 productos y 22 categorías × ca/en/fr/it),
     `drush queue:run ai_translator_worker --time-limit=3000` hasta que `--estado` dé 0 trozos y
     todos los trabajos en 5, y `--apagar`. Los textos actuales de ca/en/fr/it están respaldados en
-    `respaldo/bodies-otros-idiomas-*.json`. Mientras, las cuatro traducciones siguen con el texto
-    viejo y marcadas como desactualizadas. **La traducción es un paso aparte y posterior**: no
+    `respaldo/bodies-otros-idiomas-*.json`. **En producción la clave sí es válida** y la tanda se
+    lanzó el mismo día; lo de arriba es el entorno local. Mientras no termine, las cuatro
+    traducciones siguen con el texto viejo y marcadas como desactualizadas. **La traducción es un paso aparte y posterior**: no
     hay que encadenarla con la importación, y los textos castellanos ya son correctos sin ella.
   - **Datos que los redactores detectaron y quedan para el cliente**: la sudadera 362 dice color
     "Raw Natural" y su foto es marino; las mascarillas 176 y 177 enseñan modelos adultos pero solo

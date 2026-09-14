@@ -59,12 +59,49 @@ foreach ($extra as $a) {
   }
   elseif ($a === '--estado') {
     $filtro = \Drupal::state()->get(TraduccionHooks::ESTADO);
-    print 'Interruptor: ' . ($filtro ? json_encode($filtro) : 'apagado') . "\n";
+    print 'Interruptor de campos: ' . ($filtro ? json_encode($filtro) : 'APAGADO') . "\n";
     $q = \Drupal::queue('ai_translator_worker');
-    printf("Cola ai_translator_worker: %d trozos pendientes\n", $q->numberOfItems());
+    $pendientes = $q->numberOfItems();
+    printf("Trozos pendientes en la cola: %d\n", $pendientes);
+
     $db = \Drupal::database();
-    $r = $db->query("SELECT state, COUNT(*) n FROM {tmgmt_job} WHERE label LIKE 'Descripciones %' GROUP BY state")->fetchAllKeyed();
-    print 'Trabajos "Descripciones": ' . json_encode($r) . " (0 sin pedir, 1 activo, 5 terminado, 6 rechazado, 7 abortado)\n";
+    // Los códigos de estado en claro: leerlos como números invita a confundir
+    // "84 trabajos en estado 1" con "84 abortados".
+    $nombres = [0 => 'sin pedir', 1 => 'en curso', 2 => 'pendiente de revisar', 3 => 'terminado', 5 => 'terminado', 6 => 'rechazado', 7 => 'abortado'];
+    $filas = $db->query("SELECT state, COUNT(*) n FROM {tmgmt_job} WHERE label LIKE 'Descripciones %' GROUP BY state")->fetchAllKeyed();
+    print "Trabajos:\n";
+    if ($filas === []) {
+      print "  (ninguno: esta base de datos no tiene la tanda)\n";
+    }
+    foreach ($filas as $estado => $n) {
+      printf("  %-22s %d\n", $nombres[(int) $estado] ?? ('estado ' . $estado), $n);
+    }
+    $items = $db->query("SELECT ji.state, COUNT(*) n FROM {tmgmt_job_item} ji INNER JOIN {tmgmt_job} j ON j.tjid = ji.tjid WHERE j.label LIKE 'Descripciones %' GROUP BY ji.state")->fetchAllKeyed();
+    print "Entidades (items):\n";
+    foreach ($items as $estado => $n) {
+      printf("  %-22s %d\n", $nombres[(int) $estado] ?? ('estado ' . $estado), $n);
+    }
+
+    // Lo que de verdad hay que vigilar: un item que falla NO cambia el estado
+    // del trabajo, se queda "en curso" para siempre. El fallo solo sale en el
+    // registro, así que se mira ahí y solo lo de la última hora, para no
+    // confundirlo con errores de tandas anteriores.
+    if ($db->schema()->tableExists('watchdog')) {
+      $desde = \Drupal::time()->getRequestTime() - 3600;
+      $fallos = (int) $db->query("SELECT COUNT(*) FROM {watchdog} WHERE type IN ('ai', 'ai_tmgmt', 'tmgmt') AND severity <= 4 AND timestamp > :d", [':d' => $desde])->fetchField();
+      printf("Errores en el registro (última hora): %d\n", $fallos);
+      if ($fallos > 0) {
+        $ultimo = $db->query("SELECT message, variables FROM {watchdog} WHERE type IN ('ai', 'ai_tmgmt', 'tmgmt') AND severity <= 4 AND timestamp > :d ORDER BY wid DESC LIMIT 1", [':d' => $desde])->fetchObject();
+        $vars = $ultimo->variables ? @unserialize($ultimo->variables) : [];
+        $texto = is_array($vars) ? strtr($ultimo->message, array_map(static fn($v) => is_scalar($v) ? (string) $v : '', $vars)) : $ultimo->message;
+        printf("  último: %s\n", mb_substr(preg_replace('/\s+/', ' ', $texto), 0, 200));
+        print "  Un item que falla deja su trabajo 'en curso' para siempre: revisa la clave\n";
+        print "  de la API antes de seguir vaciando la cola.\n";
+      }
+    }
+    print $pendientes === 0 && !isset($filas[1])
+      ? "\nTerminado: ya puedes apagar el interruptor con --apagar.\n"
+      : "\nSigue con: drush queue:run ai_translator_worker --time-limit=3000\n";
     return;
   }
   elseif (str_starts_with($a, '--idiomas=')) {

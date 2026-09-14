@@ -23,10 +23,16 @@ use Drupal\views\ViewExecutable;
  * - Identidad de la empresa (legalName, taxID, foundingDate), que es lo que
  *   permite a un grafo de conocimiento cruzar "Pronens" con registros
  *   oficiales. Hoy ese dato solo vivía en texto plano del aviso legal.
- * - sameAs a pronens.com: la web del fabricante (venta a colegios y empresas)
- *   y esta tienda son la MISMA empresa con dos públicos. pronens.com ya
- *   enlaza aquí ("Tienda familias"); esto cierra el vínculo en la otra
- *   dirección y en datos estructurados, que es lo que desambigua la entidad.
+ * - parentOrganization hacia pronens.com: la web del fabricante (venta a
+ *   colegios y empresas) es la matriz y esta es la tienda de particulares.
+ *   pronens.com ya enlaza aquí ("Tienda familias"); esto cierra el vínculo en
+ *   la otra dirección y en datos estructurados, que es lo que desambigua las
+ *   dos entidades en vez de confundirlas.
+ * - employee con las personas que dirigen la empresa, que es lo que la ata a
+ *   nombres propios: sin ello, "taller familiar desde 1984" es una frase de
+ *   marketing sin respaldo en los datos. Llevan el mismo @id que usan
+ *   pronens.com y educoland.com, así que para un grafo de conocimiento son
+ *   una sola persona en los tres sitios y no tres homónimos.
  * - hasMerchantReturnPolicy y shippingDetails, requisito de Google desde 2023
  *   para la ficha de comercio completa, con los importes leídos de Commerce.
  * - seller y sku en cada Offer, e ItemList en las páginas de categoría.
@@ -48,14 +54,54 @@ final class JsonLdHooks {
   private const VIEW_ID = 'catalogo';
 
   /**
-   * La web del fabricante, el otro sitio de la misma empresa.
+   * La web del fabricante, la empresa matriz.
    */
   private const WEB_FABRICANTE = 'https://www.pronens.com/';
+
+  /**
+   * El @id con el que pronens.com declara su propia Organization.
+   *
+   * Tiene que coincidir byte a byte con el que emite el JSON-LD de esa web
+   * (pronens_seo_page_attachments allí): así parentOrganization no es un nodo
+   * anónimo sino una referencia a la entidad ya descrita, y los dos documentos
+   * se funden en uno solo para un grafo de conocimiento.
+   */
+  private const ID_FABRICANTE = self::WEB_FABRICANTE . '#organization';
+
+  /**
+   * El @id de la persona que dirige la empresa.
+   *
+   * Cuelga de pronens.com, que es la matriz y el sitio canónico del grupo.
+   * Un identificador global no es una URL que haya que servir desde aquí, así
+   * que lo importante es que sea EL MISMO en los tres sitios (aquí,
+   * pronens.com y educoland.com): compartiéndolo da igual qué documento
+   * aporte cada propiedad, porque un grafo de conocimiento los funde en una
+   * sola persona. Tres identificadores distintos serían tres homónimos.
+   */
+  private const ID_CEO = self::WEB_FABRICANTE . '#victor-minguell';
+
+  /**
+   * El @id de quien lleva la parte técnica, con el mismo criterio.
+   */
+  private const ID_CTO = self::WEB_FABRICANTE . '#jose-llamas';
 
   /**
    * Datos de identidad que no tienen etiqueta en schema_metatag 3.0.
    *
    * Salen del aviso legal y del pie de las facturas, donde ya son públicos.
+   *
+   * parentOrganization sustituye al sameAs hacia pronens.com que había hasta
+   * el 2026-09-14: sameAs afirma que las dos URL son LA MISMA entidad, y
+   * declarar a la vez que una es la matriz de la otra es una contradicción
+   * que un grafo de conocimiento no puede resolver. La relación real es de
+   * matriz (venta a colegios y empresas) a tienda de particulares, y eso es
+   * lo que dice parentOrganization.
+   *
+   * La persona va en employee y NO en founder (cliente, 2026-09-14): founder
+   * junto a foundingDate 1984 afirmaba que fundó la empresa ese año, y lo que
+   * es de verdad es su CEO. schema.org no tiene una propiedad para el cargo
+   * directivo, así que el cargo va en jobTitle de la Person. Quién fundó
+   * Pronens en 1984 está sin declarar: no se pone hasta saberlo.
    *
    * @var array<string, mixed>
    */
@@ -64,7 +110,30 @@ final class JsonLdHooks {
     'taxID' => 'ES36928020W',
     'foundingDate' => '1984',
     'currenciesAccepted' => 'EUR',
-    'sameAs' => [self::WEB_FABRICANTE],
+    'parentOrganization' => [
+      '@type' => 'Organization',
+      '@id' => self::ID_FABRICANTE,
+      'name' => 'Pronens',
+      'url' => self::WEB_FABRICANTE,
+    ],
+    'employee' => [
+      [
+        '@type' => 'Person',
+        '@id' => self::ID_CEO,
+        'name' => 'Victor Minguell',
+        'jobTitle' => 'CEO',
+      ],
+      [
+        '@type' => 'Person',
+        '@id' => self::ID_CTO,
+        'name' => 'Jose Llamas',
+        'jobTitle' => 'CTO',
+        // Se repite aquí aunque el @id ya funda las dos fichas: un rastreador
+        // que solo vea esta página se queda si no con un nombre propio que no
+        // puede resolver, y sameAs es la señal que desambigua a una persona.
+        'sameAs' => ['https://www.linkedin.com/in/jose-llamas-2337a413/'],
+      ],
+    ],
   ];
 
   public function __construct(
@@ -163,6 +232,10 @@ final class JsonLdHooks {
     $devolucionId = $base . '#politica-devolucion';
     $datos = [
       'empresa' => self::EMPRESA,
+      'base' => $base,
+      // De reserva: el @id lo manda la configuración de metatag y lo resuelve
+      // GrafoCalculator leyéndolo del propio grafo. Esto solo actúa si la
+      // ficha de empresa llegara sin ninguno.
       'vendedor' => $base . '#organization',
       'devolucion' => $this->politicas->devolucion($devolucionId, $this->urlDevoluciones()),
       'devolucionRef' => $devolucionId,
