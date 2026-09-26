@@ -6,6 +6,8 @@ namespace Drupal\pronens_correos_express\Plugin\views\field;
 
 use Drupal\commerce_order\Entity\OrderInterface;
 use Drupal\Core\Cache\CacheableMetadata;
+use Drupal\Core\Datetime\DateFormatterInterface;
+use Drupal\Core\Routing\RedirectDestinationInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Url;
 use Drupal\pronens_correos_express\ResumenEnvios;
@@ -33,6 +35,11 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  * prerrellenado. Quién lo ve es la misma regla de operacionesDeEnvio(), con la
  * recogida en tienda fuera, solo que leída del resumen para no volver a
  * preguntárselo a las entidades fila a fila.
+ *
+ * Las recogidas en tienda usan la misma casilla (cliente, 2026-09-26): donde un
+ * envío tendría «EXPEDIR», una recogida tiene «RECOGIDO», que marca que el
+ * cliente ya se ha llevado el pedido. Ese sí actúa al momento (no cuesta nada y
+ * se deshace), y una vez marcada la casilla dice cuándo y ofrece deshacerlo.
  */
 #[ViewsField('pronens_expedicion_pedido')]
 final class ExpedicionDelPedido extends FieldPluginBase {
@@ -48,12 +55,24 @@ final class ExpedicionDelPedido extends FieldPluginBase {
   protected AccountInterface $usuarioActual;
 
   /**
+   * Para volver a la lista, con sus filtros, después de marcar una recogida.
+   */
+  protected RedirectDestinationInterface $destino;
+
+  /**
+   * Formateador de la fecha de recogida.
+   */
+  protected DateFormatterInterface $fechas;
+
+  /**
    * {@inheritdoc}
    */
   public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
     $plugin = parent::create($container, $configuration, $plugin_id, $plugin_definition);
     $plugin->resumenEnvios = $container->get(ResumenEnvios::class);
     $plugin->usuarioActual = $container->get('current_user');
+    $plugin->destino = $container->get('redirect.destination');
+    $plugin->fechas = $container->get('date.formatter');
 
     return $plugin;
   }
@@ -89,7 +108,7 @@ final class ExpedicionDelPedido extends FieldPluginBase {
     $metadatos = new CacheableMetadata();
     $metadatos->addCacheableDependency($pedido);
     $resumen = $this->resumenEnvios->deUnPedido($pedido, $metadatos);
-    if ($resumen->expediciones === [] && $resumen->pendientes === []) {
+    if ($resumen->expediciones === [] && $resumen->pendientes === [] && $resumen->recogidas === []) {
       return '';
     }
 
@@ -176,9 +195,67 @@ final class ExpedicionDelPedido extends FieldPluginBase {
       }
     }
 
+    if ($puedeExpedir) {
+      foreach ($resumen->recogidas as $recogida) {
+        $construccion['#items'][] = $this->casillaDeRecogida($recogida, $metadatos);
+      }
+    }
+
     $metadatos->applyTo($construccion);
 
     return $construccion;
+  }
+
+  /**
+   * Botón «RECOGIDO», o cuándo se recogió y el enlace para deshacerlo.
+   *
+   * @param array{envio: string, pedido: string, etiqueta: string, recogido: int|null} $recogida
+   *   La recogida, tal como la da el resumen.
+   * @param \Drupal\Core\Cache\CacheableMetadata $metadatos
+   *   Metadatos de la fila: el enlace lleva la URL de la lista como destino.
+   *
+   * @return array<string, mixed>
+   *   El elemento de la lista.
+   */
+  protected function casillaDeRecogida(array $recogida, CacheableMetadata $metadatos): array {
+    $metadatos->addCacheContexts(['url.path', 'url.query_args']);
+    $parametros = [
+      'commerce_order' => $recogida['pedido'],
+      'commerce_shipment' => $recogida['envio'],
+    ];
+    $opciones = ['query' => $this->destino->getAsArray()];
+
+    if ($recogida['recogido'] === NULL) {
+      return [
+        'recogido' => [
+          '#type' => 'link',
+          '#title' => 'RECOGIDO',
+          '#url' => Url::fromRoute('pronens_correos_express.recogido', $parametros, $opciones),
+          '#attributes' => [
+            'class' => ['button', 'button--small', 'pronens-expedicion__recogido'],
+            'title' => 'Marcar que el cliente ya ha recogido el pedido en la tienda (' . $recogida['etiqueta'] . ')',
+          ],
+        ],
+      ];
+    }
+
+    return [
+      'fecha' => [
+        '#type' => 'html_tag',
+        '#tag' => 'span',
+        '#value' => 'Recogido el ' . $this->fechas->format($recogida['recogido'], 'custom', 'j M'),
+        '#attributes' => ['class' => ['pronens-expedicion__recogido-fecha']],
+      ],
+      'deshacer' => [
+        '#type' => 'link',
+        '#title' => 'Deshacer',
+        '#url' => Url::fromRoute('pronens_correos_express.recogido_deshacer', $parametros, $opciones),
+        '#attributes' => [
+          'class' => ['pronens-expedicion__deshacer'],
+          'title' => 'Volver a dejar el pedido pendiente de recogida',
+        ],
+      ],
+    ];
   }
 
 }

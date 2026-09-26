@@ -34,6 +34,7 @@ final class CalculadoraSituacion {
     SituacionPedido::Expedido->value,
     SituacionPedido::Enviado->value,
     SituacionPedido::RecogeEnTienda->value,
+    SituacionPedido::Recogido->value,
     SituacionPedido::Entregado->value,
   ];
 
@@ -101,10 +102,11 @@ final class CalculadoraSituacion {
 
     // La recogida en tienda se mira antes que el seguimiento porque no tiene:
     // no hay expedición ninguna. Que el envío esté en «shipped» significa que
-    // el cliente ya pasó a por el paquete, así que ahí sí está entregado.
+    // el cliente ya pasó a por el paquete: es lo que marca el botón
+    // «Recogido» de la lista de pedidos.
     if (($envio['seExpide'] ?? TRUE) === FALSE) {
       return $estado === 'shipped'
-        ? SituacionPedido::Entregado
+        ? SituacionPedido::Recogido
         : SituacionPedido::RecogeEnTienda;
     }
 

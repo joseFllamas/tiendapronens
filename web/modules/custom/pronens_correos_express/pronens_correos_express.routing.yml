@@ -60,3 +60,38 @@ pronens_correos_express.etiqueta:
         type: 'entity:commerce_order'
       commerce_shipment:
         type: 'entity:commerce_shipment'
+
+# Recogida en tienda: el botón «Recogido» de la lista de pedidos y su deshacer.
+# Son enlaces que cambian datos, así que van con token CSRF: sin él, cualquier
+# página podría marcar pedidos recogidos con una imagen apuntando aquí.
+pronens_correos_express.recogido:
+  path: '/admin/commerce/orders/{commerce_order}/shipments/{commerce_shipment}/recogido'
+  defaults:
+    _controller: '\Drupal\pronens_correos_express\Controller\RecogidaController::marcar'
+  requirements:
+    _permission: 'generar expediciones correos express'
+    _entity_access: 'commerce_shipment.update'
+    _csrf_token: 'TRUE'
+  options:
+    _admin_route: TRUE
+    parameters:
+      commerce_order:
+        type: 'entity:commerce_order'
+      commerce_shipment:
+        type: 'entity:commerce_shipment'
+
+pronens_correos_express.recogido_deshacer:
+  path: '/admin/commerce/orders/{commerce_order}/shipments/{commerce_shipment}/recogido/deshacer'
+  defaults:
+    _controller: '\Drupal\pronens_correos_express\Controller\RecogidaController::deshacer'
+  requirements:
+    _permission: 'generar expediciones correos express'
+    _entity_access: 'commerce_shipment.update'
+    _csrf_token: 'TRUE'
+  options:
+    _admin_route: TRUE
+    parameters:
+      commerce_order:
+        type: 'entity:commerce_order'
+      commerce_shipment:
+        type: 'entity:commerce_shipment'

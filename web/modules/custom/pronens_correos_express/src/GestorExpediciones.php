@@ -64,6 +64,16 @@ final class GestorExpediciones {
   public const CLAVE_ULTIMO_ESTADO = 'cex_ultimo_estado';
   public const CLAVE_ULTIMA_CONSULTA = 'cex_ultima_consulta';
 
+  /**
+   * Cuándo marcó el taller la recogida en tienda.
+   *
+   * La leen también el correo de expedición (pronens_mail), para no mandarle al
+   * cliente un «tu pedido está en camino» de un paquete que se acaba de llevar
+   * en mano, y «Mis pedidos» del tema, para decir «Entregado». Los dos la leen
+   * con el literal: ninguno depende de este módulo.
+   */
+  public const CLAVE_RECOGIDO = 'pronens_recogido';
+
   public function __construct(
     private readonly CorreosExpressClientInterface $cliente,
     private readonly MapeadorEnvio $mapeador,
@@ -207,6 +217,73 @@ final class GestorExpediciones {
     ]);
 
     return $ultimo;
+  }
+
+  /**
+   * Indica si un envío es una recogida en tienda que el cliente aún no recogió.
+   */
+  public function esperaRecogida(ShipmentInterface $envio): bool {
+    return !$this->seExpide($envio)
+      && in_array($envio->getState()->getId(), ['draft', 'ready'], TRUE);
+  }
+
+  /**
+   * Marca una recogida en tienda como recogida por el cliente.
+   *
+   * Aplica las transiciones de siempre (`finalize` si hace falta y `ship`), así
+   * que el envío queda en «Enviado» igual que uno que se llevó el transportista
+   * y todo lo que ya lee ese estado (la lista, el filtro, «Mis pedidos») lo
+   * entiende sin más.
+   *
+   * @return bool
+   *   FALSE si el envío no era una recogida pendiente y no se ha tocado.
+   */
+  public function marcarRecogido(ShipmentInterface $envio): bool {
+    if (!$this->esperaRecogida($envio)) {
+      return FALSE;
+    }
+
+    $estado = $envio->getState();
+    if ($estado->getId() === 'draft') {
+      $estado->applyTransitionById('finalize');
+    }
+    $estado->applyTransitionById('ship');
+    $ahora = $this->time->getRequestTime();
+    $envio->setShippedTime($ahora);
+    // Antes del save: el correo de expedición sale en el post_transition de
+    // este mismo guardado y mira esta marca para callarse.
+    $envio->setData(self::CLAVE_RECOGIDO, $ahora);
+    $envio->save();
+    $this->registrar($envio, 'pronens_recogida_hecha', []);
+
+    return TRUE;
+  }
+
+  /**
+   * Deshace una recogida marcada por error.
+   *
+   * El workflow no tiene vuelta atrás desde «Enviado», así que el estado se
+   * escribe directamente: sin transición no se dispara ningún evento, y en
+   * particular ningún correo. Solo vale para lo que marcó marcarRecogido(): un
+   * envío que se llevó el transportista no se desmarca desde aquí.
+   *
+   * @return bool
+   *   FALSE si el envío no era una recogida marcada y no se ha tocado.
+   */
+  public function deshacerRecogido(ShipmentInterface $envio): bool {
+    if ($this->seExpide($envio)
+      || $envio->getState()->getId() !== 'shipped'
+      || $envio->getData(self::CLAVE_RECOGIDO) === NULL) {
+      return FALSE;
+    }
+
+    $envio->getState()->setValue('ready');
+    $envio->set('shipped', NULL);
+    $envio->unsetData(self::CLAVE_RECOGIDO);
+    $envio->save();
+    $this->registrar($envio, 'pronens_recogida_deshecha', []);
+
+    return TRUE;
   }
 
   /**

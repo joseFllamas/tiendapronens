@@ -56,7 +56,8 @@ final class SituacionDelEnvio extends InOperator {
         'por_expedir' => $this->t('Por expedir'),
         'expedido' => $this->t('Expedido, pendiente de recogida'),
         'enviado' => $this->t('Enviado o entregado'),
-        'recoge_en_tienda' => $this->t('Recoge en tienda'),
+        'recoge_en_tienda' => $this->t('Recoge en tienda, sin recoger'),
+        'recogido' => $this->t('Recogido en tienda'),
         'sin_envio' => $this->t('Sin envío'),
       ];
     }
@@ -93,7 +94,14 @@ final class SituacionDelEnvio extends InOperator {
   protected function condicion(string $situacion): string {
     return match ($situacion) {
       'sin_envio' => 'NOT ' . $this->existeEnvio(''),
-      'recoge_en_tienda' => $this->existeEnvio($this->esRecogida()),
+      // La recogida se parte en dos igual que el chip: esperando al cliente y
+      // ya recogida (el botón «Recogido» aplica `ship` al envío).
+      'recoge_en_tienda' => $this->existeEnvio(
+        "pcex_s.state IN ('draft', 'ready') AND " . $this->esRecogida()
+      ),
+      'recogido' => $this->existeEnvio(
+        "pcex_s.state = 'shipped' AND " . $this->esRecogida()
+      ),
       // Sin número de expedición y todavía en el taller. Un envío marcado como
       // preparado a mano tampoco tiene expedición, así que también cuenta.
       'por_expedir' => $this->existeEnvio(
@@ -105,7 +113,9 @@ final class SituacionDelEnvio extends InOperator {
         "pcex_s.state = 'ready'"
         . " AND pcex_s.tracking_code IS NOT NULL AND pcex_s.tracking_code <> ''"
       ),
-      'enviado' => $this->existeEnvio("pcex_s.state = 'shipped'"),
+      'enviado' => $this->existeEnvio(
+        "pcex_s.state = 'shipped' AND " . $this->noEsRecogida()
+      ),
       default => '1 = 0',
     };
   }
