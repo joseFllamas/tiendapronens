@@ -103,7 +103,7 @@ final class CalculadoraSituacionTest extends UnitTestCase {
       ],
       'recogida en tienda ya entregada' => [
         ['estado' => 'shipped', 'expedido' => FALSE, 'seExpide' => FALSE, 'situacion' => NULL],
-        SituacionPedido::Entregado,
+        SituacionPedido::Recogido,
       ],
     ];
   }

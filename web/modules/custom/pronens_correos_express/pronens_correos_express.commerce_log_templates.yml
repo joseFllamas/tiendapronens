@@ -15,3 +15,14 @@ pronens_cex_estado_actualizado:
   category: commerce_order
   label: 'Estado del envío actualizado desde Correos Express'
   template: '<p>La expedición {{ expedicion }} está ahora en <strong>{{ situacion }}</strong>: {{ descripcion }}.</p>'
+
+# La recogida en tienda no tiene seguimiento que la cuente: el rastro es esto.
+pronens_recogida_hecha:
+  category: commerce_order
+  label: 'Pedido recogido en tienda'
+  template: '<p>El cliente ha recogido el pedido en la tienda.</p>'
+
+pronens_recogida_deshecha:
+  category: commerce_order
+  label: 'Recogida en tienda desmarcada'
+  template: '<p>Se ha desmarcado la recogida en tienda: el pedido vuelve a esperar al cliente.</p>'

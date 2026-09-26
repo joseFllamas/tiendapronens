@@ -36,12 +36,17 @@ final class ResumenEnvio {
    *   recogida en tienda no entran, que no se expiden. La `etiqueta` es la del
    *   envío («Shipment #1»), y solo sirve para distinguirlos cuando un pedido
    *   va en varias cajas.
+   * @param array<int, array{envio: string, pedido: string, etiqueta: string, recogido: int|null}> $recogidas
+   *   Una por envío de recogida en tienda que siga vivo. `recogido` es cuándo
+   *   lo marcó el taller, o NULL si el cliente todavía no ha pasado: es lo que
+   *   decide si la casilla ofrece el botón «Recogido» o el «Deshacer».
    */
   public function __construct(
     public readonly SituacionPedido $situacion,
     public readonly array $metodos = [],
     public readonly array $expediciones = [],
     public readonly array $pendientes = [],
+    public readonly array $recogidas = [],
   ) {}
 
 }

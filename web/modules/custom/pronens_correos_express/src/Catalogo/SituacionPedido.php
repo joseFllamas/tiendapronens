@@ -48,7 +48,12 @@ enum SituacionPedido: string {
   // Lo recoge el cliente en la tienda: no se expide.
   case RecogeEnTienda = 'recoge_en_tienda';
 
-  // Entregado, o recogido en tienda por el cliente.
+  // El cliente ya pasó por la tienda a por el paquete. Es el final de una
+  // recogida, igual que Entregado lo es de un envío, pero se nombra aparte: el
+  // taller lo marca a mano desde la lista y tiene que ver que lo ha marcado.
+  case Recogido = 'recogido';
+
+  // Correos Express lo entregó.
   case Entregado = 'entregado';
 
   // Pedido o envío anulado.
@@ -65,6 +70,7 @@ enum SituacionPedido: string {
       self::Expedido => 'Expedido',
       self::Enviado => 'Enviado',
       self::RecogeEnTienda => 'Recoge en tienda',
+      self::Recogido => 'Recogido',
       self::Entregado => 'Entregado',
       self::Cancelado => 'Cancelado',
     };
@@ -76,7 +82,7 @@ enum SituacionPedido: string {
   public function pideTrabajo(): bool {
     return match ($this) {
       self::PorExpedir, self::Expedido, self::Devuelto => TRUE,
-      self::SinEnvio, self::Enviado, self::RecogeEnTienda, self::Entregado, self::Cancelado => FALSE,
+      self::SinEnvio, self::Enviado, self::RecogeEnTienda, self::Recogido, self::Entregado, self::Cancelado => FALSE,
     };
   }
 

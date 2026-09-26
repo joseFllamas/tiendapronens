@@ -44,6 +44,7 @@ final class ResumenEnvios {
     $metodos = [];
     $expediciones = [];
     $pendientes = [];
+    $recogidas = [];
 
     // Quién se expide sale de los ajustes (la lista de métodos que no pasan por
     // Correos Express), así que una fila cacheada tiene que caducar cuando el
@@ -73,6 +74,19 @@ final class ResumenEnvios {
           'envio' => (string) $envio->id(),
           'pedido' => (string) $pedido->id(),
           'etiqueta' => (string) $envio->label(),
+        ];
+      }
+
+      // Las recogidas en tienda: esperando al cliente, o ya recogidas desde el
+      // botón de la lista (las únicas que se pueden desmarcar desde ahí).
+      $recogido = $envio->getData(GestorExpediciones::CLAVE_RECOGIDO);
+      if ($this->gestorExpediciones->esperaRecogida($envio)
+        || (!$seExpide && $envio->getState()->getId() === 'shipped' && $recogido !== NULL)) {
+        $recogidas[] = [
+          'envio' => (string) $envio->id(),
+          'pedido' => (string) $pedido->id(),
+          'etiqueta' => (string) $envio->label(),
+          'recogido' => $envio->getState()->getId() === 'shipped' ? (int) $recogido : NULL,
         ];
       }
 
@@ -108,6 +122,7 @@ final class ResumenEnvios {
       array_values($metodos),
       $expediciones,
       $pendientes,
+      $recogidas,
     );
   }
 

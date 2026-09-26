@@ -33,10 +33,16 @@ class EnvioSubscriber implements EventSubscriberInterface {
    *
    * Es post_transition y no pre: el correo dice que el pedido ya está en
    * camino, así que solo se manda si la transición ha cuajado de verdad.
+   *
+   * Y no se manda en una recogida en tienda: el botón «Recogido» de la lista de
+   * pedidos aplica esta misma transición cuando el cliente se lleva el paquete
+   * en mano, y antes deja la marca `pronens_recogido` en el envío
+   * (GestorExpediciones::CLAVE_RECOGIDO, con el literal para no depender de
+   * pronens_correos_express).
    */
   public function avisar(WorkflowTransitionEvent $evento): void {
     $envio = $evento->getEntity();
-    if ($envio instanceof ShipmentInterface) {
+    if ($envio instanceof ShipmentInterface && $envio->getData('pronens_recogido') === NULL) {
       $this->envioMailer->avisar($envio);
     }
   }

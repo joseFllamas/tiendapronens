@@ -451,7 +451,7 @@ class CuentaHooks {
     $enviado = FALSE;
     foreach ($this->enviosDelPedido($pedido, $metadatos) as $envio) {
       $situacion = $this->situacionDeSeguimiento($envio);
-      if ($situacion === 'entregado') {
+      if ($situacion === 'entregado' || $this->recogidoEnTienda($envio)) {
         return ['clave' => 'entregado', 'etiqueta' => $this->t('Delivered', [], ['context' => 'order status'])];
       }
       if ($situacion === 'devuelto') {
@@ -503,11 +503,12 @@ class CuentaHooks {
    */
   protected function pasosDelEnvio(OrderInterface $pedido, ShipmentInterface $envio): array {
     $situacion = $this->situacionDeSeguimiento($envio);
-    $entregado = $situacion === 'entregado';
+    $recogido = $this->recogidoEnTienda($envio);
+    $entregado = $situacion === 'entregado' || $recogido;
     $enviado = $entregado || $envio->getState()->getId() === 'shipped';
 
-    $fecha_entrega = NULL;
-    if ($entregado) {
+    $fecha_entrega = $recogido ? (int) $envio->getData('pronens_recogido') : NULL;
+    if ($situacion === 'entregado') {
       $estado = $envio->getData('cex_ultimo_estado');
       $fecha_entrega = is_array($estado) && !empty($estado['fecha'])
         ? strtotime((string) $estado['fecha']) ?: NULL
@@ -542,6 +543,18 @@ class CuentaHooks {
     ];
 
     return $pasos;
+  }
+
+  /**
+   * Indica si el cliente ya recogió el pedido en la tienda.
+   *
+   * La marca la deja el botón «Recogido» de la lista de pedidos del backoffice
+   * (GestorExpediciones::CLAVE_RECOGIDO); se lee con el literal porque el tema
+   * no depende de ese módulo.
+   */
+  protected function recogidoEnTienda(ShipmentInterface $envio): bool {
+    return $envio->getState()->getId() === 'shipped'
+      && $envio->getData('pronens_recogido') !== NULL;
   }
 
   /**
