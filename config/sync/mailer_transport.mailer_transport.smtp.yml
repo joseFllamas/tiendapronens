@@ -7,7 +7,7 @@ label: SMTP
 plugin: smtp
 configuration:
   user: pronens.com@c.odisean.net
-  pass: GZsbuF4dNHzKsGn8WMEV
+  pass: coz-lucy-shaw-armchair
   host: smtp.odisean.net
   port: 587
   query:

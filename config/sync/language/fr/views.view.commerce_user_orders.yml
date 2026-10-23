@@ -34,7 +34,7 @@ display:
           label: Total
           separator: ', '
         state:
-          label: État
+          label: 'Statut de la commande'
           separator: ', '
       title: Commandes
       arguments:

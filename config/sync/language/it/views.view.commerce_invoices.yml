@@ -36,7 +36,7 @@ display:
           label: Cliente
           separator: ', '
         state:
-          label: Stato
+          label: "Stato dell'ordine"
           separator: ', '
         operations:
           label: Operazioni
@@ -49,7 +49,7 @@ display:
             label: Tipo
         state:
           expose:
-            label: Stato
+            label: "Stato dell'ordine"
       title: Facturas
   page_1:
     display_title: Pagina

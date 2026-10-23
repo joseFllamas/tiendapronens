@@ -2107,7 +2107,13 @@ Donde este documento y la realidad del repo discrepan, manda esta lista (decidid
     `drush cim` (27 objetos, cubre las collections de idioma) y `cex` de comprobación sin cambios.
     Regla: **antes de commitear un `cex`, `git diff` y todo lo que toque klaro, metatag por idioma o
     `views.view.commerce_orders` sin haberlo cambiado tú es el pisotón: se revierte, no se exporta**;
-    la verdad de ese copy son `scripts/cookies-klaro.php` y `scripts/pedidos-admin-etiquetas.php`. Lo
+    la verdad de ese copy son `scripts/cookies-klaro.php` y `scripts/pedidos-admin-etiquetas.php`.
+    **Revisado el 2026-10-23 (cliente): manda lo que hay en producción.** El backup de producción de
+    ese día traía esos 62 objetos (Klaro, metatag por idioma, nueve views) tal como los dejó la
+    importación de traducciones, y el cliente decidió conservarlos: se exportaron tal cual a
+    `config/sync`, así que hoy `config/sync` ES la configuración de producción y la regla de arriba
+    ya no aplica a esos ficheros. No relanzar `cookies-klaro.php` ni `pedidos-admin-etiquetas.php`
+    sin preguntar: devolverían el copy anterior. Lo
     único legítimo que faltaba en `config/sync` y se conserva: `pronens.settings` (favicon propio del
     tema; sin él un `cim` lo habría borrado) y los overrides de las apps legacy `ga`/`gtm` de Klaro,
     que están apagadas.
@@ -2301,6 +2307,127 @@ Donde este documento y la realidad del repo discrepan, manda esta lista (decidid
     las bolsas mochila 227-229 no, al revés de lo que dice la lógica de la categoría; el interior de
     las Márfegas 91 y 261 no es vichí como decía el D7 sino rayas y liso; los alias de la blanca y la
     rosa de inicial siguen cruzados; y las fotos de las sudaderas 234 y 238 no enseñan ninguna letra.
+
+- **URLs regeneradas desde cero y SIN redirecciones, para el dominio nuevo (2026-10-23, cliente)**: la
+  tienda cambia de dominio y el cliente quiere un índice limpio, aunque se pierda antigüedad, porque
+  Google marcó la web anterior como de baja calidad y arrastraba a la nueva. `scripts/urls-regenerar.php`
+  borra TODOS los alias (2085: 351 productos congelados del D7 con el tramo de categoría de entonces,
+  349 traducciones con el alias castellano, 62 de vocabularios sin página, dobles de los clones) y las
+  1702 redirecciones heredadas, y genera 2013 alias con los patrones de pathauto: 372 productos, 29
+  categorías y las páginas, en los cinco idiomas. Quedan **obsoletas** las notas anteriores sobre alias
+  manuales, «conviven dos prefijos a propósito» (2026-08-12), las 266 redirecciones del D7 (2026-09-03)
+  y las de la transliteración (2026-09-10): hoy no existe ningún alias manual ni ninguna redirección, y
+  `drush cst` sigue limpio. Lo que conviene no reinventar:
+  - **Patrones**: producto `/productos/[primera categoría]/[título]`, categoría `/productos/[nombre]`
+    (plano, por la hoja: la URL de la categoría es el prefijo exacto de la de sus productos) y página
+    `/[título]`, con los overrides de idioma (`productes`/`products`/`produits`/`prodotti`). El nombre
+    de la categoría sale traducido (el token hace `getTranslationFromContext`) y el título es el de cada
+    traducción. `punctuation.quotes` pasa a «sustituir por el separador»: `bata-d-escola-bressol`,
+    `pour-l-ecole` (87 títulos ca, 34 it, 10 fr y 4 categorías con apóstrofo) a cambio de
+    `children-s-…` en 13 títulos y 4 categorías inglesas.
+  - **Los uniformes de escuela (19, sin categoría) llevan la escuela como tramo**
+    (`/productos/uniformes-de-colegio-goar/pantalon-corto`), que es lo que separa GOAR de Salesians
+    cuando comparten título. Lo hace `AliasHooks::tramoDeEscuela()` en `hook_pathauto_alias_alter`,
+    y NO en `pattern_alter`: con la operación `return` pathauto devuelve el alias antes de restaurar el
+    patrón alterado, y el patrón castellano es un objeto compartido por todas las entidades. Los 8
+    chándals 35-42 (ni categoría ni escuela) y la basura 260/359 quedan en `/productos/titulo`.
+  - **El patrón se mantiene solo** (`pronens_seo/src/Hook/AliasHooks.php`, lógica pura en
+    `AliasCalculator` con pruebas): al guardar un producto en automático se regeneran LAS DEMÁS
+    traducciones (de la guardada se ocupa pathauto justo después; generarla antes con `insert`
+    duplicaba filas, el bug que dejó dos filas `es` en los clones 377-382, corregido también en
+    `clonar-producto.php`); al renombrar una categoría, sus otras traducciones y los productos que la
+    llevan como PRIMER término, en los idiomas cambiados; al borrar una traducción, su alias. Probado:
+    cambiar la categoría desde el formulario ca mueve los 5 alias (con 5 301, que en el dominio nuevo
+    sí se quieren), guardar sin cambios no crea nada, un producto nuevo nace con una fila por idioma.
+    El widget `path` está **oculto** en el formulario de producto: el estado es por entidad, y
+    desmarcar «generar automático» en ca congelaría los 5 idiomas.
+  - **Estado de pathauto**: el script borra las colecciones `pathauto_state.*` de producto, término y
+    nodo; sin fila, lo que tiene patrón es automático y lo que no (escuelas, guías de tallas) manual.
+    `auto_redirect` sigue encendido: generar desde cero no crea ninguna redirección (redirect solo la
+    deja al ACTUALIZAR un alias), pero los cambios futuros sí dejan 301. Pathauto devuelve NULL para
+    las categorías hijas porque ya las generó al recorrer el padre (`loadTermChildren`): no es fallo.
+  - **Pendiente del cliente**: el 246 «azulón» está traducido como «azul marino» en ca y en, igual que
+    el 244, y queda con `-0` hasta corregir el título; 10 URLs se truncan a 150 caracteres por el
+    nombre de la categoría Mikoshin (361, 362, 367, 368). El dominio nuevo y la retirada del viejo
+    están en la resolución siguiente. **No relanzar nunca la migración
+    `pronens_alias_producto` con `--update`**: devolvería los alias del D7.
+  - **En producción**, en este orden: `git pull`, `drush cim`, `drush cr`, dump, simulación
+    (`drush php:script scripts/urls-regenerar.php`), `-- --crear`, `drush cr`,
+    `drush simple-sitemap:generate`, y enviar el sitemap en la propiedad nueva de Search Console. La
+    BBDD local no es idéntica a producción (aquí no existe el nodo 9 de la política de cookies), por
+    eso el script no se basa en ids. Copia previa local: snapshot `pre-urls-nuevas`.
+
+- **La tienda pasa a `https://store.pronens.com` (2026-10-23, cliente)**, y `tienda.pronens.es` se
+  retira con **410 a todo, sin excepciones**: ni 301 ni salida para las rutas privadas. El cliente
+  prefiere que los enlaces de los correos ya enviados (ver pedido, descargar factura) dejen de
+  funcionar antes que heredar nada del dominio viejo. Casi nada lleva el dominio escrito: canónicas,
+  og:url, hreflang, JSON-LD (`[site:url]#organization`), la línea `Sitemap:` del robots.txt, llms.txt
+  y los enlaces absolutos de los correos salen **del host de la petición** y cambian solos.
+  Comprobado sirviendo la tienda local como `store.pronens.com`: todo sale con el dominio nuevo, los
+  13 enlaces del llms.txt dan 200 y el sitemap regenerado no lleva ni una URL vieja. Lo que sí había
+  que tocar, y lo que conviene saber:
+  - **Dos valores de configuración**: `simple_sitemap.settings:base_url` (el sitemap se genera por
+    cron, sin petición, y guarda las URLs) y el pie de factura
+    (`commerce_invoice.commerce_invoice_type.default:footerText`, que decía `tienda.pronens.com`, un
+    dominio que no existió nunca). Las facturas ya emitidas conservan su pie: se copia en cada factura
+    al crearla, y un documento fiscal emitido no se reescribe.
+  - **El `@id` de la tienda lo comparte pronens.com**: su `subOrganization` apunta a
+    `https://store.pronens.com/#organization` (constante `PRONENS_SEO_TIENDA` de `pronens_seo.module`
+    en `pronensd10.test`, verificado en su portada). Si el dominio vuelve a cambiar, se mueven las dos
+    webs a la vez o la matriz declara una hija que ya no publica nadie.
+  - **El 410 lo da el hosting VIEJO, no este servidor** (cliente, 2026-10-23): la web nueva sube en
+    otro servidor y la vieja se deshabilita, así que el servidor nuevo solo atiende
+    `store.pronens.com`. Se descartó la primera idea, una regla nginx en el DDEV nuevo con los dos
+    dominios en `additional_fqdns`: con el DNS de `tienda.pronens.es` apuntando al hosting viejo,
+    Let's Encrypt no podría emitir el certificado de ese nombre. En el hosting viejo (Apache), el
+    `.htaccess` del docroot de `tienda.pronens.es` se sustituye entero por:
+    ```
+    RewriteEngine On
+    RewriteRule ^ - [G]
+    ```
+    `[G]` es 410 Gone y, sin condiciones, cubre todo, `robots.txt` incluido y a propósito: un
+    robots.txt con 4xx Google lo lee como «sin restricciones», rastrea, ve los 410 y suelta las URLs.
+    Si ese docroot sirve otros dominios, va al principio y con
+    `RewriteCond %{HTTP_HOST} ^(www\.)?tienda\.pronens\.es$ [NC]` delante. Lo que hace que funcione:
+    **el DNS de `tienda.pronens.es` sigue apuntando a ese hosting y con el certificado HTTPS en
+    vigor** mientras Google recorre las URLs viejas; si se apaga o caduca el certificado, Googlebot ve
+    errores de conexión en vez del 410 y tarda semanas más en soltarlas. Se comprueba con
+    `curl -sI https://tienda.pronens.es/robots.txt` (`410 Gone`).
+  - **Producción es DDEV y `.ddev/` no está en git**, así que lo del servidor se hace allí a mano:
+    1. `additional_fqdns` solo con `store.pronens.com` (el viejo lo atiende el otro hosting).
+    2. `web_environment: [DRUSH_OPTIONS_URI=https://store.pronens.com]`: los correos que salen desde
+       drush (el cron de Correos Express aplica `ship` y manda el aviso de expedición;
+       `scripts/facturas.php --con-correo`) componen los enlaces con la URI de drush, y sin ella salen
+       con el host de antes o con `http://default`. **No se versiona un `drush/drush.yml` con la URI**:
+       en Drush 13 la configuración del proyecto tiene más prioridad que `DRUSH_OPTIONS_URI`
+       (`ConfigLocator`), así que en local le pisaría a ddev la suya.
+    3. Después del despliegue: `drush cim`, `drush cr` y `drush simple-sitemap:generate`.
+  - **Fuera de Drupal**: el panel de Redsys, para tarjeta y Bizum (que la URL de notificación no esté
+    fijada al dominio viejo: el módulo manda `MerchantURL`, `UrlOK` y `UrlKO` con el host de la
+    petición); los activadores de GTM y el flujo de GA4 si filtran por nombre de host; propiedad nueva
+    en Search Console con el sitemap, **sin** la herramienta de cambio de dirección, que es un 301
+    declarado y justo lo que no se quiere; y Merchant Center y Google Business Profile si apuntan a la
+    tienda. PayPal no tiene webhook configurado y SPF/DKIM no cambian (el remitente sigue siendo
+    `pronens@pronens.com`).
+  - **Un pago a medias en el momento del cambio se pierde**: la notificación de Redsys de un pago
+    iniciado en el dominio viejo llegaría al 410. Conviene cambiar a una hora sin tráfico.
+  - **Ensayo completo el 2026-10-23 sobre el backup de producción de ese día** (último pedido
+    P-2026-0017): `config/sync` quedó idéntico a producción salvo cuatro objetos del dominio nuevo
+    (pie de factura, `base_url` del sitemap, alias oculto en el formulario de producto y
+    `punctuation.quotes` de pathauto), más `mailer_override.settings` sin la entrada `update`, que
+    producción ya no tenía porque desinstaló el módulo. La contraseña SMTP de `config/sync` es la
+    de producción. La regeneración dio las mismas cifras que con los datos del 26/09 (2085 alias y
+    1702 redirecciones borrados, 2013 alias nuevos, 0 duplicados) y el sitemap 1962 URLs, todas
+    con store.pronens.com. El procedimiento del lunes 26/10 está en el documento «Subida de la
+    tienda a store.pronens.com» (https://claude.ai/artifact/GCixE1DLJrQYmDuD5oRmsK).
+  - **Los enlaces desde las otras webs**: **no basta cambiar el dominio**, las rutas también son otras
+    desde la regeneración de hoy (`/productos/bolsas-guardería-y-escolares` es ahora
+    `/productos/bolsas-y-sacos`). En pronens.com los pasó `scripts/dominio-tienda.php` de
+    `pronensd10.test` sobre una copia de su base de datos de producción (97 enlaces en 27 entidades:
+    menú «Tienda familias», cuerpos y «enlace de compra» de los productos y el CTA de la portada), con
+    cada ruta vieja resuelta con las redirecciones del D7 y el mapa de migración, y enlazando a la tienda
+    en el idioma de la página; las 61 URLs distintas dan 200 aquí. Los de educoland son contenido y los
+    cambia el cliente en producción (`tienda_url` de `educoland_pronens.settings` y los banners).
 
 ## Orden de trabajo
 1. **Tema `pronens`**: tokens CSS (custom properties con los colores/tipos del README), fuentes

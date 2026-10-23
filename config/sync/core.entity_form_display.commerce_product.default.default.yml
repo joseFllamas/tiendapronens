@@ -39,7 +39,6 @@ dependencies:
     - media_library
     - media_library_edit
     - metatag
-    - path
     - text
 _core:
   default_config_hash: bVqhDE0CBvUi4RPHqKu4sBhUOUwOTgcHVhn5PkfngLU
@@ -268,12 +267,6 @@ content:
     settings:
       include_locked: true
     third_party_settings: {  }
-  path:
-    type: path
-    weight: 6
-    region: content
-    settings: {  }
-    third_party_settings: {  }
   simple_sitemap:
     weight: 10
     region: content
@@ -316,4 +309,5 @@ content:
     third_party_settings: {  }
 hidden:
   field_fuentes_permitidas: true
+  path: true
   variations: true

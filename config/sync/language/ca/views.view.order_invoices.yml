@@ -20,7 +20,7 @@ display:
           label: Llengua
           separator: ', '
         state:
-          label: Estat
+          label: 'Estat de la comanda'
           separator: ', '
         total_price__number:
           label: Total

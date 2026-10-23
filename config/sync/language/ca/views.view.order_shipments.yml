@@ -23,7 +23,7 @@ display:
           label: 'Enllaç de seguiment'
           separator: ', '
         state:
-          label: Estat
+          label: 'Estat de la comanda'
           separator: ', '
         operations:
           label: "Enllaços d'operacions"

@@ -22,7 +22,7 @@ display:
             last: "dernier\_»"
       fields:
         state:
-          label: État
+          label: 'Statut de la commande'
         label:
           label: Libellé
         type:

@@ -36,7 +36,7 @@ display:
           label: Client
           separator: ', '
         state:
-          label: Estat
+          label: 'Estat de la comanda'
           separator: ', '
         operations:
           label: Operacions
@@ -49,7 +49,7 @@ display:
             label: Tipus
         state:
           expose:
-            label: Estat
+            label: 'Estat de la comanda'
       title: Facturas
   page_1:
     display_title: Pàgina

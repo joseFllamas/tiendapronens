@@ -6,7 +6,7 @@ _core:
   default_config_hash: 9k3tkKyDEQ6oHCBVtCa7v6c6lWQy8DcGB8JCfp68Bn0
 id: ga
 label: 'Google Analytics (legacy)'
-description: 'Tracks online visits of the website as a service.'
+description: 'Estadísticas de uso de la tienda: páginas vistas, productos y compras, de forma agregada.'
 default: false
 purposes:
   - analytics

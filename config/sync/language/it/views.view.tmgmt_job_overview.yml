@@ -4,7 +4,7 @@ display:
     display_options:
       fields:
         state:
-          label: Stato
+          label: "Stato dell'ordine"
           separator: ', '
         label:
           label: Etichetta
@@ -49,7 +49,7 @@ display:
       filters:
         state:
           expose:
-            label: Stato
+            label: "Stato dell'ordine"
         source_language:
           expose:
             label: 'Lingua di origine'

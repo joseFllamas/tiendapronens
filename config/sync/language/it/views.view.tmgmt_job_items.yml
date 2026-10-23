@@ -22,7 +22,7 @@ display:
             last: 'ultima »'
       fields:
         state:
-          label: Stato
+          label: "Stato dell'ordine"
         label:
           label: Etichetta
         type:

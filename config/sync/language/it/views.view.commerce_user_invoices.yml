@@ -34,7 +34,7 @@ display:
           label: Totale
           separator: ', '
         state:
-          label: Stato
+          label: "Stato dell'ordine"
           separator: ', '
       title: Facturas
       arguments:

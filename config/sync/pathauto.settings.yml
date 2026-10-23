@@ -3,6 +3,7 @@ _core:
 enabled_entity_types: {  }
 punctuation:
   hyphen: 1
+  quotes: 1
 verbose: false
 separator: '-'
 max_length: 150

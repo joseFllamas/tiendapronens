@@ -22,7 +22,7 @@ display:
             last: 'últim »'
       fields:
         state:
-          label: Estat
+          label: 'Estat de la comanda'
         label:
           label: Etiqueta
         type:

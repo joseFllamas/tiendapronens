@@ -34,7 +34,7 @@ display:
           label: Total
           separator: ', '
         state:
-          label: Estat
+          label: 'Estat de la comanda'
           separator: ', '
       title: Comandes
       arguments:

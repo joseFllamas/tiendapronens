@@ -358,7 +358,7 @@ echo "simple_sitemap configurado.\n";
 // ---------------------------------------------------------------------------
 // La línea Sitemap la añade pronens_seo (hook_robotstxt) con el dominio de la
 // petición: no se escribe aquí para que valga en ddev, en la URL temporal y
-// en tienda.pronens.es sin tocar nada.
+// en store.pronens.com sin tocar nada.
 $robots = <<<'ROBOTS'
 #
 # robots.txt de la tienda Pronens (generado por el módulo robotstxt).

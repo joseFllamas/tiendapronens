@@ -416,8 +416,12 @@ foreach ($tandas as $numero => $tanda) {
   // -------------------------------------------------------------------------
   // 6. Alias: pathauto solo genera el del idioma que se guarda.
   // -------------------------------------------------------------------------
+  // Con «update» y no «insert»: la operación insert no busca el alias que ya
+  // existe (el del idioma guardado lo creó pathauto en el save) y dejaba DOS
+  // filas «es» por clon. Desde que AliasHooks regenera las demás traducciones
+  // al guardar, esta vuelta no escribe nada y se conserva solo como red.
   foreach ($clon->getTranslationLanguages() as $idioma) {
-    $pathauto->updateEntityAlias($clon->getTranslation($idioma->getId()), 'insert');
+    $pathauto->updateEntityAlias($clon->getTranslation($idioma->getId()), 'update');
   }
   $alias = $conexion->select('path_alias', 'a')
     ->fields('a', ['langcode', 'alias'])

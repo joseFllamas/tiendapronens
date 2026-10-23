@@ -15,7 +15,7 @@ display:
         avs_response_code:
           separator: ', '
         state:
-          label: Stato
+          label: "Stato dell'ordine"
           separator: ', '
         payment_gateway:
           separator: ', '

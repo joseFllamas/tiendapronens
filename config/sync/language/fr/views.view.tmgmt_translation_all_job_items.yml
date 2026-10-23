@@ -5,7 +5,7 @@ display:
       title: 'Éléments de travail'
       fields:
         state:
-          label: État
+          label: 'Statut de la commande'
         label:
           label: Libellé
         type:
@@ -52,7 +52,7 @@ display:
           expose:
             label: États
           group_info:
-            label: État
+            label: 'Statut de la commande'
         source_language:
           expose:
             label: "Langue d'origine"

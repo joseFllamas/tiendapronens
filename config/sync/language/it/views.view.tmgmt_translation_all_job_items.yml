@@ -4,7 +4,7 @@ display:
     display_options:
       fields:
         state:
-          label: Stato
+          label: "Stato dell'ordine"
         label:
           label: Etichetta
         type:
@@ -51,7 +51,7 @@ display:
           expose:
             label: Stati
           group_info:
-            label: Stato
+            label: "Stato dell'ordine"
         source_language:
           expose:
             label: 'Lingua di origine'

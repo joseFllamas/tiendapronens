@@ -1,6 +1,6 @@
 name: 'Pronens: SEO del catálogo'
 type: module
-description: 'Canónica y robots de las páginas de categoría, meta description limpia, miga de pan del catálogo, tokens de ofertas por variación para el Product JSON-LD y la línea Sitemap de robots.txt.'
+description: 'Alias del catálogo siempre en el patrón y en el idioma de cada traducción, canónica y robots de las páginas de categoría, meta description limpia, miga de pan del catálogo, tokens de ofertas por variación para el Product JSON-LD y la línea Sitemap de robots.txt.'
 package: Pronens
 core_version_requirement: ^11
 dependencies:
@@ -9,3 +9,4 @@ dependencies:
   - drupal:views
   - commerce:commerce_product
   - commerce_stock:commerce_stock
+  - pathauto:pathauto

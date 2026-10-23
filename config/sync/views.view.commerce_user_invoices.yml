@@ -309,7 +309,7 @@ display:
           entity_type: commerce_invoice
           entity_field: state
           plugin_id: field
-          label: Estado
+          label: 'Estado del pedido'
           exclude: false
           alter:
             alter_text: false

@@ -4,7 +4,7 @@ display:
     display_options:
       fields:
         state:
-          label: État
+          label: 'Statut de la commande'
           separator: ', '
         label:
           label: Libellé
@@ -49,7 +49,7 @@ display:
       filters:
         state:
           expose:
-            label: État
+            label: 'Statut de la commande'
         source_language:
           expose:
             label: "Langue d'origine"

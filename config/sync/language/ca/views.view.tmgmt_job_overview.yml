@@ -4,7 +4,7 @@ display:
     display_options:
       fields:
         state:
-          label: Estat
+          label: 'Estat de la comanda'
           separator: ', '
         label:
           label: Etiqueta
@@ -49,7 +49,7 @@ display:
       filters:
         state:
           expose:
-            label: Estat
+            label: 'Estat de la comanda'
         source_language:
           expose:
             label: 'Llengua de la font'

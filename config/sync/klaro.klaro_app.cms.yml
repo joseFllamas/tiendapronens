@@ -5,7 +5,7 @@ dependencies: {  }
 _core:
   default_config_hash: rrSeECmRTHSq5ndTWg2FAj_DNC_IxbpKaLbqGORp7xY
 id: cms
-label: 'Tienda Pronens'
+label: 'Funcionamiento de la tienda'
 description: 'Cookies técnicas de la propia tienda: sesión, cesta y seguridad de los formularios.'
 default: true
 purposes:

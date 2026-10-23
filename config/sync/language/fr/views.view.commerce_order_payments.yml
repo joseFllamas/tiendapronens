@@ -16,7 +16,7 @@ display:
           label: 'Code de réponse AVS'
           separator: ', '
         state:
-          label: État
+          label: 'Statut de la commande'
           separator: ', '
         payment_gateway:
           label: 'Passerelle de paiement'

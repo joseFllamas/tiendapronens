@@ -33,7 +33,7 @@ display:
           admin_label: ''
           entity_type: tmgmt_job_item
           plugin_id: tmgmt_job_item_state
-          label: Estado
+          label: 'Estado del pedido'
           exclude: false
           alter:
             alter_text: false
@@ -695,7 +695,7 @@ display:
             reduce: false
           is_grouped: false
           group_info:
-            label: Estado
+            label: 'Estado del pedido'
             description: ''
             identifier: state
             optional: true

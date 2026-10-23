@@ -15,7 +15,7 @@ display:
         avs_response_code:
           separator: ', '
         state:
-          label: Estat
+          label: 'Estat de la comanda'
           separator: ', '
         payment_gateway:
           separator: ', '

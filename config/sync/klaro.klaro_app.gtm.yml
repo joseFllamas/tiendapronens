@@ -6,7 +6,7 @@ _core:
   default_config_hash: HpGtx8qvg1MU3pq0gIz7LvcXUtq2xQ3azKLR34J4OYo
 id: gtm
 label: 'Google Tag Manager (legacy)'
-description: 'Manages and deploys marketing tags.'
+description: 'Gestor de etiquetas. Carga siempre; hasta que aceptes, Google Analytics solo recibe señales anónimas sin cookies (Consent Mode v2).'
 default: false
 purposes:
   - advertising

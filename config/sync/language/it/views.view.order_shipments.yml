@@ -23,7 +23,7 @@ display:
           label: 'Link di tracciamento'
           separator: ', '
         state:
-          label: Stato
+          label: "Stato dell'ordine"
           separator: ', '
         operations:
           label: 'Link operativi'

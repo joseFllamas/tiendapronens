@@ -32,7 +32,7 @@ display:
           entity_type: tmgmt_job_item
           entity_field: state
           plugin_id: machine_name
-          label: Estado
+          label: 'Estado del pedido'
           exclude: false
           alter:
             alter_text: false

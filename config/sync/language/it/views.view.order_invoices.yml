@@ -20,7 +20,7 @@ display:
           label: Lingua
           separator: ', '
         state:
-          label: Stato
+          label: "Stato dell'ordine"
           separator: ', '
         total_price__number:
           label: Totale

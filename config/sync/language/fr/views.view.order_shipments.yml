@@ -23,7 +23,7 @@ display:
           label: 'Lien de suivi'
           separator: ', '
         state:
-          label: État
+          label: 'Statut de la commande'
           separator: ', '
         operations:
           label: "Liens d'actions"

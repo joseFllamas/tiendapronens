@@ -36,7 +36,7 @@ display:
           label: Client
           separator: ', '
         state:
-          label: État
+          label: 'Statut de la commande'
           separator: ', '
         operations:
           label: Actions
@@ -49,7 +49,7 @@ display:
             label: Type
         state:
           expose:
-            label: État
+            label: 'Statut de la commande'
       title: Factures
   page_1:
     display_title: Page
