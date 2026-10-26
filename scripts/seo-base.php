@@ -508,7 +508,7 @@ $config->getEditable('llms_txt.settings')->set('content', $llms)->save();
 echo "llms.txt configurado.\n";
 
 // ---------------------------------------------------------------------------
-// 8. Google Tag Manager: el contenedor GTM-KQMTNQ9S. GA4 se inyecta desde GTM.
+// 8. Google Tag Manager: el contenedor GTM-MW6LXBTV. GA4 se inyecta desde GTM.
 // ---------------------------------------------------------------------------
 $contenedor = TagContainer::load('pronens');
 if ($contenedor === NULL) {
@@ -517,11 +517,11 @@ if ($contenedor === NULL) {
 $contenedor
   ->set('status', TRUE)
   ->set('weight', 0)
-  ->set('tag_container_ids', ['GTM-KQMTNQ9S'])
+  ->set('tag_container_ids', ['GTM-MW6LXBTV'])
   ->set('advanced_settings', [
     'consent_mode' => FALSE,
     'gtm' => [
-      'GTM-KQMTNQ9S' => [
+      'GTM-MW6LXBTV' => [
         'data_layer' => 'dataLayer',
         'include_classes' => FALSE,
         'allowlist_classes' => '',
@@ -561,7 +561,7 @@ $config->getEditable('google_tag.settings')
   ->set('use_collection', FALSE)
   ->set('default_google_tag_entity', 'pronens')
   ->save();
-echo "Contenedor GTM-KQMTNQ9S configurado.\n";
+echo "Contenedor GTM-MW6LXBTV configurado.\n";
 
 drupal_flush_all_caches();
 echo "Hecho. Ahora: ddev drush simple-sitemap:generate\n";

@@ -8,11 +8,11 @@ id: pronens
 label: 'Tienda Pronens'
 weight: 0
 tag_container_ids:
-  - GTM-KQMTNQ9S
+  - GTM-MW6LXBTV
 advanced_settings:
   consent_mode: true
   gtm:
-    GTM-KQMTNQ9S:
+    GTM-MW6LXBTV:
       data_layer: dataLayer
       include_classes: false
       allowlist_classes: ''

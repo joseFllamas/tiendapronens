@@ -1374,7 +1374,8 @@ Donde este documento y la realidad del repo discrepan, manda esta lista (decidid
     de más peso.
   - **llms.txt** (módulo llms_txt, texto en `scripts/seo-base.php`) con las categorías reales y los
     tres datos que se repiten en toda la web (1986, 72 h, 60 €), idénticos al marquee.
-  - **GTM `GTM-KQMTNQ9S` con google_tag 2.0**: fuera de `/admin`, `/user` y `/batch`, y con los
+  - **GTM `GTM-MW6LXBTV` con google_tag 2.0** (desde 2026-10-26 es el contenedor propio de
+    store.pronens.com; antes `GTM-KQMTNQ9S`, el de la tienda en tienda.pronens.es): fuera de `/admin`, `/user` y `/batch`, y con los
     eventos de comercio GA4 en el dataLayer (view_item, add_to_cart, remove_from_cart,
     begin_checkout, add_shipping_info, add_payment_info, purchase, refund, login, sign_up). **GA4 no va
     en Drupal**: se inyecta desde GTM. No había ningún GA anterior que quitar.
@@ -1444,7 +1445,7 @@ Donde este documento y la realidad del repo discrepan, manda esta lista (decidid
     aceptar empuja `klaro-<servicio>-accepted` al dataLayer. **`ga_consent_mode`** (opt-in, apagado
     por defecto) manda el `consent update` de `analytics_storage`. Klaro decora los scripts de
     google_tag (`type="text/plain" data-name="gtm_consent_mode"`) y los reactiva él mismo al
-    arrancar: en el DOM renderizado gtm.js carga con GTM-KQMTNQ9S. El contenedor google_tag lleva
+    arrancar: en el DOM renderizado gtm.js carga con GTM-MW6LXBTV. El contenedor google_tag lleva
     además `consent_mode: true` (cinturón y tirantes). **Modo AVANZADO (cliente)**: en GTM la etiqueta
     GA4 dispara en todas las páginas (Initialization / All pages) y es el consent mode quien decide:
     sin consentimiento, pings anónimos sin cookies; con él, medición completa. Por eso la política de

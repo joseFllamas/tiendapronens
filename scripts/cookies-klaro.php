@@ -4,7 +4,7 @@
  * @file
  * Consentimiento de cookies con Klaro y Google Consent Mode v2.
  *
- * GA4 se da de alta desde GTM (GTM-KQMTNQ9S, módulo google_tag). Antes de
+ * GA4 se da de alta desde GTM (GTM-MW6LXBTV, módulo google_tag). Antes de
  * esto no había ni banner ni consent mode: GTM cargaba sin pedir permiso. El
  * montaje sigue la receta del propio módulo Klaro para GTM: el servicio
  * `gtm_consent_mode` es obligatorio (siempre corre), fija el estado por
