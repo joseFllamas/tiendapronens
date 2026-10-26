@@ -1670,19 +1670,32 @@ Donde este documento y la realidad del repo discrepan, manda esta lista (decidid
     La otra opción de la enumeración dice exactamente lo que pasa (el coste es responsabilidad
     del cliente) y no pide importe. Si algún día se fija una tarifa única de devolución, entonces
     sí se vuelve a `ReturnShippingFees` **y con `returnShippingFeesAmount`**, nunca uno sin otro.
-  - **Pendiente y de decisión del cliente**: (1) `legalName`, `taxID` y `foundingDate: 1984` están
-    **en los dos nodos**, y dos empresas con el mismo NIF no pueden existir: o la identidad
-    registral se queda solo en la matriz y la tienda conserva lo comercial (nombre, descripción,
-    moneda, devoluciones, envíos), o se vuelve al modelo de una sola entidad con dos URL. El
-    `foundingDate: 1984` en la tienda es además falso por su cuenta: la empresa es de 1984, la
-    tienda online no. (2) La tienda y su matriz se llaman **las dos «Pronens»**, así que en un
-    resultado de búsqueda no se distinguen; «Tienda Pronens Particulares» lo resolvía. (3) En
-    educoland.com las dos `Person` no tienen `@id` y tienen que llevar esos mismos dos, y su
-    Organization sale **distinta en la home y en /quienes-somos con el mismo `@id`**. (4) Victor
-    no tiene `sameAs`, que es la señal que de verdad desambigua a una persona.
-  - **Pendiente en pronens.com**: su `Organization` sigue declarando `sameAs` a la tienda y lo
-    recíproco correcto ahora es **`subOrganization`** (o dejarlo sin nada, que `parentOrganization`
-    ya cuenta la relación entera). Mientras no se cambie, las dos webs se contradicen entre sí.
+  - **Resuelto el 2026-10-26: la identidad registral vive solo en la matriz.** `legalName`,
+    `taxID` y `foundingDate` se quitaron de `JsonLdHooks::EMPRESA`: pronens.com ya los declara en su
+    `Organization` (comprobado en producción) y repetirlos aquí describía dos empresas con el mismo
+    NIF; el `foundingDate: 1984` era además falso para la tienda online. La tienda conserva lo
+    comercial (nombre, descripción, moneda, devoluciones, envíos, empleados) y llega a la identidad
+    por `parentOrganization`. El NIF sigue visible donde la ley lo pide: el aviso legal y las
+    facturas. Si algún día se vuelve a una sola entidad con dos URL, se recuperan las tres claves y
+    se quitan a la vez `parentOrganization` aquí y `subOrganization` en pronens.com.
+  - **Pendiente y de decisión del cliente**: (1) La tienda y su matriz se llaman **las dos
+    «Pronens»**, así que en un resultado de búsqueda no se distinguen; «Tienda Pronens
+    Particulares» lo resolvía. (2) En educoland.com las dos `Person` no tienen `@id` y tienen que
+    llevar esos mismos dos, y su Organization sale **distinta en la home y en /quienes-somos con el
+    mismo `@id`**. (3) Victor no tiene `sameAs`, que es la señal que de verdad desambigua a una
+    persona.
+  - **pronens.com ya declara `subOrganization`** hacia `https://store.pronens.com/#organization`
+    (comprobado en producción el 2026-10-26), así que las dos webs ya no se contradicen.
+  - **Más arreglos del JSON-LD del 2026-10-26**, tras revisarlo en producción en los cinco idiomas:
+    - **La descripción del `ItemPage` y del `CollectionPage` salía con los párrafos pegados**
+      («…en una nube.Están hechos…»): `SeoHooks::descripciones()` solo limpiaba la del `Product`.
+      Ahora limpia las dos (`ETIQUETAS_DESCRIPCION_SCHEMA`).
+    - **La política de devolución enlazaba a la página castellana en los cinco idiomas**, y
+      `/ca/envios-y-devoluciones` da 404 desde la regeneración de URLs. `urlDevoluciones()` le
+      pasaba el alias castellano a `fromUserInput()`, que lo busca en el idioma de la página. Ahora
+      se resuelve primero a `/node/N` en castellano y la URL sale con el alias de cada idioma.
+    - **La descripción de la tienda (`schema_organization_description`) estaba solo en castellano**:
+      va traducida en los overrides de idioma de `metatag.metatag_defaults.global`.
 
 - **Envíos, devoluciones y formas de pago reescritos (2026-09-03, cliente)**: los nodos 1 y 2 seguían
   con el texto del D7 y contradecían al resto de la tienda en la misma sesión de compra. Lo que

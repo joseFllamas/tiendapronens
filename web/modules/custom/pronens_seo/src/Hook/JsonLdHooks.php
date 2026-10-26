@@ -14,15 +14,13 @@ use Drupal\pronens_seo\GrafoCalculator;
 use Drupal\pronens_seo\Ofertas;
 use Drupal\pronens_seo\PoliticasComerciales;
 use Drupal\pronens_seo\ResultadosCatalogo;
+use Drupal\path_alias\AliasManagerInterface;
 use Drupal\views\ViewExecutable;
 
 /**
  * Completa el JSON-LD con lo que schema_metatag no sabe expresar.
  *
  * Qué se añade y por qué:
- * - Identidad de la empresa (legalName, taxID, foundingDate), que es lo que
- *   permite a un grafo de conocimiento cruzar "Pronens" con registros
- *   oficiales. Hoy ese dato solo vivía en texto plano del aviso legal.
  * - parentOrganization hacia pronens.com: la web del fabricante (venta a
  *   colegios y empresas) es la matriz y esta es la tienda de particulares.
  *   pronens.com ya enlaza aquí ("Tienda familias"); esto cierra el vínculo en
@@ -52,6 +50,14 @@ final class JsonLdHooks {
    * Id de la view del catálogo, la que pinta las categorías.
    */
   private const VIEW_ID = 'catalogo';
+
+  /**
+   * El alias castellano de la página de envíos y devoluciones.
+   *
+   * Es el único que se puede escribir: desde la regeneración de URLs del
+   * 2026-10-23 cada idioma tiene el suyo (/ca/enviaments-i-devolucions…).
+   */
+  private const ALIAS_DEVOLUCIONES = '/envios-y-devoluciones';
 
   /**
    * La web del fabricante, la empresa matriz.
@@ -86,9 +92,16 @@ final class JsonLdHooks {
   private const ID_CTO = self::WEB_FABRICANTE . '#jose-llamas';
 
   /**
-   * Datos de identidad que no tienen etiqueta en schema_metatag 3.0.
+   * Datos de la tienda que no tienen etiqueta en schema_metatag 3.0.
    *
-   * Salen del aviso legal y del pie de las facturas, donde ya son públicos.
+   * La identidad registral (legalName, taxID, foundingDate) NO va aquí desde
+   * el 2026-10-26: la declara la matriz en pronens.com, y repetirla en la
+   * tienda describía dos entidades distintas con el mismo NIF, que no pueden
+   * existir. foundingDate 1984 era además falso para la tienda online. Un
+   * grafo de conocimiento la alcanza por parentOrganization, que apunta al
+   * mismo @id. Si algún día se vuelve a una sola entidad con dos URL, se
+   * recuperan aquí y se quita parentOrganization (y el subOrganization de
+   * pronens.com) a la vez.
    *
    * parentOrganization sustituye al sameAs hacia pronens.com que había hasta
    * el 2026-09-14: sameAs afirma que las dos URL son LA MISMA entidad, y
@@ -106,9 +119,6 @@ final class JsonLdHooks {
    * @var array<string, mixed>
    */
   private const EMPRESA = [
-    'legalName' => 'Maria-Elisa Moreno Iglesias',
-    'taxID' => 'ES36928020W',
-    'foundingDate' => '1984',
     'currenciesAccepted' => 'EUR',
     'parentOrganization' => [
       '@type' => 'Organization',
@@ -142,6 +152,7 @@ final class JsonLdHooks {
     private readonly Ofertas $ofertas,
     private readonly PoliticasComerciales $politicas,
     private readonly ResultadosCatalogo $resultados,
+    private readonly AliasManagerInterface $aliasManager,
   ) {
   }
 
@@ -276,9 +287,17 @@ final class JsonLdHooks {
 
   /**
    * La página de envíos y devoluciones, en el idioma de la petición.
+   *
+   * El alias castellano se resuelve primero a la ruta interna, buscándolo en
+   * castellano, y la URL se genera desde ahí. Pasárselo tal cual a
+   * fromUserInput() lo buscaba en el idioma de la página, no lo encontraba y
+   * devolvía la ruta castellana en los cinco idiomas: la política de
+   * devolución de la página catalana enlazaba a la versión española.
    */
   private function urlDevoluciones(): string {
-    return Url::fromUserInput('/envios-y-devoluciones', ['absolute' => TRUE])->toString();
+    $interna = $this->aliasManager->getPathByAlias(self::ALIAS_DEVOLUCIONES, 'es');
+
+    return Url::fromUserInput($interna, ['absolute' => TRUE])->toString();
   }
 
 }

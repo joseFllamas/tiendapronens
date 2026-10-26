@@ -73,6 +73,18 @@ final class SeoHooks {
   private const ETIQUETAS_DESCRIPCION = ['description', 'og_description', 'twitter_cards_description'];
 
   /**
+   * Etiquetas del JSON-LD que llevan la descripción entera.
+   *
+   * Las dos, la de la entidad (Product) y la de su página (ItemPage o
+   * CollectionPage): hasta el 2026-10-26 solo se limpiaba la primera, y la de
+   * la página llegaba con el strip_tags de metatag y los párrafos pegados
+   * ("…en una nube.Están hechos…").
+   *
+   * @var array<int, string>
+   */
+  private const ETIQUETAS_DESCRIPCION_SCHEMA = ['schema_product_description', 'schema_web_page_description'];
+
+  /**
    * Etiquetas que llevan el nombre de la categoría y pasan a llevar su H1.
    *
    * Las etiquetas og:title y twitter:title son "el nombre de la página" para
@@ -359,12 +371,10 @@ final class SeoHooks {
   private function descripciones(array &$metatags, array $context): void {
     $entidad = $context['entity'] ?? NULL;
     $html = NULL;
-    $schema = NULL;
     if ($entidad instanceof ProductInterface) {
       /** @var \Drupal\commerce_product\Entity\ProductInterface $producto */
       $producto = $this->entityRepository->getTranslationFromContext($entidad);
       $html = $producto->hasField('body') ? (string) ($producto->get('body')->value ?? '') : '';
-      $schema = 'schema_product_description';
     }
     elseif ($entidad instanceof TermInterface) {
       $termino = $this->entityRepository->getTranslationFromContext($entidad);
@@ -390,8 +400,11 @@ final class SeoHooks {
     }
     // El JSON-LD no tiene el límite del snippet: lleva la descripción entera,
     // con los párrafos separados, que es lo que leen los motores de respuesta.
-    if ($schema !== NULL && isset($metatags[$schema])) {
-      $metatags[$schema] = Descripcion::texto($html);
+    $larga = Descripcion::texto($html);
+    foreach (self::ETIQUETAS_DESCRIPCION_SCHEMA as $etiqueta) {
+      if (isset($metatags[$etiqueta])) {
+        $metatags[$etiqueta] = $larga;
+      }
     }
   }
 
