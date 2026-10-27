@@ -4,7 +4,7 @@
   Based on web/core/phpunit.xml.dist. Paths are relative to the project root,
   so run it from there inside DDEV, for example:
 
-    ddev exec vendor/bin/phpunit web/modules/custom/pronens_migrate
+    ddev exec vendor/bin/phpunit web/modules/custom/pronens_seo
 
   or passing the testsuite flag with the suite name "unit".
 

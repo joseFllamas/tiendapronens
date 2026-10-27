@@ -2363,8 +2363,8 @@ Donde este documento y la realidad del repo discrepan, manda esta lista (decidid
   - **Pendiente del cliente**: el 246 «azulón» está traducido como «azul marino» en ca y en, igual que
     el 244, y queda con `-0` hasta corregir el título; 10 URLs se truncan a 150 caracteres por el
     nombre de la categoría Mikoshin (361, 362, 367, 368). El dominio nuevo y la retirada del viejo
-    están en la resolución siguiente. **No relanzar nunca la migración
-    `pronens_alias_producto` con `--update`**: devolvería los alias del D7.
+    están en la resolución siguiente. (La advertencia de no relanzar la migración de alias ya no
+    aplica: la migración se retiró entera el 2026-10-27, ver la última resolución.)
   - **En producción**, en este orden: `git pull`, `drush cim`, `drush cr`, dump, simulación
     (`drush php:script scripts/urls-regenerar.php`), `-- --crear`, `drush cr`,
     `drush simple-sitemap:generate`, y enviar el sitemap en la propiedad nueva de Search Console. La
@@ -2442,6 +2442,25 @@ Donde este documento y la realidad del repo discrepan, manda esta lista (decidid
     cada ruta vieja resuelta con las redirecciones del D7 y el mapa de migración, y enlazando a la tienda
     en el idioma de la página; las 61 URLs distintas dan 200 aquí. Los de educoland son contenido y los
     cambia el cliente en producción (`tienda_url` de `educoland_pronens.settings` y los banners).
+
+- **La migración del D7 se retiró entera (2026-10-27, cliente)**: «ya no tiene sentido». Se
+  desinstalaron `pronens_migrate`, `migrate_drupal`, `migrate_plus`, `migrate_tools` y `migrate`, se
+  quitaron los dos contrib de composer, se borró el módulo del repo (sigue en el historial de git) y
+  se eliminaron las 32 tablas `migrate_map_*`/`migrate_message_*` y su estado en `key_value`. Nada de
+  la tienda las usaba en tiempo de ejecución. **Las notas de este documento que hablan de los mapas
+  de migración, del re-import o de `pronens_migrate` son históricas**, y los scripts que los leían
+  (`redirecciones-d7.php`, `fotos-prendas-sanitarias.php`) ya no se pueden relanzar. Era además el
+  aviso «Módulos obsoletos» del informe de estado: `migrate_drupal` se retira en Drupal 12.
+  - **Contact sigue, pero desde contrib** (`drupal/contact` 1.0.0, mismo nombre de máquina): el core
+    lo marca obsoleto y el formulario `/contact` está en uso. Al estar en `modules/contrib`, Drupal
+    toma esa copia en lugar de la del core sin desinstalar nada, así que el formulario, su política
+    de Mailer Plus y los permisos se conservan.
+  - **`enable_html5_validation` se declara TRUE en `settings.php`** (que no está en git: en
+    producción se añade a mano). El aviso del informe de estado **no desaparece con TRUE**, solo
+    cambia de texto, porque el core avisa de que el ajuste se elimina en Drupal 13. FALSE lo quitaría,
+    pero con Inline Form Errors desactivado el checkout y el contacto dejarían de marcar el campo
+    vacío y pasarían a enseñar los errores arriba de la página. Se queda TRUE hasta que se decida
+    activar Inline Form Errors y probar el checkout con FALSE.
 
 ## Orden de trabajo
 1. **Tema `pronens`**: tokens CSS (custom properties con los colores/tipos del README), fuentes
