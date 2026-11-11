@@ -33,6 +33,50 @@ $cadenas = [
     'fr' => 'Stock actuel : @stock_level. Indiquez les unités disponibles maintenant ; la différence sera enregistrée comme un mouvement de stock. Laissez vide pour ne rien changer.',
     'it' => 'Scorte attuali: @stock_level. Indica le unità disponibili ora e la differenza verrà registrata come movimento di magazzino. Lascia vuoto per non modificarle.',
   ],
+  // Columna y filtro de stock de /admin/commerce/variaciones
+  // (pronens_personalizacion, ver scripts/stock-variaciones.php).
+  'Always in stock' => [
+    'es' => 'Siempre disponible',
+    'ca' => 'Sempre disponible',
+    'fr' => 'Toujours disponible',
+    'it' => 'Sempre disponibile',
+  ],
+  '@n (sold out)' => [
+    'es' => '@n (agotado)',
+    'ca' => '@n (esgotat)',
+    'fr' => '@n (épuisé)',
+    'it' => '@n (esaurito)',
+  ],
+  'Sold out or no stock' => [
+    'es' => 'Agotado o sin stock',
+    'ca' => 'Esgotat o sense estoc',
+    'fr' => 'Épuisé ou sans stock',
+    'it' => 'Esaurito o senza scorte',
+  ],
+  'Low stock (@n or fewer)' => [
+    'es' => 'Pocas unidades (@n o menos)',
+    'ca' => 'Poques unitats (@n o menys)',
+    'fr' => 'Stock faible (@n ou moins)',
+    'it' => 'Poche unità (@n o meno)',
+  ],
+  'In stock (more than @n)' => [
+    'es' => 'Con stock (más de @n)',
+    'ca' => 'Amb estoc (més de @n)',
+    'fr' => 'En stock (plus de @n)',
+    'it' => 'Disponibile (più di @n)',
+  ],
+  'Available stock (real)' => [
+    'es' => 'Stock disponible (real)',
+  ],
+  'Sum of the variation stock transactions, always up to date. Sortable.' => [
+    'es' => 'Suma de los movimientos de stock de la variación, siempre al día. Ordenable.',
+  ],
+  'Stock situation' => [
+    'es' => 'Situación del stock',
+  ],
+  'Sold out (or no transactions), low stock or in stock.' => [
+    'es' => 'Agotado (o sin movimientos), pocas unidades o con stock.',
+  ],
 ];
 
 $escritas = 0;

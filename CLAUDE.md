@@ -2472,6 +2472,16 @@ Donde este documento y la realidad del repo discrepan, manda esta lista (decidid
   «Always in stock». Textos en castellano con `scripts/traducir-stock.php` (contenido: ejecutar
   también en producción, después del `drush cim`). Probado en el navegador sobre la variación 2158 de
   la mochila: 100 → 98 → 100, con las transacciones de prueba dejadas a propósito (suman 0).
+  - **Y se ve en la lista de variaciones** (`/admin/commerce/variaciones`): columna «Stock»
+    ordenable y filtro «Agotado o sin stock / Pocas unidades (5 o menos) / Con stock (más de 5)»,
+    añadidos con `scripts/stock-variaciones.php` (solo añade, no rehace la view). Son pseudocampos
+    de `pronens_personalizacion` (`StockViewsHooks`, `StockSql`) que **suman los movimientos**:
+    la tabla `commerce_stock_location_level` de Commerce Stock es un total que el cron rehace por
+    tandas de 50 cada hora y va por detrás de la realidad, así que no sirve para esto. «Agotado»
+    incluye las variaciones **sin ningún movimiento**, que la tienda enseña agotadas: en la copia
+    de producción del 23/10 eran 34, 30 de ellas los blusones clonados 377-382. Las de «Always in
+    stock» cuentan como con stock. **No hay aviso por correo de stock agotado**: ni Commerce Stock
+    lo trae ni se ha montado.
 
 ## Orden de trabajo
 1. **Tema `pronens`**: tokens CSS (custom properties con los colores/tipos del README), fuentes

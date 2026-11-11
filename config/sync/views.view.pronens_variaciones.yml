@@ -7,6 +7,7 @@ dependencies:
   module:
     - commerce_price
     - commerce_product
+    - pronens_personalizacion
     - user
 id: pronens_variaciones
 label: 'Variaciones de producto'
@@ -82,6 +83,14 @@ display:
           settings:
             strip_trailing_zeroes: false
             currency_display: symbol
+        pronens_stock:
+          id: pronens_stock
+          table: commerce_product_variation_field_data
+          field: pronens_stock
+          plugin_id: pronens_stock
+          label: Stock
+          alter:
+            alter_text: false
         status:
           id: status
           table: commerce_product_variation_field_data
@@ -233,6 +242,23 @@ display:
             required: false
             remember: false
             multiple: false
+        pronens_situacion_stock:
+          id: pronens_situacion_stock
+          table: commerce_product_variation_field_data
+          field: pronens_situacion_stock
+          plugin_id: pronens_situacion_stock
+          operator: in
+          value: {  }
+          exposed: true
+          expose:
+            operator_id: pronens_situacion_stock_op
+            label: Stock
+            operator: pronens_situacion_stock_op
+            identifier: stock
+            required: false
+            remember: false
+            multiple: false
+            reduce: false
         default_langcode_producto:
           id: default_langcode_producto
           table: commerce_product_field_data
@@ -281,9 +307,13 @@ display:
             changed:
               sortable: true
               default_sort_order: desc
+            pronens_stock:
+              sortable: true
+              default_sort_order: asc
           override: true
           sticky: true
           empty_table: true
+          class: ''
       row:
         type: fields
       query:
