@@ -2462,6 +2462,17 @@ Donde este documento y la realidad del repo discrepan, manda esta lista (decidid
     vacío y pasarían a enseñar los errores arriba de la página. Se queda TRUE hasta que se decida
     activar Inline Form Errors y probar el checkout con FALSE.
 
+- **El stock se edita en la propia variación (2026-11-11, cliente)**: `field_stock` estaba en
+  `hidden` en el form display de la variación, así que al editarla solo salía «Always in stock?» y la
+  única vía era `/admin/commerce/config/stock/transactions1`. Ahora lleva el widget **Absolute stock
+  level** (`commerce_stock_level_absolute`): enseña el stock actual, se escribe el que hay ahora y el
+  módulo crea la transacción de diferencia con la nota «Ajuste de stock desde la variación»; vacío no
+  toca nada. Sigue siendo por variación (el stock es de la variación, no del producto) y el registro
+  sigue siendo transaccional, igual que antes. El widget **no se pinta** si la variación marca
+  «Always in stock». Textos en castellano con `scripts/traducir-stock.php` (contenido: ejecutar
+  también en producción, después del `drush cim`). Probado en el navegador sobre la variación 2158 de
+  la mochila: 100 → 98 → 100, con las transacciones de prueba dejadas a propósito (suman 0).
+
 ## Orden de trabajo
 1. **Tema `pronens`**: tokens CSS (custom properties con los colores/tipos del README), fuentes
    self-hosted WOFF2 (Archivo, Nunito Sans, Caveat), layout base, header sticky + marquee + footer.

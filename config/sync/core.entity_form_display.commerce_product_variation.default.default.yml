@@ -15,6 +15,7 @@ dependencies:
     - field.field.commerce_product_variation.default.weight
   module:
     - commerce_price
+    - commerce_stock_field
     - media_library
     - media_library_edit
     - physical
@@ -81,6 +82,15 @@ content:
       media_library_edit:
         show_edit: true
         edit_form_mode: media_library
+  field_stock:
+    type: commerce_stock_level_absolute
+    weight: 5
+    region: content
+    settings:
+      step: '1'
+      custom_transaction_note: false
+      default_transaction_note: 'Ajuste de stock desde la variación'
+    third_party_settings: {  }
   langcode:
     type: language_select
     weight: 2
@@ -126,5 +136,4 @@ content:
     third_party_settings: {  }
 hidden:
   created: true
-  field_stock: true
   uid: true
